@@ -52,6 +52,7 @@ ext {
             appCompat      : "com.android.support:appcompat-v7:${appCompatVersion}",
             supportDesign  : "com.android.support:design:${supportDesignVersion}",
             firebase       : "com.firebase:firebase-client-android:${firebaseVersion}",
+            eventbus       : "org.greenrobot:eventbus:${eventBusVersion}",
     ]
 
     presentationTestDependencies = [

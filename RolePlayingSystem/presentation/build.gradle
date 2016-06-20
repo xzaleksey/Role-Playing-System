@@ -94,6 +94,7 @@ dependencies {
     compile presentationDependencies.recyclerView
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
+    compile presentationDependencies.eventbus
     provided presentationDependencies.javaxAnnotation
     compile presentationDependencies.firebase
 
