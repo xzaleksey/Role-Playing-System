@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.valyakinaleksey.roleplayingsystem"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        buildConfigField 'String', 'WEATHER_API_KEY', '\"your-app-id-goes-here\"'
+        buildConfigField 'String', 'FIREBASE_NAME', '\"vivid-torch-5500\"'
+        buildConfigField 'String', 'WEATHER_API_HOST', '\"http://api.openweathermap.org/data/2.5/\"'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile(name: 'dialogwrapper', ext: 'aar')
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.android.support:support-annotations:23.3.0'
+
+    //Firebase
+    compile 'com.google.firebase:firebase-core:9.0.2'
+    compile 'com.google.firebase:firebase-crash:9.0.2'
+    compile 'com.firebase:firebase-client-android:2.5.2+'
+
+
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.google.code.gson:gson:2.6.2'
+
+    // Dagger 2
+    compile 'com.google.dagger:dagger:2.4'
+    apt 'com.google.dagger:dagger-compiler:2.4'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
+    // Retrofit
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+
+    // Rx
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
+
+    //Logger
+    compile 'com.noveogroup.android:android-logger:1.3.5'
+    // Stream API
+    compile 'com.annimon:stream:1.0.2'
+
+    //Unit test
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.0.33-beta'
+    testCompile('org.powermock:powermock-api-mockito:1.6.3') {
+        exclude module: 'hamcrest-core'
+        exclude module: 'objenesis'
+    }
+    testCompile('org.powermock:powermock-module-junit4:1.6.3') {
+        exclude module: 'hamcrest-core'
+        exclude module: 'objenesis'
+    }
+}
+
+apply plugin: 'com.google.gms.google-services'
