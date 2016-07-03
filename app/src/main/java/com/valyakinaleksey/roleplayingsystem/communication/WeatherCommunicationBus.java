@@ -4,10 +4,10 @@ package com.valyakinaleksey.roleplayingsystem.communication;
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.presenter.WeatherPresenter;
-import com.valyakinaleksey.roleplayingsystem.view.CautionDialogData;
-import com.valyakinaleksey.roleplayingsystem.view.WeatherView;
+import com.valyakinaleksey.roleplayingsystem.view.data.CautionDialogData;
+import com.valyakinaleksey.roleplayingsystem.view.interfaces.WeatherView;
 import com.valyakinaleksey.roleplayingsystem.view.model.WeatherViewModel;
-import com.valyakinaleksey.roleplayingsystem.view.model.WeatherViewState;
+import com.valyakinaleksey.roleplayingsystem.view.model.state.WeatherViewState;
 
 import javax.inject.Inject;
 

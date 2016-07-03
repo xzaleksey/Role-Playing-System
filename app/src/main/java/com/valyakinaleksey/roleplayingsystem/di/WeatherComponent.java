@@ -1,7 +1,7 @@
-package com.valyakinaleksey.roleplayingsystem.view.di;
+package com.valyakinaleksey.roleplayingsystem.di;
 
 
-import com.valyakinaleksey.roleplayingsystem.app.AppComponent;
+import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.presenter.WeatherPresenter;

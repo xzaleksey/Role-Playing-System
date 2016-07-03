@@ -32,7 +32,7 @@ import com.firebase.client.FirebaseError;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
 import com.valyakinaleksey.roleplayingsystem.R;
-import com.valyakinaleksey.roleplayingsystem.app.RpsApp;
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 
 import java.util.ArrayList;
 import java.util.List;

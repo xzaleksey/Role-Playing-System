@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.view.di;
+package com.valyakinaleksey.roleplayingsystem.di;
 
 
 import com.valyakinaleksey.roleplayingsystem.communication.WeatherCommunicationBus;
@@ -13,7 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.presenter.WeatherPresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import com.valyakinaleksey.roleplayingsystem.view.mapper.WeatherMapper;
 import com.valyakinaleksey.roleplayingsystem.view.mapper.WeatherMapperImpl;
-import com.valyakinaleksey.roleplayingsystem.view.model.WeatherViewState;
+import com.valyakinaleksey.roleplayingsystem.view.model.state.WeatherViewState;
 
 import javax.inject.Named;
 

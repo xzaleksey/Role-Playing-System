@@ -9,7 +9,7 @@ import android.support.v4.view.PagerAdapter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.Tuple;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsViewPagerActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ViewPagerAdapter;
-import com.valyakinaleksey.roleplayingsystem.view.CautionDialogData;
+import com.valyakinaleksey.roleplayingsystem.view.data.CautionDialogData;
 
 import java.util.Random;
 

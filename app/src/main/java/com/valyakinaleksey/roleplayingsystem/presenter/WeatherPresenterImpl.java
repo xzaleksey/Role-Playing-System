@@ -6,8 +6,8 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.GetWeatherInMoscowInteractor;
-import com.valyakinaleksey.roleplayingsystem.view.CautionDialogData;
-import com.valyakinaleksey.roleplayingsystem.view.WeatherView;
+import com.valyakinaleksey.roleplayingsystem.view.data.CautionDialogData;
+import com.valyakinaleksey.roleplayingsystem.view.interfaces.WeatherView;
 import com.valyakinaleksey.roleplayingsystem.view.mapper.WeatherMapper;
 import com.valyakinaleksey.roleplayingsystem.view.model.WeatherViewModel;
 

@@ -9,13 +9,13 @@ import android.widget.TextView;
 
 import com.onemanparty.lib.dialog.delegate.ConfirmDialogFragmentDelegate;
 import com.valyakinaleksey.roleplayingsystem.R;
-import com.valyakinaleksey.roleplayingsystem.app.RpsApp;
-import com.valyakinaleksey.roleplayingsystem.presenter.WeatherPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.view.CautionDialogData;
-import com.valyakinaleksey.roleplayingsystem.view.WeatherView;
-import com.valyakinaleksey.roleplayingsystem.view.di.DaggerWeatherComponent;
-import com.valyakinaleksey.roleplayingsystem.view.di.WeatherComponent;
+import com.valyakinaleksey.roleplayingsystem.di.DaggerWeatherComponent;
+import com.valyakinaleksey.roleplayingsystem.di.WeatherComponent;
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
+import com.valyakinaleksey.roleplayingsystem.presenter.WeatherPresenter;
+import com.valyakinaleksey.roleplayingsystem.view.data.CautionDialogData;
+import com.valyakinaleksey.roleplayingsystem.view.interfaces.WeatherView;
 import com.valyakinaleksey.roleplayingsystem.view.model.WeatherViewModel;
 import com.valyakinaleksey.roleplayingsystem.view.view_pager.ViewPagerActivity;
 

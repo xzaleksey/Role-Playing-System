@@ -1,8 +1,9 @@
-package com.valyakinaleksey.roleplayingsystem.app;
+package com.valyakinaleksey.roleplayingsystem.di.app;
 
 import android.content.Context;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.BuildConfig;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
@@ -41,5 +42,11 @@ public class AppModule {
     @Singleton
     Firebase provideFirebase() {
         return new Firebase(String.format(StringConstants.FIREBASE_URL_FORMAT, BuildConfig.FIREBASE_NAME));
+    }
+
+    @Provides
+    @Singleton
+    FirebaseAuth provideFirebaseAuth() {
+        return FirebaseAuth.getInstance();
     }
 }

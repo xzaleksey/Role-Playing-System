@@ -2,7 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.utils;
 
 import android.content.Context;
 
-import com.valyakinaleksey.roleplayingsystem.app.RpsApp;
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.core.utils.CompatUtils;
 
 import java.io.File;
