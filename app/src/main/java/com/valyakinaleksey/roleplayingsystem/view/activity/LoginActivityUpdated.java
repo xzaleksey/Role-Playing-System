@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity;
-import com.valyakinaleksey.roleplayingsystem.view.fragment.WeatherFragment;
+import com.valyakinaleksey.roleplayingsystem.view.fragment.LoginFragment;
 
 public class LoginActivityUpdated extends AbsSingleFragmentActivity {
     @Override
@@ -12,13 +12,23 @@ public class LoginActivityUpdated extends AbsSingleFragmentActivity {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            setSingleFragment(WeatherFragment.newInstance(), WeatherFragment.TAG);
+            setSingleFragment(LoginFragment.newInstance(), LoginFragment.TAG);
         }
+    }
+
+
+    @Override
+    protected void setupToolbar() {
+
     }
 
     @Override
     protected void setupToolbarImpl() {
-        setToolbarTitle(getString(R.string.app_name));
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.single_fragment_activity_no_toolbar;
     }
 }
       

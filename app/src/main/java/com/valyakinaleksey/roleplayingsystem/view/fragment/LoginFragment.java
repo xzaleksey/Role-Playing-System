@@ -4,8 +4,6 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.onemanparty.lib.dialog.delegate.ConfirmDialogFragmentDelegate;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -17,12 +15,8 @@ import com.valyakinaleksey.roleplayingsystem.presenter.auth.AuthPresenter;
 import com.valyakinaleksey.roleplayingsystem.view.data.CautionDialogData;
 import com.valyakinaleksey.roleplayingsystem.view.interfaces.WeatherView;
 import com.valyakinaleksey.roleplayingsystem.view.model.WeatherViewModel;
-import com.valyakinaleksey.roleplayingsystem.view.view_pager.ViewPagerActivity;
 
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.OnClick;
 
 public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherViewModel, WeatherView.WeatherError, WeatherView> implements WeatherView {
 
@@ -31,18 +25,12 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherVi
     @Inject
     AuthPresenter presenter;
 
-    @Bind(R.id.weather_tv_temp)
-    TextView currentTemperature;
-
-    @Bind(R.id.weather_btn_navigate_with_probable_show)
-    Button navigationWithDialog;
-
     ConfirmDialogFragmentDelegate<CautionDialogData> mCautionDialogDelegate;
 
     private ConfirmDialogFragmentDelegate.OnConfirmWithDataDialogListener<CautionDialogData> listener = new ConfirmDialogFragmentDelegate.OnConfirmWithDataDialogListener<CautionDialogData>() {
         @Override
         public void onOkDialog(DialogFragment dialogFragment, CautionDialogData data) {
-            ViewPagerActivity.start(getActivity(), data);
+//            ViewPagerActivity.start(getActivity(), data);
         }
 
         @Override
@@ -90,7 +78,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherVi
 
     @Override
     protected int getContentResId() {
-        return R.layout.weather;
+        return R.layout.fragment_login;
     }
 
     @Override
@@ -101,7 +89,6 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherVi
     @Override
     public void showContent() {
         super.showContent();
-        currentTemperature.setText(getString(R.string.weather_tv_temperature, data.getTemperature()));
     }
 
     @Override
@@ -109,8 +96,4 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherVi
         mCautionDialogDelegate.showDialog(data);
     }
 
-    @OnClick(R.id.weather_btn_navigate_with_probable_show)
-    public void propagateClick() {
-//        getComponent().getPresenter().someInsaneActionClicked();
-    }
 }
