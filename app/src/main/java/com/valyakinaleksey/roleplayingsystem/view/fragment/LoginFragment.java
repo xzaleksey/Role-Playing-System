@@ -3,7 +3,10 @@ package com.valyakinaleksey.roleplayingsystem.view.fragment;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 
 import com.onemanparty.lib.dialog.delegate.ConfirmDialogFragmentDelegate;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -18,6 +21,8 @@ import com.valyakinaleksey.roleplayingsystem.view.model.WeatherViewModel;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+
 public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherViewModel, WeatherView.WeatherError, WeatherView> implements WeatherView {
 
     public static final String TAG = LoginFragment.class.getSimpleName();
@@ -25,6 +30,12 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherVi
     @Inject
     AuthPresenter presenter;
 
+    @Bind(R.id.email)
+    AutoCompleteTextView atEmail;
+    @Bind(R.id.til_password)
+    TextInputLayout tilPassword;
+    @Bind(R.id.password)
+    EditText etPassword;
     ConfirmDialogFragmentDelegate<CautionDialogData> mCautionDialogDelegate;
 
     private ConfirmDialogFragmentDelegate.OnConfirmWithDataDialogListener<CautionDialogData> listener = new ConfirmDialogFragmentDelegate.OnConfirmWithDataDialogListener<CautionDialogData>() {
@@ -62,6 +73,8 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherVi
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
+        etPassword.setTypeface(atEmail.getTypeface());
+        tilPassword.setTypeface(atEmail.getTypeface());
     }
 
     @Override

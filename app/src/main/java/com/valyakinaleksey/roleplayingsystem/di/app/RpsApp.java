@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 
 import com.firebase.client.Firebase;
+import com.valyakinaleksey.roleplayingsystem.R;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RpsApp extends Application {
 
@@ -14,6 +17,11 @@ public class RpsApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Roboto-RobotoRegular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         Firebase.setAndroidContext(this);
         instance = this;
     }

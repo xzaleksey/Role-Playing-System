@@ -6,9 +6,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
+        <item name="android:buttonStyle">@style/AppTheme.Widget.Button</item>
+        <item name="android:autoCompleteTextViewStyle">@style/AppTheme.Widget.AutoCompleteTextView
+        </item>
+        <item name="android:editTextStyle">@style/AppTheme.Widget.EditText</item>
+
     </style>
 
     <style name="AppTheme.TextWhite">
@@ -20,4 +25,22 @@
         <item name="android:textColorSecondary">@color/white7</item>
     </style>
 
+    <style name="AppTheme.Widget" />
+
+    <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+
+    <style name="AppTheme.Widget.EditText" parent="android:Widget.Holo.Light.EditText">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+
+
+    <style name="AppTheme.Widget.AutoCompleteTextView" parent="android:Widget.Holo.Light.AutoCompleteTextView">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+
+    <style name="AppTheme.Widget.Button" parent="Base.Widget.AppCompat.Button">
+        <item name="fontPath">fonts/Roboto-Bold.ttf</item>
+    </style>
 </resources>

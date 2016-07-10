@@ -29,11 +29,13 @@ android {
 
 dependencies {
     compile(name: 'dialogwrapper', ext: 'aar')
+    //Design
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:support-annotations:23.3.0'
-
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    compile 'com.dmitrymalkovich.android:material-design-dimens:1.2'
     //Firebase
     compile 'com.google.firebase:firebase-core:9.0.2'
     compile 'com.google.firebase:firebase-crash:9.0.2'
