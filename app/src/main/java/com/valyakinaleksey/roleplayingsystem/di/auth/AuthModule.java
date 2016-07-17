@@ -8,6 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.LoginInteractor;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.LoginUseCase;
+import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.presenter.auth.AuthPresenter;
 import com.valyakinaleksey.roleplayingsystem.presenter.auth.AuthPresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
@@ -32,8 +33,8 @@ public class AuthModule {
     @Provides
     @PerFragment
     @Named("presenter")
-    AuthPresenter provideAuthPresenter(LoginInteractor loginInteractor) {
-        return new AuthPresenterImpl(loginInteractor);
+    AuthPresenter provideAuthPresenter(LoginInteractor loginInteractor, SharedPreferencesHelper sharedPreferencesHelper) {
+        return new AuthPresenterImpl(loginInteractor, sharedPreferencesHelper);
     }
 
     @Provides

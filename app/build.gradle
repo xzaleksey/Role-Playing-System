@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.jakewharton.hugo'
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -12,7 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField 'String', 'WEATHER_API_KEY', '\"your-app-id-goes-here\"'
-        buildConfigField 'String', 'FIREBASE_NAME', '\"vivid-torch-5500\"'
+        buildConfigField 'String', 'FIREBASE_NAME', '\"role-playing-system\"'
         buildConfigField 'String', 'WEATHER_API_HOST', '\"http://api.openweathermap.org/data/2.5/\"'
     }
     buildTypes {
@@ -29,6 +31,7 @@ android {
 
 dependencies {
     compile(name: 'dialogwrapper', ext: 'aar')
+    compile fileTree(dir: 'libs', include: '*.jar')
     //Design
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'

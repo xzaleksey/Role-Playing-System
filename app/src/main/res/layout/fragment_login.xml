@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="50dp"
+                    android:layout_marginBottom="40dp"
                     android:text="@string/app_name"
                     android:textColor="@android:color/white" />
 
@@ -45,6 +45,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_email"
+                        android:imeOptions="actionNext"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true" />
@@ -71,7 +72,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
-                    android:id="@+id/email_sign_in_button"
+                    android:id="@+id/sign_in_button"
                     style="?android:textAppearanceSmall"
                     fontPath="fonts/Roboto-Bold.ttf"
                     android:layout_width="match_parent"
@@ -84,7 +85,7 @@
                     tools:ignore="MissingPrefix" />
 
                 <Button
-                    android:id="@+id/email_sign_up_button"
+                    android:id="@+id/sign_up_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

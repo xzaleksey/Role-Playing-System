@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.onemanparty.lib.dialog.delegate.ConfirmDialogFragmentDelegate;
@@ -14,16 +15,18 @@ import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.di.auth.AuthComponent;
 import com.valyakinaleksey.roleplayingsystem.di.auth.DaggerAuthComponent;
+import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.presenter.auth.AuthPresenter;
 import com.valyakinaleksey.roleplayingsystem.view.data.CautionDialogData;
-import com.valyakinaleksey.roleplayingsystem.view.interfaces.WeatherView;
-import com.valyakinaleksey.roleplayingsystem.view.model.WeatherViewModel;
+import com.valyakinaleksey.roleplayingsystem.view.interfaces.AuthView;
+import com.valyakinaleksey.roleplayingsystem.view.model.AuthViewModel;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
-public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherViewModel, WeatherView.WeatherError, WeatherView> implements WeatherView {
+public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewModel, AuthView.AuthError, AuthView> implements AuthView {
 
     public static final String TAG = LoginFragment.class.getSimpleName();
 
@@ -36,6 +39,11 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherVi
     TextInputLayout tilPassword;
     @Bind(R.id.password)
     EditText etPassword;
+    @Bind(R.id.sign_in_button)
+    Button signInBtn;
+    @Bind(R.id.sign_up_button)
+    Button signUpBtn;
+
     ConfirmDialogFragmentDelegate<CautionDialogData> mCautionDialogDelegate;
 
     private ConfirmDialogFragmentDelegate.OnConfirmWithDataDialogListener<CautionDialogData> listener = new ConfirmDialogFragmentDelegate.OnConfirmWithDataDialogListener<CautionDialogData>() {
@@ -85,6 +93,8 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherVi
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString(SharedPreferencesHelper.LOGIN, atEmail.getText().toString());
+        savedInstanceState.putString(SharedPreferencesHelper.PASSWORD, etPassword.getText().toString());
         super.onSaveInstanceState(savedInstanceState);
         mCautionDialogDelegate.onSaveInstanceState(savedInstanceState);
     }
@@ -96,17 +106,31 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, WeatherVi
 
     @Override
     public void loadData() {
-//        getComponent().getPresenter().restoreData;
+        getComponent().getPresenter().restoreData();
     }
 
     @Override
     public void showContent() {
         super.showContent();
+        atEmail.setText(data.getEmail());
+        etPassword.setText(data.getPassword());
     }
 
     @Override
     public void showCautionDialog(CautionDialogData data) {
         mCautionDialogDelegate.showDialog(data);
+    }
+
+    @OnClick(R.id.sign_in_button)
+    public void signIn() {
+        getComponent().getPresenter().login(atEmail.getText().toString(),
+                etPassword.getText().toString());
+    }
+
+    @OnClick(R.id.sign_up_button)
+    public void signUp(){
+        getComponent().getPresenter().register(atEmail.getText().toString(),
+                etPassword.getText().toString());
     }
 
 }

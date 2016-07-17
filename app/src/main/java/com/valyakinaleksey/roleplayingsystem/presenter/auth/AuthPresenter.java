@@ -10,4 +10,6 @@ public interface AuthPresenter extends Presenter<AuthView> {
     void register(String email, String password);
 
     void resetPassword(String email);
+
+    void restoreData();
 }

@@ -41,4 +41,9 @@ public class AuthCommunicationBus
     public void resetPassword(String email) {
         getPresenter().resetPassword(email);
     }
+
+    @Override
+    public void restoreData() {
+        getPresenter().restoreData();
+    }
 }

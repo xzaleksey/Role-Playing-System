@@ -1,7 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.model.interactor.auth;
 
 
-import com.firebase.client.AuthData;
+import com.google.firebase.auth.FirebaseUser;
 
 import rx.Observable;
 
@@ -10,6 +10,6 @@ import rx.Observable;
  */
 public interface LoginInteractor {
 
-    Observable<AuthData> get(String email, String password);
+    Observable<FirebaseUser> get(String email, String password);
 
 }
