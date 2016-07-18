@@ -18,6 +18,12 @@ android {
         buildConfigField 'String', 'WEATHER_API_HOST', '\"http://api.openweathermap.org/data/2.5/\"'
     }
     buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            useProguard false
+            debuggable true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
