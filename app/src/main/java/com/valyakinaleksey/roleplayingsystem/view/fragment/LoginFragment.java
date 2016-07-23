@@ -3,15 +3,14 @@ package com.valyakinaleksey.roleplayingsystem.view.fragment;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.onemanparty.lib.dialog.delegate.ConfirmDialogFragmentDelegate;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
+import com.valyakinaleksey.roleplayingsystem.core.utils.SnackbarHelper;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.di.auth.AuthComponent;
 import com.valyakinaleksey.roleplayingsystem.di.auth.DaggerAuthComponent;
@@ -34,9 +33,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     AuthPresenter presenter;
 
     @Bind(R.id.email)
-    AutoCompleteTextView atEmail;
-    @Bind(R.id.til_password)
-    TextInputLayout tilPassword;
+    EditText etEmail;
     @Bind(R.id.password)
     EditText etPassword;
     @Bind(R.id.sign_in_button)
@@ -81,8 +78,6 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
-        etPassword.setTypeface(atEmail.getTypeface());
-        tilPassword.setTypeface(atEmail.getTypeface());
     }
 
     @Override
@@ -93,7 +88,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putString(SharedPreferencesHelper.LOGIN, atEmail.getText().toString());
+        savedInstanceState.putString(SharedPreferencesHelper.LOGIN, etEmail.getText().toString());
         savedInstanceState.putString(SharedPreferencesHelper.PASSWORD, etPassword.getText().toString());
         super.onSaveInstanceState(savedInstanceState);
         mCautionDialogDelegate.onSaveInstanceState(savedInstanceState);
@@ -112,7 +107,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @Override
     public void showContent() {
         super.showContent();
-        atEmail.setText(data.getEmail());
+        etEmail.setText(data.getEmail());
         etPassword.setText(data.getPassword());
     }
 
@@ -123,14 +118,19 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
 
     @OnClick(R.id.sign_in_button)
     public void signIn() {
-        getComponent().getPresenter().login(atEmail.getText().toString(),
+        getComponent().getPresenter().login(etEmail.getText().toString(),
                 etPassword.getText().toString());
     }
 
     @OnClick(R.id.sign_up_button)
-    public void signUp(){
-        getComponent().getPresenter().register(atEmail.getText().toString(),
+    public void signUp() {
+        getComponent().getPresenter().register(etEmail.getText().toString(),
                 etPassword.getText().toString());
     }
 
+    @Override
+    public void showError(AuthError authError) {
+        super.showError(authError);
+        SnackbarHelper.show(getView(), authError.toString());
+    }
 }

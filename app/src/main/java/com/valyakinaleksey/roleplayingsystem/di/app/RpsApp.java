@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import com.firebase.client.Firebase;
 import com.valyakinaleksey.roleplayingsystem.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -22,13 +21,12 @@ public class RpsApp extends MultiDexApplication {
 
     @Override
     public void onCreate() {
+        super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Roboto-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-        Firebase.setAndroidContext(this);
-        super.onCreate();
         instance = this;
     }
 

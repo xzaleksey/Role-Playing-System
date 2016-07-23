@@ -10,6 +10,6 @@ import rx.Observable;
  */
 public interface RegisterInteractor {
 
-    Observable<AuthResult> get(String email, String password);
+    Observable<AuthResult> register(String email, String password);
 
 }

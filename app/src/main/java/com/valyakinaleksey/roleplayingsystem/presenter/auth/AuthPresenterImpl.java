@@ -2,10 +2,13 @@ package com.valyakinaleksey.roleplayingsystem.presenter.auth;
 
 import android.os.Bundle;
 
+import com.noveogroup.android.log.Logger;
+import com.noveogroup.android.log.LoggerManager;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.LoginInteractor;
+import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.RegisterInteractor;
 import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.view.interfaces.AuthView;
 import com.valyakinaleksey.roleplayingsystem.view.model.AuthViewModel;
@@ -22,9 +25,10 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
     private CompositeSubscription mSubscriptions;
     private AuthView mView;
     private LoginInteractor loginInteractor;
+    private RegisterInteractor registerInteractor;
     private SharedPreferencesHelper sharedPreferencesHelper;
     private AuthViewModel viewModel;
-
+    private final Logger logger = LoggerManager.getLogger();
     private Runnable mShowLoading = () -> {
         mView.showLoading();
     };
@@ -33,8 +37,9 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
     };
 
     @Inject
-    public AuthPresenterImpl(LoginInteractor loginInteractor, SharedPreferencesHelper sharedPreferencesHelper) {
+    public AuthPresenterImpl(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, SharedPreferencesHelper sharedPreferencesHelper) {
         this.loginInteractor = loginInteractor;
+        this.registerInteractor = registerInteractor;
         this.sharedPreferencesHelper = sharedPreferencesHelper;
         mSubscriptions = new CompositeSubscription();
     }
@@ -87,20 +92,38 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
     @Override
     public void login(String email, String password) {
         mSubscriptions.add(loginInteractor
-                .get(email, password)
+                .get(email, password, task -> {
+                    if (task.isSuccessful()) {
+                        logger.d(task.getResult().getUser().toString());
+                    } else {
+                        showError(task.getException());
+                    }
+                })
+                .subscribeOn(Schedulers.io())               // inject for testing
+                .observeOn(AndroidSchedulers.mainThread())  // inject for testing
+                .compose(RxTransformers.applyOpBeforeAndAfter(mShowLoading, mHideLoading))
+                .subscribe(firebaseUser -> {
+                    updateUi(viewModel);
+                }, this::showError));
+    }
+
+    private void showError(Throwable throwable) {
+        AuthView.AuthError general = AuthView.AuthError.LOGIN;
+        general.setValue(throwable.getMessage());
+        showError(general);
+    }
+
+    @Override
+    public void register(String email, String password) {
+        mSubscriptions.add(registerInteractor.register(email, password)
                 .subscribeOn(Schedulers.io())               // inject for testing
                 .observeOn(AndroidSchedulers.mainThread())  // inject for testing
                 .compose(RxTransformers.applyOpBeforeAndAfter(mShowLoading, mHideLoading))
                 .subscribe(firebaseUser -> {
                     updateUi(viewModel);
                 }, throwable -> {
-                    showError(AuthView.AuthError.GENERAL);
+                    showError(AuthView.AuthError.LOGIN);
                 }));
-    }
-
-    @Override
-    public void register(String email, String password) {
-
     }
 
     @Override

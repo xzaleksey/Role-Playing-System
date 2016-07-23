@@ -14,16 +14,10 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField 'String', 'WEATHER_API_KEY', '\"your-app-id-goes-here\"'
-        buildConfigField 'String', 'FIREBASE_NAME', '\"role-playing-system\"'
+        buildConfigField 'String', 'FIREBASE_NAME', '\"roleplaying-system\"'
         buildConfigField 'String', 'WEATHER_API_HOST', '\"http://api.openweathermap.org/data/2.5/\"'
     }
     buildTypes {
-        debug {
-            minifyEnabled false
-            shrinkResources false
-            useProguard false
-            debuggable true
-        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -46,10 +40,10 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.dmitrymalkovich.android:material-design-dimens:1.2'
     //Firebase
-    compile 'com.google.firebase:firebase-core:9.0.2'
-    compile 'com.google.firebase:firebase-crash:9.0.2'
-    compile 'com.google.firebase:firebase-auth:9.0.2'
-    compile 'com.firebase:firebase-client-android:2.5.2+'
+    compile 'com.google.firebase:firebase-core:9.2.1'
+    compile 'com.google.firebase:firebase-crash:9.2.1'
+    compile 'com.google.firebase:firebase-auth:9.2.1'
+    compile 'com.google.android.gms:play-services:9.2.1'
 
 
     compile 'com.jakewharton:butterknife:7.0.1'

@@ -8,6 +8,8 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.LoginInteractor;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.LoginUseCase;
+import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.RegisterInteractor;
+import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.RegisterUseCase;
 import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.presenter.auth.AuthPresenter;
 import com.valyakinaleksey.roleplayingsystem.presenter.auth.AuthPresenterImpl;
@@ -23,6 +25,7 @@ import dagger.Provides;
 public class AuthModule {
 
     private final static String VIEW_STATE_FILE_NAME = AuthModule.class.getSimpleName();
+    public static final String PRESENTER = "presenter";
 
     @Provides
     @PerFragment
@@ -32,9 +35,8 @@ public class AuthModule {
 
     @Provides
     @PerFragment
-    @Named("presenter")
-    AuthPresenter provideAuthPresenter(LoginInteractor loginInteractor, SharedPreferencesHelper sharedPreferencesHelper) {
-        return new AuthPresenterImpl(loginInteractor, sharedPreferencesHelper);
+    RegisterInteractor provideRegisterInteractor(FirebaseAuth firebaseAuth) {
+        return new RegisterUseCase(firebaseAuth);
     }
 
     @Provides
@@ -42,9 +44,17 @@ public class AuthModule {
         return new AuthViewState(storage);
     }
 
+
+    @Provides
+    @Named("presenter")
+    @PerFragment
+    AuthPresenter provideWeatherPresenter(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, SharedPreferencesHelper sharedPreferencesHelper) {
+        return new AuthPresenterImpl(loginInteractor, registerInteractor, sharedPreferencesHelper);
+    }
+
     @Provides
     @PerFragment
-    AuthPresenter provideCommunicationBus(@Named("presenter") AuthPresenter presenter, AuthViewState viewState) {
+    AuthPresenter provideCommunicationBus(@Named(PRESENTER) AuthPresenter presenter, AuthViewState viewState) {
         return new AuthCommunicationBus(presenter, viewState);
     }
 

@@ -16,7 +16,7 @@ public class RegisterUseCase implements RegisterInteractor {
     }
 
     @Override
-    public Observable<AuthResult> get(String email, String password) {
+    public Observable<AuthResult> register(String email, String password) {
         return Observable.create(subscriber -> {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {

@@ -6,7 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.model.domain.WeatherResponse;
 import rx.Observable;
 
 /**
- * Use case: get weather in Moscow
+ * Use case: register weather in Moscow
  */
 public interface GetWeatherInMoscowInteractor {
 

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "323803254006",
-    "firebase_url": "https://role-playing-system.firebaseio.com",
-    "project_id": "role-playing-system",
-    "storage_bucket": "role-playing-system.appspot.com"
+    "project_number": "1041577285195",
+    "firebase_url": "https://roleplaying-system.firebaseio.com",
+    "project_id": "roleplaying-system",
+    "storage_bucket": "roleplaying-system.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:323803254006:android:113c8f80af244b4a",
+        "mobilesdk_app_id": "1:1041577285195:android:113c8f80af244b4a",
         "android_client_info": {
           "package_name": "com.valyakinaleksey.roleplayingsystem"
         }
       },
       "oauth_client": [
         {
-          "client_id": "323803254006-hhmq9bl5kd33tn55ti8kt9fkvk1vo3cq.apps.googleusercontent.com",
+          "client_id": "1041577285195-pdaf1h0odqd982bhp16ls2daojt273g5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.valyakinaleksey.roleplayingsystem",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "323803254006-8pbqivbp2h7b4a8rtdrk1tduggss00l0.apps.googleusercontent.com",
+          "client_id": "1041577285195-nppss38ol3ft613vhs3seub6u21i08oe.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC4PCRBoV1TaT6G64xlqvnWrRs5v5TjKEc"
+          "current_key": "AIzaSyCUTbZgMUrvc93oYVn9auz2Cytf48F_3pg"
         }
       ],
       "services": {
@@ -37,47 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:323803254006:android:c3c513a548057204",
-        "android_client_info": {
-          "package_name": "com.valyakinaleksey.data"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "323803254006-e0li9k9p5jdm87jd12r0v8eip5s58mr2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.valyakinaleksey.data",
-            "certificate_hash": "068F2667437ED62498B10F67E7E8ED9496A0A5B9"
-          }
-        },
-        {
-          "client_id": "323803254006-8pbqivbp2h7b4a8rtdrk1tduggss00l0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC4PCRBoV1TaT6G64xlqvnWrRs5v5TjKEc"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1041577285195-nppss38ol3ft613vhs3seub6u21i08oe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

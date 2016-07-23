@@ -13,6 +13,16 @@ public interface AuthView extends LceView<AuthViewModel, AuthView.AuthError> {
 
     enum AuthError {
         @ErrorType(type = ErrorTypes.ONE_SHOT)
-        GENERAL
+        LOGIN;
+        private String error;
+
+        public void setValue(String error) {
+            this.error = error;
+        }
+
+        @Override
+        public String toString() {
+            return error;
+        }
     }
 }

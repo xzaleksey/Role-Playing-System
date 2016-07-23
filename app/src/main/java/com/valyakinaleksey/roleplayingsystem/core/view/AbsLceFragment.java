@@ -12,6 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFr
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SnackbarHelper;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
+import com.valyakinaleksey.roleplayingsystem.model.error.ErrorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,11 +194,11 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
     public void showError(E e) {
         String name = e.name();
         switch (name) {
-            case "CONNECTION":
+            case ErrorUtils.CONNECTION:
                 handleNoConnection();
                 break;
-            case "DATA":
-            case "GENERAL":
+            case ErrorUtils.DATA:
+            case ErrorUtils.GENERAL:
                 handleNoData();
                 break;
             default:

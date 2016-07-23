@@ -4,12 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
-import com.valyakinaleksey.roleplayingsystem.BuildConfig;
 import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
-import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
 
 import javax.inject.Singleton;
 
@@ -41,11 +38,6 @@ public class AppModule {
         return new PathManager(context);
     }
 
-    @Provides
-    @Singleton
-    Firebase provideFirebase() {
-        return new Firebase(String.format(StringConstants.FIREBASE_URL_FORMAT, BuildConfig.FIREBASE_NAME));
-    }
 
     @Provides
     @Singleton
