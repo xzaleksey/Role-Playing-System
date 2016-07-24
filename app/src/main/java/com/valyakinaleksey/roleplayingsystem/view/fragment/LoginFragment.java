@@ -103,9 +103,18 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCautionDialogDelegate.onResume();
+    }
+
+    private void initValidation() {
         subscriptions.add(RxTextView.textChanges(etEmail).subscribe(charSequence -> {
             String s = etEmail.getText().toString();
-//            data.setEmail(s);
+            data.setEmail(s);
             if (TextUtils.isEmpty(s)) {
                 emailInputLayout.setError(errorEmptyField);
             } else if (ValidationUtils.isValidEmail(s)) {
@@ -116,7 +125,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
         }));
         subscriptions.add(RxTextView.textChanges(etPassword).subscribe(charSequence -> {
             String s = etPassword.getText().toString();
-//            data.setPassword(s);
+            data.setPassword(s);
             if (TextUtils.isEmpty(s)) {
                 passwordInputLayout.setError(errorEmptyField);
             } else if (ValidationUtils.isValidLength(s)) {
@@ -125,12 +134,6 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
                 passwordInputLayout.setError(errorMinSymbols);
             }
         }));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mCautionDialogDelegate.onResume();
     }
 
     @Override
@@ -154,6 +157,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @Override
     public void showContent() {
         super.showContent();
+        initValidation();
         etEmail.setText(data.getEmail());
         etPassword.setText(data.getPassword());
     }
@@ -190,10 +194,10 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     }
 
     @Override
-    public void onDestroy() {
+    public void onPause() {
+        super.onPause();
         for (Subscription subscription : subscriptions) {
             subscription.unsubscribe();
         }
-        super.onDestroy();
     }
 }

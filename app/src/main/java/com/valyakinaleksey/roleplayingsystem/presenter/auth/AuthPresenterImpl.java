@@ -47,7 +47,7 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
     @Override
     public void onCreate(Bundle arguments, Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            mView.loadData();
+            restoreData();
         }
     }
 
@@ -55,10 +55,12 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
     public void onSaveInstanceState(Bundle bundle) {
         String login = bundle.getString(SharedPreferencesHelper.LOGIN, "");
         String password = bundle.getString(SharedPreferencesHelper.PASSWORD, "");
-        viewModel.setEmail(login);
-        viewModel.setPassword(password);
+        saveModel(login, password);
+    }
+
+    private void saveModel(String login, String password) {
         sharedPreferencesHelper.saveLogin(login);
-        sharedPreferencesHelper.savePassword(bundle.getString(SharedPreferencesHelper.PASSWORD, ""));
+        sharedPreferencesHelper.savePassword(password);
     }
 
     // todo abstract away attach / detach of view
@@ -74,6 +76,7 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
 
     @Override
     public void onDestroy() {
+        saveModel(viewModel.getEmail(), viewModel.getPassword());
         if (mSubscriptions != null && !mSubscriptions.isUnsubscribed()) {
             mSubscriptions.unsubscribe();
         }
