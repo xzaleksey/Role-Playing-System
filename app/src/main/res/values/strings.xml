@@ -22,5 +22,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="error_empty_field">Field shouldn\'t be empty</string>
+    <string name="error_min_symbols">Field should containt at least 6 symbols</string>
 
 </resources>

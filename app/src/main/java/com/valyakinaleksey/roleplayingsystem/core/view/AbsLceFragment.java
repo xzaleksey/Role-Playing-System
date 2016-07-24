@@ -202,6 +202,7 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
                 handleNoData();
                 break;
             default:
+                hideLeContainer();
                 break;
         }
     }

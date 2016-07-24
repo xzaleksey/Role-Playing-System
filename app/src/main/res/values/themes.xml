@@ -18,7 +18,6 @@
 
     <style name="AppTheme.TextWhite">
         <item name="colorAccent">@android:color/white</item>
-        <item name="android:background">@android:color/black</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="colorPrimaryDark">@android:color/black</item>
         <item name="android:textColorHint">@color/white7</item>
@@ -34,7 +33,6 @@
     <style name="AppTheme.Widget.EditText" parent="android:Widget.Holo.Light.EditText">
         <item name="fontPath">fonts/Roboto-Regular.ttf</item>
     </style>
-
 
     <style name="AppTheme.Widget.AutoCompleteTextView" parent="android:Widget.Holo.Light.AutoCompleteTextView">
         <item name="fontPath">fonts/Roboto-Regular.ttf</item>

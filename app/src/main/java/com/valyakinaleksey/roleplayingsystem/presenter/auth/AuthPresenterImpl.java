@@ -95,6 +95,8 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
                 .get(email, password, task -> {
                     if (task.isSuccessful()) {
                         logger.d(task.getResult().getUser().toString());
+                        viewModel.setFirebaseUser(task.getResult().getUser());
+                        updateUi(viewModel);
                     } else {
                         showError(task.getException());
                     }
@@ -103,7 +105,7 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
                 .observeOn(AndroidSchedulers.mainThread())  // inject for testing
                 .compose(RxTransformers.applyOpBeforeAndAfter(mShowLoading, mHideLoading))
                 .subscribe(firebaseUser -> {
-                    updateUi(viewModel);
+
                 }, this::showError));
     }
 
@@ -115,7 +117,14 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
 
     @Override
     public void register(String email, String password) {
-        mSubscriptions.add(registerInteractor.register(email, password)
+        mSubscriptions.add(registerInteractor.register(email, password,
+                task -> {
+                    if (task.isSuccessful()) {
+                        logger.d(task.getResult().toString());
+                    } else {
+                        showError(task.getException());
+                    }
+                })
                 .subscribeOn(Schedulers.io())               // inject for testing
                 .observeOn(AndroidSchedulers.mainThread())  // inject for testing
                 .compose(RxTransformers.applyOpBeforeAndAfter(mShowLoading, mHideLoading))

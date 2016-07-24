@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.view.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ public class AuthViewModel implements EmptyViewModel, Parcelable, Serializable {
 
     private String email;
     private String password;
-
+    private FirebaseUser firebaseUser;
 
     public String getEmail() {
         return email;
@@ -59,4 +60,13 @@ public class AuthViewModel implements EmptyViewModel, Parcelable, Serializable {
             return new AuthViewModel[size];
         }
     };
+
+    @Override
+    public boolean isEmpty() {
+        return firebaseUser == null;
+    }
+
+    public void setFirebaseUser(FirebaseUser firebaseUser) {
+        this.firebaseUser = firebaseUser;
+    }
 }
