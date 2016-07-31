@@ -13,7 +13,7 @@ public class LceCommunicationBus<D extends EmptyViewModel, E extends Enum<E>, V 
         extends CommunicationBus<V, P>
         implements LceView<D, E> {
 
-    VS viewState;
+    protected VS viewState;
 
     public LceCommunicationBus(P presenter, VS viewState) {
         super(presenter);

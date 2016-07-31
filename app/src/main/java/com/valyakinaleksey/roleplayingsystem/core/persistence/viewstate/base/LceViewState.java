@@ -14,11 +14,17 @@ public interface LceViewState<D extends EmptyViewModel, E extends Enum<E>, V ext
     int STATE_SHOW_CONTENT = 1;
     int STATE_SHOW_LOADING = 2;
     int STATE_SHOW_ERROR = 3;
+    int STATE_SHOW_SNACKBAR_STRING = 4;
 
     void setStateShowLoading();
+
     void setStateHideLoading();
+
     void setStateShowError(E error, boolean isShown);
+
     void setStateShowContent();
+
     void setData(D data);
+
     D getData();
 }

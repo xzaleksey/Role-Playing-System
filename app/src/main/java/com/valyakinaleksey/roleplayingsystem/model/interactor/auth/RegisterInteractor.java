@@ -11,6 +11,6 @@ import rx.Observable;
  */
 public interface RegisterInteractor {
 
-    Observable<AuthResult> register(String email, String password, OnCompleteListener<AuthResult> authResultOnCompleteListener);
+    Observable<Void> register(String email, String password, OnCompleteListener<AuthResult> authResultOnCompleteListener);
 
 }

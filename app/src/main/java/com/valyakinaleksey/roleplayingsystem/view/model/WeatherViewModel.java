@@ -45,4 +45,9 @@ public class WeatherViewModel implements EmptyViewModel, Parcelable, Serializabl
             return new WeatherViewModel[size];
         }
     };
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
 }

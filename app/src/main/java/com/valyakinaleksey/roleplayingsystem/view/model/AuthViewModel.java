@@ -10,8 +10,8 @@ import java.io.Serializable;
 
 public class AuthViewModel implements EmptyViewModel, Parcelable, Serializable {
 
-    private String email;
-    private String password;
+    private String email ="";
+    private String password ="";
     private FirebaseUser firebaseUser;
 
     public String getEmail() {
@@ -30,6 +30,13 @@ public class AuthViewModel implements EmptyViewModel, Parcelable, Serializable {
         this.password = password;
     }
 
+    public AuthViewModel() {
+    }
+
+    public void setFirebaseUser(FirebaseUser firebaseUser) {
+        this.firebaseUser = firebaseUser;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -39,9 +46,6 @@ public class AuthViewModel implements EmptyViewModel, Parcelable, Serializable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.email);
         dest.writeString(this.password);
-    }
-
-    public AuthViewModel() {
     }
 
     protected AuthViewModel(Parcel in) {
@@ -63,10 +67,6 @@ public class AuthViewModel implements EmptyViewModel, Parcelable, Serializable {
 
     @Override
     public boolean isEmpty() {
-        return firebaseUser == null;
-    }
-
-    public void setFirebaseUser(FirebaseUser firebaseUser) {
-        this.firebaseUser = firebaseUser;
+        return false;
     }
 }

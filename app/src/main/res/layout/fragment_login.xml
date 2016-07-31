@@ -11,7 +11,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".view.activity.LoginActivityUpdated">
 
-
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
@@ -35,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="40dp"
+                    android:layout_marginBottom="@dimen/login_vertical_margin"
                     android:text="@string/app_name"
                     android:textColor="@android:color/white" />
 
@@ -68,7 +67,7 @@
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:imeActionId="@+id/login"
+                        android:imeActionId="@+id/sign_in_button"
                         android:imeActionLabel="@string/action_sign_in_short"
                         android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
@@ -80,15 +79,12 @@
                 <Button
                     android:id="@+id/sign_in_button"
                     style="?android:textAppearanceSmall"
-                    fontPath="fonts/Roboto-Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
                     android:background="@drawable/black_btn_selector"
                     android:text="@string/action_sign_in"
                     android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    tools:ignore="MissingPrefix" />
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/sign_up_button"
@@ -101,6 +97,18 @@
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/forgot_password"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/email_login_form"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/login_vertical_margin"
+                android:text="@string/forgot_password"
+                android:textColor="@color/material_grey_400" />
         </RelativeLayout>
     </ScrollView>
+
 </RelativeLayout>

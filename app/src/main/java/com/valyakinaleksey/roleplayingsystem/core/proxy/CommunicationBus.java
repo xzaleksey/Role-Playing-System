@@ -14,8 +14,8 @@ import com.valyakinaleksey.roleplayingsystem.core.view.View;
 public abstract class CommunicationBus<V extends View, P extends Presenter<V>>
         implements Presenter<V>, View {
 
-    P presenter;
-    V view;
+    protected P presenter;
+    protected V view;
 
     public CommunicationBus(P presenter) {
         this.presenter = presenter;

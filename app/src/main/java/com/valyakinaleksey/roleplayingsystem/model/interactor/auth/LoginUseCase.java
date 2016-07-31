@@ -4,7 +4,6 @@ package com.valyakinaleksey.roleplayingsystem.model.interactor.auth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
 import com.valyakinaleksey.roleplayingsystem.core.model.Interactor;
@@ -23,7 +22,7 @@ public class LoginUseCase extends Interactor implements LoginInteractor {
     }
 
     @Override
-    public Observable<FirebaseUser> get(String email, String password, OnCompleteListener<AuthResult> authResultOnCompleteListener) {
+    public Observable<Void> get(String email, String password, OnCompleteListener<AuthResult> authResultOnCompleteListener) {
         return Observable.create(subscriber -> {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(authResultOnCompleteListener);
         });

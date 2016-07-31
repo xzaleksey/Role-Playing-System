@@ -1,16 +1,17 @@
 package com.valyakinaleksey.roleplayingsystem.view.fragment;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.onemanparty.lib.dialog.delegate.ConfirmDialogFragmentDelegate;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SnackbarHelper;
@@ -21,7 +22,6 @@ import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.Shared
 import com.valyakinaleksey.roleplayingsystem.presenter.auth.AuthPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
 import com.valyakinaleksey.roleplayingsystem.utils.ValidationUtils;
-import com.valyakinaleksey.roleplayingsystem.view.data.CautionDialogData;
 import com.valyakinaleksey.roleplayingsystem.view.interfaces.AuthView;
 import com.valyakinaleksey.roleplayingsystem.view.model.AuthViewModel;
 
@@ -38,6 +38,7 @@ import rx.Subscription;
 public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewModel, AuthView.AuthError, AuthView> implements AuthView {
 
     public static final String TAG = LoginFragment.class.getSimpleName();
+    public static final String RESET_PASSWORD = "resetPassword";
     private Runnable action;
     private List<Subscription> subscriptions = new ArrayList<>();
 
@@ -65,20 +66,6 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @BindString(R.string.error_min_symbols)
     String errorMinSymbols;
 
-    ConfirmDialogFragmentDelegate<CautionDialogData> mCautionDialogDelegate;
-
-    private ConfirmDialogFragmentDelegate.OnConfirmWithDataDialogListener<CautionDialogData> listener = new ConfirmDialogFragmentDelegate.OnConfirmWithDataDialogListener<CautionDialogData>() {
-        @Override
-        public void onOkDialog(DialogFragment dialogFragment, CautionDialogData data) {
-//            ViewPagerActivity.start(getActivity(), data);
-        }
-
-        @Override
-        public void onCancelDialog(DialogFragment dialogFragment, CautionDialogData data) {
-//            getComponent().getPresenter().someInsaneActionClicked();
-        }
-    };
-
     public static LoginFragment newInstance() {
         return new LoginFragment();
     }
@@ -94,59 +81,28 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCautionDialogDelegate = new ConfirmDialogFragmentDelegate<>("caution_dialog", listener, R.string.weather_dialog_title, R.string.weather_dialog_subtitle, android.R.string.ok, android.R.string.cancel);
-        mCautionDialogDelegate.onCreate(savedInstanceState, getActivity());
         getComponent().inject(this);
-        getComponent().getPresenter().restoreData();
     }
 
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
+        etPassword.setOnEditorActionListener((v, actionId, event) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+                signIn();
+                handled = true;
+            }
+            return handled;
+        });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mCautionDialogDelegate.onResume();
-    }
-
-    private void initValidation() {
-        subscriptions.add(RxTextView.textChanges(etEmail).subscribe(charSequence -> {
-            String s = etEmail.getText().toString();
-            data.setEmail(s);
-            if (TextUtils.isEmpty(s)) {
-                emailInputLayout.setError(errorEmptyField);
-            } else if (ValidationUtils.isValidEmail(s)) {
-                emailInputLayout.setError(StringConstants.EMPTY_STRING);
-            } else {
-                emailInputLayout.setError(errorInvalidEmail);
-            }
-        }));
-        subscriptions.add(RxTextView.textChanges(etPassword).subscribe(charSequence -> {
-            String s = etPassword.getText().toString();
-            data.setPassword(s);
-            if (TextUtils.isEmpty(s)) {
-                passwordInputLayout.setError(errorEmptyField);
-            } else if (ValidationUtils.isValidLength(s)) {
-                passwordInputLayout.setError(StringConstants.EMPTY_STRING);
-            } else {
-                passwordInputLayout.setError(errorMinSymbols);
-            }
-        }));
-    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putString(SharedPreferencesHelper.LOGIN, etEmail.getText().toString());
         savedInstanceState.putString(SharedPreferencesHelper.PASSWORD, etPassword.getText().toString());
         super.onSaveInstanceState(savedInstanceState);
-        mCautionDialogDelegate.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected int getContentResId() {
-        return R.layout.fragment_login;
     }
 
     @Override
@@ -157,14 +113,12 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @Override
     public void showContent() {
         super.showContent();
-        initValidation();
         etEmail.setText(data.getEmail());
+        etEmail.post(() -> {
+            etEmail.setSelection(etEmail.getText().length());
+        });
         etPassword.setText(data.getPassword());
-    }
-
-    @Override
-    public void showCautionDialog(CautionDialogData data) {
-        mCautionDialogDelegate.showDialog(data);
+        initValidation();
     }
 
     @OnClick(R.id.sign_in_button)
@@ -174,17 +128,28 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
         startRequest();
     }
 
-    private void startRequest() {
-        if (TextUtils.isEmpty(emailInputLayout.getError()) && TextUtils.isEmpty(passwordInputLayout.getError())) {
-            loadData();
-        }
-    }
-
     @OnClick(R.id.sign_up_button)
     public void signUp() {
         action = () -> getComponent().getPresenter().register(etEmail.getText().toString(),
                 etPassword.getText().toString());
         startRequest();
+    }
+
+    @OnClick(R.id.forgot_password)
+    public void resetPassword() {
+        if (ValidationUtils.isValidEmail(etEmail.getText())) {
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                    .title(R.string.reset_password)
+                    .content(R.string.reset_password_text)
+                    .positiveText(android.R.string.ok)
+                    .onPositive((dialog1, which) -> {
+                        getComponent().getPresenter().resetPassword(etEmail.getText().toString());
+                    })
+                    .negativeText(android.R.string.cancel)
+                    .show();
+        } else {
+            SnackbarHelper.show(mainContainer, errorInvalidEmail);
+        }
     }
 
     @Override
@@ -199,5 +164,66 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
         for (Subscription subscription : subscriptions) {
             subscription.unsubscribe();
         }
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        updateEmail();
+        updatePassword();
+        super.onDestroyView();
+    }
+
+    @Override
+    protected int getContentResId() {
+        return R.layout.fragment_login;
+    }
+
+    private void initValidation() {
+        subscriptions.add(RxTextView.textChanges(etEmail).subscribe(charSequence -> {
+            String s = updateEmail();
+            if (TextUtils.isEmpty(s)) {
+                emailInputLayout.setError(String.format(errorEmptyField, getString(R.string.email)));
+            } else if (ValidationUtils.isValidEmail(s)) {
+                emailInputLayout.setError(StringConstants.EMPTY_STRING);
+            } else {
+                emailInputLayout.setError(errorInvalidEmail);
+            }
+        }));
+        subscriptions.add(RxTextView.textChanges(etPassword).subscribe(charSequence -> {
+            String s = updatePassword();
+            if (TextUtils.isEmpty(s)) {
+                passwordInputLayout.setError(String.format(errorEmptyField, getString(R.string.password)));
+            } else if (ValidationUtils.isValidLength(s)) {
+                passwordInputLayout.setError(StringConstants.EMPTY_STRING);
+            } else {
+                passwordInputLayout.setError(String.format(errorMinSymbols, getString(R.string.password)));
+            }
+        }));
+    }
+
+    @NonNull
+    private String updatePassword() {
+        String s = etPassword.getText().toString();
+        data.setPassword(s);
+        return s;
+    }
+
+    @NonNull
+    private String updateEmail() {
+        String s = etEmail.getText().toString();
+        data.setEmail(s);
+        return s;
+    }
+
+    private void startRequest() {
+        if (TextUtils.isEmpty(emailInputLayout.getError()) && TextUtils.isEmpty(passwordInputLayout.getError())) {
+            loadData();
+        }
+    }
+
+    @Override
+    public void showSnackBarString(String s) {
+        SnackbarHelper.show(mainContainer, s);
     }
 }

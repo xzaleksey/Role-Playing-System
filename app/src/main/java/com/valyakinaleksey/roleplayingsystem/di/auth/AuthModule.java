@@ -1,6 +1,8 @@
 package com.valyakinaleksey.roleplayingsystem.di.auth;
 
 
+import android.content.Context;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.communication.AuthCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
@@ -10,6 +12,8 @@ import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.LoginInteract
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.LoginUseCase;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.RegisterInteractor;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.RegisterUseCase;
+import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.ResetPasswordInteractor;
+import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.ResetPasswordUseCase;
 import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.presenter.auth.AuthPresenter;
 import com.valyakinaleksey.roleplayingsystem.presenter.auth.AuthPresenterImpl;
@@ -40,6 +44,12 @@ public class AuthModule {
     }
 
     @Provides
+    @PerFragment
+    ResetPasswordInteractor provideResetPasswordInteractor(FirebaseAuth firebaseAuth) {
+        return new ResetPasswordUseCase(firebaseAuth);
+    }
+
+    @Provides
     AuthViewState provideViewState(ViewStateStorage storage) {
         return new AuthViewState(storage);
     }
@@ -48,8 +58,8 @@ public class AuthModule {
     @Provides
     @Named("presenter")
     @PerFragment
-    AuthPresenter provideWeatherPresenter(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, SharedPreferencesHelper sharedPreferencesHelper) {
-        return new AuthPresenterImpl(loginInteractor, registerInteractor, sharedPreferencesHelper);
+    AuthPresenter provideWeatherPresenter(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, ResetPasswordInteractor resetPasswordInteractor, SharedPreferencesHelper sharedPreferencesHelper, Context context) {
+        return new AuthPresenterImpl(loginInteractor, registerInteractor, resetPasswordInteractor, sharedPreferencesHelper, context);
     }
 
     @Provides

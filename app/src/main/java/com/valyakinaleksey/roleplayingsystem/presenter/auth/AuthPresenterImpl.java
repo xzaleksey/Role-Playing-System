@@ -1,14 +1,17 @@
 package com.valyakinaleksey.roleplayingsystem.presenter.auth;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
+import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.LoginInteractor;
 import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.RegisterInteractor;
+import com.valyakinaleksey.roleplayingsystem.model.interactor.auth.ResetPasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.view.interfaces.AuthView;
 import com.valyakinaleksey.roleplayingsystem.view.model.AuthViewModel;
@@ -22,13 +25,15 @@ import rx.subscriptions.CompositeSubscription;
 @PerFragment
 public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<AuthViewModel> {
 
+    private final Logger logger = LoggerManager.getLogger();
     private CompositeSubscription mSubscriptions;
     private AuthView mView;
     private LoginInteractor loginInteractor;
     private RegisterInteractor registerInteractor;
+    private ResetPasswordInteractor resetPasswordInteractor;
     private SharedPreferencesHelper sharedPreferencesHelper;
     private AuthViewModel viewModel;
-    private final Logger logger = LoggerManager.getLogger();
+    private Context context;
     private Runnable mShowLoading = () -> {
         mView.showLoading();
     };
@@ -37,10 +42,12 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
     };
 
     @Inject
-    public AuthPresenterImpl(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, SharedPreferencesHelper sharedPreferencesHelper) {
+    public AuthPresenterImpl(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, ResetPasswordInteractor resetPasswordInteractor, SharedPreferencesHelper sharedPreferencesHelper, Context context) {
         this.loginInteractor = loginInteractor;
         this.registerInteractor = registerInteractor;
+        this.resetPasswordInteractor = resetPasswordInteractor;
         this.sharedPreferencesHelper = sharedPreferencesHelper;
+        this.context = context;
         mSubscriptions = new CompositeSubscription();
     }
 
@@ -104,16 +111,16 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
                         showError(task.getException());
                     }
                 })
-                .subscribeOn(Schedulers.io())               // inject for testing
-                .observeOn(AndroidSchedulers.mainThread())  // inject for testing
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxTransformers.applyOpBeforeAndAfter(mShowLoading, mHideLoading))
-                .subscribe(firebaseUser -> {
+                .subscribe(aVoid -> {
 
                 }, this::showError));
     }
 
     private void showError(Throwable throwable) {
-        AuthView.AuthError general = AuthView.AuthError.LOGIN;
+        AuthView.AuthError general = AuthView.AuthError.AUTH_ERROR;
         general.setValue(throwable.getMessage());
         showError(general);
     }
@@ -128,19 +135,28 @@ public class AuthPresenterImpl implements AuthPresenter, RestorablePresenter<Aut
                         showError(task.getException());
                     }
                 })
-                .subscribeOn(Schedulers.io())               // inject for testing
-                .observeOn(AndroidSchedulers.mainThread())  // inject for testing
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxTransformers.applyOpBeforeAndAfter(mShowLoading, mHideLoading))
-                .subscribe(firebaseUser -> {
-                    updateUi(viewModel);
-                }, throwable -> {
-                    showError(AuthView.AuthError.LOGIN);
-                }));
+                .subscribe(aVoid -> {
+
+                }, this::showError));
     }
 
     @Override
     public void resetPassword(String email) {
+        resetPasswordInteractor.resetPassword(email, task -> {
+            if (task.isSuccessful()) {
+                mView.showSnackBarString(context.getString(R.string.email_has_been_sent));
+            } else {
+                showError(task.getException());
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxTransformers.applyOpBeforeAndAfter(mShowLoading, mHideLoading))
+                .subscribe(aVoid -> {
 
+                }, this::showError);
     }
 
     @Override
