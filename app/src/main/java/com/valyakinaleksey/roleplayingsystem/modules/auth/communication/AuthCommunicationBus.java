@@ -47,6 +47,6 @@ public class AuthCommunicationBus
 
     @Override
     public void showSnackBarString(String s) {
-        viewState.showString(s, view);
+        getNavigationResolver().resolveNavigation(authView -> authView.showSnackBarString(s));
     }
 }
