@@ -1,7 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
 import android.content.Context;
-import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -13,11 +12,6 @@ public class RpsApp extends MultiDexApplication {
     private AppComponent component;
 
     private static RpsApp instance;
-
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
 
     @Override
     public void onCreate() {

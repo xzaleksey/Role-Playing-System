@@ -3,9 +3,8 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 import android.content.Context;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.valyakinaleksey.roleplayingsystem.model.repository.WeatherRepository;
 import com.valyakinaleksey.roleplayingsystem.model.repository.di.ApiModule;
-import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.SharedPreferencesHelper;
+import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 
 import javax.inject.Singleton;
@@ -18,8 +17,6 @@ import dagger.Component;
 @Singleton
 @Component(modules = {AppModule.class, ApiModule.class})
 public interface AppComponent {
-
-    WeatherRepository repository();
 
     Context context();
 

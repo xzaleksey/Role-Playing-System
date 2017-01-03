@@ -6,14 +6,13 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.LoggerManager;
-import com.valyakinaleksey.roleplayingsystem.view.activity.LoginActivityUpdated;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.view.LoginActivityUpdated;
 
 import java.lang.ref.WeakReference;
 
+import timber.log.Timber;
+
 public class AuthStateListener implements FirebaseAuth.AuthStateListener {
-    private final Logger logger = LoggerManager.getLogger();
     private final WeakReference<Activity> activityWeakReference;
 
     public AuthStateListener(Activity activity) {
@@ -25,10 +24,10 @@ public class AuthStateListener implements FirebaseAuth.AuthStateListener {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             // User is signed in
-            logger.d("onAuthStateChanged:signed_in:" + user.getUid());
+            Timber.d("onAuthStateChanged:signed_in:" + user.getUid());
         } else {
             // User is signed out
-            logger.d("onAuthStateChanged:signed_out");
+            Timber.d("onAuthStateChanged:signed_out");
             Activity activity = activityWeakReference.get();
             if (activity != null && !(activity instanceof LoginActivityUpdated)) {
                 Intent intent = new Intent(activity, LoginActivityUpdated.class);

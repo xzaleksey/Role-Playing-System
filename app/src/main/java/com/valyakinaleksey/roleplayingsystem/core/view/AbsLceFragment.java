@@ -12,7 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFr
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SnackbarHelper;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
-import com.valyakinaleksey.roleplayingsystem.model.error.ErrorUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.ErrorUtils;
 
 import java.util.ArrayList;
 import java.util.List;

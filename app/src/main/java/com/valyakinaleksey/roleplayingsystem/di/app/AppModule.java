@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.valyakinaleksey.roleplayingsystem.model.repository.preferences.SharedPreferencesHelper;
+import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 
 import javax.inject.Singleton;
