@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
@@ -18,13 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import rx.subscriptions.CompositeSubscription;
+
+import static com.valyakinaleksey.roleplayingsystem.core.view.BaseError.NO_CONNECTION;
 
 /**
  * Base load - content - error view
  * Handles CONNECTION, NO_DATA, GENERAL errors
  * To work properly, your view should be able to work with enum <code>XXXError</code> with corresponding fields
  */
-public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyViewModel, E extends Enum<E>, V extends LceView<M, E>> extends ComponentManagerFragment<C, V> implements LceView<M, E> {
+public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyViewModel, V extends LceView<M>> extends ComponentManagerFragment<C, V> implements LceView<M> {
 
     @Bind(R.id.progress)
     ImageView progress;
@@ -49,6 +53,10 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
 
     private List<View> mViews;
 
+
+    protected Runnable action = () -> getComponent().getPresenter().getData();
+    protected CompositeSubscription compositeSubscription;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +68,27 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
         ViewStub stub = (ViewStub) view.findViewById(R.id.content_placeholder);
         stub.setLayoutResource(getContentResId());
         contentRoot = stub.inflate();
+    }
+
+
+    @Override
+    public void onResume() {
+        if (compositeSubscription == null || compositeSubscription.isUnsubscribed()) {
+            compositeSubscription = new CompositeSubscription();
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if (compositeSubscription != null) {
+            compositeSubscription.unsubscribe();
+        }
+        super.onPause();
+    }
+
+    protected void initSubscriptions() {
+
     }
 
     @Override
@@ -191,20 +220,31 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
     }
 
     @Override
-    public void showError(E e) {
-        String name = e.name();
-        switch (name) {
-            case ErrorUtils.CONNECTION:
+    public void showError(BaseError e) {
+        switch (e) {
+            case NO_CONNECTION:
                 handleNoConnection();
                 break;
-            case ErrorUtils.DATA:
-            case ErrorUtils.GENERAL:
-                handleNoData();
+            case NO_DATA:
+                break;
+            case SNACK:
+                showSnackbarString(e.toString());
+                break;
+            case TOAST:
+                showToast(e.toString());
                 break;
             default:
                 hideLeContainer();
                 break;
         }
+    }
+
+    protected void showToast(String s) {
+        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void showSnackbarString(String s) {
+        SnackbarHelper.show(contentRoot, s);
     }
 
     private void handleNoData() {

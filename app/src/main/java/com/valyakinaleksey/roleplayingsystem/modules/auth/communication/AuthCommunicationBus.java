@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 @PerFragment
 public class AuthCommunicationBus
-        extends SelfRestorableNavigationLceCommunicationBus<AuthViewModel, AuthView.AuthError, AuthView, AuthPresenter, AuthViewState>
+        extends SelfRestorableNavigationLceCommunicationBus<AuthViewModel, AuthView, AuthPresenter, AuthViewState>
         implements AuthPresenter, AuthView {
 
     @Override

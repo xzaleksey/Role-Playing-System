@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.AbsNavigationLceViewStateImpl;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action2;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
@@ -15,8 +16,8 @@ import java.util.ArrayList;
  * Implementation of ViewState for LceView with view-based navigation and ability to put itself
  * (the whole object) in Parcel
  */
-public class ParcelableDataNavigationLceViewStateImpl<D extends Parcelable & EmptyViewModel, E extends Enum<E>, V extends LceView<D, E>>
-                extends AbsNavigationLceViewStateImpl<D, E, V, Parcelable>
+public class ParcelableDataNavigationLceViewStateImpl<D extends Parcelable & EmptyViewModel, V extends LceView<D>>
+                extends AbsNavigationLceViewStateImpl<D, V, Parcelable>
                 implements Parcelable{
 
     @Override
@@ -102,7 +103,7 @@ public class ParcelableDataNavigationLceViewStateImpl<D extends Parcelable & Emp
         this.currentState = in.readInt();
         int hasEnum = in.readInt();
         if (hasEnum == 1) {
-            Class<E> errorType = (Class<E>) in.readSerializable();
+            Class<BaseError> errorType = (Class<BaseError>) in.readSerializable();
             String err = in.readString();
             this.error = Enum.valueOf(errorType, err);
         }

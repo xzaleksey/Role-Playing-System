@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.core.proxy;
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.LceViewState;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
@@ -9,9 +10,9 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel
  * Base classes for all communication buses for {@link LceView}
  * Handles ViewState restore, tracking ViewState for loading - content - error related operations
  */
-public class LceCommunicationBus<D extends EmptyViewModel, E extends Enum<E>, V extends LceView<D, E>, P extends Presenter<V>, VS extends LceViewState<D, E, V>>
+public class LceCommunicationBus<D extends EmptyViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V>>
         extends CommunicationBus<V, P>
-        implements LceView<D, E> {
+        implements LceView<D> {
 
     protected VS viewState;
 
@@ -24,6 +25,11 @@ public class LceCommunicationBus<D extends EmptyViewModel, E extends Enum<E>, V 
     public void attachView(V view) {
         super.attachView(view);
         viewState.apply(view);
+    }
+
+    @Override
+    public void getData() {
+        presenter.getData();
     }
 
     @Override
@@ -59,7 +65,7 @@ public class LceCommunicationBus<D extends EmptyViewModel, E extends Enum<E>, V 
     }
 
     @Override
-    public void showError(E error) {
+    public void showError(BaseError error) {
         boolean isViewAttached = view != null;
         viewState.setStateShowError(error, isViewAttached);
         if (isViewAttached) {

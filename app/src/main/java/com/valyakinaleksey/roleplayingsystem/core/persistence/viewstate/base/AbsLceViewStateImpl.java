@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base;
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.error_declaration.ErrorType;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.error_declaration.ErrorTypes;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
@@ -10,13 +11,12 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel
  * Base ViewState implementation for {@link LceView}
  *
  * @param <D> type of data view operates on
- * @param <E> type of errors view can handle
  * @param <V> type of view
  */
-public abstract class AbsLceViewStateImpl<D extends EmptyViewModel, E extends Enum<E>, V extends LceView<D, E>> implements LceViewState<D, E, V> {
+public abstract class AbsLceViewStateImpl<D extends EmptyViewModel, V extends LceView<D>> implements LceViewState<D, V> {
 
     protected int currentState;
-    protected E error;
+    protected BaseError error;
     protected D data;
 
     public AbsLceViewStateImpl() {
@@ -41,7 +41,7 @@ public abstract class AbsLceViewStateImpl<D extends EmptyViewModel, E extends En
     }
 
     @Override
-    public void setStateShowError(E storeError, boolean isShown) {
+    public void setStateShowError(BaseError storeError, boolean isShown) {
         boolean isOneShot = isOneShot(storeError);
         if (isOneShot && isShown) {
             return;
@@ -94,7 +94,7 @@ public abstract class AbsLceViewStateImpl<D extends EmptyViewModel, E extends En
     }
 
     // TODO generify things there will be new error types
-    private boolean isOneShot(E error) {
+    private boolean isOneShot(BaseError error) {
         boolean hasAnnotation = false;
         try {
             ErrorType type = error.getDeclaringClass().getField(error.name()).getAnnotation(ErrorType.class);

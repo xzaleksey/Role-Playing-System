@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.auth.view;
+package com.valyakinaleksey.roleplayingsystem.modules.main_screen.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,23 +16,34 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SnackbarHelper;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.di.AuthComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.di.DaggerAuthComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.main_screen.di.DaggerGamesListComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.main_screen.di.GamesListComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.main_screen.presenter.GamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
 import com.valyakinaleksey.roleplayingsystem.utils.ValidationUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.OnClick;
+import rx.Subscription;
 
-public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewModel, AuthView> implements AuthView {
+public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, GamesListViewModel, GamesListView> implements GamesListView {
 
-    public static final String TAG = LoginFragment.class.getSimpleName();
+    public static final String TAG = GamesListFragment.class.getSimpleName();
+    public static final String RESET_PASSWORD = "resetPassword";
+    private Runnable action;
+    private List<Subscription> subscriptions = new ArrayList<>();
+
+    @Inject
+    GamesListPresenter presenter;
 
     @Bind(R.id.email)
     EditText etEmail;
@@ -55,13 +66,13 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @BindString(R.string.error_min_symbols)
     String errorMinSymbols;
 
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
+    public static GamesListFragment newInstance() {
+        return new GamesListFragment();
     }
 
     @Override
-    protected AuthComponent createComponent() {
-        return DaggerAuthComponent
+    protected GamesListComponent createComponent() {
+        return DaggerGamesListComponent
                 .builder()
                 .appComponent(RpsApp.getAppComponent(getActivity()))
                 .build();
@@ -103,9 +114,11 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     public void showContent() {
         super.showContent();
         etEmail.setText(data.getEmail());
-        etEmail.post(() -> etEmail.setSelection(etEmail.getText().length()));
+        etEmail.post(() -> {
+            etEmail.setSelection(etEmail.getText().length());
+        });
         etPassword.setText(data.getPassword());
-        initSubscriptions();
+        initValidation();
     }
 
     @OnClick(R.id.sign_in_button)
@@ -115,34 +128,13 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
         startRequest();
     }
 
-    @OnClick(R.id.sign_up_button)
-    public void signUp() {
-        action = () -> getComponent().getPresenter().register(etEmail.getText().toString(),
-                etPassword.getText().toString());
-        startRequest();
-    }
-
-    @OnClick(R.id.forgot_password)
-    public void resetPassword() {
-        if (ValidationUtils.isValidEmail(etEmail.getText())) {
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                    .title(R.string.reset_password)
-                    .content(R.string.reset_password_text)
-                    .positiveText(android.R.string.ok)
-                    .onPositive((dialog1, which) -> {
-                        getComponent().getPresenter().resetPassword(etEmail.getText().toString());
-                    })
-                    .negativeText(android.R.string.cancel)
-                    .show();
-        } else {
-            SnackbarHelper.show(mainContainer, errorInvalidEmail);
-        }
-    }
 
     @Override
     public void onPause() {
-        compositeSubscription.unsubscribe();
         super.onPause();
+        for (Subscription subscription : subscriptions) {
+            subscription.unsubscribe();
+        }
     }
 
 
@@ -158,9 +150,8 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
         return R.layout.fragment_login;
     }
 
-    @Override
-    protected void initSubscriptions() {
-        compositeSubscription.add(RxTextView.textChanges(etEmail).subscribe(charSequence -> {
+    private void initValidation() {
+        subscriptions.add(RxTextView.textChanges(etEmail).subscribe(charSequence -> {
             String s = updateEmail();
             if (TextUtils.isEmpty(s)) {
                 emailInputLayout.setError(String.format(errorEmptyField, getString(R.string.email)));
@@ -170,7 +161,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
                 emailInputLayout.setError(errorInvalidEmail);
             }
         }));
-        compositeSubscription.add(RxTextView.textChanges(etPassword).subscribe(charSequence -> {
+        subscriptions.add(RxTextView.textChanges(etPassword).subscribe(charSequence -> {
             String s = updatePassword();
             if (TextUtils.isEmpty(s)) {
                 passwordInputLayout.setError(String.format(errorEmptyField, getString(R.string.password)));

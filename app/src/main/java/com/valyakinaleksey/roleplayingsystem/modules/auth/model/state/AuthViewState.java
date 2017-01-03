@@ -8,7 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
 /**
  * Alias name for Weather ViewState
  */
-public class AuthViewState extends StorageBackedNavigationLceViewStateImpl<AuthViewModel, AuthView.AuthError, AuthView> {
+public class AuthViewState extends StorageBackedNavigationLceViewStateImpl<AuthViewModel, AuthView> {
 
     public AuthViewState(ViewStateStorage storage) {
         super(storage);

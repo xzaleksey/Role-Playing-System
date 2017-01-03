@@ -1,13 +1,14 @@
 package com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base;
 
 
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
 /**
  * ViewState for {@link LceView}
  */
-public interface LceViewState<D extends EmptyViewModel, E extends Enum<E>, V extends LceView<D, E>> extends ViewState<V> {
+public interface LceViewState<D extends EmptyViewModel, V extends LceView<D>> extends ViewState<V> {
 
     int STATE_UNINITIALIZED = -1;
 
@@ -19,7 +20,7 @@ public interface LceViewState<D extends EmptyViewModel, E extends Enum<E>, V ext
 
     void setStateHideLoading();
 
-    void setStateShowError(E error, boolean isShown);
+    void setStateShowError(BaseError baseError, boolean isShown);
 
     void setStateShowContent();
 

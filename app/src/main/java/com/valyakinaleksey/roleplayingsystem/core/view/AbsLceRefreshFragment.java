@@ -12,7 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel
  * Base class with swipe-to-refresh ability
  * To work properly layout, provided by {@link AbsLceFragment#getContentResId()}, should have {@link SwipeRefreshLayout} with id = R.id.swipe
  */
-public abstract class AbsLceRefreshFragment<C extends HasPresenter, M extends EmptyViewModel, E extends Enum<E>, V extends LceView<M, E>> extends AbsLceFragment<C, M, E, V> implements SwipeRefreshLayout.OnRefreshListener {
+public abstract class AbsLceRefreshFragment<C extends HasPresenter, M extends EmptyViewModel, E extends Enum<E>, V extends LceView<M>> extends AbsLceFragment<C, M, V> implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout swipe;
 

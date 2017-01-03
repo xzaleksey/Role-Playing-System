@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Base ViewState implementation for {@link LceView} with view-based navigation
  */
-public abstract class AbsNavigationLceViewStateImpl<D extends EmptyViewModel, E extends Enum<E>, V extends LceView<D, E>, T>
-                        extends AbsLceViewStateImpl<D, E, V>
+public abstract class AbsNavigationLceViewStateImpl<D extends EmptyViewModel, V extends LceView<D>, T>
+                        extends AbsLceViewStateImpl<D, V>
                         implements NavigationViewState<V, T> {
 
     protected List<PendingStateChange<V>> pendingStateChangesList;

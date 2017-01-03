@@ -13,8 +13,8 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel
 /**
  * Base class for all communication buses for {@link LceView} with ability to save / restore ViewState automatically
  */
-public abstract class SelfRestorableLceCommunicationBus<D extends EmptyViewModel, E extends Enum<E>, V extends LceView<D, E>, P extends Presenter<V>, VS extends LceViewState<D, E, V> & SelfRestorableViewState>
-        extends LceCommunicationBus<D, E, V, P ,VS> {
+public abstract class SelfRestorableLceCommunicationBus<D extends EmptyViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V> & SelfRestorableViewState>
+        extends LceCommunicationBus<D, V, P ,VS> {
 
     public SelfRestorableLceCommunicationBus(P presenter, VS viewState) {
         super(presenter, viewState);

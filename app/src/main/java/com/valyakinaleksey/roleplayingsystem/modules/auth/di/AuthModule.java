@@ -56,9 +56,9 @@ public class AuthModule {
 
 
     @Provides
-    @Named("presenter")
+    @Named(PRESENTER)
     @PerFragment
-    AuthPresenter provideWeatherPresenter(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, ResetPasswordInteractor resetPasswordInteractor, SharedPreferencesHelper sharedPreferencesHelper, Context context) {
+    AuthPresenter provideAuthPresenter(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, ResetPasswordInteractor resetPasswordInteractor, SharedPreferencesHelper sharedPreferencesHelper, Context context) {
         return new AuthPresenterImpl(loginInteractor, registerInteractor, resetPasswordInteractor, sharedPreferencesHelper, context);
     }
 

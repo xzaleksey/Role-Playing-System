@@ -5,6 +5,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.Pen
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action2;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
@@ -22,11 +23,11 @@ import rx.schedulers.Schedulers;
  * in {@link ViewStateStorage}.
  * For particular cases of saving instance use {@link StorageBackedNavigationLceViewStateImpl#save()}
  * To restore actual state from storage use {@link StorageBackedNavigationLceViewStateImpl#restore()}
- *
+ * <p>
  * When ViewState is no longer needed clean the storage with {@link StorageBackedNavigationLceViewStateImpl#clean()}:
  * - onDestroy() for example
  */
-public class StorageBackedNavigationLceViewStateImpl<D extends Serializable & EmptyViewModel, E extends Enum<E>, V extends LceView<D, E>> extends AbsSelfRestorableNavigationLceViewStateImpl<D, E, V, Serializable> {
+public class StorageBackedNavigationLceViewStateImpl<D extends Serializable & EmptyViewModel, V extends LceView<D>> extends AbsSelfRestorableNavigationLceViewStateImpl<D, V, Serializable> {
 
     private final ViewStateStorage storage;
 
@@ -41,7 +42,7 @@ public class StorageBackedNavigationLceViewStateImpl<D extends Serializable & Em
     }
 
     @Override
-    public void setStateShowError(E error, boolean isShown) {
+    public void setStateShowError(BaseError error, boolean isShown) {
         super.setStateShowError(error, isShown);
         save();
     }
@@ -113,7 +114,7 @@ public class StorageBackedNavigationLceViewStateImpl<D extends Serializable & Em
 
     public void restoreFromBackUp(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         currentState = (int) stream.readObject();
-        error = (E) stream.readObject();
+        error = (BaseError) stream.readObject();
         data = (D) stream.readObject();
         List<PendingStateChange<V>> pendingStateChangeList = (List<PendingStateChange<V>>) stream.readObject();
         setPendingStateChangeList(pendingStateChangeList);
