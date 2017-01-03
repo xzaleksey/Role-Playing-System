@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.auth.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -19,12 +21,9 @@ import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.di.AuthComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.di.DaggerAuthComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
 import com.valyakinaleksey.roleplayingsystem.utils.ValidationUtils;
-
-import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -71,6 +70,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getComponent().inject(this);
+        getComponent().getPresenter().initGoogleAuth(getActivity());
     }
 
     @Override
@@ -103,7 +103,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     public void showContent() {
         super.showContent();
         etEmail.setText(data.getEmail());
-        etEmail.post(() -> etEmail.setSelection(etEmail.getText().length()));
+        etEmail.setSelection(etEmail.getText().length());
         etPassword.setText(data.getPassword());
         initSubscriptions();
     }
@@ -205,5 +205,16 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @Override
     public void showSnackBarString(String s) {
         SnackbarHelper.show(mainContainer, s);
+    }
+
+    @OnClick(R.id.auth_button)
+    public void googleAuth(){
+      getComponent().getPresenter().googleAuth(getActivity());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        getComponent().getPresenter().onActivityResult(getActivity(), requestCode, resultCode, data);
     }
 }

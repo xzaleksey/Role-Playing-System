@@ -1,6 +1,9 @@
 package com.valyakinaleksey.roleplayingsystem.modules.auth.communication;
 
 
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
+
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenter;
@@ -43,6 +46,21 @@ public class AuthCommunicationBus
     @Override
     public void restoreData() {
         getPresenter().restoreData();
+    }
+
+    @Override
+    public void initGoogleAuth(FragmentActivity activity) {
+        presenter.initGoogleAuth(activity);
+    }
+
+    @Override
+    public void googleAuth(FragmentActivity activity) {
+        presenter.googleAuth(activity);
+    }
+
+    @Override
+    public void onActivityResult(FragmentActivity activity, int requestCode, int resultCode, Intent data) {
+        presenter.onActivityResult(activity, requestCode, resultCode, data);
     }
 
     @Override

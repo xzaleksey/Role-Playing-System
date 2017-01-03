@@ -7,7 +7,7 @@ import com.google.firebase.auth.AuthResult;
 import rx.Observable;
 
 /**
- * Use case: get list of games
+ * Use case: loginWithPassword list of games
  */
 public interface GetListOfGamesInteractor {
 

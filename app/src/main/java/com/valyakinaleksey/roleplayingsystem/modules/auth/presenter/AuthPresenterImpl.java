@@ -1,9 +1,20 @@
 package com.valyakinaleksey.roleplayingsystem.modules.auth.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
@@ -24,13 +35,15 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 @PerFragment
-public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> implements AuthPresenter, RestorablePresenter<AuthViewModel> {
+public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> implements AuthPresenter, RestorablePresenter<AuthViewModel>, GoogleApiClient.OnConnectionFailedListener {
+    private static final int RC_SIGN_IN = 9001;
 
     private LoginInteractor loginInteractor;
     private RegisterInteractor registerInteractor;
     private ResetPasswordInteractor resetPasswordInteractor;
     private SharedPreferencesHelper sharedPreferencesHelper;
     private Context appContext;
+    private GoogleApiClient googleApiClient;
 
     @Inject
     public AuthPresenterImpl(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, ResetPasswordInteractor resetPasswordInteractor, SharedPreferencesHelper sharedPreferencesHelper, Context appContext) {
@@ -87,16 +100,9 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
 
     @Override
     public void login(String email, String password) {
+        OnCompleteListener<AuthResult> authResultOnCompleteListener = getAuthResultOnCompleteListener();
         compositeSubscription.add(loginInteractor
-                .get(email, password, task -> {
-                    if (task.isSuccessful()) {
-                        Timber.d(task.getResult().getUser().toString());
-                        viewModel.setFirebaseUser(task.getResult().getUser());
-                        updateUi(viewModel);
-                    } else {
-                        showError(task.getException());
-                    }
-                })
+                .loginWithPassword(email, password, authResultOnCompleteListener)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
@@ -149,6 +155,50 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
         updateUi(viewModel);
     }
 
+    @Override
+    public void initGoogleAuth(FragmentActivity activity) {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(appContext.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleApiClient = new GoogleApiClient.Builder(activity)
+                .enableAutoManage(activity, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+    }
+
+    @Override
+    public void googleAuth(FragmentActivity activity) {
+        Intent authorizeIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        activity.startActivityForResult(authorizeIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(FragmentActivity activity, int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                GoogleSignInAccount account = result.getSignInAccount();
+                loginInteractor.loginWithGoogle(account, getAuthResultOnCompleteListener())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+                        .subscribe(aVoid -> {
+
+                        }, this::showError);
+            } else {
+                view.showSnackBarString(result.getStatus().getStatusMessage());
+            }
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        if (view != null) {
+            view.showSnackBarString(connectionResult.getErrorMessage());
+        }
+    }
+
     private void showError(Throwable throwable) {
         BaseError general = BaseError.SNACK;
         general.setValue(throwable.getMessage());
@@ -157,5 +207,18 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
 
     private void showError(BaseError error) {
         view.showError(error);
+    }
+
+    @NonNull
+    private OnCompleteListener<AuthResult> getAuthResultOnCompleteListener() {
+        return task -> {
+            if (task.isSuccessful()) {
+                Timber.d(task.getResult().getUser().toString());
+                viewModel.setFirebaseUser(task.getResult().getUser());
+                view.showSnackBarString("success");
+            } else {
+                showError(task.getException());
+            }
+        };
     }
 }
