@@ -1,20 +1,43 @@
 package com.valyakinaleksey.roleplayingsystem.core.view;
 
 
+import android.content.Context;
+import android.support.annotation.IntDef;
+
+import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
+
+import java.lang.annotation.Retention;
+
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
  * Interface for Load-Content-Error view
  */
 public interface LceView<D extends EmptyViewModel> extends View {
 
-	void showLoading();
-	void hideLoading();
+    @Retention(SOURCE)
+    @IntDef({TOAST, SNACK, DIALOG})
+    @interface MessageType {
+    }
 
-	void setData(D data);
-	void showContent();
+    int TOAST = 0;
+    int SNACK = 1;
+    int DIALOG = 2;
 
-	void showError(BaseError error);
+    void showLoading();
 
-	void loadData();
+    void hideLoading();
+
+    void setData(D data);
+
+    void showContent();
+
+    void showError(BaseError error);
+
+    void loadData();
+
+    void performAction(Action1<Context> contextAction);
+
+    void showMessage(CharSequence message, @MessageType int type);
 }

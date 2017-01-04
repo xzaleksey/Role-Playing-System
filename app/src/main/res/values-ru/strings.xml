@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Role Playing System</string>
+    <string name="email_has_been_sent">Email отправлен</string>
+    <string name="error_empty_field">%s не должен быть пустым</string>
+    <string name="error_field_required">Обязательное поле</string>
+    <string name="error_incorrect_password">Пароль не правильный</string>
+    <string name="error_invalid_email">Этот email не валиден</string>
+    <string name="error_invalid_password">Пароль слишком короткий</string>
+    <string name="error_min_symbols">%s должен содержать 6 символов</string>
+    <string name="error_subtitle_no_connection"></string>
+    <string name="error_title_no_connection">Проблемы с сетью</string>
+    <string name="error_title_no_loaded">Проблемы с загрузкой данных</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="password">Пароль</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="reset_password">Сбросить пароль</string>
+    <string name="reset_password_text">Не забудьте проверить ваш Email</string>
+    <string name="retry_error_button">Попробовать снова</string>
+    <string name="success">Успех</string>
+</resources>

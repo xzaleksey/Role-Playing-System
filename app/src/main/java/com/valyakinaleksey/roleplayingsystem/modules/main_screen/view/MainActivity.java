@@ -9,7 +9,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity
 
 import timber.log.Timber;
 
-public class LoginActivityUpdated extends AbsSingleFragmentActivity {
+public class MainActivity extends AbsSingleFragmentActivity {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,19 +24,14 @@ public class LoginActivityUpdated extends AbsSingleFragmentActivity {
         }
     }
 
-
-    @Override
-    protected void setupToolbar() {
-
-    }
-
     @Override
     protected void setupToolbarImpl() {
+
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.single_fragment_activity_no_toolbar;
+        return R.layout.single_fragment_activity;
     }
 }
       

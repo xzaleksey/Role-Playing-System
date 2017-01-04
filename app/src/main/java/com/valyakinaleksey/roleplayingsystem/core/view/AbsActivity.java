@@ -38,9 +38,11 @@ public abstract class AbsActivity extends AppCompatActivity {
         setupToolbarImpl();
     }
 
-    protected void setToolbarTitle(String title) {
+    public void setToolbarTitle(String title) {
         ActionBar supportActionBar = getSupportActionBar();
-        supportActionBar.setTitle(title);
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(title);
+        }
     }
 
     protected abstract void setupToolbarImpl(); // todo refactor, use builder pattern

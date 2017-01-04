@@ -15,10 +15,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
+import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
@@ -26,6 +28,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.Login
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.RegisterInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.ResetPasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
+import com.valyakinaleksey.roleplayingsystem.modules.main_screen.view.MainActivity;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 
 import javax.inject.Inject;
@@ -133,7 +136,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     public void resetPassword(String email) {
         resetPasswordInteractor.resetPassword(email, task -> {
             if (task.isSuccessful()) {
-                view.showSnackBarString(appContext.getString(R.string.email_has_been_sent));
+                view.showMessage(appContext.getString(R.string.email_has_been_sent), LceView.SNACK);
             } else {
                 showError(task.getException());
             }
@@ -156,7 +159,11 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     }
 
     @Override
-    public void initGoogleAuth(FragmentActivity activity) {
+    public void init(FragmentActivity activity) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            navigateToMainActivity(activity);
+            return;
+        }
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(appContext.getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -187,7 +194,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
 
                         }, this::showError);
             } else {
-                view.showSnackBarString(result.getStatus().getStatusMessage());
+                view.showMessage(result.getStatus().getStatusMessage(), LceView.SNACK);
             }
         }
     }
@@ -195,7 +202,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         if (view != null) {
-            view.showSnackBarString(connectionResult.getErrorMessage());
+            view.showMessage(connectionResult.getErrorMessage(), LceView.SNACK);
         }
     }
 
@@ -215,10 +222,16 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
             if (task.isSuccessful()) {
                 Timber.d(task.getResult().getUser().toString());
                 viewModel.setFirebaseUser(task.getResult().getUser());
-                view.showSnackBarString("success");
+                view.showMessage(appContext.getString(R.string.success), LceView.TOAST);
+                view.performAction(context -> navigateToMainActivity((FragmentActivity) context));
             } else {
                 showError(task.getException());
             }
         };
+    }
+
+    private void navigateToMainActivity(FragmentActivity activity) {
+        activity.startActivity(new Intent(activity, MainActivity.class));
+        activity.finish();
     }
 }

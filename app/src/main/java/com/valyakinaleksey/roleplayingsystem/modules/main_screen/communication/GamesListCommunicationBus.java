@@ -34,9 +34,4 @@ public class GamesListCommunicationBus
     public void restoreData() {
         getPresenter().restoreData();
     }
-
-    @Override
-    public void showSnackBarString(String s) {
-        getNavigationResolver().resolveNavigation(authView -> authView.showSnackBarString(s));
-    }
 }

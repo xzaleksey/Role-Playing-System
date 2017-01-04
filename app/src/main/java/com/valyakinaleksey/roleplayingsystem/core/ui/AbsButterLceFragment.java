@@ -1,8 +1,10 @@
 package com.valyakinaleksey.roleplayingsystem.core.ui;
 
+import android.content.Context;
 import android.view.View;
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
+import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
@@ -25,5 +27,10 @@ public abstract class AbsButterLceFragment<C extends HasPresenter, M extends Emp
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void performAction(Action1<Context> contextAction) {
+        contextAction.apply(getActivity());
     }
 }

@@ -16,7 +16,7 @@ public interface AuthPresenter extends Presenter<AuthView> {
 
     void restoreData();
 
-    void initGoogleAuth(FragmentActivity activity);
+    void init(FragmentActivity activity);
 
     void googleAuth(FragmentActivity activity);
 

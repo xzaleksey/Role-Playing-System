@@ -5,7 +5,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.view.LoginFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthFragment;
 
 import dagger.Component;
 
@@ -19,5 +19,5 @@ import dagger.Component;
 @PerFragment
 public interface AuthComponent extends HasPresenter<AuthPresenter> {
 
-    void inject(LoginFragment loginFragment);
+    void inject(AuthFragment authFragment);
 }

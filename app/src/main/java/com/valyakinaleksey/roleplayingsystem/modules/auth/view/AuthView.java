@@ -6,6 +6,4 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
 
 public interface AuthView extends LceView<AuthViewModel> {
 
-    void showSnackBarString(String s);
-
 }

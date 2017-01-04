@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.core.proxy;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -8,6 +9,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.Nav
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.SelfRestorableViewState;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.SerializableViewNavigationResolver;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
+import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
@@ -19,10 +21,10 @@ import java.io.Serializable;
  * And also it inherits the ability to save / restore ViewState(but with pending view state navigations this time) automatically
  */
 public class SelfRestorableNavigationLceCommunicationBus<D extends EmptyViewModel,
-                                                        V extends LceView<D>,
-                                                        P extends Presenter<V>,
-                                                        VS extends LceViewState<D, V> & SelfRestorableViewState & NavigationViewState<V, Serializable>>
-        extends SelfRestorableLceCommunicationBus<D, V, P ,VS> {
+        V extends LceView<D>,
+        P extends Presenter<V>,
+        VS extends LceViewState<D, V> & SelfRestorableViewState & NavigationViewState<V, Serializable>>
+        extends SelfRestorableLceCommunicationBus<D, V, P, VS> {
 
     private SerializableViewNavigationResolver<V> navigationResolver;
 
@@ -50,5 +52,15 @@ public class SelfRestorableNavigationLceCommunicationBus<D extends EmptyViewMode
 
     public SerializableViewNavigationResolver<V> getNavigationResolver() {
         return navigationResolver;
+    }
+
+    @Override
+    public void performAction(Action1<Context> contextAction) {
+        getNavigationResolver().resolveNavigation(authView -> authView.performAction(contextAction));
+    }
+
+    @Override
+    public void showMessage(CharSequence message, @MessageType int type) {
+        getNavigationResolver().resolveNavigation(v -> v.showMessage(message, type));
     }
 }

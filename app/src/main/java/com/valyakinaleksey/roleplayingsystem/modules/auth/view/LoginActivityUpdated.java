@@ -20,7 +20,7 @@ public class LoginActivityUpdated extends AbsSingleFragmentActivity {
             Timber.d(currentUser.toString());
         }
         if (savedInstanceState == null) {
-            setSingleFragment(LoginFragment.newInstance(), LoginFragment.TAG);
+            setSingleFragment(AuthFragment.newInstance(), AuthFragment.TAG);
         }
     }
 

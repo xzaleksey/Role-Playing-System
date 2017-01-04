@@ -10,7 +10,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel
  * Base classes for all communication buses for {@link LceView}
  * Handles ViewState restore, tracking ViewState for loading - content - error related operations
  */
-public class LceCommunicationBus<D extends EmptyViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V>>
+public abstract class LceCommunicationBus<D extends EmptyViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V>>
         extends CommunicationBus<V, P>
         implements LceView<D> {
 
@@ -79,4 +79,5 @@ public class LceCommunicationBus<D extends EmptyViewModel, V extends LceView<D>,
             view.loadData();
         }
     }
+
 }

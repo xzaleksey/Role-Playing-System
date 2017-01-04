@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentActivity;
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.state.AuthViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
 
 import javax.inject.Inject;
 
@@ -49,8 +49,8 @@ public class AuthCommunicationBus
     }
 
     @Override
-    public void initGoogleAuth(FragmentActivity activity) {
-        presenter.initGoogleAuth(activity);
+    public void init(FragmentActivity activity) {
+        presenter.init(activity);
     }
 
     @Override
@@ -63,8 +63,4 @@ public class AuthCommunicationBus
         presenter.onActivityResult(activity, requestCode, resultCode, data);
     }
 
-    @Override
-    public void showSnackBarString(String s) {
-        getNavigationResolver().resolveNavigation(authView -> authView.showSnackBarString(s));
-    }
 }

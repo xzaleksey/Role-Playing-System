@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -29,9 +28,9 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.OnClick;
 
-public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewModel, AuthView> implements AuthView {
+public class AuthFragment extends AbsButterLceFragment<AuthComponent, AuthViewModel, AuthView> implements AuthView {
 
-    public static final String TAG = LoginFragment.class.getSimpleName();
+    public static final String TAG = AuthFragment.class.getSimpleName();
 
     @Bind(R.id.email)
     EditText etEmail;
@@ -54,8 +53,8 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     @BindString(R.string.error_min_symbols)
     String errorMinSymbols;
 
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
+    public static AuthFragment newInstance() {
+        return new AuthFragment();
     }
 
     @Override
@@ -70,7 +69,7 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getComponent().inject(this);
-        getComponent().getPresenter().initGoogleAuth(getActivity());
+        getComponent().getPresenter().init(getActivity());
     }
 
     @Override
@@ -89,9 +88,9 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putString(SharedPreferencesHelper.LOGIN, etEmail.getText().toString());
         savedInstanceState.putString(SharedPreferencesHelper.PASSWORD, etPassword.getText().toString());
-        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
@@ -148,8 +147,10 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
 
     @Override
     public void onDestroyView() {
-        updateEmail();
-        updatePassword();
+        if (data != null) {
+            updateEmail();
+            updatePassword();
+        }
         super.onDestroyView();
     }
 
@@ -202,14 +203,10 @@ public class LoginFragment extends AbsButterLceFragment<AuthComponent, AuthViewM
         }
     }
 
-    @Override
-    public void showSnackBarString(String s) {
-        SnackbarHelper.show(mainContainer, s);
-    }
 
     @OnClick(R.id.auth_button)
-    public void googleAuth(){
-      getComponent().getPresenter().googleAuth(getActivity());
+    public void googleAuth() {
+        getComponent().getPresenter().googleAuth(getActivity());
     }
 
     @Override

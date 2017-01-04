@@ -275,4 +275,16 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
     public void setData(M data) {
         this.data = data;
     }
+
+    @Override
+    public void showMessage(CharSequence message, @MessageType int type) {
+        switch (type) {
+            case TOAST:
+                Toast.makeText(getContext(),message, Toast.LENGTH_SHORT).show();
+                break;
+            case SNACK:
+                SnackbarHelper.show(contentRoot, message);
+                break;
+        }
+    }
 }
