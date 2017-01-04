@@ -185,10 +185,12 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     public void googleAuth(FragmentActivity activity) {
         Intent authorizeIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         activity.startActivityForResult(authorizeIntent, RC_SIGN_IN);
+        view.showLoading();
     }
 
     @Override
     public void onActivityResult(FragmentActivity activity, int requestCode, int resultCode, Intent data) {
+        view.hideLoading();
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {

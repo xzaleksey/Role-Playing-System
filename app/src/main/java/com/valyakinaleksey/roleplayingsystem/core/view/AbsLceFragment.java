@@ -200,9 +200,7 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
 
     @Override
     public void showLoading() {
-        if (!hasData()) {
-            showFullLoading();
-        }
+        showFullLoading();
     }
 
     protected final boolean hasData() {
@@ -280,7 +278,7 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
     public void showMessage(CharSequence message, @MessageType int type) {
         switch (type) {
             case TOAST:
-                Toast.makeText(getContext(),message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 break;
             case SNACK:
                 SnackbarHelper.show(contentRoot, message);
