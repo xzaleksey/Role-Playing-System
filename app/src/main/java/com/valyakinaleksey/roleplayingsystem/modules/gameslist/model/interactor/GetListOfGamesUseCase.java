@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.interactor;
+package com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.interactor;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;

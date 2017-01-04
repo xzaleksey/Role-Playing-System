@@ -28,5 +28,6 @@
     <string name="password">Password</string>
     <string name="email_has_been_sent">Email has been sent</string>
     <string name="success">Success</string>
+    <string name="logout">Logout</string>
 
 </resources>

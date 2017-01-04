@@ -18,4 +18,5 @@
     <string name="reset_password_text">Не забудьте проверить ваш Email</string>
     <string name="retry_error_button">Попробовать снова</string>
     <string name="success">Успех</string>
+    <string name="logout">Выйти</string>
 </resources>

@@ -1,12 +1,12 @@
-package com.valyakinaleksey.roleplayingsystem.modules.main_screen.communication;
+package com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication;
 
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.GamesListViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.state.GamesListViewState;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.presenter.GamesListPresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.view.GamesListView;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.state.GamesListViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
 
 import javax.inject.Inject;
 

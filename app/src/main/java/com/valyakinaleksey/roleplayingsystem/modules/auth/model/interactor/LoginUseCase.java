@@ -24,7 +24,8 @@ public class LoginUseCase extends Interactor implements LoginInteractor {
     @Override
     public Observable<Void> loginWithPassword(String email, String password, OnCompleteListener<AuthResult> authResultOnCompleteListener) {
         return Observable.create(subscriber -> {
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(authResultOnCompleteListener);
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(authResultOnCompleteListener);
         });
     }
 

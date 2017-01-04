@@ -1,15 +1,14 @@
-package com.valyakinaleksey.roleplayingsystem.modules.main_screen.presenter;
+package com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
-import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.GamesListViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.interactor.GetListOfGamesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.view.GamesListView;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.interactor.GetListOfGamesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 
 import javax.inject.Inject;

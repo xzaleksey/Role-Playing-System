@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.main_screen.di;
+package com.valyakinaleksey.roleplayingsystem.modules.gameslist.di;
 
 
 import android.content.Context;
@@ -7,12 +7,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.communication.GamesListCommunicationBus;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.interactor.GetListOfGamesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.interactor.GetListOfGamesUseCase;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.state.GamesListViewState;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.presenter.GamesListPresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.presenter.GamesListPresenterImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication.GamesListCommunicationBus;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.interactor.GetListOfGamesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.interactor.GetListOfGamesUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.state.GamesListViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 

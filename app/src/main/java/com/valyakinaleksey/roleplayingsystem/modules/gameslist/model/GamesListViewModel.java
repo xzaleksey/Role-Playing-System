@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.main_screen.model;
+package com.valyakinaleksey.roleplayingsystem.modules.gameslist.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

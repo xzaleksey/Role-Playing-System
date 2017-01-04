@@ -10,6 +10,7 @@
         <item name="windowActionBar">false</item>
         <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
         <item name="android:buttonStyle">@style/AppTheme.Widget.Button</item>
+        <item name="android:panelFullBackground">@color/material_blue_600</item>
         <item name="android:autoCompleteTextViewStyle">@style/AppTheme.Widget.AutoCompleteTextView
         </item>
         <item name="android:editTextStyle">@style/AppTheme.Widget.EditText</item>

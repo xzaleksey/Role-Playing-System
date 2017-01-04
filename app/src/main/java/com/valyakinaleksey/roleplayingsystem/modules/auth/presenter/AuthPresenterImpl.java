@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 
+import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -16,6 +17,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
@@ -24,12 +28,15 @@ import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.LoginInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.RegisterInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.ResetPasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.view.MainActivity;
+import com.valyakinaleksey.roleplayingsystem.modules.mainscreen.view.MainActivity;
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
+
 
 import javax.inject.Inject;
 
@@ -110,7 +117,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(aVoid -> {
-
+                    Timber.d("Got login result");
                 }, this::showError));
     }
 
@@ -160,7 +167,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
 
     @Override
     public void init(FragmentActivity activity) {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) { // navigate to main Activity if logged in
             navigateToMainActivity(activity);
             return;
         }
@@ -220,7 +227,9 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     private OnCompleteListener<AuthResult> getAuthResultOnCompleteListener() {
         return task -> {
             if (task.isSuccessful()) {
-                Timber.d(task.getResult().getUser().toString());
+                FirebaseUser user = task.getResult().getUser();
+                Timber.d(user.toString());
+                onAuthSuccess(user);
                 viewModel.setFirebaseUser(task.getResult().getUser());
                 view.showMessage(appContext.getString(R.string.success), LceView.TOAST);
                 view.performAction(context -> navigateToMainActivity((FragmentActivity) context));
@@ -228,6 +237,21 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
                 showError(task.getException());
             }
         };
+    }
+
+    private void onAuthSuccess(FirebaseUser user) {
+        String username = FireBaseUtils.usernameFromEmail(user.getEmail());
+        writeNewUser(user.getUid(), username, user.getEmail());
+    }
+
+    private void writeNewUser(String userId, String name, String email) {
+        User user = new User(name, email);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        RxFirebaseDatabase.getInstance().observeSetValuePush(reference.child(FireBaseUtils.USERS).child(userId), user)
+                .compose(RxTransformers.applySchedulers())
+                .subscribe(s -> {
+                    Timber.d("user Created" + user.getName() + " " + s);
+                });
     }
 
     private void navigateToMainActivity(FragmentActivity activity) {

@@ -1,9 +1,9 @@
-package com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.state;
+package com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.state;
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.StorageBackedNavigationLceViewStateImpl;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.model.GamesListViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.main_screen.view.GamesListView;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
 
 /**
  * Alias name for Weather ViewState
