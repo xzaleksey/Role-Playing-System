@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         android:supportsRtl="true">
         <activity
-            android:name=".modules.auth.view.LoginActivityUpdated"
+            android:name=".modules.auth.view.AuthActivity"
             android:theme="@style/AppTheme.TextWhite"
             android:label="@string/app_name">
             <intent-filter>

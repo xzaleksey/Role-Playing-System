@@ -35,7 +35,7 @@ public abstract class AbsActivity extends AppCompatActivity {
     protected void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setupToolbarImpl();
+        fillToolbarItems();
     }
 
     public void setToolbarTitle(String title) {
@@ -45,7 +45,9 @@ public abstract class AbsActivity extends AppCompatActivity {
         }
     }
 
-    protected abstract void setupToolbarImpl(); // todo refactor, use builder pattern
+    protected void fillToolbarItems() {
+
+    }
 
     protected abstract int getLayoutId();
 

@@ -25,7 +25,7 @@ public class MainActivity extends AbsSingleFragmentActivity {
     }
 
     @Override
-    protected void setupToolbarImpl() {
+    protected void fillToolbarItems() {
 
     }
 
