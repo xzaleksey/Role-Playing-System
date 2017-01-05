@@ -33,7 +33,8 @@ public class LoginUseCase extends Interactor implements LoginInteractor {
     public Observable<Void> loginWithGoogle(GoogleSignInAccount googleSignInAccount, OnCompleteListener<AuthResult> authResultOnCompleteListener) {
         return Observable.create(subscriber -> {
             AuthCredential credential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
-            firebaseAuth.signInWithCredential(credential).addOnCompleteListener(authResultOnCompleteListener);
+            firebaseAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(authResultOnCompleteListener);
         });
     }
 }

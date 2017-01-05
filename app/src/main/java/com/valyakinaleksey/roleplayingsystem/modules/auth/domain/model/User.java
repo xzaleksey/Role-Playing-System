@@ -8,13 +8,28 @@ import java.io.Serializable;
 public class User implements Serializable, Parcelable {
     private String name;
     private String email;
+    private String photoUrl;
 
     public User(String name, String email) {
         this.name = name;
         this.email = email;
     }
 
+
+    public User(String name, String email, String photoUrl) {
+        this(name, email);
+        this.photoUrl = photoUrl;
+    }
+
     public User() {
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public String getName() {
@@ -42,11 +57,13 @@ public class User implements Serializable, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
         dest.writeString(this.email);
+        dest.writeString(this.photoUrl);
     }
 
     protected User(Parcel in) {
         this.name = in.readString();
         this.email = in.readString();
+        this.photoUrl = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

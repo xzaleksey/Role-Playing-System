@@ -9,8 +9,8 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/material_layout_avatar"
+        android:layout_height="@dimen/material_layout_avatar"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/material_component_lists_icon_left_padding"
         tools:src="@drawable/ic_add_black_24dp" />

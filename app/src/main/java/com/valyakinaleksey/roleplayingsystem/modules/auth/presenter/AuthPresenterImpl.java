@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.auth.presenter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -37,6 +40,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
 import com.valyakinaleksey.roleplayingsystem.modules.mainscreen.view.MainActivity;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -256,7 +261,8 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
                 FirebaseUser user = task.getResult().getUser();
                 Timber.d(user.toString());
                 onAuthSuccess(user);
-                viewModel.setFirebaseUser(task.getResult().getUser());
+                viewModel.setFirebaseUser(user);
+                UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
                 view.showMessage(appContext.getString(R.string.success), LceView.TOAST);
                 view.performAction(context -> navigateToMainActivity((FragmentActivity) context));
             } else {
@@ -278,6 +284,14 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
 
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email);
+        List<? extends UserInfo> providerData = FirebaseAuth.getInstance().getCurrentUser().getProviderData();
+        for (UserInfo userInfo : providerData) {
+            Uri photoUrl = userInfo.getPhotoUrl();
+            if (photoUrl != null && !TextUtils.isEmpty(photoUrl.toString())) {
+                user.setPhotoUrl(photoUrl.toString());
+                break;
+            }
+        }
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child(FireBaseUtils.USERS).child(userId).setValue(user);
     }
