@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
-import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -37,7 +36,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
 import com.valyakinaleksey.roleplayingsystem.modules.mainscreen.view.MainActivity;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
-
 
 import javax.inject.Inject;
 
@@ -189,6 +187,15 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
         view.showLoading();
     }
 
+
+    /**
+     * Check google accont was chosen and login to firebase with google account
+     *
+     * @param activity    AuthActivity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(FragmentActivity activity, int requestCode, int resultCode, Intent data) {
         view.hideLoading();
@@ -212,6 +219,12 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
         }
     }
 
+
+    /**
+     * Google connection failed
+     *
+     * @param connectionResult
+     */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         if (view != null) {
@@ -229,6 +242,12 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
         view.showError(error);
     }
 
+
+    /**
+     * Handle AuthResult from firebase
+     *
+     * @return firebaseListener
+     */
     @NonNull
     private OnCompleteListener<AuthResult> getAuthResultOnCompleteListener() {
         return task -> {
@@ -245,6 +264,11 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
         };
     }
 
+    /**
+     * Should be in User Repository, TODO create it, when i will work with users table
+     *
+     * @param user
+     */
     private void onAuthSuccess(FirebaseUser user) {
         String username = FireBaseUtils.usernameFromEmail(user.getEmail());
         writeNewUser(user.getUid(), username, user.getEmail());
@@ -253,11 +277,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        RxFirebaseDatabase.getInstance().observeSetValuePush(reference.child(FireBaseUtils.USERS).child(userId), user)
-                .compose(RxTransformers.applySchedulers())
-                .subscribe(s -> {
-                    Timber.d("user Created" + user.getName() + " " + s);
-                });
+        reference.child(FireBaseUtils.USERS).child(userId).setValue(user);
     }
 
     private void navigateToMainActivity(FragmentActivity activity) {

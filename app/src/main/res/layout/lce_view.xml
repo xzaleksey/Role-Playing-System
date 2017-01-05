@@ -7,6 +7,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <ViewStub
         android:id="@+id/content_placeholder"
         android:layout_width="match_parent"
@@ -17,12 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <ProgressBar
             android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@android:drawable/ic_menu_rotate" />
+            android:indeterminate="true" />
 
         <include layout="@layout/no_connection_error" />
 

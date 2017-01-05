@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -31,7 +32,7 @@ import static com.valyakinaleksey.roleplayingsystem.core.view.BaseError.NO_CONNE
 public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyViewModel, V extends LceView<M>> extends ComponentManagerFragment<C, V> implements LceView<M> {
 
     @Bind(R.id.progress)
-    ImageView progress;
+    ProgressBar progress;
 
     @Bind(R.id.no_connection_error_layout)
     View noConnection;
