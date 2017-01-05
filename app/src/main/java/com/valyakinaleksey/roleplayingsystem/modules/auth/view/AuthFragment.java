@@ -75,6 +75,8 @@ public class AuthFragment extends AbsButterLceFragment<AuthComponent, AuthViewMo
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
+        emailInputLayout.setHint(getString(R.string.email));
+        passwordInputLayout.setHint(getString(R.string.password));
         etPassword.setOnEditorActionListener((v, actionId, event) -> {
             boolean handled = false;
             if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
@@ -161,26 +163,30 @@ public class AuthFragment extends AbsButterLceFragment<AuthComponent, AuthViewMo
 
     @Override
     protected void initSubscriptions() {
-        compositeSubscription.add(RxTextView.textChanges(etEmail).subscribe(charSequence -> {
-            String s = updateEmail();
-            if (TextUtils.isEmpty(s)) {
-                emailInputLayout.setError(String.format(errorEmptyField, getString(R.string.email)));
-            } else if (ValidationUtils.isValidEmail(s)) {
-                emailInputLayout.setError(StringConstants.EMPTY_STRING);
-            } else {
-                emailInputLayout.setError(errorInvalidEmail);
-            }
-        }));
-        compositeSubscription.add(RxTextView.textChanges(etPassword).subscribe(charSequence -> {
-            String s = updatePassword();
-            if (TextUtils.isEmpty(s)) {
-                passwordInputLayout.setError(String.format(errorEmptyField, getString(R.string.password)));
-            } else if (ValidationUtils.isValidLength(s)) {
-                passwordInputLayout.setError(StringConstants.EMPTY_STRING);
-            } else {
-                passwordInputLayout.setError(String.format(errorMinSymbols, getString(R.string.password)));
-            }
-        }));
+        compositeSubscription.add(RxTextView.textChanges(etEmail)
+                .skip(1)
+                .subscribe(charSequence -> {
+                    String s = updateEmail();
+                    if (TextUtils.isEmpty(s)) {
+                        emailInputLayout.setError(String.format(errorEmptyField, getString(R.string.email)));
+                    } else if (ValidationUtils.isValidEmail(s)) {
+                        emailInputLayout.setError(StringConstants.EMPTY_STRING);
+                    } else {
+                        emailInputLayout.setError(errorInvalidEmail);
+                    }
+                }));
+        compositeSubscription.add(RxTextView.textChanges(etPassword)
+                .skip(1)
+                .subscribe(charSequence -> {
+                    String s = updatePassword();
+                    if (TextUtils.isEmpty(s)) {
+                        passwordInputLayout.setError(String.format(errorEmptyField, getString(R.string.password)));
+                    } else if (ValidationUtils.isValidLength(s)) {
+                        passwordInputLayout.setError(StringConstants.EMPTY_STRING);
+                    } else {
+                        passwordInputLayout.setError(String.format(errorMinSymbols, getString(R.string.password)));
+                    }
+                }));
     }
 
     @NonNull
