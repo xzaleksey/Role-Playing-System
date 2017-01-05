@@ -32,6 +32,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     public void createGame(GameModel gameModel) {
         createNewGameInteractor.createNewGame(gameModel)
                 .compose(RxTransformers.applySchedulers())
+                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(s -> {
                     Timber.d("success");
                 }, throwable -> {
