@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor;
+package com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;

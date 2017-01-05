@@ -3,8 +3,9 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication;
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.GamesListViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.state.GamesListViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.state.GamesListViewState;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
 
@@ -26,12 +27,7 @@ public class GamesListCommunicationBus
     }
 
     @Override
-    public void login(String email, String password) {
-        getPresenter().login(email, password);
-    }
-
-    @Override
-    public void restoreData() {
-        getPresenter().restoreData();
+    public void createGame(GameModel gameModel) {
+        presenter.createGame(gameModel);
     }
 }

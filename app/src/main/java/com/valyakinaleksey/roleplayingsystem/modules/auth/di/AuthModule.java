@@ -8,17 +8,17 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.communication.AuthComm
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.LoginInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.LoginUseCase;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.RegisterInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.RegisterUseCase;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.ResetPasswordInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.ResetPasswordUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.LoginInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.LoginUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.RegisterInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.RegisterUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.ResetPasswordInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.ResetPasswordUseCase;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.state.AuthViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.state.AuthViewState;
 
 import javax.inject.Named;
 

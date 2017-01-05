@@ -19,7 +19,7 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.SnackbarHelper;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.di.AuthComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.di.DaggerAuthComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.AuthViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
 import com.valyakinaleksey.roleplayingsystem.utils.ValidationUtils;

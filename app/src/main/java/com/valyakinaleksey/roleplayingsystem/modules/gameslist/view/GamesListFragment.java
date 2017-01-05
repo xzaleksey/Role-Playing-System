@@ -12,7 +12,8 @@ import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 
 import butterknife.Bind;
 
@@ -47,6 +48,9 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
+        fab.setOnClickListener(v -> {
+            getComponent().getPresenter().createGame(new GameModel("name1", "description1"));
+        });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

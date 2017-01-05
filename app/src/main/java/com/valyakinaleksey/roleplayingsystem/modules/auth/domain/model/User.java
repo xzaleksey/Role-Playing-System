@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.auth.model;
+package com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

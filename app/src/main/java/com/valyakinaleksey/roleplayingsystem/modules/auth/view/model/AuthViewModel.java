@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gameslist.model;
+package com.valyakinaleksey.roleplayingsystem.modules.auth.view.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,7 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel
 
 import java.io.Serializable;
 
-public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializable {
+public class AuthViewModel implements EmptyViewModel, Parcelable, Serializable {
 
     private String email ="";
     private String password ="";
@@ -30,7 +30,7 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
         this.password = password;
     }
 
-    public GamesListViewModel() {
+    public AuthViewModel() {
     }
 
     public void setFirebaseUser(FirebaseUser firebaseUser) {
@@ -48,20 +48,20 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
         dest.writeString(this.password);
     }
 
-    protected GamesListViewModel(Parcel in) {
+    protected AuthViewModel(Parcel in) {
         this.email = in.readString();
         this.password = in.readString();
     }
 
-    public static final Creator<GamesListViewModel> CREATOR = new Creator<GamesListViewModel>() {
+    public static final Creator<AuthViewModel> CREATOR = new Creator<AuthViewModel>() {
         @Override
-        public GamesListViewModel createFromParcel(Parcel source) {
-            return new GamesListViewModel(source);
+        public AuthViewModel createFromParcel(Parcel source) {
+            return new AuthViewModel(source);
         }
 
         @Override
-        public GamesListViewModel[] newArray(int size) {
-            return new GamesListViewModel[size];
+        public AuthViewModel[] newArray(int size) {
+            return new AuthViewModel[size];
         }
     };
 

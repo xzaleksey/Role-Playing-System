@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentActivity;
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.model.state.AuthViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.AuthViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.state.AuthViewState;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
 

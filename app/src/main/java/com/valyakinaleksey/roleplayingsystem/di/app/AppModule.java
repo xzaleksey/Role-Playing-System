@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 
@@ -55,5 +57,12 @@ public class AppModule {
     @Singleton
     SharedPreferencesHelper provideSharedPreferencesHelper(SharedPreferences sharedPreferences) {
         return new SharedPreferencesHelper(sharedPreferences);
+    }
+
+
+    @Provides
+    @Singleton
+    CreateNewGameInteractor provideCreateNewGameInteractor() {
+        return new CreateNewGameUseCase();
     }
 }
