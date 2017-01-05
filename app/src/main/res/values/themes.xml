@@ -28,6 +28,7 @@
 
     <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
         <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="AppTheme.Widget.EditText" parent="android:Widget.Holo.Light.EditText">
