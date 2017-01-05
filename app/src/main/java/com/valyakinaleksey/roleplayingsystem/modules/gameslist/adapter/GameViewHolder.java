@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter;
 
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.TextUtils;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.crashlytics.android.Crashlytics;
@@ -19,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ButterKnifeViewHolder;
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
@@ -60,6 +64,7 @@ public class GameViewHolder extends ButterKnifeViewHolder {
         if (subscription != null) {
             subscription.unsubscribe();
         }
+        ColorGenerator generator = ColorGenerator.MATERIAL;
         subscription = RxFirebaseDatabase.getInstance()
                 .observeSingleValue(FirebaseDatabase.getInstance()
                         .getReference()
@@ -68,9 +73,16 @@ public class GameViewHolder extends ButterKnifeViewHolder {
                 )
                 .subscribe(dataSnapshot -> {
                     User user = dataSnapshot.getValue(User.class);
+                    TextDrawable textDrawable = TextDrawable.builder().beginConfig()
+                            .useFont(RpsApp.getFont())
+                            .toUpperCase()
+                            .endConfig()
+                            .buildRound(user.getName().substring(0, 1), generator.getRandomColor());
                     Glide.with(ivAvatar.getContext()).load(user.getPhotoUrl())
                             .asBitmap()
                             .centerCrop()
+                            .placeholder(textDrawable)
+                            .error(textDrawable)
                             .into(new BitmapImageViewTarget(ivAvatar) {
                                 @Override
                                 protected void setResource(Bitmap resource) {

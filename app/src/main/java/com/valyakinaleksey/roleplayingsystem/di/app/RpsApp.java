@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
@@ -15,11 +16,14 @@ import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
+import static java.security.AccessController.getContext;
+
 public class RpsApp extends MultiDexApplication {
 
     private AppComponent component;
 
     private static RpsApp instance;
+    private static Typeface font;
 
     @Override
     public void onCreate() {
@@ -35,6 +39,11 @@ public class RpsApp extends MultiDexApplication {
                 .build()
         );
         instance = this;
+        font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+    }
+
+    public static Typeface getFont() {
+        return font;
     }
 
     public static AppComponent getAppComponent(Context context) {

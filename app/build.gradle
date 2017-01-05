@@ -18,6 +18,7 @@ repositories {
     mavenCentral() // jcenter() works as well because it pulls from Maven Central
     maven { url "https://jitpack.io" }
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'http://dl.bintray.com/amulyakhare/maven' }
 }
 
 android {
@@ -63,7 +64,7 @@ dependencies {
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.afollestad.material-dialogs:core:0.8.6.2'
     compile 'com.afollestad.material-dialogs:commons:0.8.6.2'
-
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     //Firebase
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-crash:10.0.1'

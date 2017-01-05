@@ -3,7 +3,9 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -89,6 +91,20 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         super.showContent();
         if (gameListAdapter == null) {
             gameListAdapter = new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class, data.getReference());
+//            gameListAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//                @Override
+//                public void onItemRangeInserted(int positionStart, int itemCount) {
+//                    super.onItemRangeInserted(positionStart, itemCount);
+//                    int chatMessageCount = gameListAdapter.getItemCount();
+//                    int lastVisiblePosition =
+//                            ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+//                    if (lastVisiblePosition == -1 ||
+//                            (positionStart >= (chatMessageCount - 1) &&
+//                                    lastVisiblePosition == (positionStart - 1))) {
+//                        recyclerView.scrollToPosition(positionStart);
+//                    }
+//                }
+//            });
         }
         if (recyclerView.getAdapter() == null) {
             recyclerView.setAdapter(gameListAdapter);
