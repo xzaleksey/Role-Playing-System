@@ -61,6 +61,7 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class GameModel implements Serializable, Parcelable {
     private String id;
     private String masterId;
+    private String masterName;
     private String name;
     private long dateCreate;
     private String description;
@@ -29,6 +30,15 @@ public class GameModel implements Serializable, Parcelable {
         this(name, description);
         this.masterId = masterId;
         this.dateCreate = dateCreate;
+    }
+
+
+    public String getMasterName() {
+        return masterName;
+    }
+
+    public void setMasterName(String masterName) {
+        this.masterName = masterName;
     }
 
     public String getId() {
@@ -80,6 +90,7 @@ public class GameModel implements Serializable, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.masterId);
+        dest.writeString(this.masterName);
         dest.writeString(this.name);
         dest.writeLong(this.dateCreate);
         dest.writeString(this.description);
@@ -88,6 +99,7 @@ public class GameModel implements Serializable, Parcelable {
     protected GameModel(Parcel in) {
         this.id = in.readString();
         this.masterId = in.readString();
+        this.masterName = in.readString();
         this.name = in.readString();
         this.dateCreate = in.readLong();
         this.description = in.readString();

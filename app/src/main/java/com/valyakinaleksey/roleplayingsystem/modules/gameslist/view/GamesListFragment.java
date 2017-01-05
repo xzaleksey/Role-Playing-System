@@ -10,6 +10,8 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameListAdapter;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
@@ -26,6 +28,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
 
     @Bind(R.id.fab)
     FloatingActionButton fab;
+    private GameListAdapter gameListAdapter;
 
     public static GamesListFragment newInstance() {
         return new GamesListFragment();
@@ -72,7 +75,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
 
     @Override
     public void loadData() {
-
+        getComponent().getPresenter().getData();
     }
 
     @Override
@@ -84,8 +87,22 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     @Override
     public void showContent() {
         super.showContent();
+        if (gameListAdapter == null) {
+            gameListAdapter = new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class, data.getReference());
+        }
+        if (recyclerView.getAdapter() == null) {
+            recyclerView.setAdapter(gameListAdapter);
+        }
     }
 
+
+    @Override
+    public void onDestroy() {
+        if (gameListAdapter != null) {
+            gameListAdapter.cleanup();
+        }
+        super.onDestroy();
+    }
 
     @Override
     protected int getContentResId() {

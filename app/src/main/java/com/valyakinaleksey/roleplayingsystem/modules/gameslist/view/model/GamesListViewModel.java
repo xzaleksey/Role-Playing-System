@@ -3,6 +3,8 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
 import java.io.Serializable;
@@ -10,17 +12,23 @@ import java.util.List;
 
 public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializable {
 
-    private List<GameViewModel> gameViewModels;
+    private transient DatabaseReference reference;
 
     public GamesListViewModel() {
     }
 
-    public List<GameViewModel> getGameViewModels() {
-        return gameViewModels;
+    public DatabaseReference getReference() {
+        return reference;
     }
 
-    public void setGameViewModels(List<GameViewModel> gameViewModels) {
-        this.gameViewModels = gameViewModels;
+    public void setReference(DatabaseReference reference) {
+        this.reference = reference;
+    }
+
+
+    @Override
+    public boolean isEmpty() {
+        return reference == null;
     }
 
     @Override
@@ -28,14 +36,11 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
         return 0;
     }
 
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.gameViewModels);
     }
 
     protected GamesListViewModel(Parcel in) {
-        this.gameViewModels = in.createTypedArrayList(GameViewModel.CREATOR);
     }
 
     public static final Creator<GamesListViewModel> CREATOR = new Creator<GamesListViewModel>() {
@@ -49,9 +54,4 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
             return new GamesListViewModel[size];
         }
     };
-
-    @Override
-    public boolean isEmpty() {
-        return gameViewModels == null || gameViewModels.isEmpty();
-    }
 }

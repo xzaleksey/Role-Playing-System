@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter;
 import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
@@ -11,6 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 import timber.log.Timber;
 
@@ -25,7 +27,15 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
 
     @Override
     protected GamesListViewModel initNewViewModel(Bundle arguments) {
-        return new GamesListViewModel();
+        GamesListViewModel gamesListViewModel = new GamesListViewModel();
+        setDatabaseReference(gamesListViewModel);
+        return gamesListViewModel;
+    }
+
+    @Override
+    public void restoreViewModel(GamesListViewModel viewModel) {
+        super.restoreViewModel(viewModel);
+        setDatabaseReference(viewModel);
     }
 
     @Override
@@ -42,6 +52,11 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
 
     @Override
     public void getData() {
+        view.setData(viewModel);
+        view.showContent();
+    }
 
+    private void setDatabaseReference(GamesListViewModel gamesListViewModel) {
+        gamesListViewModel.setReference(FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.GAMES));
     }
 }
