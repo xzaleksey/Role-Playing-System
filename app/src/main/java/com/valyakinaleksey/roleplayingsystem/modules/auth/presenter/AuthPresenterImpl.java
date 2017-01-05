@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -129,13 +130,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     @Override
     public void register(String email, String password) {
         compositeSubscription.add(registerInteractor.register(email, password,
-                task -> {
-                    if (task.isSuccessful()) {
-                        Timber.d(task.getResult().toString());
-                    } else {
-                        showError(task.getException());
-                    }
-                })
+                getAuthResultOnCompleteListener())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
@@ -256,19 +251,21 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
      */
     @NonNull
     private OnCompleteListener<AuthResult> getAuthResultOnCompleteListener() {
-        return task -> {
-            if (task.isSuccessful()) {
-                FirebaseUser user = task.getResult().getUser();
-                Timber.d(user.toString());
-                onAuthSuccess(user);
-                viewModel.setFirebaseUser(user);
-                UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
-                view.showMessage(appContext.getString(R.string.success), LceView.TOAST);
-                view.performAction(context -> navigateToMainActivity((FragmentActivity) context));
-            } else {
-                showError(task.getException());
-            }
-        };
+        return this::handleTaskResult;
+    }
+
+    private void handleTaskResult(Task<AuthResult> task) {
+        view.hideLoading();
+        if (task.isSuccessful()) {
+            FirebaseUser user = task.getResult().getUser();
+            Timber.d(user.toString());
+            onAuthSuccess(user);
+            viewModel.setFirebaseUser(user);
+            view.showMessage(appContext.getString(R.string.success), LceView.TOAST);
+            view.performAction(context -> navigateToMainActivity((FragmentActivity) context));
+        } else {
+            showError(task.getException());
+        }
     }
 
     /**
