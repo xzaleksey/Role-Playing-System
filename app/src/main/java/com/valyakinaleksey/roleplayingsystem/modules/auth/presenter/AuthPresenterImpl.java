@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -27,6 +28,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.AuthViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.model.interactor.LoginInteractor;
@@ -272,6 +274,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     private void onAuthSuccess(FirebaseUser user) {
         String username = FireBaseUtils.usernameFromEmail(user.getEmail());
         writeNewUser(user.getUid(), username, user.getEmail());
+        RpsApp.logUser();
     }
 
     private void writeNewUser(String userId, String name, String email) {
