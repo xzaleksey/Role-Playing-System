@@ -19,4 +19,7 @@
     <string name="retry_error_button">Попробовать снова</string>
     <string name="success">Успех</string>
     <string name="logout">Выйти</string>
+    <string name="create_game">Создать игру</string>
+    <string name="game_name">Название</string>
+    <string name="description">Описание</string>
 </resources>

@@ -38,12 +38,22 @@ public class GamesListCommunicationBus
     }
 
     @Override
+    public void onFabPressed() {
+        presenter.onFabPressed();
+    }
+
+    @Override
     public UserGetInteractor getValue() {
         return presenter.getValue();
     }
 
     @Override
-    public void scrollToBottom() {
-        getNavigationResolver().resolveNavigation(GamesListView::scrollToBottom);
+    public void onGameCreated() {
+        getNavigationResolver().resolveNavigation(GamesListView::onGameCreated);
+    }
+
+    @Override
+    public void showCreateGameDialog() {
+        getNavigationResolver().resolveNavigation(GamesListView::showCreateGameDialog);
     }
 }

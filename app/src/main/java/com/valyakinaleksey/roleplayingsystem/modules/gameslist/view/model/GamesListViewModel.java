@@ -13,6 +13,7 @@ import java.util.List;
 public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializable {
 
     private transient DatabaseReference reference;
+    private CreateGameDialogViewModel dialogData;
 
     public GamesListViewModel() {
     }
@@ -31,6 +32,14 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
         return reference == null;
     }
 
+    public void setDialogData(CreateGameDialogViewModel dialogData) {
+        this.dialogData = dialogData;
+    }
+
+    public CreateGameDialogViewModel getDialogData() {
+        return dialogData;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -38,9 +47,11 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.dialogData, flags);
     }
 
     protected GamesListViewModel(Parcel in) {
+        this.dialogData = in.readParcelable(CreateGameDialogViewModel.class.getClassLoader());
     }
 
     public static final Creator<GamesListViewModel> CREATOR = new Creator<GamesListViewModel>() {

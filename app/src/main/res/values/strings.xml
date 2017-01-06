@@ -29,5 +29,8 @@
     <string name="email_has_been_sent">Email has been sent</string>
     <string name="success">Success</string>
     <string name="logout">Logout</string>
+    <string name="create_game">Create game</string>
+    <string name="game_name">Name</string>
+    <string name="description">Description</string>
 
 </resources>

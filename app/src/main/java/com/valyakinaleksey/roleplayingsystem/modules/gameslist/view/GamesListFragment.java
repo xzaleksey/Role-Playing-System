@@ -7,8 +7,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
@@ -18,9 +22,11 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameViewH
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 
 import butterknife.Bind;
+import rx.subscriptions.CompositeSubscription;
 
 public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, GamesListViewModel, GamesListView> implements GamesListView {
 
@@ -32,6 +38,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     @Bind(R.id.fab)
     FloatingActionButton fab;
     private GameListAdapter gameListAdapter;
+    private MaterialDialog dialog;
 
     public static GamesListFragment newInstance() {
         return new GamesListFragment();
@@ -54,9 +61,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
-        fab.setOnClickListener(v -> {
-            getComponent().getPresenter().createGame(new GameModel("name1", "description1"));
-        });
+        setupFabButton();
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -115,8 +120,10 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         if (recyclerView.getAdapter() == null) {
             recyclerView.setAdapter(gameListAdapter);
         }
+        if (data.getDialogData() != null && (dialog == null || !dialog.isShowing())) {
+            showCreateGameDialog();
+        }
     }
-
 
     @Override
     public void onDestroy() {
@@ -126,13 +133,65 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         super.onDestroy();
     }
 
+
     @Override
     protected int getContentResId() {
         return R.layout.fragment_games_list;
     }
 
     @Override
-    public void scrollToBottom() {
+    public void onGameCreated() {
         recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+    }
+
+    @Override
+    public void showCreateGameDialog() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_create_game_content, null);
+        EditText etName = (EditText) dialogView.findViewById(R.id.name);
+        EditText etDescription = (EditText) dialogView.findViewById(R.id.description);
+        CreateGameDialogViewModel dialogData = data.getDialogData();
+        GameModel gameModel = dialogData.getGameModel();
+        etName.setText(gameModel.getName());
+        etDescription.setText(gameModel.getDescription());
+        CompositeSubscription compositeSubscription = new CompositeSubscription();
+        dialog = new MaterialDialog.Builder(getContext())
+                .title(dialogData.getTitle())
+                .customView(dialogView, true)
+                .autoDismiss(false)
+                .positiveText(android.R.string.ok)
+                .negativeText(android.R.string.cancel)
+                .onPositive((dialog, which) -> {
+//                        getComponent().getPresenter().createGame(new GameModel("name1", "description1"));
+                })
+                .onNegative((dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .dismissListener(dialog1 -> {
+                    data.setDialogData(null);
+                    compositeSubscription.unsubscribe();
+                })
+                .build();
+        compositeSubscription.add(RxTextView.textChanges(etName)
+                .subscribe(charSequence -> {
+                    gameModel.setName(charSequence.toString());
+                }));
+        compositeSubscription.add(RxTextView.textChanges(etDescription)
+                .subscribe(charSequence -> {
+                    gameModel.setDescription(charSequence.toString());
+                }));
+        dialog.show();
+        etName.post(() -> etName.setSelection(etName.length()));
+    }
+
+    @Override
+    public void onDestroyView() {
+        dialog = null;
+        super.onDestroyView();
+    }
+
+    private void setupFabButton() {
+        fab.setOnClickListener(v -> {
+            getComponent().getPresenter().onFabPressed();
+        });
     }
 }

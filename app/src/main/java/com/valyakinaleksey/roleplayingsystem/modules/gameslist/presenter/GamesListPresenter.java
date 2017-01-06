@@ -12,4 +12,5 @@ public interface GamesListPresenter extends Presenter<GamesListView>, Provider<U
 
     void loadComplete();
 
+    void onFabPressed();
 }
