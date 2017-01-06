@@ -21,6 +21,8 @@ repositories {
     maven { url 'http://dl.bintray.com/amulyakhare/maven' }
 }
 
+def globalConfiguration = rootProject.ext;
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
@@ -30,6 +32,7 @@ android {
     }
     defaultConfig {
         applicationId "com.valyakinaleksey.roleplayingsystem"
+        buildConfigField("String", "masterPassword", "\"$globalConfiguration.password\"")
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
