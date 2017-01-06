@@ -10,6 +10,12 @@ public enum ErrorTypes {
      * Once shown, clean error state
      */
     ONE_SHOT,
+
+
+    /**
+     * if data not empty - oneshot
+     */
+    ONE_SHOT_OR_DEFAULT,
     /**
      * save error state until new (successful) request will clean error state
      */

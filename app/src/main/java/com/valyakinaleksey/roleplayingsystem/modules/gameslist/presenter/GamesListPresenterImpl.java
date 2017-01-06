@@ -3,10 +3,12 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter;
 import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
@@ -73,6 +75,14 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
         view.setData(viewModel);
         view.showContent();
         view.showLoading();
+        ReactiveNetwork.observeInternetConnectivity()
+                .compose(RxTransformers.applySchedulers())
+                .take(1)
+                .subscribe(aBoolean -> {
+                    if (!aBoolean) {
+                        view.showError(BaseError.NO_CONNECTION);
+                    }
+                });
     }
 
     private void setDatabaseReference(GamesListViewModel gamesListViewModel) {
