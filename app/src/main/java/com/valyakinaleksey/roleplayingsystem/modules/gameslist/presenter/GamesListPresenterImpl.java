@@ -47,7 +47,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(s -> {
-                    Timber.d("success");
+                    view.scrollToBottom();
                 }, throwable -> {
                     Crashlytics.logException(throwable);
                 });

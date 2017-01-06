@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -56,6 +57,8 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         fab.setOnClickListener(v -> {
             getComponent().getPresenter().createGame(new GameModel("name1", "description1"));
         });
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
+                ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -90,7 +93,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     public void showContent() {
         super.showContent();
         if (gameListAdapter == null) {
-            gameListAdapter = new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class, data.getReference(),getComponent().getPresenter().getValue());
+            gameListAdapter = new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class, data.getReference(), getComponent().getPresenter().getValue());
             gameListAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
                 public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -126,5 +129,10 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     @Override
     protected int getContentResId() {
         return R.layout.fragment_games_list;
+    }
+
+    @Override
+    public void scrollToBottom() {
+        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
     }
 }

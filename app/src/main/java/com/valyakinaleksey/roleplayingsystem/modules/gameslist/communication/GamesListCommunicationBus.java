@@ -41,4 +41,9 @@ public class GamesListCommunicationBus
     public UserGetInteractor getValue() {
         return presenter.getValue();
     }
+
+    @Override
+    public void scrollToBottom() {
+        getNavigationResolver().resolveNavigation(GamesListView::scrollToBottom);
+    }
 }
