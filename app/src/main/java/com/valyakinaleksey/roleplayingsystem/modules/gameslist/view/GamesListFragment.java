@@ -26,6 +26,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListCompo
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
 
 import butterknife.Bind;
@@ -197,7 +198,10 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
                     gameModel.setPassword(charSequence.toString());
                 }));
         dialog.show();
-        etName.post(() -> etName.setSelection(etName.length()));
+        etName.post(() -> {
+            etName.setSelection(etName.length());
+            KeyboardUtils.showKeyboard(getActivity());
+        });
     }
 
     @Override

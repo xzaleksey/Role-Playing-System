@@ -28,7 +28,12 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import rx.Subscription;
@@ -40,6 +45,10 @@ public class GameViewHolder extends ButterKnifeViewHolder {
     protected TextView tvMasterName;
     @Bind(R.id.name)
     protected TextView tvName;
+    @Bind(R.id.date)
+    protected TextView tvDate;
+    @Bind(R.id.iv_password)
+    protected ImageView ivPassword;
 
     protected Subscription subscription;
 
@@ -54,7 +63,17 @@ public class GameViewHolder extends ButterKnifeViewHolder {
     public void bind(GameModel model, UserGetInteractor userGetInteractor) {
         setName(model.getName());
         setMasterName(model.getMasterName());
+        setDate(model.getDateCreate());
+        updateLock(TextUtils.isEmpty(model.getPassword()));
         updateAvatar(model.getMasterId(), model.getMasterName(), userGetInteractor);
+    }
+
+    private void updateLock(boolean empty) {
+        ivPassword.setVisibility(empty ? View.GONE : View.VISIBLE);
+    }
+
+    private void setDate(long dateCreate) {
+        tvDate.setText(new DateTime(dateCreate).toString(DateTimeFormat.mediumDate().withLocale(Locale.getDefault())));
     }
 
     public void setMasterName(String masterName) {

@@ -46,14 +46,12 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
 
     @Override
     public void createGame(GameModel gameModel) {
-        createNewGameInteractor.createNewGame(gameModel)
+        compositeSubscription.add(createNewGameInteractor.createNewGame(gameModel)
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(s -> {
                     view.onGameCreated();
-                }, throwable -> {
-                    Crashlytics.logException(throwable);
-                });
+                }, Crashlytics::logException));
     }
 
     @Override
@@ -75,7 +73,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
         view.setData(viewModel);
         view.showContent();
         view.showLoading();
-        ReactiveNetwork.observeInternetConnectivity()
+        compositeSubscription.add(ReactiveNetwork.observeInternetConnectivity()
                 .compose(RxTransformers.applySchedulers())
                 .take(1)
                 .subscribe(aBoolean -> {
@@ -83,7 +81,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
                         view.showError(BaseError.NO_CONNECTION);
                         view.hideLoading();
                     }
-                });
+                }));
     }
 
     private void setDatabaseReference(GamesListViewModel gamesListViewModel) {
