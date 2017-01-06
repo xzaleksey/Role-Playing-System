@@ -1,5 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
@@ -13,6 +15,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.GameActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
@@ -34,6 +37,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     @Override
     protected GamesListViewModel initNewViewModel(Bundle arguments) {
         GamesListViewModel gamesListViewModel = new GamesListViewModel();
+        gamesListViewModel.setToolbarTitle(RpsApp.app().getString(R.string.list_of_games));
         setDatabaseReference(gamesListViewModel);
         return gamesListViewModel;
     }
@@ -66,6 +70,11 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
         createGameDialogViewModel.setGameModel(new GameModel());
         viewModel.setDialogData(createGameDialogViewModel);
         view.showCreateGameDialog();
+    }
+
+    @Override
+    public void navigateToGameScreen(Context context, GameModel model) {
+        context.startActivity(new Intent(context, GameActivity.class));
     }
 
     @Override

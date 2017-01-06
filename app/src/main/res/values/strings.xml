@@ -32,5 +32,6 @@
     <string name="create_game">Create game</string>
     <string name="game_name">Name</string>
     <string name="description">Description</string>
+    <string name="list_of_games">Games</string>
 
 </resources>

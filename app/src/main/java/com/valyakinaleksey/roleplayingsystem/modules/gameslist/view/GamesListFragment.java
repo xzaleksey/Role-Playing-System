@@ -97,14 +97,14 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     @Override
     public void onResume() {
         super.onResume();
-        ((AbsActivity) getActivity()).setToolbarTitle("test");
     }
 
     @Override
     public void showContent() {
         super.showContent();
+        ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
         if (gameListAdapter == null) {
-            gameListAdapter = new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class, data.getReference(), getComponent().getPresenter().getValue());
+            gameListAdapter = new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class, data.getReference(), getComponent().getPresenter());
             gameListAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
                 public void onItemRangeInserted(int positionStart, int itemCount) {

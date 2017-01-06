@@ -26,6 +26,7 @@ import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 import org.joda.time.DateTime;
@@ -60,12 +61,17 @@ public class GameViewHolder extends ButterKnifeViewHolder {
         tvName.setText(name);
     }
 
-    public void bind(GameModel model, UserGetInteractor userGetInteractor) {
+    public void bind(GameModel model, GamesListPresenter gamesListPresenter) {
+        itemView.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(model.getPassword())) {
+                gamesListPresenter.navigateToGameScreen(itemView.getContext(), model);
+            }
+        });
         setName(model.getName());
         setMasterName(model.getMasterName());
         setDate(model.getDateCreate());
         updateLock(TextUtils.isEmpty(model.getPassword()));
-        updateAvatar(model.getMasterId(), model.getMasterName(), userGetInteractor);
+        updateAvatar(model.getMasterId(), model.getMasterName(), gamesListPresenter.getValue());
     }
 
     private void updateLock(boolean empty) {

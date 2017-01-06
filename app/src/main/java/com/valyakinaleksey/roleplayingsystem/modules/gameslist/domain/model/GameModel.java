@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 public class GameModel implements Serializable, Parcelable {
+    public static final String KEY = GameModel.class.getSimpleName();
     private String id;
     private String masterId;
     private String masterName;

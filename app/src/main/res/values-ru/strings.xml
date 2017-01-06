@@ -22,4 +22,5 @@
     <string name="create_game">Создать игру</string>
     <string name="game_name">Название</string>
     <string name="description">Описание</string>
+    <string name="list_of_games">Список игр</string>
 </resources>

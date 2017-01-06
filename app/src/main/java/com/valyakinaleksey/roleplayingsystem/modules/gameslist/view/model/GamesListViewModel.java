@@ -14,6 +14,7 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
 
     private transient DatabaseReference reference;
     private CreateGameDialogViewModel dialogData;
+    private String toolbarTitle;
 
     public GamesListViewModel() {
     }
@@ -40,6 +41,14 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
         return dialogData;
     }
 
+    public String getToolbarTitle() {
+        return toolbarTitle;
+    }
+
+    public void setToolbarTitle(String toolbarTitle) {
+        this.toolbarTitle = toolbarTitle;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -48,10 +57,12 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.dialogData, flags);
+        dest.writeString(this.toolbarTitle);
     }
 
     protected GamesListViewModel(Parcel in) {
         this.dialogData = in.readParcelable(CreateGameDialogViewModel.class.getClassLoader());
+        this.toolbarTitle = in.readString();
     }
 
     public static final Creator<GamesListViewModel> CREATOR = new Creator<GamesListViewModel>() {

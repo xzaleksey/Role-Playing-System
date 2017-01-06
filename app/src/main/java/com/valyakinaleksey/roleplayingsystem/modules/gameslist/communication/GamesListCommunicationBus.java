@@ -1,6 +1,8 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication;
 
 
+import android.content.Context;
+
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
@@ -40,6 +42,11 @@ public class GamesListCommunicationBus
     @Override
     public void onFabPressed() {
         presenter.onFabPressed();
+    }
+
+    @Override
+    public void navigateToGameScreen(Context context, GameModel model) {
+        presenter.navigateToGameScreen(context, model);
     }
 
     @Override
