@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication;
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.state.GamesListViewState;
@@ -29,5 +30,15 @@ public class GamesListCommunicationBus
     @Override
     public void createGame(GameModel gameModel) {
         presenter.createGame(gameModel);
+    }
+
+    @Override
+    public void loadComplete() {
+        presenter.loadComplete();
+    }
+
+    @Override
+    public UserGetInteractor getValue() {
+        return presenter.getValue();
     }
 }

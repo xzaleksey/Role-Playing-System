@@ -90,11 +90,14 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     public void showContent() {
         super.showContent();
         if (gameListAdapter == null) {
-            gameListAdapter = new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class, data.getReference());
-//            gameListAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-//                @Override
-//                public void onItemRangeInserted(int positionStart, int itemCount) {
-//                    super.onItemRangeInserted(positionStart, itemCount);
+            gameListAdapter = new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class, data.getReference(),getComponent().getPresenter().getValue());
+            gameListAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    super.onItemRangeInserted(positionStart, itemCount);
+                    if (positionStart == 0) {
+                        getComponent().getPresenter().loadComplete();
+                    }
 //                    int chatMessageCount = gameListAdapter.getItemCount();
 //                    int lastVisiblePosition =
 //                            ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
@@ -103,8 +106,8 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
 //                                    lastVisiblePosition == (positionStart - 1))) {
 //                        recyclerView.scrollToPosition(positionStart);
 //                    }
-//                }
-//            });
+                }
+            });
         }
         if (recyclerView.getAdapter() == null) {
             recyclerView.setAdapter(gameListAdapter);

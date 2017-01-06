@@ -4,6 +4,8 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.di;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication.GamesListCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
@@ -37,8 +39,8 @@ public class GamesListModule {
     @Provides
     @Named(PRESENTER)
     @PerFragment
-    GamesListPresenter providePresenter(CreateNewGameInteractor createNewGameInteractor) {
-        return new GamesListPresenterImpl(createNewGameInteractor);
+    GamesListPresenter providePresenter(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor) {
+        return new GamesListPresenterImpl(createNewGameInteractor, userGetInteractor);
     }
 
 

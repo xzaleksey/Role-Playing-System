@@ -8,10 +8,11 @@ import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 import timber.log.Timber;
@@ -20,9 +21,11 @@ import timber.log.Timber;
 public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesListViewModel> implements GamesListPresenter, RestorablePresenter<GamesListViewModel> {
 
     private CreateNewGameInteractor createNewGameInteractor;
+    private UserGetInteractor userGetInteractor;
 
-    public GamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor) {
+    public GamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor) {
         this.createNewGameInteractor = createNewGameInteractor;
+        this.userGetInteractor = userGetInteractor;
     }
 
     @Override
@@ -51,12 +54,23 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     }
 
     @Override
+    public void loadComplete() {
+        view.hideLoading();
+    }
+
+    @Override
     public void getData() {
         view.setData(viewModel);
         view.showContent();
+        view.showLoading();
     }
 
     private void setDatabaseReference(GamesListViewModel gamesListViewModel) {
         gamesListViewModel.setReference(FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.GAMES));
+    }
+
+    @Override
+    public UserGetInteractor getValue() {
+        return userGetInteractor;
     }
 }

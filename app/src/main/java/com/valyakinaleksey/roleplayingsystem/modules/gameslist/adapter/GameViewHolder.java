@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ButterKnifeViewHolder;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
@@ -50,34 +51,29 @@ public class GameViewHolder extends ButterKnifeViewHolder {
         tvName.setText(name);
     }
 
-    public void bind(GameModel model) {
+    public void bind(GameModel model, UserGetInteractor userGetInteractor) {
         setName(model.getName());
         setMasterName(model.getMasterName());
-        updateAvatar(model.getMasterId());
+        updateAvatar(model.getMasterId(), model.getMasterName(), userGetInteractor);
     }
 
     public void setMasterName(String masterName) {
         tvMasterName.setText(masterName);
     }
 
-    public void updateAvatar(String uid) {
+    public void updateAvatar(String uid, String masterName, UserGetInteractor userGetInteractor) {
         if (subscription != null) {
             subscription.unsubscribe();
         }
         ColorGenerator generator = ColorGenerator.MATERIAL;
-        subscription = RxFirebaseDatabase.getInstance()
-                .observeSingleValue(FirebaseDatabase.getInstance()
-                        .getReference()
-                        .child(FireBaseUtils.USERS)
-                        .child(uid)
-                )
-                .subscribe(dataSnapshot -> {
-                    User user = dataSnapshot.getValue(User.class);
-                    TextDrawable textDrawable = TextDrawable.builder().beginConfig()
-                            .useFont(RpsApp.getFont())
-                            .toUpperCase()
-                            .endConfig()
-                            .buildRound(user.getName().substring(0, 1), generator.getRandomColor());
+        TextDrawable textDrawable = TextDrawable.builder().beginConfig()
+                .useFont(RpsApp.getFont())
+                .toUpperCase()
+                .endConfig()
+                .buildRound(masterName.substring(0, 1), generator.getColor(uid));
+        ivAvatar.setImageDrawable(textDrawable);
+        subscription = userGetInteractor.getUserByUid(uid)
+                .subscribe(user -> {
                     Glide.with(ivAvatar.getContext()).load(user.getPhotoUrl())
                             .asBitmap()
                             .centerCrop()

@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
@@ -64,5 +68,17 @@ public class AppModule {
     @Singleton
     CreateNewGameInteractor provideCreateNewGameInteractor() {
         return new CreateNewGameUseCase();
+    }
+
+    @Provides
+    @Singleton
+    UserRepository provideUserRepository() {
+        return new UserRepositoryImpl();
+    }
+
+    @Provides
+    @Singleton
+    UserGetInteractor provideUserGetInteractor(UserRepository userRepository) {
+        return new UserGetUseCase(userRepository);
     }
 }
