@@ -6,13 +6,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.internal.MDButton;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.rengwuxian.materialedittext.MaterialEditText;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
@@ -24,8 +26,10 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListCompo
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import rx.subscriptions.CompositeSubscription;
 
 public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, GamesListViewModel, GamesListView> implements GamesListView {
@@ -34,7 +38,8 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
-
+    @BindString(R.string.error_empty_field)
+    String errorEmptyField;
     @Bind(R.id.fab)
     FloatingActionButton fab;
     private GameListAdapter gameListAdapter;
@@ -106,14 +111,6 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
                     if (positionStart == 0) {
                         getComponent().getPresenter().loadComplete();
                     }
-//                    int chatMessageCount = gameListAdapter.getItemCount();
-//                    int lastVisiblePosition =
-//                            ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-//                    if (lastVisiblePosition == -1 ||
-//                            (positionStart >= (chatMessageCount - 1) &&
-//                                    lastVisiblePosition == (positionStart - 1))) {
-//                        recyclerView.scrollToPosition(positionStart);
-//                    }
                 }
             });
         }
@@ -141,14 +138,18 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
 
     @Override
     public void onGameCreated() {
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+        }
         recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
     }
 
     @Override
     public void showCreateGameDialog() {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_create_game_content, null);
-        EditText etName = (EditText) dialogView.findViewById(R.id.name);
-        EditText etDescription = (EditText) dialogView.findViewById(R.id.description);
+        MaterialEditText etName = (MaterialEditText) dialogView.findViewById(R.id.name);
+        MaterialEditText etDescription = (MaterialEditText) dialogView.findViewById(R.id.description);
         CreateGameDialogViewModel dialogData = data.getDialogData();
         GameModel gameModel = dialogData.getGameModel();
         etName.setText(gameModel.getName());
@@ -161,7 +162,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
                 .positiveText(android.R.string.ok)
                 .negativeText(android.R.string.cancel)
                 .onPositive((dialog, which) -> {
-//                        getComponent().getPresenter().createGame(new GameModel("name1", "description1"));
+                    getComponent().getPresenter().createGame(dialogData.getGameModel());
                 })
                 .onNegative((dialog, which) -> {
                     dialog.dismiss();
@@ -171,8 +172,18 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
                     compositeSubscription.unsubscribe();
                 })
                 .build();
+        MDButton actionButton = dialog.getActionButton(DialogAction.POSITIVE);
+        if (TextUtils.isEmpty(gameModel.getName())) {
+            actionButton.setEnabled(false);
+        }
         compositeSubscription.add(RxTextView.textChanges(etName)
+                .skip(1)
                 .subscribe(charSequence -> {
+                    if (TextUtils.isEmpty(charSequence)) {
+                        actionButton.setEnabled(false);
+                    } else {
+                        actionButton.setEnabled(true);
+                    }
                     gameModel.setName(charSequence.toString());
                 }));
         compositeSubscription.add(RxTextView.textChanges(etDescription)
