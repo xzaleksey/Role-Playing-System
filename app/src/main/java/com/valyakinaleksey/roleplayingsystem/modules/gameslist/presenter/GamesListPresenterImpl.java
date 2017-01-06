@@ -81,6 +81,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
                 .subscribe(aBoolean -> {
                     if (!aBoolean) {
                         view.showError(BaseError.NO_CONNECTION);
+                        view.hideLoading();
                     }
                 });
     }
