@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.valyakinaleksey.roleplayingsystem.BuildConfig;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
@@ -13,6 +14,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
+import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
 
 import javax.inject.Singleton;
 
@@ -66,8 +68,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    CreateNewGameInteractor provideCreateNewGameInteractor() {
-        return new CreateNewGameUseCase();
+    CreateNewGameInteractor provideCreateNewGameInteractor(SimpleCrypto simpleCrypto) {
+        return new CreateNewGameUseCase(simpleCrypto);
     }
 
     @Provides
@@ -80,5 +82,11 @@ public class AppModule {
     @Singleton
     UserGetInteractor provideUserGetInteractor(UserRepository userRepository) {
         return new UserGetUseCase(userRepository);
+    }
+
+    @Provides
+    @Singleton
+    SimpleCrypto provideSimpleCrypto() {
+        return SimpleCrypto.getDefault(BuildConfig.masterPassword, "salt", new byte[16]);
     }
 }

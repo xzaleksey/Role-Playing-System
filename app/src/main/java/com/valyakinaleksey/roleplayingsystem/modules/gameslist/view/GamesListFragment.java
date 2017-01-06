@@ -150,10 +150,12 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_create_game_content, null);
         MaterialEditText etName = (MaterialEditText) dialogView.findViewById(R.id.name);
         MaterialEditText etDescription = (MaterialEditText) dialogView.findViewById(R.id.description);
+        MaterialEditText etPassword = (MaterialEditText) dialogView.findViewById(R.id.password);
         CreateGameDialogViewModel dialogData = data.getDialogData();
         GameModel gameModel = dialogData.getGameModel();
         etName.setText(gameModel.getName());
         etDescription.setText(gameModel.getDescription());
+        etPassword.setText(gameModel.getPassword());
         CompositeSubscription compositeSubscription = new CompositeSubscription();
         dialog = new MaterialDialog.Builder(getContext())
                 .title(dialogData.getTitle())
@@ -189,6 +191,10 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         compositeSubscription.add(RxTextView.textChanges(etDescription)
                 .subscribe(charSequence -> {
                     gameModel.setDescription(charSequence.toString());
+                }));
+        compositeSubscription.add(RxTextView.textChanges(etPassword)
+                .subscribe(charSequence -> {
+                    gameModel.setPassword(charSequence.toString());
                 }));
         dialog.show();
         etName.post(() -> etName.setSelection(etName.length()));

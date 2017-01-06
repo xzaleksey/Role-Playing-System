@@ -12,6 +12,7 @@ public class GameModel implements Serializable, Parcelable {
     private String name;
     private long dateCreate;
     private String description;
+    private String password;
 
     public GameModel() {
     }
@@ -65,6 +66,14 @@ public class GameModel implements Serializable, Parcelable {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public long getDateCreate() {
         return dateCreate;
     }
@@ -94,6 +103,7 @@ public class GameModel implements Serializable, Parcelable {
         dest.writeString(this.name);
         dest.writeLong(this.dateCreate);
         dest.writeString(this.description);
+        dest.writeString(this.password);
     }
 
     protected GameModel(Parcel in) {
@@ -103,6 +113,7 @@ public class GameModel implements Serializable, Parcelable {
         this.name = in.readString();
         this.dateCreate = in.readLong();
         this.description = in.readString();
+        this.password = in.readString();
     }
 
     public static final Creator<GameModel> CREATOR = new Creator<GameModel>() {

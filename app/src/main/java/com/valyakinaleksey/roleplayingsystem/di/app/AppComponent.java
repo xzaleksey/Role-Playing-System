@@ -8,6 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.User
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
+import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
 
 import javax.inject.Singleton;
 
@@ -31,5 +32,7 @@ public interface AppComponent {
     CreateNewGameInteractor getCreateNewGameInteractor();
 
     UserGetInteractor getUserGetInteractor();
+
+    SimpleCrypto getSimpleCrypto();
 
 }
