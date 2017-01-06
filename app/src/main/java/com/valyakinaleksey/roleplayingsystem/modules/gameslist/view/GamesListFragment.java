@@ -200,7 +200,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         dialog.show();
         etName.post(() -> {
             etName.setSelection(etName.length());
-            KeyboardUtils.showKeyboard(getActivity());
+            KeyboardUtils.showSoftKeyboard(etName);
         });
     }
 
