@@ -14,6 +14,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticItem;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.AvatarWithTwoLineTextModel;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
@@ -31,9 +32,11 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
 public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptionView, GamesDescriptionModel> implements GamesDescriptionPresenter {
 
     private UserGetInteractor userGetInteractor;
+    private JoinGameInteractor joinGameInteractor;
 
-    public GamesDescriptionPresenterImpl(UserGetInteractor userGetInteractor) {
+    public GamesDescriptionPresenterImpl(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor) {
         this.userGetInteractor = userGetInteractor;
+        this.joinGameInteractor = joinGameInteractor;
     }
 
     @SuppressWarnings("unchecked")
@@ -81,6 +84,15 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
 
     @Override
     public void joinGame() {
-        Timber.d("join game pressed");
+        compositeSubscription.add(joinGameInteractor
+                .joinGame(viewModel.getGameModel())
+                .compose(RxTransformers.applySchedulers())
+                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+                .subscribe(aBoolean -> {
+
+                }, throwable -> {
+                    Timber.d(throwable);
+                    Crashlytics.logException(throwable);
+                }));
     }
 }

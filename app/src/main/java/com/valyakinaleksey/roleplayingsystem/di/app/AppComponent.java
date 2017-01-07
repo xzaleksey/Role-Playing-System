@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
@@ -40,5 +41,7 @@ public interface AppComponent {
     CheckUserJoinedGameInteractor getCheckUserJoinedGameInteractor();
 
     SimpleCrypto getSimpleCrypto();
+
+    JoinGameInteractor getJoinGameInteractor();
 
 }
