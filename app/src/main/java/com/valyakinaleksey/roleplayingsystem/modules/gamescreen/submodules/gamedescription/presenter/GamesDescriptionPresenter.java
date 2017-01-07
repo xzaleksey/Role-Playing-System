@@ -7,5 +7,5 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionView;
 
 public interface GamesDescriptionPresenter extends Presenter<GamesDescriptionView>, Provider<UserGetInteractor> {
-
+    void joinGame();
 }

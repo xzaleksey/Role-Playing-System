@@ -40,7 +40,7 @@
     </style>
 
     <style name="AppTheme.Widget.Button" parent="Base.Widget.AppCompat.Button">
-        <item name="fontPath">fonts/Roboto-Bold.ttf</item>
+        <item name="fontPath">fonts/Roboto-Medium.ttf</item>
     </style>
 
     <style name="AppTheme.ActionBar">

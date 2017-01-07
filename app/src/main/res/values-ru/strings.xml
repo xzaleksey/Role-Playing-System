@@ -26,4 +26,5 @@
     <string name="input_password">Введите пароль</string>
     <string name="here_could_be_description">Здесь могло быть описание =)</string>
     <string name="master_of_the_game">Мастер игры</string>
+    <string name="join_game">Присоединиться</string>
 </resources>

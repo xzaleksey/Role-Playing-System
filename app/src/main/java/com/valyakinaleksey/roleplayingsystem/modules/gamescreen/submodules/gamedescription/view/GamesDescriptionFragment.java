@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -25,6 +26,8 @@ public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescript
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
+    @Bind(R.id.join_game_btn)
+    Button btnJoinGame;
 
     private MaterialDialog dialog;
 
@@ -54,6 +57,9 @@ public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescript
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
+        btnJoinGame.setOnClickListener(v -> {
+            getComponent().getPresenter().joinGame();
+        });
     }
 
     @Override

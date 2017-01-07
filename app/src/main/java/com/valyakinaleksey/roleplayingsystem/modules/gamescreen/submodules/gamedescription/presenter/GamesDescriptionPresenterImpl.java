@@ -20,6 +20,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.Game
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_DESCRIPTION;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_DIVIDER;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TITLE;
@@ -77,4 +79,8 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
         return userGetInteractor;
     }
 
+    @Override
+    public void joinGame() {
+        Timber.d("join game pressed");
+    }
 }

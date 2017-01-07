@@ -30,4 +30,9 @@ public class GameDescriptionViewCommunicationBus
     public UserGetInteractor getValue() {
         return presenter.getValue();
     }
+
+    @Override
+    public void joinGame() {
+        presenter.joinGame();
+    }
 }
