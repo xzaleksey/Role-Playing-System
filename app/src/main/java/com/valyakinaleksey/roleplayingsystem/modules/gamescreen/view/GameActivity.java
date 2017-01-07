@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment;
 
 import timber.log.Timber;
@@ -22,7 +23,8 @@ public class GameActivity extends AbsSingleFragmentActivity {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            setSingleFragment(GamesListFragment.newInstance(), GamesListFragment.TAG);
+            GamesDescriptionFragment fragment = GamesDescriptionFragment.newInstance(getIntent().getExtras());
+            setSingleFragment(fragment, GamesListFragment.TAG);
         }
     }
 

@@ -5,9 +5,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
 
-/**
- * Alias name for Weather ViewState
- */
+
 public class GamesListViewState extends StorageBackedNavigationLceViewStateImpl<GamesListViewModel, GamesListView> {
 
     public GamesListViewState(ViewStateStorage storage) {

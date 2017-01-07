@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import com.crashlytics.android.Crashlytics;
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
@@ -18,7 +19,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.GameUserModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.GameActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
@@ -82,7 +83,9 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
 
     @Override
     public void navigateToGameScreen(Context context, GameModel model) {
-        context.startActivity(new Intent(context, GameActivity.class));
+        Intent intent = new Intent(context, GameActivity.class);
+        intent.putExtra(GameModel.KEY, (Parcelable) model);
+        context.startActivity(intent);
     }
 
     @Override
@@ -95,7 +98,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
                     .compose(RxTransformers.applySchedulers())
                     .subscribe(dataSnapshot -> {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            GameUserModel gameUserModel = snapshot.getValue(GameUserModel.class);
+                            UserInGameModel gameUserModel = snapshot.getValue(UserInGameModel.class);
                             if (currentUserId.equals(gameUserModel.getUid())) {
                                 navigateToGameScreen(context, model);
                                 return;

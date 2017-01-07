@@ -25,11 +25,12 @@ import javax.inject.Named;
 import dagger.Module;
 import dagger.Provides;
 
+import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
+
 @Module
 public class AuthModule {
 
     private final static String VIEW_STATE_FILE_NAME = AuthModule.class.getSimpleName();
-    public static final String PRESENTER = "presenter";
 
     @Provides
     @PerFragment

@@ -1,11 +1,11 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model;
 
 import java.io.Serializable;
 
-public class GameUserModel implements Serializable {
+public class UserInGameModel implements Serializable {
     private String uid;
 
-    public GameUserModel() {
+    public UserInGameModel() {
     }
 
     public String getUid() {
