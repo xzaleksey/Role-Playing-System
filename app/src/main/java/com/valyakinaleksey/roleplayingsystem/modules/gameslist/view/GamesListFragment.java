@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -212,14 +213,25 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     @Override
     public void showPasswordDialog() {
         PasswordDialogViewModel passwordDialogViewModel = data.getPasswordDialogViewModel();
+        CompositeSubscription compositeSubscription = new CompositeSubscription();
         dialog = new MaterialDialog.Builder(getContext())
                 .title(R.string.input_password)
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
                 .input(getString(R.string.password), passwordDialogViewModel.getInputPassword(), false, (dialog1, input) -> {
                     getComponent().getPresenter().validatePassword(getContext(), input.toString(), passwordDialogViewModel.getGameModel());
                 })
-                .dismissListener(dialog1 -> data.setPasswordDialogViewModel(null))
+                .dismissListener(dialog1 -> {
+                    data.setPasswordDialogViewModel(null);
+                    compositeSubscription.unsubscribe();
+                })
                 .show();
+        compositeSubscription.add(RxTextView.textChanges((TextView) dialog.getView().findViewById(android.R.id.input))
+                .skip(1)
+                .subscribe(charSequence -> {
+                    passwordDialogViewModel.setInputPassword(charSequence.toString());
+                })
+        );
+
     }
 
     @Override
