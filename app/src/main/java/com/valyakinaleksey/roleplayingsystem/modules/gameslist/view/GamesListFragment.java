@@ -123,7 +123,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         if (data.getCreateGameDialogData() != null && (dialog == null || !dialog.isShowing())) {
             showCreateGameDialog();
         }
-        if (data.getCreateGameDialogData() != null && (dialog == null || !dialog.isShowing())) {
+        if (data.getPasswordDialogViewModel() != null && (dialog == null || !dialog.isShowing())) {
             showPasswordDialog();
         }
     }
