@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.core.view.adapter;
+package com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

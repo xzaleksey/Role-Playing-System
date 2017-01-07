@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.valyakinaleksey.roleplayingsystem.R;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ButterKnifeViewHolder;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
 
 import butterknife.Bind;
 import butterknife.BindInt;

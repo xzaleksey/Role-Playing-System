@@ -2,11 +2,17 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 
 import android.os.Bundle;
 
+import com.crashlytics.android.Crashlytics;
+import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.MaterialDrawableProviderImpl;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
+import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticFieldsSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticItem;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.AvatarWithTwoLineTextModel;
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
@@ -15,6 +21,9 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.Game
 import java.util.ArrayList;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_DESCRIPTION;
+import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_DIVIDER;
+import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TITLE;
+import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TWO_LINE_WITH_AVATAR;
 
 @PerFragment
 public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptionView, GamesDescriptionModel> implements GamesDescriptionPresenter {
@@ -28,15 +37,11 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
     @SuppressWarnings("unchecked")
     @Override
     protected GamesDescriptionModel initNewViewModel(Bundle arguments) {
-        GamesDescriptionModel gamesDescriptionModel = new GamesDescriptionModel();
+        final GamesDescriptionModel gamesDescriptionModel = new GamesDescriptionModel();
         GameModel gameModel = arguments.getParcelable(GameModel.KEY);
         gamesDescriptionModel.setToolbarTitle(gameModel.getName());
         gamesDescriptionModel.setGameModel(gameModel);
-        ArrayList<InfoSection> infoSections = new ArrayList<>();
-        ArrayList<StaticItem> data = new ArrayList<>();
-        data.add(new StaticItem(TYPE_DESCRIPTION, gameModel.getDescription()));
-        infoSections.add(new StaticFieldsSection(data));
-        gamesDescriptionModel.setInfoSections(infoSections);
+
         return gamesDescriptionModel;
     }
 
@@ -45,11 +50,26 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
         super.restoreViewModel(viewModel);
     }
 
-
+    @SuppressWarnings("unchecked")
     @Override
     public void getData() {
-        view.setData(viewModel);
-        view.showContent();
+        GameModel gameModel = viewModel.getGameModel();
+        compositeSubscription.add(userGetInteractor.getUserByUid(gameModel.getMasterId())
+                .compose(RxTransformers.applySchedulers())
+                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+                .subscribe(user -> {
+                    ArrayList<InfoSection> infoSections = new ArrayList<>();
+                    ArrayList<StaticItem> data = new ArrayList<>();
+                    data.add(new StaticItem(TYPE_DESCRIPTION, gameModel.getDescription()));
+                    data.add(new StaticItem(TYPE_TITLE, RpsApp.app().getString(R.string.master_of_the_game)));
+                    data.add(new StaticItem(TYPE_TWO_LINE_WITH_AVATAR, new AvatarWithTwoLineTextModel(gameModel.getMasterName(), "Провел много игр",
+                            new MaterialDrawableProviderImpl(gameModel.getMasterName(), gameModel.getMasterId()), user.getPhotoUrl())));
+                    data.add(new StaticItem(TYPE_DIVIDER, null));
+                    infoSections.add(new StaticFieldsSection(data));
+                    viewModel.setInfoSections(infoSections);
+                    view.setData(viewModel);
+                    view.showContent();
+                }, Crashlytics::logException));
     }
 
     @Override

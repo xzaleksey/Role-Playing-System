@@ -25,4 +25,5 @@
     <string name="list_of_games">Список игр</string>
     <string name="input_password">Введите пароль</string>
     <string name="here_could_be_description">Здесь могло быть описание =)</string>
+    <string name="master_of_the_game">Мастер игры</string>
 </resources>
