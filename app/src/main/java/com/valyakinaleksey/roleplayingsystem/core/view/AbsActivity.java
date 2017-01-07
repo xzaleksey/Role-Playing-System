@@ -35,6 +35,7 @@ public abstract class AbsActivity extends AppCompatActivity {
     protected void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
         fillToolbarItems();
     }
 

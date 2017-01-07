@@ -8,7 +8,4 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamed
 
 public interface GamesDescriptionPresenter extends Presenter<GamesDescriptionView>, Provider<UserGetInteractor> {
 
-    void onFabPressed();
-
-
 }

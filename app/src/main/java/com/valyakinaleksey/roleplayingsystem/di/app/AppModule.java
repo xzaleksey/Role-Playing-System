@@ -10,6 +10,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
@@ -90,6 +92,12 @@ public class AppModule {
     @Singleton
     ValidatePasswordInteractor provideValidatePasswordInteractor(SimpleCrypto simpleCrypto) {
         return new ValidatePasswordInteractorImpl(simpleCrypto);
+    }
+
+    @Provides
+    @Singleton
+    CheckUserJoinedGameInteractor provideCheckUserJoinedGameInteractor() {
+        return new CheckUserJoinedGameInteractorImpl();
     }
 
     @Provides

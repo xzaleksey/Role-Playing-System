@@ -2,9 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -12,13 +9,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.di.DaggerGamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.di.GamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
-import butterknife.BindString;
 
 public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescriptionComponent, GamesDescriptionModel, GamesDescriptionView> implements GamesDescriptionView {
 
@@ -26,12 +25,11 @@ public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescript
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindString(R.string.error_empty_field)
-    String errorEmptyField;
-    @Bind(R.id.fab)
-    FloatingActionButton fab;
+
     private MaterialDialog dialog;
 
+    @Inject
+    SectionsAdapter sectionsAdapter;
 
     public static GamesDescriptionFragment newInstance(Bundle arguments) {
         GamesDescriptionFragment gamesDescriptionFragment = new GamesDescriptionFragment();
@@ -56,26 +54,6 @@ public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescript
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
-        setupFabButton();
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
-                ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 || dy < 0 && fab.isShown()) {
-                    fab.hide();
-                }
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    fab.show();
-                }
-
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
     }
 
     @Override
@@ -92,6 +70,8 @@ public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescript
     public void showContent() {
         super.showContent();
         ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
+        sectionsAdapter.update(data.getInfoSections());
+        recyclerView.setAdapter(sectionsAdapter);
     }
 
     @Override
@@ -102,7 +82,7 @@ public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescript
 
     @Override
     protected int getContentResId() {
-        return R.layout.fragment_games_list;
+        return R.layout.fragment_game_description;
     }
 
     @Override
@@ -111,9 +91,4 @@ public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescript
         super.onDestroyView();
     }
 
-    private void setupFabButton() {
-        fab.setOnClickListener(v -> {
-            getComponent().getPresenter().onFabPressed();
-        });
-    }
 }

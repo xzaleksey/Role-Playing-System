@@ -26,16 +26,6 @@ public class GameDescriptionViewCommunicationBus
         super(presenter, viewState);
     }
 
-
-
-    @Override
-    public void onFabPressed() {
-        presenter.onFabPressed();
-    }
-
-
-
-
     @Override
     public UserGetInteractor getValue() {
         return presenter.getValue();

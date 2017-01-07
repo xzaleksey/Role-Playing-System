@@ -22,9 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/description"
-        android:inputType="textCapSentences"
+        android:inputType="textCapSentences|textMultiLine"
         android:maxLines="@integer/edit_text_max_lines_common"
-        android:paddingBottom="0dp"
         app:met_floatingLabel="normal"
         app:met_typeface="fonts/Roboto-Regular.ttf"
         tools:text="dsdfsf sfsfdsfdsfsfdsfdsfdsfdsfdsfds  sdfsfsfdsfs dsfdsfs sfdsfds fdsfsf sdfsfsf dsfsf sdfsfsfdsfdsfs sdfsfdsfssfdfsfs sdfs dsfsf" />

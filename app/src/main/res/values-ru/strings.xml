@@ -24,4 +24,5 @@
     <string name="description">Описание</string>
     <string name="list_of_games">Список игр</string>
     <string name="input_password">Введите пароль</string>
+    <string name="here_could_be_description">Здесь могло быть описание =)</string>
 </resources>

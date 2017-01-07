@@ -19,6 +19,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.GameActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
@@ -36,11 +37,13 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     private CreateNewGameInteractor createNewGameInteractor;
     private UserGetInteractor userGetInteractor;
     private ValidatePasswordInteractor validatePasswordInteractor;
+    private CheckUserJoinedGameInteractor checkUserJoinedGameInteractor;
 
-    public GamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor) {
+    public GamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor, CheckUserJoinedGameInteractor checkUserJoinedGameInteractor) {
         this.createNewGameInteractor = createNewGameInteractor;
         this.userGetInteractor = userGetInteractor;
         this.validatePasswordInteractor = validatePasswordInteractor;
+        this.checkUserJoinedGameInteractor = checkUserJoinedGameInteractor;
     }
 
     @Override
@@ -91,28 +94,19 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     @Override
     public void checkPassword(Context context, GameModel model) {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        if (model.getMasterId().equals(currentUserId)) {
-            navigateToGameScreen(context, model);
-        } else {
-            compositeSubscription.add(RxFirebaseDatabase.getInstance().observeSingleValue(FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME).child(model.getId()))
-                    .compose(RxTransformers.applySchedulers())
-                    .subscribe(dataSnapshot -> {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            UserInGameModel gameUserModel = snapshot.getValue(UserInGameModel.class);
-                            if (currentUserId.equals(gameUserModel.getUid())) {
-                                navigateToGameScreen(context, model);
-                                return;
-                            }
-                        }
+        compositeSubscription.add(checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
+                .compose(RxTransformers.applySchedulers())
+                .subscribe(userInGame -> {
+                    if (userInGame) {
+                        navigateToGameScreen(context, model);
+                    } else {
                         PasswordDialogViewModel passwordDialogViewModel = new PasswordDialogViewModel();
                         passwordDialogViewModel.setTitle(RpsApp.app().getString(R.string.create_game));
                         passwordDialogViewModel.setGameModel(model);
                         viewModel.setPasswordDialogViewModel(passwordDialogViewModel);
                         view.showPasswordDialog();
-                    }, Crashlytics::logException));
-
-
-        }
+                    }
+                }, Crashlytics::logException));
     }
 
     @Override
