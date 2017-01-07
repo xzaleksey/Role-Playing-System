@@ -9,4 +9,7 @@ public interface GamesListView extends LceView<GamesListViewModel> {
     void onGameCreated();
 
     void showCreateGameDialog();
+
+    void showPasswordDialog();
+
 }

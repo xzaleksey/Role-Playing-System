@@ -17,4 +17,8 @@ public interface GamesListPresenter extends Presenter<GamesListView>, Provider<U
     void onFabPressed();
 
     void navigateToGameScreen(Context context, GameModel model);
+
+    void checkPassword(Context context, GameModel model);
+
+    void validatePassword(Context context, String s, GameModel gameModel);
 }

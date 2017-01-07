@@ -23,4 +23,5 @@
     <string name="game_name">Название</string>
     <string name="description">Описание</string>
     <string name="list_of_games">Список игр</string>
+    <string name="input_password">Введите пароль</string>
 </resources>

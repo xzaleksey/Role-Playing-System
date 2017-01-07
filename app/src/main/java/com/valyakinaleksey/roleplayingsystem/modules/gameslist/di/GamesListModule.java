@@ -8,6 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication.GamesListCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.state.GamesListViewState;
@@ -39,8 +40,8 @@ public class GamesListModule {
     @Provides
     @Named(PRESENTER)
     @PerFragment
-    GamesListPresenter providePresenter(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor) {
-        return new GamesListPresenterImpl(createNewGameInteractor, userGetInteractor);
+    GamesListPresenter providePresenter(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor) {
+        return new GamesListPresenterImpl(createNewGameInteractor, userGetInteractor, validatePasswordInteractor );
     }
 
 

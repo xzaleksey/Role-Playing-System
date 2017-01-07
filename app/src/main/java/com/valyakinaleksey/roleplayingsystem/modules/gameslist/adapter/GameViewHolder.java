@@ -65,6 +65,8 @@ public class GameViewHolder extends ButterKnifeViewHolder {
         itemView.setOnClickListener(v -> {
             if (TextUtils.isEmpty(model.getPassword())) {
                 gamesListPresenter.navigateToGameScreen(itemView.getContext(), model);
+            } else {
+                gamesListPresenter.checkPassword(itemView.getContext(),model);
             }
         });
         setName(model.getName());

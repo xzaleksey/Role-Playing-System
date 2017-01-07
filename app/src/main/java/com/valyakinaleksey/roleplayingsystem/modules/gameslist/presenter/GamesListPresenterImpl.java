@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
+import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
@@ -15,12 +18,15 @@ import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.GameUserModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.GameActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 @PerFragment
@@ -28,10 +34,12 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
 
     private CreateNewGameInteractor createNewGameInteractor;
     private UserGetInteractor userGetInteractor;
+    private ValidatePasswordInteractor validatePasswordInteractor;
 
-    public GamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor) {
+    public GamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor) {
         this.createNewGameInteractor = createNewGameInteractor;
         this.userGetInteractor = userGetInteractor;
+        this.validatePasswordInteractor = validatePasswordInteractor;
     }
 
     @Override
@@ -68,13 +76,54 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
         CreateGameDialogViewModel createGameDialogViewModel = new CreateGameDialogViewModel();
         createGameDialogViewModel.setTitle(RpsApp.app().getString(R.string.create_game));
         createGameDialogViewModel.setGameModel(new GameModel());
-        viewModel.setDialogData(createGameDialogViewModel);
+        viewModel.setCreateGameDialogData(createGameDialogViewModel);
         view.showCreateGameDialog();
     }
 
     @Override
     public void navigateToGameScreen(Context context, GameModel model) {
         context.startActivity(new Intent(context, GameActivity.class));
+    }
+
+    @Override
+    public void checkPassword(Context context, GameModel model) {
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (model.getMasterId().equals(currentUserId)) {
+            navigateToGameScreen(context, model);
+        } else {
+            compositeSubscription.add(RxFirebaseDatabase.getInstance().observeSingleValue(FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME).child(model.getId()))
+                    .compose(RxTransformers.applySchedulers())
+                    .subscribe(dataSnapshot -> {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            GameUserModel gameUserModel = snapshot.getValue(GameUserModel.class);
+                            if (currentUserId.equals(gameUserModel.getUid())) {
+                                navigateToGameScreen(context, model);
+                                return;
+                            }
+                        }
+                        PasswordDialogViewModel passwordDialogViewModel = new PasswordDialogViewModel();
+                        passwordDialogViewModel.setTitle(RpsApp.app().getString(R.string.create_game));
+                        passwordDialogViewModel.setGameModel(model);
+                        viewModel.setPasswordDialogViewModel(passwordDialogViewModel);
+                        view.showPasswordDialog();
+                    }, Crashlytics::logException));
+
+
+        }
+    }
+
+    @Override
+    public void validatePassword(Context context, String s, GameModel gameModel) {
+        compositeSubscription.add(validatePasswordInteractor.isPasswordValid(s, gameModel.getPassword())
+                .subscribe(aBoolean -> {
+                    if (aBoolean) {
+                        navigateToGameScreen(context, gameModel);
+                    } else {
+                        BaseError snack = BaseError.SNACK;
+                        snack.setValue(RpsApp.app().getString(R.string.error_incorrect_password));
+                        view.showError(snack);
+                    }
+                }, Crashlytics::logException));
     }
 
     @Override

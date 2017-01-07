@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +27,13 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListCompo
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, GamesListViewModel, GamesListView> implements GamesListView {
 
@@ -118,8 +120,11 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         if (recyclerView.getAdapter() == null) {
             recyclerView.setAdapter(gameListAdapter);
         }
-        if (data.getDialogData() != null && (dialog == null || !dialog.isShowing())) {
+        if (data.getCreateGameDialogData() != null && (dialog == null || !dialog.isShowing())) {
             showCreateGameDialog();
+        }
+        if (data.getCreateGameDialogData() != null && (dialog == null || !dialog.isShowing())) {
+            showPasswordDialog();
         }
     }
 
@@ -152,7 +157,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         MaterialEditText etName = (MaterialEditText) dialogView.findViewById(R.id.name);
         MaterialEditText etDescription = (MaterialEditText) dialogView.findViewById(R.id.description);
         MaterialEditText etPassword = (MaterialEditText) dialogView.findViewById(R.id.password);
-        CreateGameDialogViewModel dialogData = data.getDialogData();
+        CreateGameDialogViewModel dialogData = data.getCreateGameDialogData();
         GameModel gameModel = dialogData.getGameModel();
         etName.setText(gameModel.getName());
         etDescription.setText(gameModel.getDescription());
@@ -171,7 +176,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
                     dialog.dismiss();
                 })
                 .dismissListener(dialog1 -> {
-                    data.setDialogData(null);
+                    data.setCreateGameDialogData(null);
                     compositeSubscription.unsubscribe();
                 })
                 .build();
@@ -202,6 +207,19 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
             etName.setSelection(etName.length());
             KeyboardUtils.showSoftKeyboard(etName);
         });
+    }
+
+    @Override
+    public void showPasswordDialog() {
+        PasswordDialogViewModel passwordDialogViewModel = data.getPasswordDialogViewModel();
+        dialog = new MaterialDialog.Builder(getContext())
+                .title(R.string.input_password)
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                .input(getString(R.string.password), passwordDialogViewModel.getInputPassword(), false, (dialog1, input) -> {
+                    getComponent().getPresenter().validatePassword(getContext(), input.toString(), passwordDialogViewModel.getGameModel());
+                })
+                .dismissListener(dialog1 -> data.setPasswordDialogViewModel(null))
+                .show();
     }
 
     @Override

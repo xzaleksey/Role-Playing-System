@@ -33,5 +33,6 @@
     <string name="game_name">Name</string>
     <string name="description">Description</string>
     <string name="list_of_games">Games</string>
+    <string name="input_password">Input password</string>
 
 </resources>

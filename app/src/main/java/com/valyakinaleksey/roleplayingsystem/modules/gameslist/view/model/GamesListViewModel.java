@@ -4,16 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializable {
 
     private transient DatabaseReference reference;
-    private CreateGameDialogViewModel dialogData;
+    private CreateGameDialogViewModel createGameDialogViewModel;
+    private PasswordDialogViewModel passwordDialogViewModel;
     private String toolbarTitle;
 
     public GamesListViewModel() {
@@ -33,12 +32,20 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
         return reference == null;
     }
 
-    public void setDialogData(CreateGameDialogViewModel dialogData) {
-        this.dialogData = dialogData;
+    public void setCreateGameDialogData(CreateGameDialogViewModel dialogData) {
+        this.createGameDialogViewModel = dialogData;
     }
 
-    public CreateGameDialogViewModel getDialogData() {
-        return dialogData;
+    public PasswordDialogViewModel getPasswordDialogViewModel() {
+        return passwordDialogViewModel;
+    }
+
+    public void setPasswordDialogViewModel(PasswordDialogViewModel passwordDialogViewModel) {
+        this.passwordDialogViewModel = passwordDialogViewModel;
+    }
+
+    public CreateGameDialogViewModel getCreateGameDialogData() {
+        return createGameDialogViewModel;
     }
 
     public String getToolbarTitle() {
@@ -56,12 +63,14 @@ public class GamesListViewModel implements EmptyViewModel, Parcelable, Serializa
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.dialogData, flags);
+        dest.writeParcelable(this.createGameDialogViewModel, flags);
+        dest.writeParcelable(this.passwordDialogViewModel, flags);
         dest.writeString(this.toolbarTitle);
     }
 
     protected GamesListViewModel(Parcel in) {
-        this.dialogData = in.readParcelable(CreateGameDialogViewModel.class.getClassLoader());
+        this.createGameDialogViewModel = in.readParcelable(CreateGameDialogViewModel.class.getClassLoader());
+        this.passwordDialogViewModel = in.readParcelable(PasswordDialogViewModel.class.getClassLoader());
         this.toolbarTitle = in.readString();
     }
 

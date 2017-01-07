@@ -50,6 +50,16 @@ public class GamesListCommunicationBus
     }
 
     @Override
+    public void checkPassword(Context context, GameModel model) {
+        presenter.checkPassword(context, model);
+    }
+
+    @Override
+    public void validatePassword(Context context, String s, GameModel gameModel) {
+        presenter.validatePassword(context, s, gameModel);
+    }
+
+    @Override
     public UserGetInteractor getValue() {
         return presenter.getValue();
     }
@@ -62,5 +72,10 @@ public class GamesListCommunicationBus
     @Override
     public void showCreateGameDialog() {
         getNavigationResolver().resolveNavigation(GamesListView::showCreateGameDialog);
+    }
+
+    @Override
+    public void showPasswordDialog() {
+        getNavigationResolver().resolveNavigation(GamesListView::showPasswordDialog);
     }
 }
