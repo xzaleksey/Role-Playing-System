@@ -39,5 +39,6 @@
     <string name="join_game">Join</string>
     <string name="characteristics">Characteristics</string>
     <string name="game_players">Players</string>
+    <string name="error_network_connection">Network error</string>
 
 </resources>

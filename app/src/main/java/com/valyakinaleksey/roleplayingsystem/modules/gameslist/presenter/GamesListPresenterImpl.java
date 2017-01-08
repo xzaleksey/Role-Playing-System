@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.exceptions.NetworkConnectionException;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
@@ -30,6 +31,10 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Create
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
 
 @PerFragment
 public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesListViewModel> implements GamesListPresenter, RestorablePresenter<GamesListViewModel> {
@@ -94,19 +99,22 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     @Override
     public void checkPassword(Context context, GameModel model) {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        compositeSubscription.add(checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
-                .compose(RxTransformers.applySchedulers())
-                .subscribe(userInGame -> {
-                    if (userInGame) {
-                        navigateToGameScreen(context, model);
-                    } else {
-                        PasswordDialogViewModel passwordDialogViewModel = new PasswordDialogViewModel();
-                        passwordDialogViewModel.setTitle(RpsApp.app().getString(R.string.create_game));
-                        passwordDialogViewModel.setGameModel(model);
-                        viewModel.setPasswordDialogViewModel(passwordDialogViewModel);
-                        view.showPasswordDialog();
-                    }
-                }, Crashlytics::logException));
+        compositeSubscription.add(
+                checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
+                        .timeout(1000, TimeUnit.MILLISECONDS)
+                        .compose(RxTransformers.applySchedulers())
+                        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+                        .subscribe(userInGame -> {
+                            if (userInGame) {
+                                navigateToGameScreen(context, model);
+                            } else {
+                                PasswordDialogViewModel passwordDialogViewModel = new PasswordDialogViewModel();
+                                passwordDialogViewModel.setTitle(RpsApp.app().getString(R.string.create_game));
+                                passwordDialogViewModel.setGameModel(model);
+                                viewModel.setPasswordDialogViewModel(passwordDialogViewModel);
+                                view.showPasswordDialog();
+                            }
+                        }, this::handleThrowable));
     }
 
     @Override

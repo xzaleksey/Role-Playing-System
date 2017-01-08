@@ -29,4 +29,5 @@
     <string name="join_game">Присоединиться</string>
     <string name="characteristics">Характеристики</string>
     <string name="game_players">Участники игры</string>
+    <string name="error_network_connection">Ошибка сети</string>
 </resources>
