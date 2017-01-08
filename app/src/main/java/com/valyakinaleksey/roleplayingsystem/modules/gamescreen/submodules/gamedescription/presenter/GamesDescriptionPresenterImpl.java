@@ -8,10 +8,12 @@ import com.valyakinaleksey.roleplayingsystem.core.interfaces.MaterialDrawablePro
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.DefaultExpandableSectionImpl;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticFieldsSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticItem;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.AvatarWithTwoLineTextModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.AvatarWithTwoLineTextModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.TwoOrThreeLineTextModel;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
@@ -71,6 +73,10 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
                             new MaterialDrawableProviderImpl(gameModel.getMasterName(), gameModel.getMasterId()), user.getPhotoUrl())));
                     data.add(new StaticItem(TYPE_DIVIDER, null));
                     infoSections.add(new StaticFieldsSection(data));
+                    ArrayList<TwoOrThreeLineTextModel> twoOrThreeLineTextModels = new ArrayList<>();
+                    twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel("name1", "description1"));
+                    twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel("name2", "description2"));
+                    infoSections.add(new DefaultExpandableSectionImpl(RpsApp.app().getString(R.string.characteristics), twoOrThreeLineTextModels));
                     viewModel.setInfoSections(infoSections);
                     view.setData(viewModel);
                     view.showContent();

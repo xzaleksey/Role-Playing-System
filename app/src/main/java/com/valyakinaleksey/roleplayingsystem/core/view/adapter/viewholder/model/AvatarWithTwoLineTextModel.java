@@ -1,6 +1,5 @@
-package com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder;
+package com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model;
 
-import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 

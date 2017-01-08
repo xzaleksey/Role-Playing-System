@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.AvatarTwoLineTextViewHolder;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.AvatarWithTwoLineTextModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.AvatarWithTwoLineTextModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.DividerViewHolder;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.TitleViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.adapter.DescriptionViewHolder;
@@ -81,7 +81,7 @@ public class StaticFieldsSection extends InfoSectionImpl<StaticItem> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, RecyclerView.Adapter adapter) {
         Serializable value = data.get(position).getValue();
         switch (holder.getItemViewType()) {
             case TYPE_DESCRIPTION:

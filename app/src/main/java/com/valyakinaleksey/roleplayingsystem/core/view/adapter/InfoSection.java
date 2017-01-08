@@ -24,7 +24,7 @@ public interface InfoSection<T extends Serializable> extends Serializable, Parce
 
 	RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType);
 
-	void onBindViewHolder(RecyclerView.ViewHolder holder, int position);
+	void onBindViewHolder(RecyclerView.ViewHolder holder, int position, RecyclerView.Adapter adapter);
 
 	int getItemViewType(int position);
 

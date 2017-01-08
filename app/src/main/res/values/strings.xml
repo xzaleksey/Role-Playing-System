@@ -37,5 +37,6 @@
     <string name="here_could_be_description">It could be a description</string>
     <string name="master_of_the_game">Master</string>
     <string name="join_game">Join</string>
+    <string name="characteristics">Characteristics</string>
 
 </resources>
