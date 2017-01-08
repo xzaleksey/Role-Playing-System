@@ -64,7 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Observable<FirebaseChildEvent> observeUsersInGame(String id) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.GAMES_IN_USERS)
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME)
                 .child(id);
         return RxFirebaseDatabase.getInstance()
                 .observeChildEvent(databaseReference);
