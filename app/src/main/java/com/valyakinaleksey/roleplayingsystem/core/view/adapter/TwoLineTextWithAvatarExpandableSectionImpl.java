@@ -7,18 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.AvatarTwoLineTextViewHolder;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ExpandableTitleViewHolder;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.TwoOrThreeLineViewHolder;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.TwoOrThreeLineTextModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.AvatarWithTwoLineTextModel;
 
 import java.util.List;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.ELEMENT_TYPE_EXPANDABLE;
+import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TWO_LINE_WITH_AVATAR;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TWO_OR_THREE_LINE_ITEM;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_EXPANDABLE_TITLE;
 
-public class DefaultExpandableSectionImpl extends ExpandableSection<TwoOrThreeLineTextModel> {
-    public DefaultExpandableSectionImpl(String title, List<TwoOrThreeLineTextModel> data) {
+public class TwoLineTextWithAvatarExpandableSectionImpl extends ExpandableSection<AvatarWithTwoLineTextModel> {
+    public TwoLineTextWithAvatarExpandableSectionImpl(String title, List<AvatarWithTwoLineTextModel> data) {
         super(ELEMENT_TYPE_EXPANDABLE, title, data);
     }
 
@@ -33,8 +34,8 @@ public class DefaultExpandableSectionImpl extends ExpandableSection<TwoOrThreeLi
                 viewHolder = new ExpandableTitleViewHolder(v);
                 break;
             case TYPE_TWO_OR_THREE_LINE_ITEM:
-                v = inflater.inflate(R.layout.two_or_three_lines_item, parent, false);
-                viewHolder = new TwoOrThreeLineViewHolder(v);
+                v = inflater.inflate(R.layout.avatar_with_two_lines, parent, false);
+                viewHolder = new AvatarTwoLineTextViewHolder(v);
                 break;
         }
         return viewHolder;
@@ -46,8 +47,8 @@ public class DefaultExpandableSectionImpl extends ExpandableSection<TwoOrThreeLi
             case TYPE_EXPANDABLE_TITLE:
                 ((ExpandableTitleViewHolder) holder).bind(getTitle(), this, adapter);
                 break;
-            case TYPE_TWO_OR_THREE_LINE_ITEM:
-                ((TwoOrThreeLineViewHolder) holder).bind(data.get(position - 1));
+            case TYPE_TWO_LINE_WITH_AVATAR:
+                ((AvatarTwoLineTextViewHolder) holder).bind(data.get(position - 1));
                 break;
         }
     }
@@ -57,7 +58,7 @@ public class DefaultExpandableSectionImpl extends ExpandableSection<TwoOrThreeLi
         if (position == 0) {
             return TYPE_EXPANDABLE_TITLE;
         }
-        return TYPE_TWO_OR_THREE_LINE_ITEM;
+        return TYPE_TWO_LINE_WITH_AVATAR;
     }
 
 
@@ -71,19 +72,19 @@ public class DefaultExpandableSectionImpl extends ExpandableSection<TwoOrThreeLi
         super.writeToParcel(dest, flags);
     }
 
-    protected DefaultExpandableSectionImpl(Parcel in) {
+    protected TwoLineTextWithAvatarExpandableSectionImpl(Parcel in) {
         super(in);
     }
 
-    public static final Creator<DefaultExpandableSectionImpl> CREATOR = new Creator<DefaultExpandableSectionImpl>() {
+    public static final Creator<TwoLineTextWithAvatarExpandableSectionImpl> CREATOR = new Creator<TwoLineTextWithAvatarExpandableSectionImpl>() {
         @Override
-        public DefaultExpandableSectionImpl createFromParcel(Parcel source) {
-            return new DefaultExpandableSectionImpl(source);
+        public TwoLineTextWithAvatarExpandableSectionImpl createFromParcel(Parcel source) {
+            return new TwoLineTextWithAvatarExpandableSectionImpl(source);
         }
 
         @Override
-        public DefaultExpandableSectionImpl[] newArray(int size) {
-            return new DefaultExpandableSectionImpl[size];
+        public TwoLineTextWithAvatarExpandableSectionImpl[] newArray(int size) {
+            return new TwoLineTextWithAvatarExpandableSectionImpl[size];
         }
     };
 

@@ -32,4 +32,8 @@
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/material_component_lists_single_line_text_size"
         tools:text="title" />
+
+    <include
+        layout="@layout/divider"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -12,6 +12,8 @@ import butterknife.Bind;
 public class ExpandableTitleViewHolder extends TitleViewHolder {
     @Bind(R.id.iv_expand)
     AppCompatImageView appCompatImageView;
+    @Bind(R.id.divider)
+    View divider;
 
     public ExpandableTitleViewHolder(View itemView) {
         super(itemView);
@@ -19,7 +21,7 @@ public class ExpandableTitleViewHolder extends TitleViewHolder {
 
     public void bind(CharSequence title, ExpandableSection expandableSection, RecyclerView.Adapter adapter) {
         bind(title);
-        updateExpandImage(expandableSection);
+        updateExpandImage(expandableSection, adapter);
         itemView.setOnClickListener(v -> {
             int size = expandableSection.getData().size();
             int positionStart = getAdapterPosition() + 1;
@@ -30,12 +32,17 @@ public class ExpandableTitleViewHolder extends TitleViewHolder {
                 expandableSection.setExpanded(true);
                 adapter.notifyItemRangeInserted(positionStart, size);
             }
-            updateExpandImage(expandableSection);
+            updateExpandImage(expandableSection, adapter);
         });
     }
 
-    private void updateExpandImage(ExpandableSection expandableSection) {
+    private void updateExpandImage(ExpandableSection expandableSection, RecyclerView.Adapter adapter) {
         appCompatImageView.setImageResource(expandableSection.isExpanded() ? R.drawable.ic_expand_less_black_24dp : R.drawable.ic_expand_more_black_24dp);
+        if (expandableSection.isExpanded() || getAdapterPosition() == adapter.getItemCount() - 1) {
+            divider.setVisibility(View.GONE);
+        } else {
+            divider.setVisibility(View.VISIBLE);
+        }
     }
 }
       

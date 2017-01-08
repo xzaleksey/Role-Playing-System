@@ -16,7 +16,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.
 import butterknife.Bind;
 import rx.Subscription;
 
-public class AvatarTwoLineTextViewHolder extends ButterKnifeViewHolder {
+public class AvatarTwoLineTextViewHolder extends ButterKnifeViewHolder  {
     @Bind(R.id.avatar)
     protected ImageView ivAvatar;
     @Bind(R.id.primary_line)

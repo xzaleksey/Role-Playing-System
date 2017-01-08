@@ -38,5 +38,6 @@
     <string name="master_of_the_game">Master</string>
     <string name="join_game">Join</string>
     <string name="characteristics">Characteristics</string>
+    <string name="game_players">Players</string>
 
 </resources>

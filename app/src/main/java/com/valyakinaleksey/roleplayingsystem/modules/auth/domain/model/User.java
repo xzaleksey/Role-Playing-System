@@ -9,19 +9,24 @@ public class User implements Serializable, Parcelable {
     private String name;
     private String email;
     private String photoUrl;
+    private String uid;
 
-    public User(String name, String email) {
+    public User(String uid, String name, String email) {
+        this.uid = uid;
         this.name = name;
         this.email = email;
     }
 
 
-    public User(String name, String email, String photoUrl) {
-        this(name, email);
-        this.photoUrl = photoUrl;
+    public User() {
     }
 
-    public User() {
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getPhotoUrl() {
@@ -58,12 +63,14 @@ public class User implements Serializable, Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.email);
         dest.writeString(this.photoUrl);
+        dest.writeString(this.uid);
     }
 
     protected User(Parcel in) {
         this.name = in.readString();
         this.email = in.readString();
         this.photoUrl = in.readString();
+        this.uid = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

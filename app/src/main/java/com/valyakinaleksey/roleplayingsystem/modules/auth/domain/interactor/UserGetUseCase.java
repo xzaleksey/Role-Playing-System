@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -23,6 +24,11 @@ public class UserGetUseCase implements UserGetInteractor {
     @Override
     public Observable<User> getUserByUid(String uid) {
         return userRepository.getUserByUid(uid);
+    }
+
+    @Override
+    public Observable<List<User>> getUsersByGameId(String id) {
+        return userRepository.geUserByGameId(id);
     }
 }
       

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public abstract class ExpandableSection<T extends Serializable> extends InfoSectionImpl<T> {
-    private boolean expanded = false;
+    protected boolean expanded = false;
 
     public ExpandableSection(int sectionType, String title, List<T> data) {
         super(sectionType, title, data);

@@ -280,7 +280,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     }
 
     private void writeNewUser(String userId, String name, String email) {
-        User user = new User(name, email);
+        User user = new User(userId, name, email);
         List<? extends UserInfo> providerData = FirebaseAuth.getInstance().getCurrentUser().getProviderData();
         for (UserInfo userInfo : providerData) {
             Uri photoUrl = userInfo.getPhotoUrl();

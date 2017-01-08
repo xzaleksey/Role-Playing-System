@@ -12,17 +12,21 @@ import com.valyakinaleksey.roleplayingsystem.core.view.adapter.DefaultExpandable
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticFieldsSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticItem;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.TwoLineTextWithAvatarExpandableSectionImpl;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.AvatarWithTwoLineTextModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.TwoOrThreeLineTextModel;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
+import rx.Observable;
 import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_DESCRIPTION;
@@ -64,7 +68,7 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
         compositeSubscription.add(userGetInteractor.getUserByUid(gameModel.getMasterId())
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-                .subscribe(user -> {
+                .zipWith(userGetInteractor.getUsersByGameId(gameModel.getId()), (user, users) -> {
                     ArrayList<InfoSection> infoSections = new ArrayList<>();
                     ArrayList<StaticItem> data = new ArrayList<>();
                     data.add(new StaticItem(TYPE_DESCRIPTION, gameModel.getDescription()));
@@ -77,7 +81,16 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
                     twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel("name1", "description1"));
                     twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel("name2", "description2"));
                     infoSections.add(new DefaultExpandableSectionImpl(RpsApp.app().getString(R.string.characteristics), twoOrThreeLineTextModels));
+                    infoSections.add(new StaticFieldsSection(new ArrayList<>(Collections.singleton(new StaticItem(TYPE_DIVIDER, null)))));
+                    ArrayList<AvatarWithTwoLineTextModel> avatarWithTwoLineTextModels = new ArrayList<>();
+                    for (User userModel : users) {
+                        avatarWithTwoLineTextModels.add(new AvatarWithTwoLineTextModel(userModel.getName(), "Провел много игр", new MaterialDrawableProviderImpl(userModel.getName(), userModel.getUid()), userModel.getPhotoUrl()));
+                    }
+                    infoSections.add(new TwoLineTextWithAvatarExpandableSectionImpl(RpsApp.app().getString(R.string.game_players), avatarWithTwoLineTextModels));
                     viewModel.setInfoSections(infoSections);
+                    return Observable.just(user);
+                })
+                .subscribe(user -> {
                     view.setData(viewModel);
                     view.showContent();
                 }, Crashlytics::logException));

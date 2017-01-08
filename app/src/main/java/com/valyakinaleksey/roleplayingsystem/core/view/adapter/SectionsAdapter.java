@@ -55,6 +55,7 @@ public class SectionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int itemCount = infoSection.getItemCount();
             if (itemCount > position) {
                 infoSection.onBindViewHolder(holder, position, this);
+                break;
             } else {
                 position -= itemCount;
             }

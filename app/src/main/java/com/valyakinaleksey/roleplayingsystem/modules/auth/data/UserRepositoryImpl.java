@@ -3,12 +3,16 @@ package com.valyakinaleksey.roleplayingsystem.modules.auth.data;
 import com.crashlytics.android.Crashlytics;
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,6 +44,21 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Observable<User> getUserByUid(String uid) {
         return Observable.defer(() -> Observable.just(stringUserConcurrentHashMap.get(uid)));
+    }
+
+    @Override
+    public Observable<List<User>> geUserByGameId(String id) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME)
+                .child(id);
+        return RxFirebaseDatabase.getInstance().observeSingleValue(databaseReference)
+                .map(dataSnapshot -> {
+                    List<User> users = new ArrayList<>();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        UserInGameModel value = snapshot.getValue(UserInGameModel.class);
+                        users.add(stringUserConcurrentHashMap.get(value.getUid()));
+                    }
+                    return users;
+                });
     }
 }
       
