@@ -5,6 +5,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.communication.GameDescriptionViewCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.presenter.GamesDescriptionPresenter;
@@ -25,7 +26,6 @@ public class GamesDescriptionModule {
     private final static String VIEW_STATE_FILE_NAME = GamesDescriptionModule.class.getSimpleName();
 
 
-
     @Provides
     GamesDescriptionViewState provideViewState(ViewStateStorage storage) {
         return new GamesDescriptionViewState(storage);
@@ -40,8 +40,8 @@ public class GamesDescriptionModule {
     @Provides
     @Named(PRESENTER)
     @PerFragment
-    GamesDescriptionPresenter providePresenter(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor) {
-        return new GamesDescriptionPresenterImpl(userGetInteractor, joinGameInteractor);
+    GamesDescriptionPresenter providePresenter(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor) {
+        return new GamesDescriptionPresenterImpl(userGetInteractor, joinGameInteractor, observeGameInteractor);
     }
 
 

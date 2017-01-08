@@ -18,19 +18,18 @@ import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
-import rx.Observable;
 import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_DESCRIPTION;
-import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_DIVIDER;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TITLE;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TWO_LINE_WITH_AVATAR;
 
@@ -39,10 +38,12 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
 
     private UserGetInteractor userGetInteractor;
     private JoinGameInteractor joinGameInteractor;
+    private ObserveGameInteractor observeGameInteractor;
 
-    public GamesDescriptionPresenterImpl(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor) {
+    public GamesDescriptionPresenterImpl(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor) {
         this.userGetInteractor = userGetInteractor;
         this.joinGameInteractor = joinGameInteractor;
+        this.observeGameInteractor = observeGameInteractor;
     }
 
     @SuppressWarnings("unchecked")
@@ -69,30 +70,20 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .zipWith(userGetInteractor.getUsersByGameId(gameModel.getId()), (user, users) -> {
-                    ArrayList<InfoSection> infoSections = new ArrayList<>();
-                    ArrayList<StaticItem> data = new ArrayList<>();
-                    data.add(new StaticItem(TYPE_DESCRIPTION, gameModel.getDescription()));
-                    data.add(new StaticItem(TYPE_TITLE, RpsApp.app().getString(R.string.master_of_the_game)));
-                    data.add(new StaticItem(TYPE_TWO_LINE_WITH_AVATAR, new AvatarWithTwoLineTextModel(gameModel.getMasterName(), "Провел много игр",
-                            new MaterialDrawableProviderImpl(gameModel.getMasterName(), gameModel.getMasterId()), user.getPhotoUrl())));
-                    data.add(new StaticItem(TYPE_DIVIDER, null));
-                    infoSections.add(new StaticFieldsSection(data));
-                    ArrayList<TwoOrThreeLineTextModel> twoOrThreeLineTextModels = new ArrayList<>();
-                    twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel("name1", "description1"));
-                    twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel("name2", "description2"));
-                    infoSections.add(new DefaultExpandableSectionImpl(RpsApp.app().getString(R.string.characteristics), twoOrThreeLineTextModels));
-                    infoSections.add(new StaticFieldsSection(new ArrayList<>(Collections.singleton(new StaticItem(TYPE_DIVIDER, null)))));
-                    ArrayList<AvatarWithTwoLineTextModel> avatarWithTwoLineTextModels = new ArrayList<>();
-                    for (User userModel : users) {
-                        avatarWithTwoLineTextModels.add(new AvatarWithTwoLineTextModel(userModel.getName(), "Провел много игр", new MaterialDrawableProviderImpl(userModel.getName(), userModel.getUid()), userModel.getPhotoUrl()));
-                    }
-                    infoSections.add(new TwoLineTextWithAvatarExpandableSectionImpl(RpsApp.app().getString(R.string.game_players), avatarWithTwoLineTextModels));
-                    viewModel.setInfoSections(infoSections);
-                    return Observable.just(user);
+                    updateInfoSections(gameModel, user, users);
+                    return user;
                 })
                 .subscribe(user -> {
                     view.setData(viewModel);
                     view.showContent();
+                    compositeSubscription.add(observeGameInteractor.observeGameModel(viewModel.getGameModel())
+                            .subscribe(gameModel1 -> {
+                                        ArrayList<StaticItem> data = ((StaticFieldsSection) viewModel.getInfoSections().get(0)).getData();
+                                        data.get(0).setValue(gameModel.getDescription());
+                                        viewModel.setToolbarTitle(gameModel.getName());
+                                        view.updateView();
+                                    },
+                                    Crashlytics::logException));
                 }, Crashlytics::logException));
     }
 
@@ -113,5 +104,26 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
                     Timber.d(throwable);
                     Crashlytics.logException(throwable);
                 }));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void updateInfoSections(GameModel gameModel, User user, List<User> users) {
+        ArrayList<InfoSection> infoSections = new ArrayList<>();
+        ArrayList<StaticItem> data = new ArrayList<>();
+        data.add(new StaticItem(TYPE_DESCRIPTION, gameModel.getDescription()));
+        data.add(new StaticItem(TYPE_TITLE, RpsApp.app().getString(R.string.master_of_the_game)));
+        data.add(new StaticItem(TYPE_TWO_LINE_WITH_AVATAR, new AvatarWithTwoLineTextModel(gameModel.getMasterName(), "Провел много игр",
+                new MaterialDrawableProviderImpl(gameModel.getMasterName(), gameModel.getMasterId()), user.getPhotoUrl())));
+        infoSections.add(new StaticFieldsSection(data));
+        ArrayList<TwoOrThreeLineTextModel> twoOrThreeLineTextModels = new ArrayList<>();
+        twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel("name1", "description1"));
+        twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel("name2", "description2"));
+        infoSections.add(new DefaultExpandableSectionImpl(RpsApp.app().getString(R.string.characteristics), twoOrThreeLineTextModels));
+        ArrayList<AvatarWithTwoLineTextModel> avatarWithTwoLineTextModels = new ArrayList<>();
+        for (User userModel : users) {
+            avatarWithTwoLineTextModels.add(new AvatarWithTwoLineTextModel(userModel.getName(), "Провел много игр", new MaterialDrawableProviderImpl(userModel.getName(), userModel.getUid()), userModel.getPhotoUrl()));
+        }
+        infoSections.add(new TwoLineTextWithAvatarExpandableSectionImpl(RpsApp.app().getString(R.string.game_players), avatarWithTwoLineTextModels));
+        viewModel.setInfoSections(infoSections);
     }
 }

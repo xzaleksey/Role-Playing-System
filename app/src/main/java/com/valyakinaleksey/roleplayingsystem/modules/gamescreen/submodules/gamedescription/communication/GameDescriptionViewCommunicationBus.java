@@ -35,4 +35,9 @@ public class GameDescriptionViewCommunicationBus
     public void joinGame() {
         presenter.joinGame();
     }
+
+    @Override
+    public void updateView() {
+        getNavigationResolver().resolveNavigation(GamesDescriptionView::updateView);
+    }
 }

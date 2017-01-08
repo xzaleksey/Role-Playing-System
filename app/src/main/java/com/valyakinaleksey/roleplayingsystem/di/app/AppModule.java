@@ -10,8 +10,12 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractorImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
@@ -112,6 +116,18 @@ public class AppModule {
     @Singleton
     JoinGameInteractor provideJoinGameInteractor() {
         return new JoinGameUseCase();
+    }
+
+    @Provides
+    @Singleton
+    GameRepository provideGameRepository() {
+        return new GameRepositoryImpl();
+    }
+
+    @Provides
+    @Singleton
+    ObserveGameInteractor provideObserveGameInteractor(GameRepository gameRepository) {
+        return new ObserveGameUseCase(gameRepository);
     }
 
 }

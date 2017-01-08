@@ -14,6 +14,8 @@ public class ExpandableTitleViewHolder extends TitleViewHolder {
     AppCompatImageView appCompatImageView;
     @Bind(R.id.divider)
     View divider;
+    @Bind(R.id.container)
+    View container;
 
     public ExpandableTitleViewHolder(View itemView) {
         super(itemView);
@@ -22,7 +24,7 @@ public class ExpandableTitleViewHolder extends TitleViewHolder {
     public void bind(CharSequence title, ExpandableSection expandableSection, RecyclerView.Adapter adapter) {
         bind(title);
         updateExpandImage(expandableSection, adapter);
-        itemView.setOnClickListener(v -> {
+        container.setOnClickListener(v -> {
             int size = expandableSection.getData().size();
             int positionStart = getAdapterPosition() + 1;
             if (expandableSection.isExpanded()) {
@@ -38,7 +40,7 @@ public class ExpandableTitleViewHolder extends TitleViewHolder {
 
     private void updateExpandImage(ExpandableSection expandableSection, RecyclerView.Adapter adapter) {
         appCompatImageView.setImageResource(expandableSection.isExpanded() ? R.drawable.ic_expand_less_black_24dp : R.drawable.ic_expand_more_black_24dp);
-        if (expandableSection.isExpanded() || getAdapterPosition() == adapter.getItemCount() - 1) {
+        if (getAdapterPosition() == 0) {
             divider.setVisibility(View.GONE);
         } else {
             divider.setVisibility(View.VISIBLE);

@@ -97,4 +97,9 @@ public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescript
         super.onDestroyView();
     }
 
+    @Override
+    public void updateView() {
+        ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
+        sectionsAdapter.notifyDataSetChanged();
+    }
 }

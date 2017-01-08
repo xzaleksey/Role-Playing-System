@@ -3,15 +3,22 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.PropertyName;
+
 import java.io.Serializable;
 
 public class GameModel implements Serializable, Parcelable {
+    public static final String FIELD_DESCRIPTION = "description";
+    public static final String FIELD_NAME = "name";
+
     public static final String KEY = GameModel.class.getSimpleName();
     private String id;
     private String masterId;
     private String masterName;
+    @PropertyName(FIELD_NAME)
     private String name;
     private long dateCreate;
+    @PropertyName(FIELD_DESCRIPTION)
     private String description;
     private String password;
 

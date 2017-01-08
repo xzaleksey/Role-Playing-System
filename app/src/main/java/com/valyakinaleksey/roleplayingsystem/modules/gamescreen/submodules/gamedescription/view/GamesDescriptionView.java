@@ -6,4 +6,5 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamed
 
 public interface GamesDescriptionView extends LceView<GamesDescriptionModel> {
 
+    void updateView();
 }
