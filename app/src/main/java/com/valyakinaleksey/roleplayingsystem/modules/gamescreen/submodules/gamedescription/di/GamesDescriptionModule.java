@@ -6,6 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.communication.GameDescriptionViewCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.presenter.GamesDescriptionPresenter;
@@ -40,8 +41,8 @@ public class GamesDescriptionModule {
     @Provides
     @Named(PRESENTER)
     @PerFragment
-    GamesDescriptionPresenter providePresenter(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor) {
-        return new GamesDescriptionPresenterImpl(userGetInteractor, joinGameInteractor, observeGameInteractor);
+    GamesDescriptionPresenter providePresenter(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor, ObserveUsersInGameInteractor observeUsersInGameInteractor) {
+        return new GamesDescriptionPresenterImpl(userGetInteractor, joinGameInteractor, observeGameInteractor, observeUsersInGameInteractor);
     }
 
 

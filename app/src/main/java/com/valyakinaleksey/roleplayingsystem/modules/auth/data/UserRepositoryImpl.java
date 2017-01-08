@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.auth.data;
 
 import com.crashlytics.android.Crashlytics;
+import com.ezhome.rxfirebase2.FirebaseChildEvent;
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -59,6 +60,14 @@ public class UserRepositoryImpl implements UserRepository {
                     }
                     return users;
                 });
+    }
+
+    @Override
+    public Observable<FirebaseChildEvent> observeUsersInGame(String id) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME)
+                .child(id);
+        return RxFirebaseDatabase.getInstance()
+                .observeChildEvent(databaseReference);
     }
 }
       

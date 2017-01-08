@@ -12,6 +12,7 @@ public class AvatarWithTwoLineTextModel implements Serializable, Parcelable {
     private String secondaryText;
     private DrawableProvider placeHolderAndErrorDrawableProvider;
     private String photoUrl;
+    private Serializable model;
 
     public String getPrimaryText() {
         return primaryText;
@@ -46,6 +47,25 @@ public class AvatarWithTwoLineTextModel implements Serializable, Parcelable {
     }
 
 
+    public AvatarWithTwoLineTextModel() {
+    }
+
+    public AvatarWithTwoLineTextModel(String primaryText, String secondaryText, DrawableProvider placeHolderAndErrorDrawableProvider, String photoUrl, Serializable model) {
+        this.primaryText = primaryText;
+        this.secondaryText = secondaryText;
+        this.placeHolderAndErrorDrawableProvider = placeHolderAndErrorDrawableProvider;
+        this.photoUrl = photoUrl;
+        this.model = model;
+    }
+
+    public Serializable getModel() {
+        return model;
+    }
+
+    public void setModel(Serializable model) {
+        this.model = model;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -57,16 +77,7 @@ public class AvatarWithTwoLineTextModel implements Serializable, Parcelable {
         dest.writeString(this.secondaryText);
         dest.writeSerializable(this.placeHolderAndErrorDrawableProvider);
         dest.writeString(this.photoUrl);
-    }
-
-    public AvatarWithTwoLineTextModel() {
-    }
-
-    public AvatarWithTwoLineTextModel(String primaryText, String secondaryText, DrawableProvider placeHolderAndErrorDrawableProvider, String photoUrl) {
-        this.primaryText = primaryText;
-        this.secondaryText = secondaryText;
-        this.placeHolderAndErrorDrawableProvider = placeHolderAndErrorDrawableProvider;
-        this.photoUrl = photoUrl;
+        dest.writeSerializable(this.model);
     }
 
     protected AvatarWithTwoLineTextModel(Parcel in) {
@@ -74,6 +85,7 @@ public class AvatarWithTwoLineTextModel implements Serializable, Parcelable {
         this.secondaryText = in.readString();
         this.placeHolderAndErrorDrawableProvider = (DrawableProvider) in.readSerializable();
         this.photoUrl = in.readString();
+        this.model = (Serializable) in.readSerializable();
     }
 
     public static final Creator<AvatarWithTwoLineTextModel> CREATOR = new Creator<AvatarWithTwoLineTextModel>() {

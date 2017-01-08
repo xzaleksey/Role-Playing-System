@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.auth.data;
 
+import com.ezhome.rxfirebase2.FirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 
 import java.util.List;
@@ -13,5 +14,8 @@ public interface UserRepository {
     Observable<User> getUserByUid(String uid);
 
     Observable<List<User>> geUserByGameId(String id);
+
+
+    Observable<FirebaseChildEvent> observeUsersInGame(String id);
 }
       

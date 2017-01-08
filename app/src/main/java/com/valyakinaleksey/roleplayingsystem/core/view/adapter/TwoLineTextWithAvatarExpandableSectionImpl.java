@@ -23,6 +23,10 @@ public class TwoLineTextWithAvatarExpandableSectionImpl extends ExpandableSectio
         super(ELEMENT_TYPE_EXPANDABLE, title, data);
     }
 
+    public TwoLineTextWithAvatarExpandableSectionImpl(int sectionType, String title, List<AvatarWithTwoLineTextModel> data) {
+        super(sectionType, title, data);
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
