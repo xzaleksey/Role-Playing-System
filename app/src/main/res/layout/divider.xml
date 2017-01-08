@@ -5,7 +5,6 @@
 
     <View
         android:id="@+id/divider"
-        style="@style/Divider"
-        android:layout_marginTop="@dimen/common_margin_between_elements" />
+        style="@style/Divider" />
 </FrameLayout>
 
