@@ -14,7 +14,7 @@ public class CheckUserJoinedGameInteractorImpl implements CheckUserJoinedGameInt
     public Observable<Boolean> checkUserInGame(String userId, GameModel gameModel) {
         if (gameModel.getMasterId().equals(userId)) return Observable.just(true); // master of the game
 
-        return RxFirebaseDatabase.getInstance().observeSingleValue(FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME).child(gameModel.getId()))
+        return RxFirebaseDatabase.getInstance().observeSingleValue(FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.GAMES_IN_USERS).child(gameModel.getId()))
                 .map(dataSnapshot -> {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         UserInGameModel gameUserModel = snapshot.getValue(UserInGameModel.class);

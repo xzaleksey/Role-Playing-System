@@ -2,12 +2,23 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model;
 
 import com.ezhome.rxfirebase2.FirebaseChildEvent;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.PropertyName;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.UID;
 
 public class UserInGameModel implements Serializable {
+    public static final String FIELD_NAME = "name";
+
+    @PropertyName(UID)
     private String uid;
+    @PropertyName(FIELD_NAME)
     private String name;
 
     @Exclude
@@ -53,6 +64,14 @@ public class UserInGameModel implements Serializable {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new LinkedHashMap<>();
+        result.put(UID, uid);
+        result.put(FIELD_NAME, name);
+        return result;
     }
 }
       

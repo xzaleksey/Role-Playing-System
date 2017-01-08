@@ -9,18 +9,25 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Use
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import rx.Observable;
 
 public class JoinGameUseCase implements JoinGameInteractor {
     @Override
     public Observable<Boolean> joinGame(GameModel gameModel) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME)
-                .child(gameModel.getId())
-                .child(currentUser.getUid());
-        databaseReference.setValue(new UserInGameModel(currentUser.getUid(), FireBaseUtils.usernameFromEmail(currentUser.getEmail())));
+        String uid = currentUser.getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        UserInGameModel userInGameModel = new UserInGameModel(uid, FireBaseUtils.usernameFromEmail(currentUser.getEmail()));
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(String.format(FireBaseUtils.FORMAT_SLASHES, FireBaseUtils.USERS_IN_GAME) + gameModel.getId() + "/" + uid, userInGameModel.toMap());
+        childUpdates.put(String.format(FireBaseUtils.FORMAT_SLASHES, FireBaseUtils.GAMES_IN_USERS) + uid + "/" + gameModel.getId(), gameModel.toMap());
+        databaseReference.updateChildren(childUpdates);
         return RxFirebaseDatabase.getInstance()
-                .observeSingleValue(databaseReference)
+                .observeSingleValue(databaseReference.child(FireBaseUtils.USERS_IN_GAME)
+                        .child(gameModel.getId()))
                 .map(dataSnapshot -> true);
     }
 }

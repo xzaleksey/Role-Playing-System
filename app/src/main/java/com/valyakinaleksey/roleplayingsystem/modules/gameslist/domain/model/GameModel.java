@@ -3,9 +3,16 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.UID;
 
 public class GameModel implements Serializable, Parcelable {
     public static final String FIELD_DESCRIPTION = "description";
@@ -39,6 +46,14 @@ public class GameModel implements Serializable, Parcelable {
         this(name, description);
         this.masterId = masterId;
         this.dateCreate = dateCreate;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new LinkedHashMap<>();
+        result.put(ID, id);
+        result.put(FIELD_NAME, name);
+        return result;
     }
 
 
