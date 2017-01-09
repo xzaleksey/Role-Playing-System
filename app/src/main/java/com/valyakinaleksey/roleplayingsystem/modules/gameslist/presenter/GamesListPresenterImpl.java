@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import com.crashlytics.android.Crashlytics;
-import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
-import com.valyakinaleksey.roleplayingsystem.core.exceptions.NetworkConnectionException;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
@@ -21,7 +18,6 @@ import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePrese
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.GameActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
@@ -33,8 +29,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Passwo
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 import java.util.concurrent.TimeUnit;
-
-import rx.Observable;
 
 @PerFragment
 public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesListViewModel> implements GamesListPresenter, RestorablePresenter<GamesListViewModel> {
@@ -73,6 +67,15 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
                 .subscribe(s -> {
                     view.onGameCreated();
                 }, Crashlytics::logException));
+
+        ReactiveNetwork.observeInternetConnectivity()
+                .take(1)
+                .filter(aBoolean -> !aBoolean)
+                .subscribe(aBoolean -> {
+                    BaseError snack = BaseError.SNACK;
+                    snack.setValue(RpsApp.app().getString(R.string.game_will_be_synched));
+                    view.showError(snack);
+                });
     }
 
     @Override
@@ -115,6 +118,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
                                 view.showPasswordDialog();
                             }
                         }, this::handleThrowable));
+
     }
 
     @Override

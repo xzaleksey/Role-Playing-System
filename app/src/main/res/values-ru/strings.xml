@@ -30,4 +30,5 @@
     <string name="characteristics">Характеристики</string>
     <string name="game_players">Участники игры</string>
     <string name="error_network_connection">Ошибка сети</string>
+    <string name="game_will_be_synched">Игра будет синхронизирована, когда восстановится соединение</string>
 </resources>

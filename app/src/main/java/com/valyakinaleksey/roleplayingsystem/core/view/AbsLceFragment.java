@@ -221,22 +221,25 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
 
     @Override
     public void showError(BaseError e) {
-        switch (e) {
-            case NO_CONNECTION:
-                handleNoConnection();
-                break;
-            case NO_DATA:
-                break;
-            case SNACK:
-                showSnackbarString(e.toString());
-                break;
-            case TOAST:
-                showToast(e.toString());
-                break;
-            default:
-                hideLeContainer();
-                break;
-        }
+        getActivity().runOnUiThread(() -> {
+            switch (e) {
+                case NO_CONNECTION:
+                    handleNoConnection();
+                    break;
+                case NO_DATA:
+                    break;
+                case SNACK:
+                    showSnackbarString(e.toString());
+                    break;
+                case TOAST:
+                    showToast(e.toString());
+                    break;
+                default:
+                    hideLeContainer();
+                    break;
+            }
+        });
+
     }
 
     protected void showToast(String s) {

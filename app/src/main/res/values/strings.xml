@@ -40,5 +40,6 @@
     <string name="characteristics">Characteristics</string>
     <string name="game_players">Players</string>
     <string name="error_network_connection">Network error</string>
+    <string name="game_will_be_synched">Gmae will be synchronized, when network connection is ok</string>
 
 </resources>
