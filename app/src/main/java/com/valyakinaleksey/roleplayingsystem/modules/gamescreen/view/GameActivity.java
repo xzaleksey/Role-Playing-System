@@ -18,6 +18,8 @@ import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.view.GamesUserFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view.MasterFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment;
 
@@ -32,16 +34,21 @@ public class GameActivity extends AbsSingleFragmentActivity {
             CheckUserJoinedGameInteractor checkUserJoinedGameInteractor = RpsApp.getAppComponent(this).getCheckUserJoinedGameInteractor();
             Bundle extras = getIntent().getExtras();
             GameModel gameModel = extras.getParcelable(GameModel.KEY);
+            String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             checkUserJoinedGameInteractor
-                    .checkUserInGame(FirebaseAuth.getInstance().getCurrentUser().getUid(),gameModel )
+                    .checkUserInGame(currentUserId, gameModel)
                     .compose(RxTransformers.applySchedulers())
                     .subscribe(aBoolean -> {
-                        Fragment fragment = GamesDescriptionFragment.newInstance(extras);
-                        if (!aBoolean){
-                            setSingleFragment(fragment, GamesListFragment.TAG);
+                        Fragment fragment;
+                        if (!aBoolean) {
+                            fragment = GamesDescriptionFragment.newInstance(extras);
+                        } else if (gameModel.getMasterId().equals(currentUserId)) {
+                            fragment = MasterFragment.newInstance(extras);
                         } else {
-                            Toast.makeText(this,"user is in game", Toast.LENGTH_SHORT).show();
+                            fragment = GamesUserFragment.newInstance(extras);
                         }
+                        setSingleFragment(fragment, MasterFragment.TAG);
+
 
                     });
         }

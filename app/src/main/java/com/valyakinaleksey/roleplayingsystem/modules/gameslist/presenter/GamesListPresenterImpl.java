@@ -30,6 +30,8 @@ import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import rx.Subscription;
+
 @PerFragment
 public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesListViewModel> implements GamesListPresenter, RestorablePresenter<GamesListViewModel> {
 
@@ -61,14 +63,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
 
     @Override
     public void createGame(GameModel gameModel) {
-        compositeSubscription.add(createNewGameInteractor.createNewGame(gameModel)
-                .compose(RxTransformers.applySchedulers())
-                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-                .subscribe(s -> {
-                    view.onGameCreated();
-                }, Crashlytics::logException));
-
-        ReactiveNetwork.observeInternetConnectivity()
+        Subscription subscription = ReactiveNetwork.observeInternetConnectivity()
                 .take(1)
                 .filter(aBoolean -> !aBoolean)
                 .subscribe(aBoolean -> {
@@ -76,6 +71,17 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
                     snack.setValue(RpsApp.app().getString(R.string.game_will_be_synched));
                     view.showError(snack);
                 });
+        compositeSubscription.add(subscription);
+
+        compositeSubscription.add(createNewGameInteractor.createNewGame(gameModel)
+                .compose(RxTransformers.applySchedulers())
+                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+                .subscribe(s -> {
+                    subscription.unsubscribe();
+                    view.onGameCreated();
+                }, Crashlytics::logException));
+
+
     }
 
     @Override

@@ -71,7 +71,7 @@ public class GamesUserFragment extends AbsButterLceFragment<GamesUserComponent, 
     @Override
     public void showContent() {
         super.showContent();
-        ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
+        ((AbsActivity) getActivity()).setToolbarTitle("User fragment");
         sectionsAdapter.update(data.getInfoSections());
         recyclerView.setAdapter(sectionsAdapter);
     }

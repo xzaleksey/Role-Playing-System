@@ -71,7 +71,7 @@ public class MasterFragment extends AbsButterLceFragment<MasterComponent, Master
     @Override
     public void showContent() {
         super.showContent();
-        ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
+        ((AbsActivity) getActivity()).setToolbarTitle("Master fragment");
         sectionsAdapter.update(data.getInfoSections());
         recyclerView.setAdapter(sectionsAdapter);
     }
