@@ -172,6 +172,7 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
                 .negativeText(android.R.string.cancel)
                 .onPositive((dialog, which) -> {
                     getComponent().getPresenter().createGame(dialogData.getGameModel());
+                    dialog.dismiss();
                 })
                 .onNegative((dialog, which) -> {
                     dialog.dismiss();

@@ -25,15 +25,20 @@ public class UserRepositoryImpl implements UserRepository {
     public UserRepositoryImpl() {
         stringUserConcurrentHashMap = new ConcurrentHashMap<>();
         RxFirebaseDatabase.getInstance()
-                .observeValueEvent(FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS))
+                .observeChildEvent(FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS))
                 .compose(RxTransformers.applyIoSchedulers())
-                .subscribe(dataSnapshot -> {
-                    HashMap<String, User> stringUserHashMap = new HashMap<>();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        User value = snapshot.getValue(User.class);
-                        stringUserHashMap.put(snapshot.getKey(), value);
+                .subscribe(firebaseChildEvent -> {
+                    User value = firebaseChildEvent.getDataSnapshot().getValue(User.class);
+                    switch (firebaseChildEvent.getEventType()) {
+                        case ADDED:
+                        case CHANGED:
+                            stringUserConcurrentHashMap.put(value.getUid(), value);
+                            break;
+                        case REMOVED:
+                            stringUserConcurrentHashMap.remove(value.getUid());
+                            break;
+
                     }
-                    stringUserConcurrentHashMap = new ConcurrentHashMap<>(stringUserHashMap);
                 }, Crashlytics::logException);
     }
 

@@ -100,7 +100,7 @@ public abstract class AbsLceViewStateImpl<D extends EmptyViewModel, V extends Lc
             ErrorType type = error.getDeclaringClass().getField(error.name()).getAnnotation(ErrorType.class);
             if (type != null) {
                 ErrorTypes type1 = type.type();
-                hasAnnotation = type1.equals(ErrorTypes.ONE_SHOT) || (type1.equals(ErrorTypes.ONE_SHOT_OR_DEFAULT) && (data != null && !kdata.isEmpty()));
+                hasAnnotation = type1.equals(ErrorTypes.ONE_SHOT) || (type1.equals(ErrorTypes.ONE_SHOT_OR_DEFAULT) && (data != null && !data.isEmpty()));
             }
         } catch (NoSuchFieldException e) {
             // assume false

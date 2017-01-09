@@ -55,7 +55,7 @@ public class GameViewHolder extends ButterKnifeViewHolder {
             if (TextUtils.isEmpty(model.getPassword())) {
                 gamesListPresenter.navigateToGameScreen(itemView.getContext(), model);
             } else {
-                gamesListPresenter.checkPassword(itemView.getContext(),model);
+                gamesListPresenter.checkPassword(itemView.getContext(), model);
             }
         });
         setName(model.getName());
@@ -90,20 +90,22 @@ public class GameViewHolder extends ButterKnifeViewHolder {
         ivAvatar.setImageDrawable(textDrawable);
         subscription = userGetInteractor.getUserByUid(uid)
                 .subscribe(user -> {
-                    Glide.with(ivAvatar.getContext()).load(user.getPhotoUrl())
-                            .asBitmap()
-                            .centerCrop()
-                            .placeholder(textDrawable)
-                            .error(textDrawable)
-                            .into(new BitmapImageViewTarget(ivAvatar) {
-                                @Override
-                                protected void setResource(Bitmap resource) {
-                                    RoundedBitmapDrawable circularBitmapDrawable =
-                                            RoundedBitmapDrawableFactory.create(ivAvatar.getContext().getResources(), resource);
-                                    circularBitmapDrawable.setCircular(true);
-                                    ivAvatar.setImageDrawable(circularBitmapDrawable);
-                                }
-                            });
+                    if (user != null) {
+                        Glide.with(ivAvatar.getContext()).load(user.getPhotoUrl())
+                                .asBitmap()
+                                .centerCrop()
+                                .placeholder(textDrawable)
+                                .error(textDrawable)
+                                .into(new BitmapImageViewTarget(ivAvatar) {
+                                    @Override
+                                    protected void setResource(Bitmap resource) {
+                                        RoundedBitmapDrawable circularBitmapDrawable =
+                                                RoundedBitmapDrawableFactory.create(ivAvatar.getContext().getResources(), resource);
+                                        circularBitmapDrawable.setCircular(true);
+                                        ivAvatar.setImageDrawable(circularBitmapDrawable);
+                                    }
+                                });
+                    }
                 }, Crashlytics::logException);
     }
 }
