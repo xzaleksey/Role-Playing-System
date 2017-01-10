@@ -64,4 +64,9 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
 
     }
 
+    @Override
+    public void onGameJoined() {
+        viewModel.setNavigationTag(GamesUserFragment.TAG);
+        view.navigate();
+    }
 }

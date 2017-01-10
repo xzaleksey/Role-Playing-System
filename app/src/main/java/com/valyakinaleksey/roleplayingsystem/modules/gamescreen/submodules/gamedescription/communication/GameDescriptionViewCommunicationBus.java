@@ -8,6 +8,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamed
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.state.GamesDescriptionViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter.ChildGameListener;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter.ParentGamePresenter;
 
 import javax.inject.Inject;
 
@@ -39,5 +41,10 @@ public class GameDescriptionViewCommunicationBus
     @Override
     public void updateView() {
         getNavigationResolver().resolveNavigation(GamesDescriptionView::updateView);
+    }
+
+    @Override
+    public void setParentPresenter(ChildGameListener parentPresenter) {
+        presenter.setParentPresenter(parentPresenter);
     }
 }

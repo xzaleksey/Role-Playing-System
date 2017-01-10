@@ -29,4 +29,9 @@ public class ParentViewCommunicationBus
     public void navigate() {
         getNavigationResolver().resolveNavigation(ParentView::navigate);
     }
+
+    @Override
+    public void onGameJoined() {
+        presenter.onGameJoined();
+    }
 }

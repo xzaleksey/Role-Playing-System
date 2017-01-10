@@ -23,6 +23,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter.ChildGameListener;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter.ParentGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants;
 
@@ -42,6 +44,7 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
     private JoinGameInteractor joinGameInteractor;
     private ObserveGameInteractor observeGameInteractor;
     private ObserveUsersInGameInteractor observeUsersInGameInteractor;
+    private ChildGameListener parentGamePresenter;
 
     public GamesDescriptionPresenterImpl(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor, ObserveUsersInGameInteractor observeUsersInGameInteractor) {
         this.userGetInteractor = userGetInteractor;
@@ -127,7 +130,7 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(aBoolean -> {
-
+                    parentGamePresenter.onGameJoined();
                 }, throwable -> {
                     Timber.d(throwable);
                     Crashlytics.logException(throwable);
@@ -154,5 +157,10 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
 
     private void addUser(ArrayList<AvatarWithTwoLineTextModel> avatarWithTwoLineTextModels, User userModel) {
         avatarWithTwoLineTextModels.add(new AvatarWithTwoLineTextModel(userModel.getName(), "Провел много игр", new MaterialDrawableProviderImpl(userModel.getName(), userModel.getUid()), userModel.getPhotoUrl(), userModel));
+    }
+
+    @Override
+    public void setParentPresenter(ChildGameListener parentPresenter) {
+        this.parentGamePresenter = parentPresenter;
     }
 }
