@@ -85,6 +85,8 @@ dependencies {
     // Dagger 2
     compile 'com.google.dagger:dagger:2.4'
     apt 'com.google.dagger:dagger-compiler:2.4'
+    apt 'com.github.lukaspili.autodagger2:autodagger2-compiler:1.1'
+    compile 'com.github.lukaspili.autodagger2:autodagger2:1.1'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
     // Retrofit

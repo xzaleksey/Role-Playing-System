@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentCreator;
+import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
+import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.View;
 
 import java.util.UUID;
@@ -23,7 +25,7 @@ public class ComponentHelper<C extends HasPresenter, V extends View> {
 
     /**
      * Flag - was onSaveInstanceState(...) called during fragment lifecycle
-     *
+     * <p>
      * Used to determine if the host fragment is about to be destroyed (so presenter in this case is also destroyed)
      */
     private boolean mOnSaveInstanceCalled;
@@ -33,11 +35,13 @@ public class ComponentHelper<C extends HasPresenter, V extends View> {
      */
     private C component;
 
+    private OnPresenterReady onPresenterReadyListener;
     /**
      * Method to be called in onCreate(..) of fragment
+     *
      * @param savedInstanceState previously saved state
-     * @param arguments input data
-     * @param creator factory object to provide object graph instance
+     * @param arguments          input data
+     * @param creator            factory object to provide object graph instance
      */
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable Bundle arguments, ComponentCreator<C> creator) {
         if (savedInstanceState == null) {
@@ -52,10 +56,15 @@ public class ComponentHelper<C extends HasPresenter, V extends View> {
             ComponentHolder.getInstance().putComponent(mFragmentId, component);
             component.getPresenter().onCreate(arguments, savedInstanceState);
         }
+        if (onPresenterReadyListener !=null){
+            onPresenterReadyListener.onPresenterReady(component.getPresenter());
+        }
     }
+
 
     /**
      * Attach view to presenter
+     *
      * @param view view
      */
     public void attachView(@NonNull V view) {
@@ -77,6 +86,7 @@ public class ComponentHelper<C extends HasPresenter, V extends View> {
 
     /**
      * Method to be called in onSaveInstanceState(..) of fragment
+     *
      * @param bundle bundle
      */
     public void onSaveInstanceState(@NonNull Bundle bundle) {
@@ -89,6 +99,7 @@ public class ComponentHelper<C extends HasPresenter, V extends View> {
 
     /**
      * Method to be called in onDestroyView(..) of fragment
+     *
      * @param fragment fragment
      */
     public void onDestroyView(@NonNull Fragment fragment) {
@@ -102,6 +113,7 @@ public class ComponentHelper<C extends HasPresenter, V extends View> {
 
     /**
      * Method to be called in onDestroy(..) of fragment
+     *
      * @param fragment fragment
      */
     public void onDestroy(@NonNull Fragment fragment) {
@@ -126,9 +138,19 @@ public class ComponentHelper<C extends HasPresenter, V extends View> {
 
     /**
      * Get object graph
+     *
      * @return object graph
      */
     public C getComponent() {
         return component;
+    }
+
+    public <C extends HasPresenter, V extends View> void setOnPresenterReadyListener(OnPresenterReady onPresenterReadyListener) {
+        this.onPresenterReadyListener = onPresenterReadyListener;
+    }
+
+
+    public interface OnPresenterReady {
+        void onPresenterReady(Presenter presenter);
     }
 }

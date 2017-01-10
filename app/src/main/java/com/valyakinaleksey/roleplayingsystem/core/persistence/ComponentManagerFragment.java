@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.holder.ComponentHelper;
+import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.View;
 
@@ -11,13 +12,13 @@ import com.valyakinaleksey.roleplayingsystem.core.view.View;
 /**
  * Base fragment that abstracts away presenter persistence management
  * Presenter can be found in dagger component for fragment, returned by {@code getComponent()}
- *
+ * <p>
  * One thing to do is to implement {@code createComponent()} method to build object graph for fragment
  */
-public abstract class ComponentManagerFragment<C extends HasPresenter, V extends View> extends AbsFragment {
+public abstract class ComponentManagerFragment<C extends HasPresenter, V extends View> extends AbsFragment implements ComponentHelper.OnPresenterReady {
 
     /**
-     *  Helper object that contains all the logic to manage object graph state
+     * Helper object that contains all the logic to manage object graph state
      */
     private ComponentHelper<C, V> mComponentHelper = new ComponentHelper<>();
 
@@ -25,10 +26,12 @@ public abstract class ComponentManagerFragment<C extends HasPresenter, V extends
      * Factory object, provides instance of object graph for fragment
      */
     private ComponentCreator<C> mCreator = this::createComponent;
+    private ComponentHelper.OnPresenterReady presenterReadyListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mComponentHelper.setOnPresenterReadyListener(this);
         mComponentHelper.onCreate(savedInstanceState, getArguments(), mCreator);
     }
 
@@ -40,7 +43,7 @@ public abstract class ComponentManagerFragment<C extends HasPresenter, V extends
     @Override
     public void onResume() {
         super.onResume();
-        mComponentHelper.attachView((V)this);
+        mComponentHelper.attachView((V) this);
     }
 
     @Override
@@ -69,6 +72,7 @@ public abstract class ComponentManagerFragment<C extends HasPresenter, V extends
 
     /**
      * Get object graph for the fragment
+     *
      * @return object graph
      */
     public C getComponent() {
@@ -77,7 +81,20 @@ public abstract class ComponentManagerFragment<C extends HasPresenter, V extends
 
     /**
      * Create an instance of object graph for fragment
+     *
      * @return instance of object graph
      */
     protected abstract C createComponent();
+
+    public void setOnPresenterReadyListener(ComponentHelper.OnPresenterReady listener) {
+        presenterReadyListener = listener;
+    }
+
+
+    @Override
+    public void onPresenterReady(Presenter presenter) {
+        if (presenterReadyListener != null) {
+            presenterReadyListener.onPresenterReady(presenter);
+        }
+    }
 }

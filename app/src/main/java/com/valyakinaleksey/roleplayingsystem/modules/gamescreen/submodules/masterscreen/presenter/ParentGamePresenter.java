@@ -4,7 +4,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mast
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.Provider;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view.MasterView;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view.ParentView;
 
-public interface MasterPresenter extends Presenter<MasterView>, Provider<UserGetInteractor> {
+public interface ParentGamePresenter extends Presenter<ParentView> {
 }
