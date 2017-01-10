@@ -1,9 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
-import android.content.Context;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
@@ -11,31 +7,20 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
-import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
-import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
-import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
 
-import javax.inject.Singleton;
+public interface UseCaseProvider {
+    JoinGameInteractor getJoinGameInteractor();
 
-import dagger.Component;
+    ObserveGameInteractor getObserveGameInteractor();
 
-/**
- * Base app component
- */
-@Singleton
-@Component(modules = {AppModule.class, InteractorModule.class})
-public interface AppComponent extends UseCaseProvider {
+    ObserveUsersInGameInteractor getObserveUsersInGameInteractor();
 
-    Context context();
+    CreateNewGameInteractor getCreateNewGameInteractor();
 
-    PathManager pathManager();
+    UserGetInteractor getUserGetInteractor();
 
-    FirebaseAuth firebaseAuth();
+    ValidatePasswordInteractor getValidatePasswordInteractor();
 
-    SharedPreferencesHelper sharedPrefencesPreferencesHelper();
-
-
-    SimpleCrypto getSimpleCrypto();
-
-
+    CheckUserJoinedGameInteractor getCheckUserJoinedGameInteractor();
 }
+      

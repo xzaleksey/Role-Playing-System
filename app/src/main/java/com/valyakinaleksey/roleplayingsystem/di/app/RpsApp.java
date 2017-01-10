@@ -51,6 +51,7 @@ public class RpsApp extends MultiDexApplication {
         if (app.component == null) {
             app.component = DaggerAppComponent.builder()
                     .appModule(app.getApplicationModule())
+                    .interactorModule(new InteractorModule())
                     .build();
         }
         return app.component;
