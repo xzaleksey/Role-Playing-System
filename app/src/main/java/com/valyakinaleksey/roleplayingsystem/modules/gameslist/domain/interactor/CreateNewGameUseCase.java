@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.valyakinaleksey.roleplayingsystem.BuildConfig;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
@@ -49,12 +50,14 @@ public class CreateNewGameUseCase implements CreateNewGameInteractor {
                                 .doOnNext(dataSnapshot -> {
                                     User user = dataSnapshot.getValue(User.class);
                                     gameModel.setMasterName(user.getName());
-                                }).switchMap(dataSnapshot -> RxFirebaseDatabase.getInstance()
-                                        .observeSetValuePush(games, gameModel)
-                                        .doOnNext(s -> {
-                                            games.child(s).child(FireBaseUtils.ID).setValue(s);
-                                            gameModel.setId(s);
-                                        }));
+                                }).switchMap(dataSnapshot -> {
+                                    return RxFirebaseDatabase.getInstance()
+                                            .observeSetValuePush(games, gameModel)
+                                            .doOnNext(s -> {
+                                                games.child(s).child(FireBaseUtils.ID).setValue(s);
+                                                gameModel.setId(s);
+                                            });
+                                });
                     } else {
                         throw new IllegalStateException("current user can't be null");
                     }

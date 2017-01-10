@@ -70,6 +70,9 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
         setupFabButton();
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
