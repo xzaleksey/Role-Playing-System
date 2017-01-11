@@ -1,8 +1,7 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -11,11 +10,10 @@ import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.view.GamesUserFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.di.DaggerMasterComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.di.MasterComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter.ChildGameListener;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter.ChildGamePresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view.model.ParentGameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.DaggerMasterComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.MasterComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ChildGamePresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 
 public class ParentGameFragment extends AbsButterLceFragment<MasterComponent, ParentGameModel, ParentView> implements ParentView {

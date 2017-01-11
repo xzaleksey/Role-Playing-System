@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter;
 
 import android.os.Bundle;
 
@@ -9,8 +9,8 @@ import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.view.GamesUserFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view.ParentView;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view.model.ParentGameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 
 @PerFragment

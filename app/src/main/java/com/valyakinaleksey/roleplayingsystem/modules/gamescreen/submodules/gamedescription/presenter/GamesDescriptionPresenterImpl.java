@@ -23,8 +23,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter.ChildGameListener;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter.ParentGamePresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ChildGameListener;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants;
 

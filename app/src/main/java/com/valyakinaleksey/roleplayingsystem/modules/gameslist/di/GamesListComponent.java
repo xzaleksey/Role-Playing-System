@@ -13,7 +13,7 @@ import dagger.Component;
  * Component for Auth screen
  */
 @Component(
-        dependencies = AppComponent.class,
+        dependencies = {AppComponent.class},
         modules = GamesListModule.class
 )
 @PerFragment

@@ -18,7 +18,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePrese
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.GameActivity;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
@@ -100,7 +100,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
 
     @Override
     public void navigateToGameScreen(Context context, GameModel model) {
-        Intent intent = new Intent(context, GameActivity.class);
+        Intent intent = new Intent(context, ParentActivity.class);
         intent.putExtra(GameModel.KEY, (Parcelable) model);
         context.startActivity(intent);
     }

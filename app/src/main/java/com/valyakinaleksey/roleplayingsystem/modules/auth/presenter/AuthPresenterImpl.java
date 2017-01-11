@@ -21,7 +21,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -38,7 +37,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.Logi
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.RegisterInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.ResetPasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
-import com.valyakinaleksey.roleplayingsystem.modules.mainscreen.view.MainActivity;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 
@@ -294,7 +293,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
     }
 
     private void navigateToMainActivity(FragmentActivity activity) {
-        activity.startActivity(new Intent(activity, MainActivity.class));
+        activity.startActivity(new Intent(activity, ParentActivity.class));
         activity.finish();
     }
 }

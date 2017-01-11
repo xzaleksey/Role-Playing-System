@@ -1,12 +1,12 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.communication;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.communication;
 
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.presenter.ParentGamePresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view.ParentView;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view.model.ParentGameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.view.model.state.ParentGameViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.state.ParentGameViewState;
 
 import javax.inject.Inject;
 

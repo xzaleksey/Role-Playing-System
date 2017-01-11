@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterscreen.domain.interactor;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.domain.interactor;
 
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 

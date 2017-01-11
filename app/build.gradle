@@ -68,6 +68,9 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.8.6.2'
     compile 'com.afollestad.material-dialogs:commons:0.8.6.2'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    compile('com.mikepenz:materialdrawer:5.8.1@aar') {
+        transitive = true
+    }
     //Firebase
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-crash:10.0.1'
@@ -127,6 +130,7 @@ dependencies {
         exclude module: 'hamcrest-core'
         exclude module: 'objenesis'
     }
+
 }
 
 apply plugin: 'com.google.gms.google-services'

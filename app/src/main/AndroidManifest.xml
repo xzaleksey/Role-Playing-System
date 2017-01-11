@@ -26,17 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".modules.mainscreen.view.MainActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <activity
-            android:name=".modules.gamescreen.view.GameActivity"
+            android:name=".modules.gamescreen.view.ParentActivity"
             android:parentActivityName=".modules.mainscreen.view.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
