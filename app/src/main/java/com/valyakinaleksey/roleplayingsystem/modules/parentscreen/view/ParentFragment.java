@@ -6,8 +6,10 @@ import android.view.View;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.ParentScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
+import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.HasParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentModule;
@@ -18,9 +20,9 @@ import autodagger.AutoInjector;
 
 @AutoComponent(dependencies = {AppComponent.class},
         modules = ParentModule.class,
-        superinterfaces = {HasParentPresenter.class, AppComponent.class}
+        superinterfaces = {HasParentPresenter.class, GlobalComponent.class}
 )
-@PerFragment
+@ParentScope
 @AutoInjector
 public class ParentFragment extends AbsButterLceFragment<ParentFragmentComponent, ParentModel, ParentView> implements ParentView {
 
@@ -69,7 +71,7 @@ public class ParentFragment extends AbsButterLceFragment<ParentFragmentComponent
 
     @Override
     protected int getContentResId() {
-        return R.layout.fragment_container;
+        return R.layout.fragment_parent_container;
     }
 
     @Override
@@ -78,7 +80,9 @@ public class ParentFragment extends AbsButterLceFragment<ParentFragmentComponent
     }
 
     @Override
-    public void navigate() {
-        getComponent().getPresenter().navigateTo(this, null);
+    public void getNavigationFragment(Bundle args) {
+        getComponent().getPresenter().navigateTo(this, args);
     }
+
+
 }

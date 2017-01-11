@@ -166,7 +166,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
 
     @Override
     public void init(FragmentActivity activity) {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) { // navigate to main Activity if logged in
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) { // getNavigationFragment to main Activity if logged in
             navigateToMainActivity(activity);
             return;
         }

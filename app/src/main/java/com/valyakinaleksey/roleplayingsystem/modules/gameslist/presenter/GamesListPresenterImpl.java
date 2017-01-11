@@ -26,7 +26,9 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListVie
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,12 +41,14 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     private UserGetInteractor userGetInteractor;
     private ValidatePasswordInteractor validatePasswordInteractor;
     private CheckUserJoinedGameInteractor checkUserJoinedGameInteractor;
+    private ParentPresenter parentPresenter;
 
-    public GamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor, CheckUserJoinedGameInteractor checkUserJoinedGameInteractor) {
+    public GamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor, CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter) {
         this.createNewGameInteractor = createNewGameInteractor;
         this.userGetInteractor = userGetInteractor;
         this.validatePasswordInteractor = validatePasswordInteractor;
         this.checkUserJoinedGameInteractor = checkUserJoinedGameInteractor;
+        this.parentPresenter = parentPresenter;
     }
 
     @Override
@@ -100,9 +104,9 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
 
     @Override
     public void navigateToGameScreen(Context context, GameModel model) {
-        Intent intent = new Intent(context, ParentActivity.class);
-        intent.putExtra(GameModel.KEY, (Parcelable) model);
-        context.startActivity(intent);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(GameModel.KEY, model);
+        parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle);
     }
 
     @Override

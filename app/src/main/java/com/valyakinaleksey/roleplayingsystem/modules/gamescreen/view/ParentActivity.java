@@ -9,14 +9,9 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment;
-
-import timber.log.Timber;
 
 public class ParentActivity extends AbsSingleFragmentActivity {
     private GoogleApiClient googleApiClient;
@@ -26,15 +21,6 @@ public class ParentActivity extends AbsSingleFragmentActivity {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
             initNavigate();
-        }
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            Timber.d("user is null");
-        } else {
-            Timber.d(currentUser.toString());
-        }
-        if (savedInstanceState == null) {
-            setSingleFragment(GamesListFragment.newInstance(), GamesListFragment.TAG);
         }
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(this.getString(R.string.default_web_client_id))
@@ -80,8 +66,7 @@ public class ParentActivity extends AbsSingleFragmentActivity {
     private void initNavigate() {
         Bundle extras = getIntent().getExtras();
         Fragment fragment = ParentFragment.newInstance(extras);
-        setSingleFragment(fragment, ParentGameFragment.TAG);
-
+        setSingleFragment(fragment, ParentFragment.TAG);
     }
 
     @Override
@@ -96,5 +81,18 @@ public class ParentActivity extends AbsSingleFragmentActivity {
         googleApiClient.disconnect();
     }
 
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (fragment != null && fragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
+            // Get the fragment fragment manager - and pop the backstack
+            fragment.getChildFragmentManager().popBackStack();
+        }
+        // Else, nothing in the direct fragment back stack
+        else {
+            // Let super handle the back press
+            super.onBackPressed();
+        }
+    }
 }
       

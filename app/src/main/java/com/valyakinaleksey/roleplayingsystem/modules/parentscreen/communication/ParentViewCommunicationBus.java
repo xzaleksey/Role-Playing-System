@@ -28,13 +28,19 @@ public class ParentViewCommunicationBus
         super(presenter, viewState);
     }
 
-    @Override
-    public void navigate() {
-        getNavigationResolver().resolveNavigation(ParentView::navigate);
-    }
 
     @Override
     public void navigateTo(Fragment fragment, Bundle args) {
         presenter.navigateTo(fragment, args);
+    }
+
+    @Override
+    public void navigateToFragment(int navId, Bundle args) {
+        presenter.navigateToFragment(navId, args);
+    }
+
+    @Override
+    public void getNavigationFragment(Bundle args) {
+        getNavigationResolver().resolveNavigation(parentView -> parentView.getNavigationFragment(args));
     }
 }

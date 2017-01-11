@@ -18,6 +18,9 @@ import com.afollestad.materialdialogs.internal.MDButton;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasComponent;
+import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
@@ -25,10 +28,13 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameListA
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
 import butterknife.Bind;
@@ -53,11 +59,14 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         return new GamesListFragment();
     }
 
+
+    @SuppressWarnings("unchecked")
     @Override
     protected GamesListComponent createComponent() {
         return DaggerGamesListComponent
                 .builder()
-                .appComponent(RpsApp.getAppComponent(getActivity()))
+                .parentFragmentComponent(((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
+                .gamesListModule(new GamesListModule())
                 .build();
     }
 

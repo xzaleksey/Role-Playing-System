@@ -12,6 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.state.GamesListViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 
 import javax.inject.Named;
@@ -41,8 +42,8 @@ public class GamesListModule {
     @Provides
     @Named(PRESENTER)
     @PerFragment
-    GamesListPresenter providePresenter(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor, CheckUserJoinedGameInteractor checkUserJoinedGameInteractor) {
-        return new GamesListPresenterImpl(createNewGameInteractor, userGetInteractor, validatePasswordInteractor, checkUserJoinedGameInteractor);
+    GamesListPresenter providePresenter(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor, CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter) {
+        return new GamesListPresenterImpl(createNewGameInteractor, userGetInteractor, validatePasswordInteractor, checkUserJoinedGameInteractor, parentPresenter);
     }
 
 

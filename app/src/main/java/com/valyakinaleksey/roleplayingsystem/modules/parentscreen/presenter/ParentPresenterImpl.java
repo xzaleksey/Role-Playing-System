@@ -2,21 +2,19 @@ package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 
-@PerFragment
-public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentModel> implements ParentPresenter {
+public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> implements ParentPresenter {
 
 
-    public ParentGamePresenterImpl() {
+    public ParentPresenterImpl() {
     }
 
     @SuppressWarnings("unchecked")
@@ -36,21 +34,34 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentMod
     @Override
     public void getData() {
         viewModel.setFirstNavigation(false);
-        view.navigate();
+        view.getNavigationFragment(null);
     }
 
     @Override
     public void navigateTo(Fragment fragment, Bundle args) {
         Fragment navFragment = null;
         switch (viewModel.getNavigationId()) {
-
             case NavigationUtils.GAMES_LIST:
                 navFragment = GamesListFragment.newInstance();
                 fragment.getChildFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.inner_fragment_container, navFragment)
+                        .replace(R.id.parent_fragment_container, navFragment)
+                        .commit();
+                break;
+            case NavigationUtils.GAME_FRAGMENT:
+                navFragment = ParentGameFragment.newInstance(args);
+                fragment.getChildFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.parent_fragment_container, navFragment)
+                        .addToBackStack(ParentGameFragment.TAG)
                         .commit();
                 break;
         }
+    }
+
+    @Override
+    public void navigateToFragment(int navId, Bundle args) {
+        viewModel.setNavigationTag(navId);
+        view.getNavigationFragment(args);
     }
 }
