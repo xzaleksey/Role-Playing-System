@@ -45,6 +45,7 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
                 navFragment = GamesListFragment.newInstance();
                 fragment.getChildFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right,android.R.anim.slide_in_left,android.R.anim.slide_out_right)
                         .replace(R.id.parent_fragment_container, navFragment)
                         .commit();
                 break;
@@ -52,6 +53,7 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
                 navFragment = ParentGameFragment.newInstance(args);
                 fragment.getChildFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out,android.R.anim.fade_in,android.R.anim.fade_out)
                         .replace(R.id.parent_fragment_container, navFragment)
                         .addToBackStack(ParentGameFragment.TAG)
                         .commit();

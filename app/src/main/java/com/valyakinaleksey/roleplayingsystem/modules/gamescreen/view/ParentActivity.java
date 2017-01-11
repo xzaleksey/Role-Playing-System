@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -86,7 +87,9 @@ public class ParentActivity extends AbsSingleFragmentActivity {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragment != null && fragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
             // Get the fragment fragment manager - and pop the backstack
-            fragment.getChildFragmentManager().popBackStack();
+            FragmentManager childFragmentManager = fragment.getChildFragmentManager();
+            childFragmentManager.popBackStack();
+            childFragmentManager.executePendingTransactions();
         }
         // Else, nothing in the direct fragment back stack
         else {
