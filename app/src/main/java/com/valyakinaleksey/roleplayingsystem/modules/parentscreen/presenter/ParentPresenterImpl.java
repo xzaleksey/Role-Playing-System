@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
@@ -46,7 +47,7 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
         switch (viewModel.getNavigationId()) {
             case NavigationUtils.GAMES_LIST:
                 navFragment = GamesListFragment.newInstance();
-                navigate(fragment, navFragment, true);
+                navigate(fragment, navFragment, false);
                 break;
             case NavigationUtils.GAME_FRAGMENT:
                 navFragment = ParentGameFragment.newInstance(args);
@@ -60,12 +61,15 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
     }
 
     private void navigate(Fragment fragment, Fragment navFragment, boolean addToBackStack) {
-        fragment.getChildFragmentManager()
+        FragmentTransaction transaction = fragment.getChildFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                .replace(R.id.parent_fragment_container, navFragment)
-                .addToBackStack(ParentGameFragment.TAG)
-                .commit();
+                .replace(R.id.parent_fragment_container, navFragment);
+        if (addToBackStack) {
+            transaction
+                    .addToBackStack(navFragment.getClass().getSimpleName());
+        }
+        transaction.commit();
     }
 
     @Override
