@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
@@ -15,6 +16,7 @@ import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.di.DaggerGamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.di.GamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
 
 import javax.inject.Inject;
 
@@ -41,10 +43,11 @@ public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescript
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected GamesDescriptionComponent createComponent() {
         return DaggerGamesDescriptionComponent
                 .builder()
-                .appComponent(RpsApp.getAppComponent(getActivity()))
+                .parentFragmentComponent(((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
                 .build();
     }
 

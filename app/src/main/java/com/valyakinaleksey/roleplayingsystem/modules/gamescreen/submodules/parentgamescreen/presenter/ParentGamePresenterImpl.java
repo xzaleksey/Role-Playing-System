@@ -12,15 +12,19 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameu
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 
 @PerFragment
 public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGameModel> implements ParentGamePresenter {
 
 
     private CheckUserJoinedGameInteractor checkUserJoinedGameInteractor;
+    private ParentPresenter parentPresenter;
 
-    public ParentGamePresenterImpl(CheckUserJoinedGameInteractor checkUserJoinedGameInteractor) {
+    public ParentGamePresenterImpl(CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter) {
         this.checkUserJoinedGameInteractor = checkUserJoinedGameInteractor;
+        this.parentPresenter = parentPresenter;
     }
 
     @SuppressWarnings("unchecked")
@@ -49,12 +53,14 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(aBoolean -> {
                     if (viewModel.isMaster()) {
-                        viewModel.setNavigationTag("master");
+                        viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
                     } else {
                         if (!aBoolean) {
-                            viewModel.setNavigationTag(GamesDescriptionFragment.TAG);
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
+                            parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
                         } else {
-                            viewModel.setNavigationTag(GamesUserFragment.TAG);
+                            viewModel.setNavigationTag(ParentGameModel.USER_SCREEN);
                         }
                     }
                     view.setData(viewModel);
@@ -62,11 +68,5 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
                     view.navigate();
                 });
 
-    }
-
-    @Override
-    public void onGameJoined() {
-        viewModel.setNavigationTag(GamesUserFragment.TAG);
-        view.navigate();
     }
 }

@@ -12,6 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamed
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.presenter.GamesDescriptionPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.presenter.GamesDescriptionPresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.state.GamesDescriptionViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 
 import javax.inject.Named;
@@ -41,8 +42,8 @@ public class GamesDescriptionModule {
     @Provides
     @Named(PRESENTER)
     @PerFragment
-    GamesDescriptionPresenter providePresenter(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor, ObserveUsersInGameInteractor observeUsersInGameInteractor) {
-        return new GamesDescriptionPresenterImpl(userGetInteractor, joinGameInteractor, observeGameInteractor, observeUsersInGameInteractor);
+    GamesDescriptionPresenter providePresenter(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor, ObserveUsersInGameInteractor observeUsersInGameInteractor, ParentPresenter parentPresenter) {
+        return new GamesDescriptionPresenterImpl(userGetInteractor, joinGameInteractor, observeGameInteractor, observeUsersInGameInteractor, parentPresenter);
     }
 
 

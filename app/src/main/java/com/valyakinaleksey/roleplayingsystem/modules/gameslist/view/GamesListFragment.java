@@ -18,12 +18,9 @@ import com.afollestad.materialdialogs.internal.MDButton;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.valyakinaleksey.roleplayingsystem.R;
-import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasComponent;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
-import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
-import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameListAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
@@ -33,14 +30,12 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.Game
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, GamesListViewModel, GamesListView> implements GamesListView {
 

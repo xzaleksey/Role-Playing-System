@@ -25,7 +25,9 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamed
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.model.GamesDescriptionModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ChildGameListener;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants;
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 
 import java.util.ArrayList;
 
@@ -43,13 +45,14 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
     private JoinGameInteractor joinGameInteractor;
     private ObserveGameInteractor observeGameInteractor;
     private ObserveUsersInGameInteractor observeUsersInGameInteractor;
-    private ChildGameListener parentGamePresenter;
+    private ParentPresenter parentPresenter;
 
-    public GamesDescriptionPresenterImpl(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor, ObserveUsersInGameInteractor observeUsersInGameInteractor) {
+    public GamesDescriptionPresenterImpl(UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor, ObserveUsersInGameInteractor observeUsersInGameInteractor, ParentPresenter parentPresenter) {
         this.userGetInteractor = userGetInteractor;
         this.joinGameInteractor = joinGameInteractor;
         this.observeGameInteractor = observeGameInteractor;
         this.observeUsersInGameInteractor = observeUsersInGameInteractor;
+        this.parentPresenter = parentPresenter;
     }
 
     @SuppressWarnings("unchecked")
@@ -129,7 +132,10 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(aBoolean -> {
-                    parentGamePresenter.onGameJoined();
+                    GameModel gameModel = viewModel.getGameModel();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(GameModel.KEY, gameModel);
+                    parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle);
                 }, throwable -> {
                     Timber.d(throwable);
                     Crashlytics.logException(throwable);
@@ -156,10 +162,5 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
 
     private void addUser(ArrayList<AvatarWithTwoLineTextModel> avatarWithTwoLineTextModels, User userModel) {
         avatarWithTwoLineTextModels.add(new AvatarWithTwoLineTextModel(userModel.getName(), "Провел много игр", new MaterialDrawableProviderImpl(userModel.getName(), userModel.getUid()), userModel.getPhotoUrl(), userModel));
-    }
-
-    @Override
-    public void setParentPresenter(ChildGameListener parentPresenter) {
-        this.parentGamePresenter = parentPresenter;
     }
 }

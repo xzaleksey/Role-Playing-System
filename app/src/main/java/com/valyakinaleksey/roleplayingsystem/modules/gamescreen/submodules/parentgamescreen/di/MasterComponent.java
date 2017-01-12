@@ -6,11 +6,12 @@ import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
 
 import dagger.Component;
 
 @Component(
-        dependencies = AppComponent.class,
+        dependencies = ParentFragmentComponent.class,
         modules = MasterModule.class
 )
 @PerFragment

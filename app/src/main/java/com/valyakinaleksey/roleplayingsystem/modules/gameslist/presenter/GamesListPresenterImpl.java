@@ -102,6 +102,12 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
         view.showCreateGameDialog();
     }
 
+    public void navigateToGameDescriptionScreen(GameModel model) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(GameModel.KEY, model);
+        parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
+    }
+
     @Override
     public void navigateToGameScreen(Context context, GameModel model) {
         Bundle bundle = new Bundle();
@@ -136,7 +142,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
         compositeSubscription.add(validatePasswordInteractor.isPasswordValid(s, gameModel.getPassword())
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
-                        navigateToGameScreen(context, gameModel);
+                        navigateToGameDescriptionScreen(gameModel);
                     } else {
                         BaseError snack = BaseError.SNACK;
                         snack.setValue(RpsApp.app().getString(R.string.error_incorrect_password));

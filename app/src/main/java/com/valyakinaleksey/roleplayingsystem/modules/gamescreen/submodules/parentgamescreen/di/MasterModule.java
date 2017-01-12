@@ -9,6 +9,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.paren
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.state.ParentGameViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 
 import javax.inject.Named;
@@ -38,8 +39,8 @@ public class MasterModule {
     @Provides
     @Named(PRESENTER)
     @PerFragment
-    ParentGamePresenter providePresenter(CheckUserJoinedGameInteractor checkUserJoinedGameInteractor) {
-        return new ParentGamePresenterImpl(checkUserJoinedGameInteractor);
+    ParentGamePresenter providePresenter(CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter) {
+        return new ParentGamePresenterImpl(checkUserJoinedGameInteractor, parentPresenter);
     }
 
 

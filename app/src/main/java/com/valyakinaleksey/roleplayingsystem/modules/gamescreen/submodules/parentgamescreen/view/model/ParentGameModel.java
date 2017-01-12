@@ -9,6 +9,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.Game
 import java.io.Serializable;
 
 public class ParentGameModel implements EmptyViewModel, Parcelable, Serializable {
+    public static final String USER_SCREEN = "user_screen";
+    public static final String MASTER_SCREEN = "master_screen";
 
     private GameModel gameModel;
     private boolean isMaster;

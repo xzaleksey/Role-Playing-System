@@ -15,6 +15,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.paren
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ChildGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
 
 public class ParentGameFragment extends AbsButterLceFragment<MasterComponent, ParentGameModel, ParentView> implements ParentView {
 
@@ -27,10 +28,11 @@ public class ParentGameFragment extends AbsButterLceFragment<MasterComponent, Pa
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected MasterComponent createComponent() {
         return DaggerMasterComponent
                 .builder()
-                .appComponent(RpsApp.getAppComponent(getActivity()))
+                .parentFragmentComponent(((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
                 .build();
     }
 
@@ -74,25 +76,16 @@ public class ParentGameFragment extends AbsButterLceFragment<MasterComponent, Pa
     public void navigate() {
         String navigationTag = data.getNavigationTag();
         ComponentManagerFragment fragment = null;
-        Bundle arguments = new Bundle();
-        arguments.putParcelable(GameModel.KEY, data.getGameModel());
-        if (GamesDescriptionFragment.TAG.equals(navigationTag)) {
-            fragment = GamesDescriptionFragment.newInstance(arguments);
-        } else if (GamesUserFragment.TAG.equals(navigationTag)) {
-            fragment = GamesUserFragment.newInstance(arguments);
-        } else if ("master".equals(navigationTag)) {
+//        Bundle arguments = new Bundle();
+//        arguments.putParcelable(GameModel.KEY, data.getGameModel());
+        if (ParentGameModel.USER_SCREEN.equals(navigationTag)) {
+            showSnackbarString("user");
+        } else if (ParentGameModel.MASTER_SCREEN.equals(navigationTag)) {
             showSnackbarString("master");
         }
-        if (fragment != null) {
-            fragment.setOnPresenterReadyListener(presenter -> {
-                if (presenter instanceof ChildGamePresenter) {
-                    ((ChildGamePresenter) presenter).setParentPresenter(getComponent().getPresenter());
-                }
-            });
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.inner_fragment_container, fragment)
-                    .commit();
-        }
+//        getChildFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.inner_fragment_container, fragment)
+//                .commit();
     }
 }
