@@ -112,7 +112,19 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     public void navigateToGameScreen(Context context, GameModel model) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(GameModel.KEY, model);
-        parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle);
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        compositeSubscription.add(
+                checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
+                        .timeout(5000, TimeUnit.MILLISECONDS)
+                        .compose(RxTransformers.applySchedulers())
+                        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+                        .subscribe(userInGame -> {
+                            if (userInGame) {
+                                parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle);
+                            } else {
+                                parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
+                            }
+                        }, this::handleThrowable));
     }
 
     @Override
@@ -120,7 +132,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         compositeSubscription.add(
                 checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
-                        .timeout(1000, TimeUnit.MILLISECONDS)
+                        .timeout(5000, TimeUnit.MILLISECONDS)
                         .compose(RxTransformers.applySchedulers())
                         .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                         .subscribe(userInGame -> {

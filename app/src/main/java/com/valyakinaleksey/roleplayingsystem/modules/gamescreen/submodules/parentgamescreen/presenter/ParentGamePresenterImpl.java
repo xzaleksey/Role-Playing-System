@@ -47,26 +47,27 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
     public void getData() {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         GameModel gameModel = viewModel.getGameModel();
-        checkUserJoinedGameInteractor
-                .checkUserInGame(currentUserId, gameModel)
-                .compose(RxTransformers.applySchedulers())
-                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-                .subscribe(aBoolean -> {
-                    if (viewModel.isMaster()) {
-                        viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
-                    } else {
-                        if (!aBoolean) {
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
-                            parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
-                        } else {
-                            viewModel.setNavigationTag(ParentGameModel.USER_SCREEN);
-                        }
-                    }
-                    view.setData(viewModel);
-                    viewModel.setFirstNavigation(false);
-                    view.navigate();
-                });
+        compositeSubscription.add(
+                checkUserJoinedGameInteractor
+                        .checkUserInGame(currentUserId, gameModel)
+                        .compose(RxTransformers.applySchedulers())
+                        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+                        .subscribe(aBoolean -> {
+                            if (viewModel.isMaster()) {
+                                viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
+                            } else {
+                                if (!aBoolean) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
+                                    parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
+                                } else {
+                                    viewModel.setNavigationTag(ParentGameModel.USER_SCREEN);
+                                }
+                            }
+                            view.setData(viewModel);
+                            viewModel.setFirstNavigation(false);
+                            view.navigate();
+                        }));
 
     }
 }

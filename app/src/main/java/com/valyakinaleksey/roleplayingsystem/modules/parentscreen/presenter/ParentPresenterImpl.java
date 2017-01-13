@@ -51,7 +51,7 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
                 break;
             case NavigationUtils.GAME_FRAGMENT:
                 navFragment = ParentGameFragment.newInstance(args);
-                navigate(fragment, navFragment, true);
+                navigate(fragment, navFragment, false);
                 break;
             case NavigationUtils.GAME_DESCRIPTION_FRAGMENT:
                 navFragment = GamesDescriptionFragment.newInstance(args);
