@@ -135,6 +135,7 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
                     GameModel gameModel = viewModel.getGameModel();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(GameModel.KEY, gameModel);
+                    bundle.putBoolean(NavigationUtils.POP_BACKSTACK, true);
                     parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle);
                 }, throwable -> {
                     Timber.d(throwable);

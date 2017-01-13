@@ -44,6 +44,9 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
     @Override
     public void navigateTo(Fragment fragment, Bundle args) {
         Fragment navFragment = null;
+        if (args != null && args.getBoolean(NavigationUtils.POP_BACKSTACK, false)) {
+            fragment.getChildFragmentManager().popBackStackImmediate();
+        }
         switch (viewModel.getNavigationId()) {
             case NavigationUtils.GAMES_LIST:
                 navFragment = GamesListFragment.newInstance();
@@ -51,7 +54,7 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
                 break;
             case NavigationUtils.GAME_FRAGMENT:
                 navFragment = ParentGameFragment.newInstance(args);
-                navigate(fragment, navFragment, false);
+                navigate(fragment, navFragment, true);
                 break;
             case NavigationUtils.GAME_DESCRIPTION_FRAGMENT:
                 navFragment = GamesDescriptionFragment.newInstance(args);

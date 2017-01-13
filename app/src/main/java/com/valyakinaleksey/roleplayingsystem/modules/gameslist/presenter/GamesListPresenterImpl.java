@@ -32,6 +32,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
 import rx.Subscription;
 
 @PerFragment
@@ -114,10 +115,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
         bundle.putParcelable(GameModel.KEY, model);
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         compositeSubscription.add(
-                checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
-                        .timeout(5000, TimeUnit.MILLISECONDS)
-                        .compose(RxTransformers.applySchedulers())
-                        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+                getCheckUserInGameObservable(model, currentUserId)
                         .subscribe(userInGame -> {
                             if (userInGame) {
                                 parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle);
@@ -131,10 +129,7 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     public void checkPassword(Context context, GameModel model) {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         compositeSubscription.add(
-                checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
-                        .timeout(5000, TimeUnit.MILLISECONDS)
-                        .compose(RxTransformers.applySchedulers())
-                        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+                getCheckUserInGameObservable(model, currentUserId)
                         .subscribe(userInGame -> {
                             if (userInGame) {
                                 navigateToGameScreen(context, model);
@@ -186,5 +181,12 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
     @Override
     public UserGetInteractor getValue() {
         return userGetInteractor;
+    }
+
+    private Observable<Boolean> getCheckUserInGameObservable(GameModel model, String currentUserId) {
+        return checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
+                .timeout(5000, TimeUnit.MILLISECONDS)
+                .compose(RxTransformers.applySchedulers())
+                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading));
     }
 }
