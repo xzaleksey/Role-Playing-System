@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -13,6 +14,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class ParentActivity extends AbsSingleFragmentActivity {
     private GoogleApiClient googleApiClient;
@@ -36,13 +40,8 @@ public class ParentActivity extends AbsSingleFragmentActivity {
     }
 
     @Override
-    protected void fillToolbarItems() {
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
     protected int getLayoutId() {
-        return R.layout.single_fragment_activity;
+        return R.layout.parent_fragment_activity;
     }
 
     @Override
@@ -50,7 +49,6 @@ public class ParentActivity extends AbsSingleFragmentActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -64,11 +62,6 @@ public class ParentActivity extends AbsSingleFragmentActivity {
         }
     }
 
-    private void initNavigate() {
-        Bundle extras = getIntent().getExtras();
-        Fragment fragment = ParentFragment.newInstance(extras);
-        setSingleFragment(fragment, ParentFragment.TAG);
-    }
 
     @Override
     protected void onStart() {
@@ -96,6 +89,17 @@ public class ParentActivity extends AbsSingleFragmentActivity {
             // Let super handle the back press
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void fillToolbarItems() {
+
+    }
+
+    private void initNavigate() {
+        Bundle extras = getIntent().getExtras();
+        Fragment fragment = ParentFragment.newInstance(extras);
+        setSingleFragment(fragment, ParentFragment.TAG);
     }
 }
       

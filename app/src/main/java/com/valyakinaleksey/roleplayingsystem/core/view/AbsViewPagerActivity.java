@@ -25,7 +25,7 @@ public abstract class AbsViewPagerActivity extends AbsActivity {
     }
 
     private void setupTabs() {
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabs = (TabLayout) findViewById(R.id.tabs);
 
         viewPager.setAdapter(providePagerAdapter());

@@ -18,7 +18,7 @@ public abstract class AbsSingleFragmentActivity extends AbsActivity {
     }
 
     protected int getLayoutId() {
-        return R.layout.single_fragment_activity;
+        return R.layout.parent_fragment_activity;
     }
 
     protected void setSingleFragment(final Fragment fragment, final String tag) {

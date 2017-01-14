@@ -6,28 +6,34 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.valyakinaleksey.roleplayingsystem.core.utils.Tuple;
 
+import java.util.List;
+
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private Tuple<String, Fragment>[] fragmentTitlePairs;
+    private List<Tuple<String, Fragment>> fragmentTitlePairs;
 
-    public ViewPagerAdapter(FragmentManager fm, Tuple<String, Fragment>[] fragmentTitlePairs) {
+    public ViewPagerAdapter(FragmentManager fm, List<Tuple<String, Fragment>> fragmentTitlePairs) {
         super(fm);
         this.fragmentTitlePairs = fragmentTitlePairs;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragmentTitlePairs[position].second;
+        return fragmentTitlePairs.get(position).second;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return fragmentTitlePairs[position].first;
+        return fragmentTitlePairs.get(position).first;
+    }
+
+    public void addFragment(Fragment fragment, String title) {
+        fragmentTitlePairs.add(new Tuple<>(title, fragment));
     }
 
     @Override
     public int getCount() {
-        return fragmentTitlePairs.length;
+        return fragmentTitlePairs.size();
     }
 }
