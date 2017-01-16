@@ -31,6 +31,8 @@ public interface LceView<D extends EmptyViewModel> extends View {
 
     void setData(D data);
 
+    void preFillModel(D data);
+
     void showContent();
 
     void showError(BaseError error);

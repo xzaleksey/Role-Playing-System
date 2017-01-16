@@ -7,7 +7,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.MaterialDrawableProviderImpl;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.DefaultExpandableSectionImpl;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticFieldsSection;
@@ -32,7 +32,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TITLE;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TWO_LINE_WITH_AVATAR;
 
-@PerFragment
+@PerFragmentScope
 public class GamesUserPresenterImpl extends BasePresenter<GamesUserView, GamesUserModel> implements GamesUserPresenter {
 
     private UserGetInteractor userGetInteractor;

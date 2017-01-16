@@ -6,8 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
-import com.valyakinaleksey.roleplayingsystem.core.view.View;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.GamesDescriptionFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView;

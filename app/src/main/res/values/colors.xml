@@ -8,5 +8,7 @@
     <color name="colorTextPrimary">#212121</color>
     <color name="colorTextSecondary">#757575</color>
     <color name="colorDivider">#BDBDBD</color>
+    <color name="defaultGrayTintColor">#737373</color>
+
 
 </resources>

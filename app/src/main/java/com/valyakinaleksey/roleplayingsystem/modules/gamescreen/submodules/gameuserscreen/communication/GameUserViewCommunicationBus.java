@@ -2,7 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.presenter.GamesUserPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.view.GamesUserView;
@@ -11,7 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameu
 
 import javax.inject.Inject;
 
-@PerFragment
+@PerFragmentScope
 public class GameUserViewCommunicationBus
         extends SelfRestorableNavigationLceCommunicationBus<GamesUserModel, GamesUserView, GamesUserPresenter, GamesUserViewState>
         implements GamesUserPresenter, GamesUserView {

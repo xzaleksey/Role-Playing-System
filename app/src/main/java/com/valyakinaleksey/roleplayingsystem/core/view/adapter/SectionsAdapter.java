@@ -3,19 +3,17 @@ package com.valyakinaleksey.roleplayingsystem.core.view.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-@PerFragment
 public class SectionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected List<InfoSection> infoSections;
 
-    @Inject
     public SectionsAdapter() {
         infoSections = new ArrayList<>();
     }

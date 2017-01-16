@@ -11,5 +11,4 @@ import dagger.Component;
 @Component(modules = {AppModule.class, InteractorModule.class})
 public interface AppComponent extends  GlobalComponent {
 
-
 }

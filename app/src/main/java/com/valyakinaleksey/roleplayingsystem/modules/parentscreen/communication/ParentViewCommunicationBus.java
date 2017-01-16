@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
@@ -13,7 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.sta
 
 import javax.inject.Inject;
 
-@PerFragment
+@PerFragmentScope
 public class ParentViewCommunicationBus
         extends SelfRestorableNavigationLceCommunicationBus<ParentModel, ParentView, ParentPresenter, ParentGameViewState>
         implements ParentPresenter, ParentView {

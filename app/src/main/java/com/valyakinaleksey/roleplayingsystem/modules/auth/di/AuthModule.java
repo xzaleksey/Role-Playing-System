@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.communication.AuthCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.LoginInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.LoginUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.RegisterInteractor;
@@ -33,19 +33,19 @@ public class AuthModule {
     private final static String VIEW_STATE_FILE_NAME = AuthModule.class.getSimpleName();
 
     @Provides
-    @PerFragment
+    @PerFragmentScope
     LoginInteractor provideLoginInteractor(FirebaseAuth firebaseAuth) {
         return new LoginUseCase(firebaseAuth);
     }
 
     @Provides
-    @PerFragment
+    @PerFragmentScope
     RegisterInteractor provideRegisterInteractor(FirebaseAuth firebaseAuth) {
         return new RegisterUseCase(firebaseAuth);
     }
 
     @Provides
-    @PerFragment
+    @PerFragmentScope
     ResetPasswordInteractor provideResetPasswordInteractor(FirebaseAuth firebaseAuth) {
         return new ResetPasswordUseCase(firebaseAuth);
     }
@@ -58,13 +58,13 @@ public class AuthModule {
 
     @Provides
     @Named(PRESENTER)
-    @PerFragment
+    @PerFragmentScope
     AuthPresenter provideAuthPresenter(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, ResetPasswordInteractor resetPasswordInteractor, SharedPreferencesHelper sharedPreferencesHelper, Context context) {
         return new AuthPresenterImpl(loginInteractor, registerInteractor, resetPasswordInteractor, sharedPreferencesHelper, context);
     }
 
     @Provides
-    @PerFragment
+    @PerFragmentScope
     AuthPresenter provideCommunicationBus(@Named(PRESENTER) AuthPresenter presenter, AuthViewState viewState) {
         return new AuthCommunicationBus(presenter, viewState);
     }

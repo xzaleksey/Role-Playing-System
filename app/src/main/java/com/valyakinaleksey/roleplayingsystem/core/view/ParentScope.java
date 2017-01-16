@@ -7,7 +7,7 @@ import javax.inject.Scope;
 
 /**
  * Dagger annotation
- * Custom scope for Activity
+ * Custom scope for Parent fragment
  */
 @Scope
 @Retention(RetentionPolicy.RUNTIME)

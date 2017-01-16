@@ -3,7 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.di;
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication.GamesListCommunicationBus;
@@ -34,14 +34,14 @@ public class GamesListModule {
     }
 
     @Provides
-    @PerFragment
+    @PerFragmentScope
     GamesListPresenter provideCommunicationBus(@Named(PRESENTER) GamesListPresenter presenter, GamesListViewState viewState) {
         return new GamesListCommunicationBus(presenter, viewState);
     }
 
     @Provides
     @Named(PRESENTER)
-    @PerFragment
+    @PerFragmentScope
     GamesListPresenter providePresenter(CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor, CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter) {
         return new GamesListPresenterImpl(createNewGameInteractor, userGetInteractor, validatePasswordInteractor, checkUserJoinedGameInteractor, parentPresenter);
     }

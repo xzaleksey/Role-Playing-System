@@ -10,14 +10,11 @@ import android.view.View;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.core.utils.Tuple;
+import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ViewPagerAdapter;
-import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.view.GamesUserFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.DaggerMasterComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.MasterComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ChildGamePresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.MasterGameEditFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.DaggerParentGameComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
@@ -26,7 +23,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 
-public class ParentGameFragment extends AbsButterLceFragment<MasterComponent, ParentGameModel, ParentView> implements ParentView {
+public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent, ParentGameModel, ParentView> implements ParentView {
 
     public static final String TAG = ParentGameFragment.class.getSimpleName();
 
@@ -34,6 +31,7 @@ public class ParentGameFragment extends AbsButterLceFragment<MasterComponent, Pa
     ViewPager viewPager;
 
     private TabLayout tabLayout;
+    private ViewPagerAdapter adapter;
 
     public static ParentGameFragment newInstance(Bundle arguments) {
         ParentGameFragment gamesDescriptionFragment = new ParentGameFragment();
@@ -43,8 +41,8 @@ public class ParentGameFragment extends AbsButterLceFragment<MasterComponent, Pa
 
     @Override
     @SuppressWarnings("unchecked")
-    protected MasterComponent createComponent() {
-        return DaggerMasterComponent
+    protected ParentGameComponent createComponent() {
+        return DaggerParentGameComponent
                 .builder()
                 .parentFragmentComponent(((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
                 .build();
@@ -61,11 +59,7 @@ public class ParentGameFragment extends AbsButterLceFragment<MasterComponent, Pa
         super.setupViews(view);
         tabLayout = ((TabLayout) getActivity().findViewById(R.id.tabs));
         tabLayout.setupWithViewPager(viewPager);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager(), new ArrayList<>());
-        adapter.addFragment(new Fragment(), "ONE");
-        adapter.addFragment(new Fragment(), "TWO");
-        adapter.addFragment(new Fragment(), "THREE");
-        viewPager.setAdapter(adapter);
+        adapter = new ViewPagerAdapter(getChildFragmentManager(), new ArrayList<>());
     }
 
     @Override
@@ -88,6 +82,15 @@ public class ParentGameFragment extends AbsButterLceFragment<MasterComponent, Pa
     @Override
     public void showContent() {
         super.showContent();
+        ((AbsActivity) getActivity()).setToolbarTitle(data.getGameModel().getName());
+        if (viewPager.getAdapter() == null) {
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(GameModel.KEY, data.getGameModel());
+            adapter.addFragment(MasterGameEditFragment.newInstance(arguments), getString(R.string.info));
+            adapter.addFragment(new Fragment(), "TWO");
+            adapter.addFragment(new Fragment(), "THREE");
+            viewPager.setAdapter(adapter);
+        }
     }
 
     @Override

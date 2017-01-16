@@ -290,4 +290,9 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
                 break;
         }
     }
+
+    @Override
+    public void preFillModel(M data) {
+
+    }
 }

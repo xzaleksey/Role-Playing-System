@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.AuthViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.state.AuthViewState;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresenter;
@@ -13,7 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
 
 import javax.inject.Inject;
 
-@PerFragment
+@PerFragmentScope
 public class AuthCommunicationBus
         extends SelfRestorableNavigationLceCommunicationBus<AuthViewModel, AuthView, AuthPresenter, AuthViewState>
         implements AuthPresenter, AuthView {

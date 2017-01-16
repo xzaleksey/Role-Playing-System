@@ -3,7 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
@@ -32,14 +32,14 @@ public class GamesUserModule {
     }
 
     @Provides
-    @PerFragment
+    @PerFragmentScope
     GamesUserPresenter provideCommunicationBus(@Named(PRESENTER) GamesUserPresenter presenter, GamesUserViewState viewState) {
         return new GameUserViewCommunicationBus(presenter, viewState);
     }
 
     @Provides
     @Named(PRESENTER)
-    @PerFragment
+    @PerFragmentScope
     GamesUserPresenter providePresenter(UserGetInteractor userGetInteractor, ObserveGameInteractor observeGameInteractor, ObserveUsersInGameInteractor observeUsersInGameInteractor) {
         return new GamesUserPresenterImpl(userGetInteractor, observeGameInteractor, observeUsersInGameInteractor);
     }

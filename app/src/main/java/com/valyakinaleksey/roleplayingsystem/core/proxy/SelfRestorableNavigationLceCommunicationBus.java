@@ -63,4 +63,9 @@ public class SelfRestorableNavigationLceCommunicationBus<D extends EmptyViewMode
     public void showMessage(CharSequence message, @MessageType int type) {
         getNavigationResolver().resolveNavigation(v -> v.showMessage(message, type));
     }
+
+    @Override
+    public void preFillModel(D data) {
+        getNavigationResolver().resolveNavigation(v -> v.preFillModel(data));
+    }
 }

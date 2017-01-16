@@ -7,7 +7,6 @@ import android.view.View;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.ParentScope;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
 import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
 import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;

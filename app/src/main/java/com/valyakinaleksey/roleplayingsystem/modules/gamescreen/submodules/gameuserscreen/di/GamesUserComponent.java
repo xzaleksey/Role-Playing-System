@@ -2,7 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.presenter.GamesUserPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.view.GamesUserFragment;
@@ -13,7 +13,7 @@ import dagger.Component;
         dependencies = AppComponent.class,
         modules = GamesUserModule.class
 )
-@PerFragment
+@PerFragmentScope
 public interface GamesUserComponent extends HasPresenter<GamesUserPresenter> {
 
     void inject(GamesUserFragment gamesListFragment);

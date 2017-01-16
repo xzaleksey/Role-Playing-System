@@ -11,7 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.Avatar
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.AvatarWithTwoLineTextModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.DividerViewHolder;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.TitleViewHolder;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.adapter.DescriptionViewHolder;
+import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.adapter.DescriptionViewHolder;
 
 import java.io.Serializable;
 import java.util.List;

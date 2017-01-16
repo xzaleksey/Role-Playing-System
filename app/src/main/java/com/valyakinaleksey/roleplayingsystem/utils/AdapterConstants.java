@@ -13,5 +13,9 @@ public class AdapterConstants {
     public static final int TYPE_DIVIDER = 4;
     public static final int TYPE_EXPANDABLE_TITLE = 5;
     public static final int TYPE_TWO_OR_THREE_LINE_ITEM = 6;
+
+    //Master Game Edit types
+    public static final int MASTER_GAME_DESCRIPTION = 7;
+
 }
       

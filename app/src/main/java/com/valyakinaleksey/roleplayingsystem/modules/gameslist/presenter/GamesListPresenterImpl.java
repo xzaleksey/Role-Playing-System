@@ -1,9 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
@@ -13,12 +11,11 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
@@ -35,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Subscription;
 
-@PerFragment
+@PerFragmentScope
 public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesListViewModel> implements GamesListPresenter, RestorablePresenter<GamesListViewModel> {
 
     private CreateNewGameInteractor createNewGameInteractor;

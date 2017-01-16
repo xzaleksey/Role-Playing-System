@@ -4,7 +4,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication;
 import android.content.Context;
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
@@ -14,7 +14,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListVie
 
 import javax.inject.Inject;
 
-@PerFragment
+@PerFragmentScope
 public class GamesListCommunicationBus
         extends SelfRestorableNavigationLceCommunicationBus<GamesListViewModel, GamesListView, GamesListPresenter, GamesListViewState>
         implements GamesListPresenter, GamesListView {

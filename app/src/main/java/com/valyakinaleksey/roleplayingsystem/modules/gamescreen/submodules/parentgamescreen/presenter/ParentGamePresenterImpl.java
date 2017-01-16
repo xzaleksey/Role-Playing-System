@@ -5,17 +5,14 @@ import android.os.Bundle;
 import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.view.GamesDescriptionFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.view.GamesUserFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 
-@PerFragment
 public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGameModel> implements ParentGamePresenter {
 
 
@@ -45,6 +42,8 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
     @SuppressWarnings("unchecked")
     @Override
     public void getData() {
+        view.setData(viewModel);
+        view.showContent();
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         GameModel gameModel = viewModel.getGameModel();
         compositeSubscription.add(

@@ -31,6 +31,7 @@ public abstract class SelfRestorableLceCommunicationBus<D extends EmptyViewModel
         super.onCreate(arguments, savedInstanceState);
     }
 
+    @SuppressWarnings("unchecked")
     private void restorePresenterViewModelIfNeeded() {
         if (presenter instanceof RestorablePresenter) {
             ((RestorablePresenter<D>) presenter).restoreViewModel(viewState.getData());

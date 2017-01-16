@@ -1,0 +1,53 @@
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.adapter;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticFieldsSection;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticItem;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewholder.SingleValueEditViewHolder;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel.SingleValueEditModel;
+
+import java.io.Serializable;
+import java.util.List;
+
+import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.MASTER_GAME_DESCRIPTION;
+
+public class MasterGameSection extends StaticFieldsSection {
+    public MasterGameSection(List<StaticItem> data) {
+        super(data);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, RecyclerView.Adapter adapter) {
+        Serializable value = data.get(position).getValue();
+        switch (holder.getItemViewType()) {
+            case MASTER_GAME_DESCRIPTION:
+                ((SingleValueEditViewHolder) holder).bind((SingleValueEditModel) value);
+                break;
+        }
+
+        super.onBindViewHolder(holder, position, adapter);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder viewHolder = null;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View v;
+        switch (viewType) {
+            case MASTER_GAME_DESCRIPTION:
+                v = inflater.inflate(R.layout.base_edit_item, parent, false);
+                viewHolder = new SingleValueEditViewHolder(v);
+                break;
+        }
+        if (viewHolder != null) {
+            return viewHolder;
+        }
+        return super.onCreateViewHolder(parent, viewType);
+    }
+}
+      

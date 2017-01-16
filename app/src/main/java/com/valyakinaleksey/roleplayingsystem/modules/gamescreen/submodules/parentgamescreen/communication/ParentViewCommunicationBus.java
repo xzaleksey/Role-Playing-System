@@ -2,7 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.pare
 
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
@@ -10,7 +10,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.paren
 
 import javax.inject.Inject;
 
-@PerFragment
+@PerFragmentScope
 public class ParentViewCommunicationBus
         extends SelfRestorableNavigationLceCommunicationBus<ParentGameModel, ParentView, ParentGamePresenter, ParentGameViewState>
         implements ParentGamePresenter, ParentView {

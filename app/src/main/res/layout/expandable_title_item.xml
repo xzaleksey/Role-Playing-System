@@ -25,11 +25,12 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:tint="#737373"
+            android:tint="@color/defaultGrayTintColor"
             app:srcCompat="@drawable/ic_expand_more_black_24dp" />
 
         <TextView
             android:id="@+id/title"
+            style="@style/SubHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -37,8 +38,6 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/iv_expand"
             android:layout_toStartOf="@+id/iv_expand"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/material_component_lists_single_line_text_size"
             tools:text="title" />
 
     </RelativeLayout>

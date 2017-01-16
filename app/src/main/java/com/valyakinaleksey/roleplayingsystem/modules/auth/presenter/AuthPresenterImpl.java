@@ -28,7 +28,7 @@ import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
-import com.valyakinaleksey.roleplayingsystem.core.view.PerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.AuthViewModel;
@@ -49,7 +49,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-@PerFragment
+@PerFragmentScope
 public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> implements AuthPresenter, RestorablePresenter<AuthViewModel>, GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 9001;
 

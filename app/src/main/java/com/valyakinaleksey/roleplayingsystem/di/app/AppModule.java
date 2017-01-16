@@ -6,24 +6,11 @@ import android.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.BuildConfig;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepositoryImpl;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRepositoryImpl;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractorImpl;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameUseCase;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameUseCase;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamedescription.domain.interactor.JoinGameUseCase;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameUseCase;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
@@ -78,8 +65,6 @@ public class AppModule {
     }
 
 
-
-
     @Provides
     @Singleton
     UserRepository provideUserRepository() {
@@ -94,13 +79,14 @@ public class AppModule {
     }
 
 
-
     @Provides
     @Singleton
     GameRepository provideGameRepository() {
         return new GameRepositoryImpl();
     }
 
-
-
+    @Provides
+    SectionsAdapter provideSectionsAdapter() {
+        return new SectionsAdapter();
+    }
 }
