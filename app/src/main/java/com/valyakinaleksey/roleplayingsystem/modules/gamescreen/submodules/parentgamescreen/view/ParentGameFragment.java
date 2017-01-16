@@ -86,7 +86,9 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
         if (viewPager.getAdapter() == null) {
             Bundle arguments = new Bundle();
             arguments.putParcelable(GameModel.KEY, data.getGameModel());
-            adapter.addFragment(MasterGameEditFragment.newInstance(arguments), getString(R.string.info));
+            if (data.isMaster()) {
+                adapter.addFragment(MasterGameEditFragment.newInstance(arguments), getString(R.string.info));
+            }
             adapter.addFragment(new Fragment(), "TWO");
             adapter.addFragment(new Fragment(), "THREE");
             viewPager.setAdapter(adapter);

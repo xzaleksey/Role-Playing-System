@@ -6,6 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.communication.MasterGameEditViewCommunicationBus;
@@ -45,8 +46,8 @@ public class MasterGameEditModule {
     @Provides
     @Named(PRESENTER)
     @GameScope
-    MasterGameEditPresenter providePresenter(UserGetInteractor userGetInteractor, ObserveGameInteractor observeGameInteractor, ObserveUsersInGameInteractor observeUsersInGameInteractor) {
-        return new MasterGameEditPresenterImpl(userGetInteractor, observeGameInteractor, observeUsersInGameInteractor);
+    MasterGameEditPresenter providePresenter(UserGetInteractor userGetInteractor, ObserveGameInteractor observeGameInteractor, ObserveUsersInGameInteractor observeUsersInGameInteractor, EditGameInteractor editGameInteractor) {
+        return new MasterGameEditPresenterImpl(userGetInteractor, observeGameInteractor, editGameInteractor);
     }
 
 

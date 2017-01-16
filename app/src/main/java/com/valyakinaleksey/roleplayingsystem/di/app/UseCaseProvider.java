@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.domain.interactor.JoinGameInteractor;
@@ -22,5 +23,7 @@ public interface UseCaseProvider {
     ValidatePasswordInteractor getValidatePasswordInteractor();
 
     CheckUserJoinedGameInteractor getCheckUserJoinedGameInteractor();
+
+    EditGameInteractor getEditGameInteractor();
 }
       

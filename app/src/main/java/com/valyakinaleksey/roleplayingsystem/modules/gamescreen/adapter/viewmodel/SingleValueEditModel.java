@@ -1,6 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel;
 
-import android.view.View;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.OnItemClickListener;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ public class SingleValueEditModel implements Serializable {
     private String value;
     private String title;
     private String valueHint;
-    private transient View.OnClickListener saveOnclickListener;
+    private transient OnItemClickListener<String> saveOnclickListener;
     private boolean editable = false;
 
     public boolean isEditable() {
@@ -43,11 +43,11 @@ public class SingleValueEditModel implements Serializable {
         this.valueHint = valueHint;
     }
 
-    public View.OnClickListener getSaveOnclickListener() {
+    public OnItemClickListener<String> getSaveOnclickListener() {
         return saveOnclickListener;
     }
 
-    public void setSaveOnclickListener(View.OnClickListener saveOnclickListener) {
+    public void setSaveOnclickListener(OnItemClickListener<String> saveOnclickListener) {
         this.saveOnclickListener = saveOnclickListener;
     }
 }

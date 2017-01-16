@@ -28,6 +28,10 @@ public class StaticFieldsSection extends InfoSectionImpl<StaticItem> {
         super(ELEMENT_TYPE_STATIC_SECTION, data);
     }
 
+    public StaticFieldsSection(int sectionType,List<StaticItem> data) {
+        super(sectionType, data);
+    }
+
     @Override
     public int describeContents() {
         return 0;

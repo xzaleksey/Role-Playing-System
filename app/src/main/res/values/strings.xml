@@ -43,5 +43,6 @@
     <string name="game_will_be_synched">Game will be synchronized, when network connection is ok</string>
     <string name="info">Info</string>
     <string name="name">Name</string>
+    <string name="super_game">Super game</string>
 
 </resources>

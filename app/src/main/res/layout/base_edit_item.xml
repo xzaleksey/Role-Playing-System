@@ -1,41 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/common_margin_between_elements"
-    android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
-    android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
-    android:paddingTop="@dimen/common_margin_between_elements">
+    android:orientation="vertical">
 
+    <include layout="@layout/divider" />
 
-    <android.support.v7.widget.AppCompatImageButton
-        android:id="@+id/edit_icon"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="?attr/selectableItemBackground"
-        app:srcCompat="@drawable/ic_mode_edit_black_24dp" />
-
-    <TextView
-        android:id="@+id/title"
-        style="@style/SubHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/edit_icon"
-        android:layout_toStartOf="@+id/edit_icon"
-        tools:text="title" />
-
-    <EditText
-        android:id="@+id/value"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:inputType="textCapSentences|textMultiLine"
-        android:maxLines="@integer/description_max_lines"
-        tools:text="value" />
-</RelativeLayout>
+        android:paddingBottom="@dimen/common_margin_between_elements"
+        android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
+        android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
+        android:paddingTop="@dimen/common_margin_between_elements">
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/edit_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="?attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_mode_edit_black_24dp" />
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/SubHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/edit_icon"
+            android:layout_toStartOf="@+id/edit_icon"
+            tools:text="title" />
+
+        <EditText
+            android:id="@+id/value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="@integer/description_max_lines"
+            tools:text="value" />
+    </RelativeLayout>
+</LinearLayout>

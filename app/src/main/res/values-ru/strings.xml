@@ -33,4 +33,5 @@
     <string name="game_will_be_synched">Игра будет синхронизирована, когда восстановится соединение</string>
     <string name="info">Инфо</string>
     <string name="name">Название</string>
+    <string name="super_game">Супер игра</string>
 </resources>
