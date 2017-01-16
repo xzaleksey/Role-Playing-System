@@ -97,7 +97,7 @@ public class MasterGameEditFragment extends AbsButterLceFragment<MasterGameEditF
 
     @Override
     protected int getContentResId() {
-        return R.layout.recycler_view;
+        return R.layout.fragment_master_info;
     }
 
     @Override
