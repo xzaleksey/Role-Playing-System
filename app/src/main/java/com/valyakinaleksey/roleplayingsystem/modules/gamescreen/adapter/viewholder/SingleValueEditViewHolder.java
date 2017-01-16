@@ -44,6 +44,7 @@ public class SingleValueEditViewHolder extends ButterKnifeViewHolder {
 
     private void initImageButton(SingleValueEditModel singleValueEditModel) {
         updateImage(singleValueEditModel);
+        //test
         editIcon.setOnClickListener(v -> {
             if (singleValueEditModel.isEditable()) {
                 singleValueEditModel.getSaveOnclickListener().onClick(editIcon);
