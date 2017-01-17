@@ -5,10 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.auth.api.Auth;
@@ -58,8 +60,13 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         getComponent().inject(this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -89,11 +96,13 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.parent_game_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
         this.menu = menu;
-        MenuItem item = getDeleteItem(menu);
-        item.setVisible(false);
+        if (data == null || !data.isMaster()) {
+            MenuItem item = getDeleteItem(menu);
+            item.setVisible(false);
+        }
     }
 
     @Override
