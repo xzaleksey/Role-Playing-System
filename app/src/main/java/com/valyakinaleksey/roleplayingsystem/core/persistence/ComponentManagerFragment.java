@@ -30,9 +30,9 @@ public abstract class ComponentManagerFragment<C extends HasPresenter, V extends
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mComponentHelper.setOnPresenterReadyListener(this);
         mComponentHelper.onCreate(savedInstanceState, getArguments(), mCreator);
+        super.onCreate(savedInstanceState);
     }
 
     @Override

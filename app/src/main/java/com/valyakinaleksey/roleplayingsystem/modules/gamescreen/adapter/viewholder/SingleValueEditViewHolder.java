@@ -57,6 +57,7 @@ public class SingleValueEditViewHolder extends ButterKnifeViewHolder {
         etSubscription = RxTextView
                 .textChanges(etValue)
                 .subscribe(charSequence -> {
+                    singleValueEditModel.setValue(charSequence.toString());
                     if (charSequence.length() == 0 && singleValueEditModel.isEditable()) {
                         editIcon.setVisibility(View.GONE);
                     } else {
