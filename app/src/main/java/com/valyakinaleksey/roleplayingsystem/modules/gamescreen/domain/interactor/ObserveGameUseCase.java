@@ -18,8 +18,8 @@ public class ObserveGameUseCase implements ObserveGameInteractor {
     }
 
     @Override
-    public Observable<GameModel> observeGameModel(GameModel gameModel) {
-        return gameRepository.observeGameById(gameModel.getId())
+    public Observable<GameModel> observeGameModelChanged(GameModel gameModel) {
+        return gameRepository.observeGameChangedById(gameModel.getId())
                 .filter(firebaseChildEvent -> {
                     DataSnapshot dataSnapshot = firebaseChildEvent.getDataSnapshot();
                     String key = dataSnapshot.getKey();
@@ -32,6 +32,11 @@ public class ObserveGameUseCase implements ObserveGameInteractor {
                     }
                     return false;
                 }).map(firebaseChildEvent -> gameModel);
+    }
+
+    @Override
+    public Observable<Boolean> observeGameModelRemoved(GameModel gameModel) {
+        return gameRepository.observeGameRemovedById(gameModel.getId());
     }
 }
       

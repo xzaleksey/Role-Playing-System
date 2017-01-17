@@ -54,6 +54,10 @@ public class SingleValueEditViewHolder extends ButterKnifeViewHolder {
         if (etSubscription != null) {
             etSubscription.unsubscribe();
         }
+
+        tvTitle.setText(singleValueEditModel.getTitle());
+        etValue.setHint(singleValueEditModel.getValueHint());
+        etValue.setText(singleValueEditModel.getValue());
         etSubscription = RxTextView
                 .textChanges(etValue)
                 .subscribe(charSequence -> {
@@ -64,9 +68,6 @@ public class SingleValueEditViewHolder extends ButterKnifeViewHolder {
                         editIcon.setVisibility(View.VISIBLE);
                     }
                 });
-        tvTitle.setText(singleValueEditModel.getTitle());
-        etValue.setHint(singleValueEditModel.getValueHint());
-        etValue.setText(singleValueEditModel.getValue());
         etValue.setOnTouchListener((v, event) -> (!singleValueEditModel.isEditable()));
         etValue.setCursorVisible(singleValueEditModel.isEditable());
     }

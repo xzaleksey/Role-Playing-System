@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
@@ -25,5 +26,7 @@ public interface UseCaseProvider {
     CheckUserJoinedGameInteractor getCheckUserJoinedGameInteractor();
 
     EditGameInteractor getEditGameInteractor();
+
+    DeleteGameInteractor getDeleteGameInteractor();
 }
       

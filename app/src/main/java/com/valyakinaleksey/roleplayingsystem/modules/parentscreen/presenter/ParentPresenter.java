@@ -13,4 +13,6 @@ public interface ParentPresenter extends Presenter<ParentView> {
     void navigateTo(Fragment fragment, Bundle args);
 
     void navigateToFragment(int navId, Bundle args);
+
+    void navigateBack();
 }

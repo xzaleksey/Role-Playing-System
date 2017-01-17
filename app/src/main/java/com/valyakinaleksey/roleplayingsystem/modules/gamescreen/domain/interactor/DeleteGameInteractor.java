@@ -4,9 +4,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.Game
 
 import rx.Observable;
 
-public interface ObserveGameInteractor {
-    Observable<GameModel> observeGameModelChanged(GameModel gameModel);
-
-    Observable<Boolean> observeGameModelRemoved(GameModel gameModel);
+public interface DeleteGameInteractor {
+    Observable<Boolean> deleteGame(GameModel gameModel);
 }
       

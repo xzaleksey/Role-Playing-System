@@ -5,6 +5,8 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.communication.ParentViewCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenterImpl;
@@ -39,8 +41,8 @@ public class ParentGameModule {
     @Provides
     @Named(PRESENTER)
     @PerFragmentScope
-    ParentGamePresenter providePresenter(CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter) {
-        return new ParentGamePresenterImpl(checkUserJoinedGameInteractor, parentPresenter);
+    ParentGamePresenter providePresenter(CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter, ObserveGameInteractor observeGameInteractor, DeleteGameInteractor deleteGameInteractor) {
+        return new ParentGamePresenterImpl(checkUserJoinedGameInteractor,observeGameInteractor, parentPresenter, deleteGameInteractor);
     }
 
 

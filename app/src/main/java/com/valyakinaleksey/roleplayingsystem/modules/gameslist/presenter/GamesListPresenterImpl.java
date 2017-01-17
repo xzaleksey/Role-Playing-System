@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
+import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -160,6 +161,12 @@ public class GamesListPresenterImpl extends BasePresenter<GamesListView, GamesLi
         view.setData(viewModel);
         view.showContent();
         view.showLoading();
+        compositeSubscription.add(RxFirebaseDatabase.getInstance().observeSingleValue(FirebaseDatabase.getInstance().getReference())
+                .subscribe(dataSnapshot -> {
+                    if (!dataSnapshot.hasChild(FireBaseUtils.GAMES)) {
+                        view.hideLoading();
+                    }
+                }, Crashlytics::logException));
         compositeSubscription.add(ReactiveNetwork.observeInternetConnectivity()
                 .compose(RxTransformers.applySchedulers())
                 .take(1)

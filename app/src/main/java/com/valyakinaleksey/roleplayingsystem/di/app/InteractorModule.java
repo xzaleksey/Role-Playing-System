@@ -6,6 +6,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractorImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
@@ -74,6 +76,12 @@ public class InteractorModule {
     @Singleton
     EditGameInteractor provideEditGameInteractor(SimpleCrypto simpleCrypto) {
         return new EditGameUseCase(simpleCrypto);
+    }
+
+    @Provides
+    @Singleton
+    DeleteGameInteractor provideDeleteGameInteractor(GameRepository gameRepository) {
+        return new DeleteGameUsecase(gameRepository);
     }
 
 }

@@ -13,6 +13,12 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentVie
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.BACK;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAMES_LIST;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_DESCRIPTION_FRAGMENT;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_FRAGMENT;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.POP_BACKSTACK;
+
 public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> implements ParentPresenter {
 
 
@@ -23,7 +29,7 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
     @Override
     protected ParentModel initNewViewModel(Bundle arguments) {
         final ParentModel parentModel = new ParentModel();
-        parentModel.setNavigationTag(NavigationUtils.GAMES_LIST);
+        parentModel.setNavigationTag(GAMES_LIST);
         return parentModel;
     }
 
@@ -43,21 +49,24 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
     @Override
     public void navigateTo(Fragment fragment, Bundle args) {
         Fragment navFragment = null;
-        if (args != null && args.getBoolean(NavigationUtils.POP_BACKSTACK, false)) {
+
+        if (args != null && args.getBoolean(POP_BACKSTACK, false)) {
             fragment.getChildFragmentManager().popBackStackImmediate();
         }
         switch (viewModel.getNavigationId()) {
-            case NavigationUtils.GAMES_LIST:
+            case GAMES_LIST:
                 navFragment = GamesListFragment.newInstance();
                 navigate(fragment, navFragment, false);
                 break;
-            case NavigationUtils.GAME_FRAGMENT:
+            case GAME_FRAGMENT:
                 navFragment = ParentGameFragment.newInstance(args);
                 navigate(fragment, navFragment, true);
                 break;
-            case NavigationUtils.GAME_DESCRIPTION_FRAGMENT:
+            case GAME_DESCRIPTION_FRAGMENT:
                 navFragment = GamesDescriptionFragment.newInstance(args);
                 navigate(fragment, navFragment, true);
+                break;
+            case BACK:
                 break;
         }
     }
@@ -78,5 +87,12 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel> 
     public void navigateToFragment(int navId, Bundle args) {
         viewModel.setNavigationTag(navId);
         view.getNavigationFragment(args);
+    }
+
+    @Override
+    public void navigateBack() {
+        Bundle args = new Bundle();
+        args.putBoolean(POP_BACKSTACK, true);
+        navigateToFragment(NavigationUtils.BACK, args);
     }
 }

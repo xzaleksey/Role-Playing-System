@@ -34,4 +34,5 @@
     <string name="info">Инфо</string>
     <string name="name">Название</string>
     <string name="super_game">Супер игра</string>
+    <string name="delete_game">Удалить игру</string>
 </resources>

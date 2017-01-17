@@ -5,8 +5,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.auth.api.Auth;
+import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -32,6 +38,7 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
 
     private TabLayout tabLayout;
     private ViewPagerAdapter adapter;
+    private Menu menu;
 
     public static ParentGameFragment newInstance(Bundle arguments) {
         ParentGameFragment gamesDescriptionFragment = new ParentGameFragment();
@@ -51,6 +58,7 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         getComponent().inject(this);
     }
 
@@ -80,9 +88,21 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.parent_game_menu, menu);
+        this.menu = menu;
+        MenuItem item = getDeleteItem(menu);
+        item.setVisible(false);
+    }
+
+    @Override
     public void showContent() {
         super.showContent();
-        ((AbsActivity) getActivity()).setToolbarTitle(data.getGameModel().getName());
+        preFillModel(data);
+        if (data.isMaster()) {
+            getDeleteItem(menu).setVisible(true);
+        }
         if (viewPager.getAdapter() == null) {
             Bundle arguments = new Bundle();
             arguments.putParcelable(GameModel.KEY, data.getGameModel());
@@ -94,6 +114,30 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
             viewPager.setAdapter(adapter);
         }
     }
+
+    @Override
+    public void preFillModel(ParentGameModel data) {
+        super.preFillModel(data);
+        ((AbsActivity) getActivity()).setToolbarTitle(data.getGameModel().getName());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete:
+                new MaterialDialog.Builder(getContext())
+                        .title(R.string.delete_game)
+                        .positiveText(android.R.string.ok)
+                        .negativeText(android.R.string.cancel)
+                        .onPositive((dialog, which) -> {
+                            getComponent().getPresenter().deleteGame();
+                        }).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     protected int getContentResId() {
@@ -117,9 +161,9 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
         } else if (ParentGameModel.MASTER_SCREEN.equals(navigationTag)) {
             showSnackbarString("master");
         }
-//        getChildFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.inner_fragment_container, fragment)
-//                .commit();
+    }
+
+    private MenuItem getDeleteItem(Menu menu) {
+        return menu.findItem(R.id.delete);
     }
 }

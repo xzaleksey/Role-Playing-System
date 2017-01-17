@@ -83,7 +83,7 @@ public class GamesDescriptionPresenterImpl extends BasePresenter<GamesDescriptio
                 .subscribe(user -> {
                     view.setData(viewModel);
                     view.showContent();
-                    compositeSubscription.add(observeGameInteractor.observeGameModel(viewModel.getGameModel())
+                    compositeSubscription.add(observeGameInteractor.observeGameModelChanged(viewModel.getGameModel())
                             .subscribe(gameModel1 -> {
                                         ArrayList<StaticItem> data = ((StaticFieldsSection) viewModel.getInfoSections().get(0)).getData();
                                         data.get(0).setValue(gameModel.getDescription());

@@ -7,6 +7,10 @@ import rx.Observable;
 
 public interface GameRepository {
 
-    Observable<FirebaseChildEvent> observeGameById(String id);
+    Observable<FirebaseChildEvent> observeGameChangedById(String id);
+
+    Observable<Boolean> observeGameRemovedById(String id);
+
+    Observable<Boolean> deleteGame(String id);
 }
       

@@ -40,6 +40,11 @@ public class ParentViewCommunicationBus
     }
 
     @Override
+    public void navigateBack() {
+        presenter.navigateBack();
+    }
+
+    @Override
     public void getNavigationFragment(Bundle args) {
         getNavigationResolver().resolveNavigation(parentView -> parentView.getNavigationFragment(args));
     }
