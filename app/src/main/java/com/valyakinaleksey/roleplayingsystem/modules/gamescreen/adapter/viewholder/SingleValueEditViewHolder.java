@@ -107,7 +107,7 @@ public class SingleValueEditViewHolder extends ButterKnifeViewHolder {
         if (singleValueEditModel.isEditable()) {
             ImageUtils.setTintVectorImage(editIcon, R.drawable.ic_done_black_24dp, accentColor);
         } else {
-            ImageUtils.setTintVectorImage(editIcon, R.drawable.ic_mode_edit_black_24dp, grayColor);
+            ImageUtils.setTintVectorImage(editIcon, R.drawable.ic_mode_edit_black_24dp, accentColor);
         }
     }
 }
