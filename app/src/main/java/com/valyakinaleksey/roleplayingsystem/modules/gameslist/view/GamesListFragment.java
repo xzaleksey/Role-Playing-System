@@ -6,8 +6,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -178,6 +180,8 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
                 .positiveText(android.R.string.ok)
                 .negativeText(android.R.string.cancel)
                 .onPositive((dialog, which) -> {
+                    gameModel.setName(gameModel.getName().trim());
+                    gameModel.setDescription(gameModel.getDescription().trim());
                     getComponent().getPresenter().createGame(dialogData.getGameModel());
                     dialog.dismiss();
                 })
@@ -193,6 +197,24 @@ public class GamesListFragment extends AbsButterLceFragment<GamesListComponent, 
         if (TextUtils.isEmpty(gameModel.getName())) {
             actionButton.setEnabled(false);
         }
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().startsWith(" ")) {
+                    s.delete(0, 1);
+                }
+            }
+        });
         compositeSubscription.add(RxTextView.textChanges(etName)
                 .skip(1)
                 .subscribe(charSequence -> {

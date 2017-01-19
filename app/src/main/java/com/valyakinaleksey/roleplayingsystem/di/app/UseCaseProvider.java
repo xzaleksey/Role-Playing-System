@@ -7,6 +7,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.domain.interactor.JoinGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.interactor.MasterLogInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 
@@ -28,5 +29,7 @@ public interface UseCaseProvider {
     EditGameInteractor getEditGameInteractor();
 
     DeleteGameInteractor getDeleteGameInteractor();
+
+    MasterLogInteractor getMasterLogInteractor();
 }
       

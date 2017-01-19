@@ -24,6 +24,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseDialogFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ViewPagerAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.MasterGameEditFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.MasterLogFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.DaggerParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
@@ -121,6 +122,7 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
             arguments.putParcelable(GameModel.KEY, data.getGameModel());
             if (data.isMaster()) {
                 adapter.addFragment(MasterGameEditFragment.newInstance(arguments), getString(R.string.info));
+                adapter.addFragment(MasterLogFragment.newInstance(arguments), getString(R.string.log));
             }
             adapter.addFragment(new Fragment(), "TWO");
             adapter.addFragment(new Fragment(), "THREE");

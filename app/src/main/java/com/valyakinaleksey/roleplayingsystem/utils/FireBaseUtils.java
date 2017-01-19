@@ -7,6 +7,7 @@ public class FireBaseUtils {
     public static final String USERS_IN_GAME = "users_in_game";
     public static final String GAMES_IN_USERS = "games_in_user";
     public static final String GAMES = "games";
+    public static final String GAME_LOG = "game_log";
     public static final String FIELD_GAME_MASTER_NAME = "masterName";
     public static final String FORMAT_SLASHES = "/%s/";
 

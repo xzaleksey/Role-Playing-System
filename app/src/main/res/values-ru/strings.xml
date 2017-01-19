@@ -35,4 +35,6 @@
     <string name="name">Название</string>
     <string name="super_game">Супер игра</string>
     <string name="delete_game">Удалить игру</string>
+    <string name="your_message">Ваше сообщение</string>
+    <string name="log">Лог</string>
 </resources>

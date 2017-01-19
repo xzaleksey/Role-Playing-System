@@ -16,6 +16,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.domain.interactor.JoinGameUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.interactor.MasterLogInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.interactor.MasterLogUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
@@ -82,6 +84,13 @@ public class InteractorModule {
     @Singleton
     DeleteGameInteractor provideDeleteGameInteractor(GameRepository gameRepository) {
         return new DeleteGameUsecase(gameRepository);
+    }
+
+
+    @Provides
+    @Singleton
+    MasterLogInteractor provideMasterLogInteractor() {
+        return new MasterLogUseCase();
     }
 
 }

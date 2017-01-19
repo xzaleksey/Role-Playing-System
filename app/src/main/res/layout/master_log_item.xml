@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/material_component_bottom_sheet_list_item_height"
+    android:paddingBottom="@dimen/common_margin_between_elements"
+    android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
+    android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
+    android:paddingTop="@dimen/common_margin_between_elements">
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/accent"
+        tools:text="text" />
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_date"
+        android:autoLink="all"
+        tools:text="text" />
+</RelativeLayout>
