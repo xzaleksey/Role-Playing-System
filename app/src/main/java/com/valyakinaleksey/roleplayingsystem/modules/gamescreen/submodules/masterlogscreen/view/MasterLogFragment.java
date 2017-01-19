@@ -77,7 +77,7 @@ public class MasterLogFragment extends AbsButterLceFragment<MasterLogFragmentCom
     public void setupViews(View view) {
         super.setupViews(view);
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
         sendIcon.setOnClickListener(v -> {
             getComponent().getPresenter().sendMessage(etInput.getText().toString());
         });
@@ -100,6 +100,7 @@ public class MasterLogFragment extends AbsButterLceFragment<MasterLogFragmentCom
                     if (positionStart == 0) {
                         getComponent().getPresenter().loadComplete();
                     }
+                    recyclerView.smoothScrollToPosition(masterLogAdapter.getItemCount());
                 }
             });
         }
