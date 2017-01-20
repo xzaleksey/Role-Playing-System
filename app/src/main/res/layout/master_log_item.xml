@@ -7,20 +7,26 @@
     android:paddingBottom="@dimen/common_margin_between_elements"
     android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
     android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
-    android:paddingTop="@dimen/common_margin_between_elements">
+    android:paddingTop="@dimen/common_margin_between_elements"
+    >
 
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/accent"
-        tools:text="text" />
+  <TextView
+      android:id="@+id/tv_date"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_marginLeft="@dimen/common_margin_between_elements"
+      android:textColor="@color/colorTextSecondary"
+      tools:text="text"
+      />
 
-    <TextView
-        android:id="@+id/tv_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_date"
-        android:autoLink="all"
-        tools:text="text" />
+  <TextView
+      android:id="@+id/tv_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_toLeftOf="@+id/tv_date"
+      android:autoLink="all"
+      android:textColor="@color/colorTextPrimary"
+      tools:text="text"
+      />
 </RelativeLayout>

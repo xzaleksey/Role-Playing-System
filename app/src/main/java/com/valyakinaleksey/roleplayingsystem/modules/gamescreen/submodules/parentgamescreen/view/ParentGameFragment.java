@@ -30,164 +30,155 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.paren
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 
-public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent, ParentGameModel, ParentView> implements ParentView, DialogProvider {
+public class ParentGameFragment
+    extends AbsButterLceFragment<ParentGameComponent, ParentGameModel, ParentView>
+    implements ParentView, DialogProvider {
 
-    public static final String TAG = ParentGameFragment.class.getSimpleName();
-    public static final String DELETE_GAME = "delete_game";
+  public static final String TAG = ParentGameFragment.class.getSimpleName();
+  public static final String DELETE_GAME = "delete_game";
 
-    @Bind(R.id.viewpager)
-    ViewPager viewPager;
+  @Bind(R.id.viewpager) ViewPager viewPager;
 
-    private TabLayout tabLayout;
-    private ViewPagerAdapter adapter;
-    private Menu menu;
+  private TabLayout tabLayout;
+  private ViewPagerAdapter adapter;
+  private Menu menu;
 
-    public static ParentGameFragment newInstance(Bundle arguments) {
-        ParentGameFragment gamesDescriptionFragment = new ParentGameFragment();
-        gamesDescriptionFragment.setArguments(arguments);
-        return gamesDescriptionFragment;
+  public static ParentGameFragment newInstance(Bundle arguments) {
+    ParentGameFragment gamesDescriptionFragment = new ParentGameFragment();
+    gamesDescriptionFragment.setArguments(arguments);
+    return gamesDescriptionFragment;
+  }
+
+  @Override @SuppressWarnings("unchecked") protected ParentGameComponent createComponent() {
+    return DaggerParentGameComponent.builder()
+        .parentFragmentComponent(
+            ((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
+        .build();
+  }
+
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    getComponent().inject(this);
+  }
+
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    setHasOptionsMenu(true);
+    return super.onCreateView(inflater, container, savedInstanceState);
+  }
+
+  @Override public void setupViews(View view) {
+    super.setupViews(view);
+    tabLayout = ((TabLayout) getActivity().findViewById(R.id.tabs));
+    tabLayout.setupWithViewPager(viewPager);
+    adapter = new ViewPagerAdapter(getChildFragmentManager(), new ArrayList<>());
+    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+      @Override
+      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+      }
+
+      @Override public void onPageSelected(int position) {
+        KeyboardUtils.hideKeyboard(getActivity());
+      }
+
+      @Override public void onPageScrollStateChanged(int state) {
+
+      }
+    });
+  }
+
+  @Override public void loadData() {
+    getComponent().getPresenter().getData();
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    tabLayout.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void onStop() {
+    tabLayout.setVisibility(View.GONE);
+    super.onStop();
+  }
+
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.parent_game_menu, menu);
+    super.onCreateOptionsMenu(menu, inflater);
+    this.menu = menu;
+    if (data == null || !data.isMaster()) {
+      MenuItem item = getDeleteItem(menu);
+      item.setVisible(false);
     }
+  }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected ParentGameComponent createComponent() {
-        return DaggerParentGameComponent
-                .builder()
-                .parentFragmentComponent(((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
-                .build();
+  @Override public void showContent() {
+    super.showContent();
+    preFillModel(data);
+    if (data.isMaster()) {
+      getDeleteItem(menu).setVisible(true);
     }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getComponent().inject(this);
+    if (viewPager.getAdapter() == null) {
+      Bundle arguments = new Bundle();
+      arguments.putParcelable(GameModel.KEY, data.getGameModel());
+      if (data.isMaster()) {
+        adapter.addFragment(MasterGameEditFragment.newInstance(arguments),
+            getString(R.string.info));
+        adapter.addFragment(MasterLogFragment.newInstance(arguments), getString(R.string.log));
+      }
+      adapter.addFragment(new Fragment(), "TWO");
+      adapter.addFragment(new Fragment(), "THREE");
+      viewPager.setAdapter(adapter);
     }
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        return super.onCreateView(inflater, container, savedInstanceState);
+  @Override public void preFillModel(ParentGameModel data) {
+    super.preFillModel(data);
+    ((AbsActivity) getActivity()).setToolbarTitle(data.getGameModel().getName());
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.delete:
+        BaseDialogFragment.newInstance(this).show(getFragmentManager(), DELETE_GAME);
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
     }
+  }
 
-    @Override
-    public void setupViews(View view) {
-        super.setupViews(view);
-        tabLayout = ((TabLayout) getActivity().findViewById(R.id.tabs));
-        tabLayout.setupWithViewPager(viewPager);
-        adapter = new ViewPagerAdapter(getChildFragmentManager(), new ArrayList<>());
+  @Override protected int getContentResId() {
+    return R.layout.fragment_game;
+  }
+
+  @Override public void onDestroyView() {
+    tabLayout.setupWithViewPager(null);
+    super.onDestroyView();
+  }
+
+  @Override public void navigate() {
+
+  }
+
+  private MenuItem getDeleteItem(Menu menu) {
+    return menu.findItem(R.id.delete);
+  }
+
+  @Override public Dialog getDialog(String tag) {
+    switch (tag) {
+      case DELETE_GAME:
+        return new MaterialDialog.Builder(getContext()).title(R.string.delete_game)
+            .positiveText(android.R.string.ok)
+            .negativeText(android.R.string.cancel)
+            .onPositive((dialog, which) -> getComponent().getPresenter().deleteGame())
+            .build();
     }
-
-    @Override
-    public void loadData() {
-        getComponent().getPresenter().getData();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        tabLayout.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onStop() {
-        tabLayout.setVisibility(View.GONE);
-        super.onStop();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.parent_game_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-        this.menu = menu;
-        if (data == null || !data.isMaster()) {
-            MenuItem item = getDeleteItem(menu);
-            item.setVisible(false);
-        }
-    }
-
-    @Override
-    public void showContent() {
-        super.showContent();
-        preFillModel(data);
-        if (data.isMaster()) {
-            getDeleteItem(menu).setVisible(true);
-        }
-        if (viewPager.getAdapter() == null) {
-            Bundle arguments = new Bundle();
-            arguments.putParcelable(GameModel.KEY, data.getGameModel());
-            if (data.isMaster()) {
-                adapter.addFragment(MasterGameEditFragment.newInstance(arguments), getString(R.string.info));
-                adapter.addFragment(MasterLogFragment.newInstance(arguments), getString(R.string.log));
-            }
-            adapter.addFragment(new Fragment(), "TWO");
-            adapter.addFragment(new Fragment(), "THREE");
-            viewPager.setAdapter(adapter);
-        }
-    }
-
-    @Override
-    public void preFillModel(ParentGameModel data) {
-        super.preFillModel(data);
-        ((AbsActivity) getActivity()).setToolbarTitle(data.getGameModel().getName());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.delete:
-                BaseDialogFragment.newInstance(this).show(getFragmentManager(), DELETE_GAME);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-
-    @Override
-    protected int getContentResId() {
-        return R.layout.fragment_game;
-    }
-
-    @Override
-    public void onDestroyView() {
-        tabLayout.setupWithViewPager(null);
-        super.onDestroyView();
-    }
-
-    @Override
-    public void navigate() {
-        String navigationTag = data.getNavigationTag();
-        ComponentManagerFragment fragment = null;
-//        Bundle arguments = new Bundle();
-//        arguments.putParcelable(GameModel.KEY, data.getGameModel());
-        if (ParentGameModel.USER_SCREEN.equals(navigationTag)) {
-            showSnackbarString("user");
-        } else if (ParentGameModel.MASTER_SCREEN.equals(navigationTag)) {
-            showSnackbarString("master");
-        }
-    }
-
-    private MenuItem getDeleteItem(Menu menu) {
-        return menu.findItem(R.id.delete);
-    }
-
-    @Override
-    public Dialog getDialog(String tag) {
-        switch (tag) {
-            case DELETE_GAME:
-                return new MaterialDialog.Builder(getContext())
-                        .title(R.string.delete_game)
-                        .positiveText(android.R.string.ok)
-                        .negativeText(android.R.string.cancel)
-                        .onPositive((dialog, which) -> {
-                            getComponent().getPresenter().deleteGame();
-                        }).build();
-        }
-        return null;
-    }
+    return null;
+  }
 }

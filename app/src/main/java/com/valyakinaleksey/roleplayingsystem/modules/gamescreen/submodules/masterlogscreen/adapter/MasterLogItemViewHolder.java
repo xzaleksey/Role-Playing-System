@@ -15,22 +15,21 @@ import java.util.Locale;
 import butterknife.Bind;
 
 public class MasterLogItemViewHolder extends ButterKnifeViewHolder {
-    @Bind(R.id.tv_date)
-    protected TextView tvDate;
-    @Bind(R.id.tv_text)
-    protected TextView tvText;
+  @Bind(R.id.tv_date) protected TextView tvDate;
+  @Bind(R.id.tv_text) protected TextView tvText;
 
-    public MasterLogItemViewHolder(View itemView) {
-        super(itemView);
-    }
+  public MasterLogItemViewHolder(View itemView) {
+    super(itemView);
+  }
 
-    public void bind(MasterLogMessage model) {
-        tvText.setText(model.getText());
-        setDate(model.getDateCreate());
-    }
+  public void bind(MasterLogMessage model) {
+    tvText.setText(model.getText());
+    setDate(model.getDateCreate());
+  }
 
-    private void setDate(long dateCreate) {
-        tvDate.setText(new DateTime(dateCreate).toString(DateTimeFormat.mediumDate().withLocale(Locale.getDefault())));
-    }
+  private void setDate(long dateCreate) {
+    tvDate.setText(new DateTime(dateCreate).toString(
+        DateTimeFormat.shortDateTime().withLocale(Locale.getDefault())));
+  }
 }
       

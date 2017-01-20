@@ -4,40 +4,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    >
 
-    <RelativeLayout
-        android:id="@+id/send_form"
+  <RelativeLayout
+      android:id="@+id/send_form"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/material_component_lists_single_line_height"
+      android:layout_alignParentBottom="true"
+      android:background="@color/white7"
+      android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
+      >
+    <View style="@style/Divider.Accent" />
+
+    <FrameLayout
+        android:id="@+id/icon_send"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/material_component_lists_single_line_height"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="?attr/selectableItemBackground"
+        android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
+        android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
+        >
+      <android.support.v7.widget.AppCompatImageView
+          android:layout_width="@dimen/material_layout_icon"
+          android:layout_height="@dimen/material_layout_icon"
+          android:layout_gravity="center"
+          android:background="?attr/selectableItemBackgroundBorderless"
+          android:tint="@color/colorAccent"
+          app:srcCompat="@drawable/ic_send_black_24dp"
+          />
+    </FrameLayout>
+
+
+    <EditText
+        android:id="@+id/input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/icon_send"
+        android:layout_toStartOf="@id/icon_send"
+        android:background="@null"
+        android:hint="@string/your_message"
+        android:maxLines="@integer/edit_text_max_lines_common"
+        />
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/icon_send"
-            android:layout_width="@dimen/material_layout_icon"
-            android:layout_height="@dimen/material_layout_icon"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:tint="@color/colorAccent"
-            app:srcCompat="@drawable/ic_send_black_24dp" />
-
-        <EditText
-            android:id="@+id/input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/icon_send"
-            android:layout_toStartOf="@id/icon_send"
-            android:hint="@string/your_message" />
-
-    </RelativeLayout>
+  </RelativeLayout>
 
 
-    <include
-        layout="@layout/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/send_form" />
+  <include
+      layout="@layout/recycler_view"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/send_form"
+      />
 
 </RelativeLayout>

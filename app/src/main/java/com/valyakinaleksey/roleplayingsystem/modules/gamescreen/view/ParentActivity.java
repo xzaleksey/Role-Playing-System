@@ -19,87 +19,74 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ParentActivity extends AbsSingleFragmentActivity {
-    private GoogleApiClient googleApiClient;
+  private GoogleApiClient googleApiClient;
 
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            initNavigate();
-        }
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(this.getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, connectionResult -> {
-
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+  @Override public void onCreate(final Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    if (savedInstanceState == null) {
+      initNavigate();
     }
+    GoogleSignInOptions gso =
+        new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(
+            this.getString(R.string.default_web_client_id)).requestEmail().build();
+    googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, connectionResult -> {
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.parent_fragment_activity;
-    }
+    }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+  }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+  @Override protected int getLayoutId() {
+    return R.layout.parent_fragment_activity;
+  }
+
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.main_menu, menu);
+    return true;
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.sign_out_menu:
+        FirebaseAuth.getInstance().signOut();
+        Auth.GoogleSignInApi.signOut(googleApiClient);
         return true;
+      default:
+        return super.onOptionsItemSelected(item);
     }
+  }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sign_out_menu:
-                FirebaseAuth.getInstance().signOut();
-                Auth.GoogleSignInApi.signOut(googleApiClient);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+  @Override protected void onStart() {
+    super.onStart();
+    googleApiClient.connect();
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    googleApiClient.disconnect();
+  }
+
+  @Override public void onBackPressed() {
+    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+    if (fragment != null && fragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
+      // Get the fragment fragment manager - and pop the backstack
+      FragmentManager childFragmentManager = fragment.getChildFragmentManager();
+      childFragmentManager.popBackStack();
+      childFragmentManager.executePendingTransactions();
     }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        googleApiClient.connect();
+    // Else, nothing in the direct fragment back stack
+    else {
+      // Let super handle the back press
+      super.onBackPressed();
     }
+  }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        googleApiClient.disconnect();
-    }
+  @Override protected void fillToolbarItems() {
 
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if (fragment != null && fragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
-            // Get the fragment fragment manager - and pop the backstack
-            FragmentManager childFragmentManager = fragment.getChildFragmentManager();
-            childFragmentManager.popBackStack();
-            childFragmentManager.executePendingTransactions();
-        }
-        // Else, nothing in the direct fragment back stack
-        else {
-            // Let super handle the back press
-            super.onBackPressed();
-        }
-    }
+  }
 
-    @Override
-    protected void fillToolbarItems() {
-
-    }
-
-    private void initNavigate() {
-        Bundle extras = getIntent().getExtras();
-        Fragment fragment = ParentFragment.newInstance(extras);
-        setSingleFragment(fragment, ParentFragment.TAG);
-    }
+  private void initNavigate() {
+    Bundle extras = getIntent().getExtras();
+    Fragment fragment = ParentFragment.newInstance(extras);
+    setSingleFragment(fragment, ParentFragment.TAG);
+  }
 }
       
