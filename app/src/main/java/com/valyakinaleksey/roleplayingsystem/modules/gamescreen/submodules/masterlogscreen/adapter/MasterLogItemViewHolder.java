@@ -7,6 +7,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.model.MasterLogMessage;
 
+import com.valyakinaleksey.roleplayingsystem.utils.TimeFormatUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -28,8 +29,7 @@ public class MasterLogItemViewHolder extends ButterKnifeViewHolder {
   }
 
   private void setDate(long dateCreate) {
-    tvDate.setText(new DateTime(dateCreate).toString(
-        DateTimeFormat.shortDateTime().withLocale(Locale.getDefault())));
+    tvDate.setText(TimeFormatUtils.getShortTime(new DateTime(dateCreate)));
   }
 }
       

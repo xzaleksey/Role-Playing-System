@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -49,6 +50,8 @@ import butterknife.Bind;
 
   private MasterLogAdapter masterLogAdapter;
 
+  private StickyHeaderDecoration decor;
+
   public static MasterLogFragment newInstance(Bundle arguments) {
     MasterLogFragment gamesDescriptionFragment = new MasterLogFragment();
     gamesDescriptionFragment.setArguments(arguments);
@@ -74,6 +77,7 @@ import butterknife.Bind;
     sendIcon.setOnClickListener(v -> {
       if (!TextUtils.isEmpty(etInput.getText().toString().trim())) {
         getComponent().getPresenter().sendMessage(etInput.getText().toString());
+        etInput.setText("");
       }
     });
     recyclerView.addOnLayoutChangeListener(
@@ -102,6 +106,8 @@ import butterknife.Bind;
           recyclerView.smoothScrollToPosition(masterLogAdapter.getItemCount());
         }
       });
+      decor = new StickyHeaderDecoration(masterLogAdapter);
+      recyclerView.addItemDecoration(decor);
     }
     if (recyclerView.getAdapter() == null) {
       recyclerView.setAdapter(masterLogAdapter);
