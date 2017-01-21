@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/backgroundColor"
+    android:background="@color/material_light_white"
     android:paddingBottom="@dimen/common_margin_between_elements"
     android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
     android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"

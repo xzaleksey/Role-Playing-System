@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mast
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -108,6 +109,8 @@ import butterknife.Bind;
       });
       decor = new StickyHeaderDecoration(masterLogAdapter);
       recyclerView.addItemDecoration(decor);
+      recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+          ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
     }
     if (recyclerView.getAdapter() == null) {
       recyclerView.setAdapter(masterLogAdapter);
@@ -120,13 +123,14 @@ import butterknife.Bind;
   }
 
   @Override protected void initSubscriptions() {
-    RxTextView.textChanges(etInput).subscribe(charSequence -> {
-      if (charSequence.length() == 0) {
-        sendIcon.setVisibility(View.GONE);
-      } else {
-        sendIcon.setVisibility(View.VISIBLE);
-      }
-    });
+    // add custom subscription when need it
+    //RxTextView.textChanges(etInput).subscribe(charSequence -> {
+    //  if (charSequence.length() == 0) {
+    //    sendIcon.setVisibility(View.GONE);
+    //  } else {
+    //    sendIcon.setVisibility(View.VISIBLE);
+    //  }
+    //});
   }
 
   @Override public void onDestroy() {

@@ -8,29 +8,37 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maste
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
+import java.util.HashMap;
+import org.joda.time.DateTime;
 import rx.Observable;
+
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
 
 public class MasterLogUseCase implements MasterLogInteractor {
 
-    @Override
-    public Observable<MasterLogMessage> sendMessage(GameModel gameModel, MasterLogMessage masterLogMessage) {
-        DatabaseReference reference = getReference(gameModel);
-        return RxFirebaseDatabase.getInstance().observeSetValuePush(reference, masterLogMessage)
-                .map(s -> {
-                    reference.child(s).child(FireBaseUtils.ID).setValue(s);
-                    masterLogMessage.setId(s);
-                    return masterLogMessage;
-                });
-    }
+  @Override public Observable<MasterLogMessage> sendMessage(GameModel gameModel,
+      MasterLogMessage masterLogMessage) {
+    DatabaseReference reference = getReference(gameModel);
+    masterLogMessage.setDateCreate(DateTime.now().getMillis());
+    return RxFirebaseDatabase.getInstance()
+        .observeSetValuePush(reference, masterLogMessage)
+        .map(s -> {
+          DatabaseReference child = reference.child(s);
+          HashMap<String, Object> map = new HashMap<>();
+          map.put(TEMP_DATE_CREATE, null);
+          map.put(ID, s);
+          child.updateChildren(map);
+          masterLogMessage.setId(s);
+          return masterLogMessage;
+        });
+  }
 
-    @Override
-    public Observable<Boolean> checkLogExists(GameModel gameModel) {
-        return RxFirebaseDatabase.getInstance().observeSingleValue(getReference(gameModel))
-                .map(DataSnapshot::exists);
-    }
-
-    private DatabaseReference getReference(GameModel gameModel) {
-        return FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.GAME_LOG).child(gameModel.getId());
-    }
+  private DatabaseReference getReference(GameModel gameModel) {
+    return FirebaseDatabase.getInstance()
+        .getReference()
+        .child(FireBaseUtils.GAME_LOG)
+        .child(gameModel.getId());
+  }
 }
       

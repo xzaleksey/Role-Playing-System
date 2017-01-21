@@ -2,18 +2,12 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mast
 
 import android.view.View;
 import android.widget.TextView;
-
+import butterknife.Bind;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.model.MasterLogMessage;
-
 import com.valyakinaleksey.roleplayingsystem.utils.TimeFormatUtils;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-
-import java.util.Locale;
-
-import butterknife.Bind;
 
 public class MasterLogItemViewHolder extends ButterKnifeViewHolder {
   @Bind(R.id.tv_date) protected TextView tvDate;
@@ -25,7 +19,7 @@ public class MasterLogItemViewHolder extends ButterKnifeViewHolder {
 
   public void bind(MasterLogMessage model) {
     tvText.setText(model.getText());
-    setDate(model.getDateCreate());
+    setDate(model.getDateCreateLong());
   }
 
   private void setDate(long dateCreate) {

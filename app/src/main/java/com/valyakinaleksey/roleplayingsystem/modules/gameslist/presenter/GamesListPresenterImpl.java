@@ -95,7 +95,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
   @Override public void onFabPressed() {
     CreateGameDialogViewModel createGameDialogViewModel = new CreateGameDialogViewModel();
     createGameDialogViewModel.setTitle(RpsApp.app().getString(R.string.create_game));
-    createGameDialogViewModel.setGameModel(new GameModel());
+    createGameDialogViewModel.setGameModel(new GameModel("", ""));
     viewModel.setCreateGameDialogData(createGameDialogViewModel);
     view.showCreateGameDialog();
   }

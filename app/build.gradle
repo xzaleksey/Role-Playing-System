@@ -69,6 +69,7 @@ dependencies {
   compile 'com.afollestad.material-dialogs:commons:0.8.6.2'
   compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
   compile 'ca.barrenechea.header-decor:header-decor:0.2.8'
+  compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
   compile('com.mikepenz:materialdrawer:5.8.1@aar') {
     transitive = true
   }

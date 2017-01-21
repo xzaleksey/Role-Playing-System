@@ -6,6 +6,6 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-    <include layout="@layout/recycler_view" />
+    <include layout="@layout/recycler_view_with_bottom_padding" />
 
 </LinearLayout>

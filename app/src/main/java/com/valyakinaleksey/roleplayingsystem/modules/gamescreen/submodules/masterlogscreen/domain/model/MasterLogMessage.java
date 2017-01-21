@@ -4,11 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.PropertyName;
 import com.google.firebase.database.ServerValue;
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.io.Serializable;
-import java.util.HashMap;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TIMESTAMP;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.DATE_CREATE;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
 
 public class MasterLogMessage implements Serializable, Parcelable {
   public static final int SIMPLE_LINK = 0;
@@ -17,10 +19,11 @@ public class MasterLogMessage implements Serializable, Parcelable {
 
   private String id;
   private String text;
-  private HashMap<String, Object> timestampCreated;
   private String link;
   private int linkType;
   private int logType = MASTER_TYPE;
+  @PropertyName(DATE_CREATE) private Object dateCreate;
+  @PropertyName(TEMP_DATE_CREATE) private Long tempDateCreate;
 
   public String getId() {
     return id;
@@ -46,12 +49,27 @@ public class MasterLogMessage implements Serializable, Parcelable {
     this.text = text;
   }
 
-  public HashMap<String, Object> getTimestampCreated() {
-    return timestampCreated;
+  @Exclude public long getDateCreateLong() {
+    if (dateCreate == null || dateCreate == ServerValue.TIMESTAMP) {
+      return tempDateCreate;
+    }
+    return (long) dateCreate;
   }
 
-  @Exclude public long getDateCreate() {
-    return (long) timestampCreated.get(TIMESTAMP);
+  public void setTempDateCreate(long dateCreate) {
+    this.tempDateCreate = dateCreate;
+  }
+
+  public Long getTempDateCreate() {
+    return tempDateCreate;
+  }
+
+  public Object getDateCreate() {
+    return dateCreate;
+  }
+
+  public void setDateCreate(Object dateCreate) {
+    this.dateCreate = dateCreate;
   }
 
   public String getLink() {
@@ -72,8 +90,7 @@ public class MasterLogMessage implements Serializable, Parcelable {
 
   public MasterLogMessage(String text) {
     this.text = text;
-    timestampCreated = new HashMap<>();
-    timestampCreated.put(TIMESTAMP, ServerValue.TIMESTAMP);
+    dateCreate = ServerValue.TIMESTAMP;
   }
 
   public MasterLogMessage() {
@@ -86,19 +103,21 @@ public class MasterLogMessage implements Serializable, Parcelable {
   @Override public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.id);
     dest.writeString(this.text);
-    dest.writeSerializable(this.timestampCreated);
     dest.writeString(this.link);
     dest.writeInt(this.linkType);
     dest.writeInt(this.logType);
+    dest.writeSerializable((Serializable) this.dateCreate);
+    dest.writeValue(this.tempDateCreate);
   }
 
   protected MasterLogMessage(Parcel in) {
     this.id = in.readString();
     this.text = in.readString();
-    this.timestampCreated = (HashMap<String, Object>) in.readSerializable();
     this.link = in.readString();
     this.linkType = in.readInt();
     this.logType = in.readInt();
+    this.dateCreate = in.readSerializable();
+    this.tempDateCreate = (Long) in.readValue(Long.class.getClassLoader());
   }
 
   public static final Creator<MasterLogMessage> CREATOR = new Creator<MasterLogMessage>() {

@@ -60,7 +60,7 @@ public class GameViewHolder extends ButterKnifeViewHolder {
         });
         setName(model.getName());
         setMasterName(model.getMasterName());
-        setDate(model.getDateCreate());
+        setDate(model.getDateCreateLong());
         updateLock(TextUtils.isEmpty(model.getPassword()));
         updateAvatar(model.getMasterId(), model.getMasterName(), gamesListPresenter.getValue());
     }

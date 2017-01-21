@@ -8,6 +8,5 @@ import rx.Observable;
 public interface MasterLogInteractor {
     Observable<MasterLogMessage> sendMessage(GameModel gameModel, MasterLogMessage masterLogMessage);
 
-    Observable<Boolean> checkLogExists(GameModel gameModel);
 }
       

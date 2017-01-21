@@ -12,6 +12,8 @@ public class FireBaseUtils {
   //Fields
   public static final String ID = "id";
   public static final String UID = "uid";
+  public static final String TEMP_DATE_CREATE = "tempDateCreate";
+  public static final String DATE_CREATE = "dateCreate";
   public static final String FIELD_GAME_MASTER_NAME = "masterName";
   public static final String TIMESTAMP = "timestamp";
 
