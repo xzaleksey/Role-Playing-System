@@ -21,86 +21,67 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 
-public class GamesDescriptionFragment extends AbsButterLceFragment<GamesDescriptionComponent, GamesDescriptionModel, GamesDescriptionView> implements GamesDescriptionView {
+public class GamesDescriptionFragment extends
+    AbsButterLceFragment<GamesDescriptionComponent, GamesDescriptionModel, GamesDescriptionView>
+    implements GamesDescriptionView {
 
-    public static final String TAG = GamesDescriptionFragment.class.getSimpleName();
+  public static final String TAG = GamesDescriptionFragment.class.getSimpleName();
 
-    @Bind(R.id.recycler_view)
-    RecyclerView recyclerView;
-    @Bind(R.id.join_game_btn)
-    Button btnJoinGame;
+  @Bind(R.id.recycler_view) RecyclerView recyclerView;
+  @Bind(R.id.join_game_btn) Button btnJoinGame;
 
-    private MaterialDialog dialog;
-    @Inject
-    SectionsAdapter sectionsAdapter;
+  @Inject SectionsAdapter sectionsAdapter;
 
-    public static GamesDescriptionFragment newInstance(Bundle arguments) {
-        GamesDescriptionFragment gamesDescriptionFragment = new GamesDescriptionFragment();
-        gamesDescriptionFragment.setArguments(arguments);
-        return gamesDescriptionFragment;
-    }
+  public static GamesDescriptionFragment newInstance(Bundle arguments) {
+    GamesDescriptionFragment gamesDescriptionFragment = new GamesDescriptionFragment();
+    gamesDescriptionFragment.setArguments(arguments);
+    return gamesDescriptionFragment;
+  }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected GamesDescriptionComponent createComponent() {
-        return DaggerGamesDescriptionComponent
-                .builder()
-                .parentFragmentComponent(((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
-                .build();
-    }
+  @Override @SuppressWarnings("unchecked") protected GamesDescriptionComponent createComponent() {
+    return DaggerGamesDescriptionComponent.builder()
+        .parentFragmentComponent(
+            ((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
+        .build();
+  }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getComponent().inject(this);
-    }
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    getComponent().inject(this);
+  }
 
-    @Override
-    public void setupViews(View view) {
-        super.setupViews(view);
-        btnJoinGame.setOnClickListener(v -> {
-            getComponent().getPresenter().joinGame();
-        });
-    }
+  @Override public void setupViews(View view) {
+    super.setupViews(view);
+    btnJoinGame.setOnClickListener(v -> {
+      getComponent().getPresenter().joinGame();
+    });
+  }
 
-    @Override
-    public void loadData() {
-        getComponent().getPresenter().getData();
-    }
+  @Override public void loadData() {
+    getComponent().getPresenter().getData();
+  }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
+  @Override public void onResume() {
+    super.onResume();
+  }
 
-    @Override
-    public void showContent() {
-        super.showContent();
-        ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
-        sectionsAdapter.update(data.getInfoSections());
-        recyclerView.setAdapter(sectionsAdapter);
-    }
+  @Override public void showContent() {
+    super.showContent();
+    ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
+    sectionsAdapter.update(data.getInfoSections());
+    recyclerView.setAdapter(sectionsAdapter);
+  }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
+  @Override public void onDestroy() {
+    super.onDestroy();
+  }
 
+  @Override protected int getContentResId() {
+    return R.layout.fragment_game_description;
+  }
 
-    @Override
-    protected int getContentResId() {
-        return R.layout.fragment_game_description;
-    }
-
-    @Override
-    public void onDestroyView() {
-        dialog = null;
-        super.onDestroyView();
-    }
-
-    @Override
-    public void updateView() {
-        ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
-        sectionsAdapter.notifyDataSetChanged();
-    }
+  @Override public void updateView() {
+    ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
+    sectionsAdapter.notifyDataSetChanged();
+  }
 }
