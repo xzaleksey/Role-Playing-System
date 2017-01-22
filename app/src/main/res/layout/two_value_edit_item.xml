@@ -20,8 +20,9 @@
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/edit_icon"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:padding="3dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
@@ -45,10 +46,11 @@
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/edit_icon2"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:padding="3dp"
         android:layout_below="@id/value"
         android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
         android:layout_marginTop="@dimen/common_margin_between_elements"
