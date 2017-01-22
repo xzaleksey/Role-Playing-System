@@ -10,6 +10,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
@@ -29,69 +31,54 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
-public class InteractorModule {
-    @Provides
-    @Singleton
-    ObserveGameInteractor provideObserveGameInteractor(GameRepository gameRepository) {
-        return new ObserveGameUseCase(gameRepository);
-    }
+@Module public class InteractorModule {
+  @Provides @Singleton ObserveGameInteractor provideObserveGameInteractor(
+      GameRepository gameRepository) {
+    return new ObserveGameUseCase(gameRepository);
+  }
 
-    @Provides
-    @Singleton
-    ObserveUsersInGameInteractor provideObserveUsersInGameInteractor(UserRepository userRepository) {
-        return new ObserveUsersInGameUseCase(userRepository);
-    }
+  @Provides @Singleton ObserveUsersInGameInteractor provideObserveUsersInGameInteractor(
+      UserRepository userRepository) {
+    return new ObserveUsersInGameUseCase(userRepository);
+  }
 
-    @Provides
-    @Singleton
-    JoinGameInteractor provideJoinGameInteractor() {
-        return new JoinGameUseCase();
-    }
+  @Provides @Singleton JoinGameInteractor provideJoinGameInteractor() {
+    return new JoinGameUseCase();
+  }
 
+  @Provides @Singleton UserGetInteractor provideUserGetInteractor(UserRepository userRepository) {
+    return new UserGetUseCase(userRepository);
+  }
 
-    @Provides
-    @Singleton
-    UserGetInteractor provideUserGetInteractor(UserRepository userRepository) {
-        return new UserGetUseCase(userRepository);
-    }
+  @Provides @Singleton ValidatePasswordInteractor provideValidatePasswordInteractor(
+      SimpleCrypto simpleCrypto) {
+    return new ValidatePasswordInteractorImpl(simpleCrypto);
+  }
 
-    @Provides
-    @Singleton
-    ValidatePasswordInteractor provideValidatePasswordInteractor(SimpleCrypto simpleCrypto) {
-        return new ValidatePasswordInteractorImpl(simpleCrypto);
-    }
+  @Provides @Singleton CheckUserJoinedGameInteractor provideCheckUserJoinedGameInteractor() {
+    return new CheckUserJoinedGameInteractorImpl();
+  }
 
-    @Provides
-    @Singleton
-    CheckUserJoinedGameInteractor provideCheckUserJoinedGameInteractor() {
-        return new CheckUserJoinedGameInteractorImpl();
-    }
+  @Provides @Singleton CreateNewGameInteractor provideCreateNewGameInteractor(
+      SimpleCrypto simpleCrypto) {
+    return new CreateNewGameUseCase(simpleCrypto);
+  }
 
-    @Provides
-    @Singleton
-    CreateNewGameInteractor provideCreateNewGameInteractor(SimpleCrypto simpleCrypto) {
-        return new CreateNewGameUseCase(simpleCrypto);
-    }
+  @Provides @Singleton EditGameInteractor provideEditGameInteractor(SimpleCrypto simpleCrypto) {
+    return new EditGameUseCase(simpleCrypto);
+  }
 
-    @Provides
-    @Singleton
-    EditGameInteractor provideEditGameInteractor(SimpleCrypto simpleCrypto) {
-        return new EditGameUseCase(simpleCrypto);
-    }
+  @Provides @Singleton DeleteGameInteractor provideDeleteGameInteractor(
+      GameRepository gameRepository) {
+    return new DeleteGameUsecase(gameRepository);
+  }
 
-    @Provides
-    @Singleton
-    DeleteGameInteractor provideDeleteGameInteractor(GameRepository gameRepository) {
-        return new DeleteGameUsecase(gameRepository);
-    }
+  @Provides @Singleton MasterLogInteractor provideMasterLogInteractor() {
+    return new MasterLogUseCase();
+  }
 
-
-    @Provides
-    @Singleton
-    MasterLogInteractor provideMasterLogInteractor() {
-        return new MasterLogUseCase();
-    }
-
+  @Provides @Singleton GameCharacteristicsInteractor provideGameCharacteristicsInteractor() {
+    return new GameCharacteristicsUseCase();
+  }
 }
       

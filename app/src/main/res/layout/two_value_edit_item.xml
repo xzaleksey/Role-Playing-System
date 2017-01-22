@@ -25,30 +25,48 @@
         android:layout_height="18dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/common_margin_between_elements"
         android:background="?attr/selectableItemBackground"
-        app:srcCompat="@drawable/ic_mode_edit_black_24dp"
-        />
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/edit_icon"
-        android:layout_toStartOf="@+id/edit_icon"
-        tools:text="title"
-        style="@style/SubHeader"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_done_black_24dp"
+        tools:visibility="visible"
         />
 
     <EditText
         android:id="@+id/value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
+        android:layout_toLeftOf="@+id/edit_icon"
+        android:layout_toStartOf="@+id/edit_icon"
         android:inputType="textCapSentences|textMultiLine|textNoSuggestions|textAutoCorrect"
-        android:maxLines="@integer/description_max_lines"
-        tools:text="value"
+        android:maxLines="@integer/edit_text_max_lines_common"
+        tools:text="value1"
+        />
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/edit_icon2"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/value"
+        android:layout_marginTop="@dimen/common_margin_between_elements"
+        android:background="?attr/selectableItemBackground"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_done_black_24dp"
+        tools:visibility="visible"
+        />
+
+    <EditText
+        android:id="@+id/value2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/value"
+        android:layout_toLeftOf="@+id/edit_icon2"
+        android:layout_toStartOf="@+id/edit_icon2"
+        android:inputType="textCapSentences|textMultiLine|textNoSuggestions|textAutoCorrect"
+        android:maxLines="@integer/edit_text_max_lines_common"
+        tools:text="value2"
         />
   </RelativeLayout>
 </LinearLayout>

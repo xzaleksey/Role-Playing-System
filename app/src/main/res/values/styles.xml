@@ -17,4 +17,12 @@
     <item name="android:textSize">@dimen/material_component_lists_single_line_text_size</item>
     <item name="fontPath">fonts/Roboto-Medium.ttf</item>
   </style>
+
+  <style name="ExpandedTitle" parent="AppTheme.Widget.TextView">
+    <item name="android:singleLine">true</item>
+    <item name="android:textColor">@color/colorTextPrimary</item>
+    <item name="android:textSize">@dimen/expanded_title_size</item>
+  </style>
+
+
 </resources>

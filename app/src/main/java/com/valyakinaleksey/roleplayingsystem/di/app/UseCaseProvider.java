@@ -4,6 +4,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.domain.interactor.JoinGameInteractor;
@@ -12,24 +13,26 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 
 public interface UseCaseProvider {
-    JoinGameInteractor getJoinGameInteractor();
+  JoinGameInteractor getJoinGameInteractor();
 
-    ObserveGameInteractor getObserveGameInteractor();
+  ObserveGameInteractor getObserveGameInteractor();
 
-    ObserveUsersInGameInteractor getObserveUsersInGameInteractor();
+  ObserveUsersInGameInteractor getObserveUsersInGameInteractor();
 
-    CreateNewGameInteractor getCreateNewGameInteractor();
+  CreateNewGameInteractor getCreateNewGameInteractor();
 
-    UserGetInteractor getUserGetInteractor();
+  UserGetInteractor getUserGetInteractor();
 
-    ValidatePasswordInteractor getValidatePasswordInteractor();
+  ValidatePasswordInteractor getValidatePasswordInteractor();
 
-    CheckUserJoinedGameInteractor getCheckUserJoinedGameInteractor();
+  CheckUserJoinedGameInteractor getCheckUserJoinedGameInteractor();
 
-    EditGameInteractor getEditGameInteractor();
+  EditGameInteractor getEditGameInteractor();
 
-    DeleteGameInteractor getDeleteGameInteractor();
+  DeleteGameInteractor getDeleteGameInteractor();
 
-    MasterLogInteractor getMasterLogInteractor();
+  MasterLogInteractor getMasterLogInteractor();
+
+  GameCharacteristicsInteractor getGameCharacteristicsInteractor();
 }
       

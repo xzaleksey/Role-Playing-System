@@ -3,7 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import java.io.Serializable;
 

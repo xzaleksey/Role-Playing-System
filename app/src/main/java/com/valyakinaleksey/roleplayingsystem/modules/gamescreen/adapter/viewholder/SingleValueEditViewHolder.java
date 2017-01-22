@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel.SingleValueEditModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel.EditableSingleValueEditModel;
 import com.valyakinaleksey.roleplayingsystem.utils.ActivityUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
@@ -44,13 +44,13 @@ public class SingleValueEditViewHolder extends ButterKnifeViewHolder {
         ViewUtils.increaseTouchArea(editIcon);
     }
 
-    public void bind(SingleValueEditModel singleValueEditModel) {
+    public void bind(EditableSingleValueEditModel singleValueEditModel) {
         initDivider();
         initEditText(singleValueEditModel);
         initImageButton(singleValueEditModel);
     }
 
-    private void initEditText(SingleValueEditModel singleValueEditModel) {
+    private void initEditText(EditableSingleValueEditModel singleValueEditModel) {
         if (etSubscription != null) {
             etSubscription.unsubscribe();
         }
@@ -80,7 +80,7 @@ public class SingleValueEditViewHolder extends ButterKnifeViewHolder {
         }
     }
 
-    private void initImageButton(SingleValueEditModel singleValueEditModel) {
+    private void initImageButton(EditableSingleValueEditModel singleValueEditModel) {
         updateImage(singleValueEditModel);
         //test
         editIcon.setOnClickListener(v -> {
@@ -103,7 +103,7 @@ public class SingleValueEditViewHolder extends ButterKnifeViewHolder {
         });
     }
 
-    private void updateImage(SingleValueEditModel singleValueEditModel) {
+    private void updateImage(EditableSingleValueEditModel singleValueEditModel) {
         if (singleValueEditModel.isEditable()) {
             ImageUtils.setTintVectorImage(editIcon, R.drawable.ic_done_black_24dp, accentColor);
         } else {

@@ -15,7 +15,10 @@ public class FireBaseUtils {
   public static final String TEMP_DATE_CREATE = "tempDateCreate";
   public static final String DATE_CREATE = "dateCreate";
   public static final String FIELD_GAME_MASTER_NAME = "masterName";
+  public static final String FIELD_NAME = "name";
+  public static final String FIELD_DESCRIPTION = "description";
   public static final String TIMESTAMP = "timestamp";
+  public static final String ALL = "all";
 
   //Tables
   public static final String USERS = "users";
@@ -23,6 +26,7 @@ public class FireBaseUtils {
   public static final String GAMES_IN_USERS = "games_in_user";
   public static final String GAMES = "games";
   public static final String GAME_LOG = "game_log";
+  public static final String GAME_CHARACTERISTICS = "game_characteristics";
 
   //formats
   public static final String FORMAT_SLASHES = "/%s/";
@@ -40,6 +44,12 @@ public class FireBaseUtils {
 
   public static DatabaseReference getDatabaseReference() {
     return FirebaseDatabase.getInstance().getReference();
+  }
+
+  public static Observable<Boolean> checkTableReferenceExists(String tableName) {
+    return RxFirebaseDatabase.getInstance()
+        .observeSingleValue(getTableReference(tableName))
+        .map(DataSnapshot::exists);
   }
 
   public static Observable<Boolean> checkReferenceExists(DatabaseReference databaseReference) {

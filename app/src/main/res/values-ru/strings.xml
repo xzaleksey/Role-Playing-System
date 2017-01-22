@@ -37,4 +37,6 @@
     <string name="delete_game">Удалить игру</string>
     <string name="your_message">Ваше сообщение</string>
     <string name="log">Лог</string>
+    <string name="add_characteristic">Добавить характеристику</string>
+    <string name="delete_characteristic">Удалить характеристику</string>
 </resources>

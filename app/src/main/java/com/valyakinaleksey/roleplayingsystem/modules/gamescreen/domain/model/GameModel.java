@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,7 +7,6 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.PropertyName;
 
 import com.google.firebase.database.ServerValue;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,7 +15,6 @@ import java.util.Map;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.DATE_CREATE;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.UID;
 
 public class GameModel implements Serializable, Parcelable {
   public static final String FIELD_DESCRIPTION = "description";

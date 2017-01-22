@@ -34,7 +34,7 @@ public class TwoLineTextWithAvatarExpandableSectionImpl extends ExpandableSectio
         View v;
         switch (viewType) {
             case TYPE_EXPANDABLE_TITLE:
-                v = inflater.inflate(R.layout.expandable_title_item, parent, false);
+                v = inflater.inflate(R.layout.title_item_with_right_image, parent, false);
                 viewHolder = new ExpandableTitleViewHolder(v);
                 break;
             case TYPE_TWO_OR_THREE_LINE_ITEM:

@@ -1,51 +1,53 @@
 <resources>
-    <string name="app_name">Role Playing System</string>
-    <string name="error_title_no_loaded">troubles while loading</string>
-    <string name="error_subtitle_no_loaded">try again if you wish</string>
-    <string name="retry_error_button">try again</string>
-    <string name="error_title_no_connection">Troubles with connection</string>
-    <string name="error_subtitle_no_connection">try again if you wish</string>
+  <string name="app_name">Role Playing System</string>
+  <string name="error_title_no_loaded">troubles while loading</string>
+  <string name="error_subtitle_no_loaded">try again if you wish</string>
+  <string name="retry_error_button">try again</string>
+  <string name="error_title_no_connection">Troubles with connection</string>
+  <string name="error_subtitle_no_connection">try again if you wish</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email" translatable="false">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in" translatable="false">Sign in</string>
-    <string name="action_sign_in_short" translatable="false">Sign in</string>
-    <string name="action_sign_up" translatable="false">Sign up</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+  <!-- Strings related to login -->
+  <string name="prompt_email" translatable="false">Email</string>
+  <string name="prompt_password">Password</string>
+  <string name="action_sign_in" translatable="false">Sign in</string>
+  <string name="action_sign_in_short" translatable="false">Sign in</string>
+  <string name="action_sign_up" translatable="false">Sign up</string>
+  <string name="error_invalid_email">This email address is invalid</string>
+  <string name="error_invalid_password">This password is too short</string>
+  <string name="error_incorrect_password">This password is incorrect</string>
+  <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="error_empty_field">%s shouldn\'t be empty</string>
-    <string name="error_min_symbols">%s should contain at least 6 symbols</string>
-    <string name="forgot_password">Forgot Password?</string>
-    <string name="reset_password">Reset Password</string>
-    <string name="reset_password_text">Don\'t forget to check your email.</string>
-    <string name="email" translatable="false">Email</string>
-    <string name="password">Password</string>
-    <string name="email_has_been_sent">Email has been sent</string>
-    <string name="success">Success</string>
-    <string name="logout">Logout</string>
-    <string name="create_game">Create game</string>
-    <string name="game_name">Name</string>
-    <string name="description">Description</string>
-    <string name="list_of_games">Games</string>
-    <string name="input_password">Input password</string>
-    <string name="here_could_be_description">It could be a description</string>
-    <string name="master_of_the_game">Master</string>
-    <string name="join_game">Join</string>
-    <string name="characteristics">Characteristics</string>
-    <string name="game_players">Players</string>
-    <string name="error_network_connection">Network error</string>
-    <string name="game_will_be_synched">Game will be synchronized, when network connection is ok</string>
-    <string name="info">Info</string>
-    <string name="name">Name</string>
-    <string name="super_game">Super game</string>
-    <string name="delete_game">Delete game</string>
-    <string name="your_message">Your message</string>
-    <string name="log">Log</string>
+  <string name="error_empty_field">%s shouldn\'t be empty</string>
+  <string name="error_min_symbols">%s should contain at least 6 symbols</string>
+  <string name="forgot_password">Forgot Password?</string>
+  <string name="reset_password">Reset Password</string>
+  <string name="reset_password_text">Don\'t forget to check your email.</string>
+  <string name="email" translatable="false">Email</string>
+  <string name="password">Password</string>
+  <string name="email_has_been_sent">Email has been sent</string>
+  <string name="success">Success</string>
+  <string name="logout">Logout</string>
+  <string name="create_game">Create game</string>
+  <string name="game_name">Name</string>
+  <string name="description">Description</string>
+  <string name="list_of_games">Games</string>
+  <string name="input_password">Input password</string>
+  <string name="here_could_be_description">It could be a description</string>
+  <string name="master_of_the_game">Master</string>
+  <string name="join_game">Join</string>
+  <string name="characteristics">Characteristics</string>
+  <string name="game_players">Players</string>
+  <string name="error_network_connection">Network error</string>
+  <string name="game_will_be_synched">Game will be synchronized, when network connection is ok</string>
+  <string name="info">Info</string>
+  <string name="name">Name</string>
+  <string name="super_game">Super game</string>
+  <string name="delete_game">Delete game</string>
+  <string name="your_message">Your message</string>
+  <string name="log">Log</string>
+  <string name="add_characteristic">Add characteristic</string>
+  <string name="delete_characteristic">Delete characteristic</string>
 
 </resources>

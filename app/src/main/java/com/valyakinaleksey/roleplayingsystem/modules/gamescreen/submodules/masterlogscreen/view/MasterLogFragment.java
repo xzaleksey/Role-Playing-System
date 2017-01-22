@@ -28,6 +28,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maste
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.MasterLogModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.model.MasterLogModel;
 
+import com.valyakinaleksey.roleplayingsystem.utils.HideKeyBoardOnScrollListener;
 import javax.inject.Inject;
 
 import autodagger.AutoComponent;

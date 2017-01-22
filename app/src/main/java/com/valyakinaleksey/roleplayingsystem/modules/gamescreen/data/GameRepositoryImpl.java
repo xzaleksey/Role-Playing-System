@@ -2,18 +2,11 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data;
 
 import com.crashlytics.android.Crashlytics;
 import com.ezhome.rxfirebase2.FirebaseChildEvent;
-import com.ezhome.rxfirebase2.database.FirebaseDatabaseErrorFactory;
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 import rx.Observable;
