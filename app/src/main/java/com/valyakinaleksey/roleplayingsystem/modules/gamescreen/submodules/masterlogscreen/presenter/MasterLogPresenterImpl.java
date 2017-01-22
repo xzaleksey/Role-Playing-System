@@ -45,13 +45,6 @@ public class MasterLogPresenterImpl extends BasePresenter<MasterLogView, MasterL
             view.hideLoading();
           }
         }, Crashlytics::logException));
-
-    compositeSubscription.add(
-        FireBaseUtils.getConnectionObservableWithTimeInterval().subscribe(aBoolean -> {
-          if (!aBoolean) {
-            view.hideLoading();
-          }
-        }));
   }
 
   @Override public void loadComplete() {

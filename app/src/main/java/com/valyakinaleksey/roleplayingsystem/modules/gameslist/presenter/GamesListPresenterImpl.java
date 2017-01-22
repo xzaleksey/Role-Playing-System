@@ -162,11 +162,13 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
               }
             }, Crashlytics::logException));
 
-    compositeSubscription.add(
-        FireBaseUtils.getConnectionObservableWithTimeInterval().subscribe(aBoolean -> {
+    compositeSubscription.add(FireBaseUtils.getConnectionObservableWithTimeInterval()
+        .compose(RxTransformers.applySchedulers())
+        .subscribe(aBoolean -> {
           if (!aBoolean) {
             view.showError(BaseError.NO_CONNECTION);
-            view.hideLoading();
+          } else {
+            view.showContent();
           }
         }));
     compositeSubscription.add(RxFirebaseDatabase.getInstance()

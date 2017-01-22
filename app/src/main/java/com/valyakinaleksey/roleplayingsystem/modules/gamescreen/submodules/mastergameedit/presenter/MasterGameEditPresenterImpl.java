@@ -56,13 +56,13 @@ public class MasterGameEditPresenterImpl
 
   @SuppressWarnings("unchecked") @Override public void getData() {
     compositeSubscription.add(Observable.just(viewModel.getGameModel())
-        .compose(RxTransformers.applySchedulers())
-        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
         .zipWith(
             gameCharacteristicsInteractor.getCharacteristicsByGameModel(viewModel.getGameModel()),
             (gameModel, gameCharacteristicModel) -> {
               return getInfoSections(gameCharacteristicModel);
             })
+        .compose(RxTransformers.applySchedulers())
+        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
         .subscribe(infoSections -> {
           viewModel.setInfoSections(infoSections);
           view.setData(viewModel);

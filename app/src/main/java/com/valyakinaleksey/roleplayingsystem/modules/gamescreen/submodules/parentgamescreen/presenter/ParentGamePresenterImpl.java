@@ -6,6 +6,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
@@ -50,6 +51,7 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
   @SuppressWarnings("unchecked") @Override public void getData() {
     view.setData(viewModel);
     view.preFillModel(viewModel);
+    view.showLoading();
     String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     GameModel gameModel = viewModel.getGameModel();
     compositeSubscription.add(
@@ -84,10 +86,12 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         observeGameInteractor.observeGameModelRemoved(gameModel).subscribe(gameModel1 -> {
           parentPresenter.navigateBack();
         }, Crashlytics::logException));
-    compositeSubscription.add(
-        FireBaseUtils.getConnectionObservableWithTimeInterval().subscribe(aBoolean -> {
+    compositeSubscription.add(FireBaseUtils.getConnectionObservableWithTimeInterval()
+        .compose(RxTransformers.applySchedulers())
+        .subscribe(aBoolean -> {
           if (!aBoolean) {
             view.hideLoading();
+            view.showError(BaseError.NO_CONNECTION);
           }
         }));
   }
