@@ -84,7 +84,11 @@ import butterknife.Bind;
     recyclerView.addOnLayoutChangeListener(
         (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
           if (bottom < oldBottom) {
-            recyclerView.postDelayed(() -> recyclerView.smoothScrollToPosition(bottom), 100);
+            recyclerView.postDelayed(() -> {
+              if (recyclerView != null) {
+                recyclerView.smoothScrollToPosition(bottom);
+              }
+            }, 100);
           }
         });
   }
@@ -96,15 +100,18 @@ import butterknife.Bind;
   @Override public void showContent() {
     super.showContent();
     if (masterLogAdapter == null) {
-      masterLogAdapter = new MasterLogAdapter(MasterLogMessage.class, R.layout.master_log_item,
-          MasterLogItemViewHolder.class, data.getDatabaseReference());
+      masterLogAdapter =
+          new MasterLogAdapter(MasterLogMessage.class, R.layout.master_log_item_test_constraint,
+              MasterLogItemViewHolder.class, data.getDatabaseReference());
       masterLogAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
         @Override public void onItemRangeInserted(int positionStart, int itemCount) {
           super.onItemRangeInserted(positionStart, itemCount);
           if (positionStart == 0) {
             getComponent().getPresenter().loadComplete();
           }
-          recyclerView.smoothScrollToPosition(masterLogAdapter.getItemCount());
+          if (recyclerView != null && masterLogAdapter != null) {
+            recyclerView.smoothScrollToPosition(masterLogAdapter.getItemCount());
+          }
         }
       });
       decor = new StickyHeaderDecoration(masterLogAdapter);
@@ -134,10 +141,10 @@ import butterknife.Bind;
   }
 
   @Override public void onDestroy() {
-    super.onDestroy();
     if (masterLogAdapter != null) {
       masterLogAdapter.cleanup();
     }
+    super.onDestroy();
   }
 
   @Override protected int getContentResId() {

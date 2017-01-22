@@ -21,7 +21,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.di.AuthComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.di.DaggerAuthComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.AuthViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
-import com.valyakinaleksey.roleplayingsystem.utils.StringConstants;
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ValidationUtils;
 
 import butterknife.Bind;
@@ -170,7 +170,7 @@ public class AuthFragment extends AbsButterLceFragment<AuthComponent, AuthViewMo
                     if (TextUtils.isEmpty(s)) {
                         emailInputLayout.setError(String.format(errorEmptyField, getString(R.string.email)));
                     } else if (ValidationUtils.isValidEmail(s)) {
-                        emailInputLayout.setError(StringConstants.EMPTY_STRING);
+                        emailInputLayout.setError(StringUtils.EMPTY_STRING);
                     } else {
                         emailInputLayout.setError(errorInvalidEmail);
                     }
@@ -182,7 +182,7 @@ public class AuthFragment extends AbsButterLceFragment<AuthComponent, AuthViewMo
                     if (TextUtils.isEmpty(s)) {
                         passwordInputLayout.setError(String.format(errorEmptyField, getString(R.string.password)));
                     } else if (ValidationUtils.isValidLength(s)) {
-                        passwordInputLayout.setError(StringConstants.EMPTY_STRING);
+                        passwordInputLayout.setError(StringUtils.EMPTY_STRING);
                     } else {
                         passwordInputLayout.setError(String.format(errorMinSymbols, getString(R.string.password)));
                     }

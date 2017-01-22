@@ -7,6 +7,7 @@ import com.crashlytics.android.Crashlytics;
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
@@ -168,6 +169,13 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
             view.hideLoading();
           }
         }));
+    compositeSubscription.add(RxFirebaseDatabase.getInstance()
+        .observeValueEvent(FireBaseUtils.getTableReference(FireBaseUtils.GAMES))
+        .map(DataSnapshot::getChildrenCount)
+        .subscribe(aLong -> {
+          viewModel.setGamesCount(aLong.intValue());
+          view.updateGamesCount();
+        }, Crashlytics::logException));
   }
 
   private void setDatabaseReference(GamesListViewModel gamesListViewModel) {
