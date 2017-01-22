@@ -2,7 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewhol
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,8 +34,8 @@ public class TwoValueEditViewHolder extends ButterKnifeViewHolder {
 
   public TwoValueEditViewHolder(View itemView) {
     super(itemView);
-    ViewUtils.increaseTouchArea(editIcon);
-    ViewUtils.increaseTouchArea(editIcon2);
+    ViewUtils.increaseTouchArea(editIcon, ViewUtils.DOUBLE_INCREASE_VALUE);
+    ViewUtils.increaseTouchArea(editIcon2, ViewUtils.DOUBLE_INCREASE_VALUE);
   }
 
   public void bind(TwoValueEditModel twoValueEditModel, EditExpandableSection editExpandableSection,
@@ -46,7 +46,7 @@ public class TwoValueEditViewHolder extends ButterKnifeViewHolder {
     }
     etSubscription = new CompositeSubscription();
     initMainValue(twoValueEditModel, editExpandableSection, adapter);
-    initSecondaryValue(twoValueEditModel.getSecondaryValue());
+    initSecondaryValue(twoValueEditModel);
   }
 
   private void initMainValue(TwoValueEditModel twoValueEditModel,
@@ -88,16 +88,17 @@ public class TwoValueEditViewHolder extends ButterKnifeViewHolder {
     }
   }
 
-  private void initSecondaryValue(SimpleSingleValueEditModel singleValueEditModel) {
+  private void initSecondaryValue(TwoValueEditModel twoValueEditModel) {
+    SimpleSingleValueEditModel singleValueEditModel = twoValueEditModel.getSecondaryValue();
     ImageUtils.setTintVectorImage(editIcon2, R.drawable.ic_done_black_24dp, accentColor);
     etValue2.setHint(singleValueEditModel.getValueHint());
     etValue2.setText(singleValueEditModel.getValue());
     etSubscription.add(RxTextView.textChanges(etValue2).skip(1).subscribe(charSequence -> {
       singleValueEditModel.setValue(charSequence.toString());
-      handleSecondaryValueFocus(charSequence);
+      handleSecondaryValueFocus(charSequence, twoValueEditModel);
     }));
     etValue2.setOnFocusChangeListener((v, hasFocus) -> {
-      handleSecondaryValueFocus(etValue2.getText());
+      handleSecondaryValueFocus(etValue2.getText(), twoValueEditModel);
     });
     etValue2.setOnTouchListener(
         ViewUtils.getFixRecyclerPositionOnTouchListener(etValue2, getAdapterPosition()));
@@ -108,8 +109,10 @@ public class TwoValueEditViewHolder extends ButterKnifeViewHolder {
     });
   }
 
-  private void handleSecondaryValueFocus(CharSequence charSequence) {
-    if (etValue2.hasFocus() && charSequence.length() > 0 && etValue.getText().length() > 0) {
+  private void handleSecondaryValueFocus(CharSequence charSequence,
+      TwoValueEditModel twoValueEditModel) {
+    if (etValue2.hasFocus() && charSequence.length() > 0 && !TextUtils.isEmpty(
+        twoValueEditModel.getId())) {
       editIcon2.setVisibility(View.VISIBLE);
     } else {
       editIcon2.setVisibility(View.GONE);

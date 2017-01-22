@@ -12,11 +12,13 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 
 public class ViewUtils {
-  public static int DEFUALT_INCREASE_VALUE =
+  public static int DEFAULT_INCREASE_VALUE =
       (int) RpsApp.app().getResources().getDimension(R.dimen.common_margin_between_elements);
+  public static int DOUBLE_INCREASE_VALUE =
+      (int) RpsApp.app().getResources().getDimension(R.dimen.activity_vertical_margin);
 
   public static void increaseTouchArea(View delegate) {
-    increaseTouchArea(delegate, DEFUALT_INCREASE_VALUE);
+    increaseTouchArea(delegate, DEFAULT_INCREASE_VALUE);
   }
 
   public static void increaseTouchArea(View delegate, int extraPadding) {
@@ -51,7 +53,7 @@ public class ViewUtils {
                 recyclerView.scrollToPosition(position);
                 editText.requestFocus();
               }
-            }, 140);
+            }, 200);
             break;
           }
       }
