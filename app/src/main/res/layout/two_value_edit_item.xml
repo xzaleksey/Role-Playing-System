@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
     android:orientation="vertical"
     >
 
@@ -14,6 +15,7 @@
       android:layout_height="wrap_content"
       android:paddingBottom="@dimen/common_margin_between_elements"
       android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
+      android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
       android:paddingTop="@dimen/common_margin_between_elements"
       >
 
@@ -22,12 +24,11 @@
         android:id="@+id/edit_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:padding="3dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
         android:layout_marginTop="@dimen/common_margin_between_elements"
         android:background="?attr/selectableItemBackground"
+        android:padding="3dp"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_done_black_24dp"
         tools:visibility="visible"
@@ -50,11 +51,10 @@
         android:layout_height="24dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:padding="3dp"
         android:layout_below="@id/value"
-        android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
         android:layout_marginTop="@dimen/common_margin_between_elements"
         android:background="?attr/selectableItemBackground"
+        android:padding="3dp"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_done_black_24dp"
         tools:visibility="visible"

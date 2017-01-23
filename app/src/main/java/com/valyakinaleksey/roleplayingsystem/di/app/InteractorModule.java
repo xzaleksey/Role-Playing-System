@@ -12,6 +12,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
@@ -79,6 +81,10 @@ import dagger.Provides;
 
   @Provides @Singleton GameCharacteristicsInteractor provideGameCharacteristicsInteractor() {
     return new GameCharacteristicsUseCase();
+  }
+
+  @Provides @Singleton GameClassesInteractor provideGameClassesInteractor() {
+    return new GameClassesUsecase();
   }
 }
       

@@ -5,6 +5,7 @@
   <color name="colorAccent">#795548</color>
   <color name="colorAccentDark">#5d4037</color>
   <color name="white7">#B2FFFFFF</color>
+  <color name="colorControlNormal">#B2FFFFFF</color>
   <color name="colorTextPrimary">#212121</color>
   <color name="colorTextSecondary">#757575</color>
   <color name="colorDivider">#BDBDBD</color>

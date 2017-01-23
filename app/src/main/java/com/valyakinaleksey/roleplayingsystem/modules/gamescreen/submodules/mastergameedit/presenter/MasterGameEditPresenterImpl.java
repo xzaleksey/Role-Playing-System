@@ -2,7 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mast
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-
 import android.text.TextUtils;
 import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -17,21 +16,21 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmode
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel.TwoValueEditModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacteristicModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.adapter.MasterGameSection;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.MasterGameEditView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.model.MasterGameEditModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.ArrayList;
-
 import java.util.List;
 import rx.Observable;
 import timber.log.Timber;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.*;
+import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_MASTER_GAME_DESCRIPTION;
+import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_MASTER_GAME_NAME;
 
 public class MasterGameEditPresenterImpl
     extends BasePresenter<MasterGameEditView, MasterGameEditModel>
@@ -39,11 +38,14 @@ public class MasterGameEditPresenterImpl
 
   private EditGameInteractor editGameInteractor;
   private GameCharacteristicsInteractor gameCharacteristicsInteractor;
+  private GameClassesInteractor gameClassesInteractor;
 
   public MasterGameEditPresenterImpl(EditGameInteractor editGameInteractor,
-      GameCharacteristicsInteractor gameCharacteristicsInteractor) {
+      GameCharacteristicsInteractor gameCharacteristicsInteractor,
+      GameClassesInteractor gameClassesInteractor) {
     this.editGameInteractor = editGameInteractor;
     this.gameCharacteristicsInteractor = gameCharacteristicsInteractor;
+    this.gameClassesInteractor = gameClassesInteractor;
   }
 
   @SuppressWarnings("unchecked") @Override

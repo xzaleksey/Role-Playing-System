@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/material_component_text_fields_floating_label_height"
     android:background="?attr/selectableItemBackground"
     android:paddingEnd="@dimen/material_component_lists_right_padding"
     android:paddingRight="@dimen/material_component_lists_right_padding"
-    android:paddingTop="@dimen/material_component_text_fields_floating_label_padding_above_label_text">
+    android:paddingTop="@dimen/material_component_text_fields_floating_label_padding_above_label_text"
+    >
 
 
     <android.support.v7.widget.AppCompatImageView

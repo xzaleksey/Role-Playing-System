@@ -6,7 +6,7 @@ import com.google.firebase.database.PropertyName;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.io.Serializable;
 
-public class GameCharacteristicModel implements Serializable, Parcelable {
+public class GameClassModel implements Serializable, Parcelable {
   private String id;
 
   private String name;
@@ -46,24 +46,23 @@ public class GameCharacteristicModel implements Serializable, Parcelable {
     dest.writeString(this.description);
   }
 
-  public GameCharacteristicModel() {
+  public GameClassModel() {
   }
 
-  protected GameCharacteristicModel(Parcel in) {
+  protected GameClassModel(Parcel in) {
     this.id = in.readString();
     this.name = in.readString();
     this.description = in.readString();
   }
 
-  public static final Creator<GameCharacteristicModel> CREATOR =
-      new Creator<GameCharacteristicModel>() {
-        @Override public GameCharacteristicModel createFromParcel(Parcel source) {
-          return new GameCharacteristicModel(source);
-        }
+  public static final Creator<GameClassModel> CREATOR = new Creator<GameClassModel>() {
+    @Override public GameClassModel createFromParcel(Parcel source) {
+      return new GameClassModel(source);
+    }
 
-        @Override public GameCharacteristicModel[] newArray(int size) {
-          return new GameCharacteristicModel[size];
-        }
-      };
+    @Override public GameClassModel[] newArray(int size) {
+      return new GameClassModel[size];
+    }
+  };
 }
       
