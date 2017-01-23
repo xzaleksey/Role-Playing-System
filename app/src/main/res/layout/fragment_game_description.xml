@@ -4,31 +4,33 @@
     android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:appContext="com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity">
+    tools:appContext="com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity"
+    >
 
-    <Button
-        android:id="@+id/join_game_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/material_layout_keylines_screen_edge_margin"
-        android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
-        android:background="@drawable/accent_button"
-        android:text="@string/join_game"
-        android:textColor="@color/material_light_white"
-        android:textSize="14sp" />
+  <Button
+      android:id="@+id/join_game_btn"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_marginBottom="@dimen/activity_vertical_margin"
+      android:layout_marginLeft="@dimen/material_layout_keylines_screen_edge_margin"
+      android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
+      android:background="@drawable/accent_button"
+      android:text="@string/join_game"
+      android:textColor="@color/material_light_white"
+      android:textSize="14sp"
+      />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/join_game_btn"
-        android:layout_alignParentTop="true"
-        android:paddingBottom="@dimen/material_component_lists_padding_above_list"
-        android:paddingTop="@dimen/material_component_lists_padding_above_list"
-        android:scrollbars="vertical"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycler_view"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/join_game_btn"
+      android:layout_alignParentTop="true"
+      android:background="@android:color/white"
+      android:scrollbars="vertical"
+      app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+      />
 
 
 </RelativeLayout>
