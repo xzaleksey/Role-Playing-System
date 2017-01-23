@@ -16,8 +16,10 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmode
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel.TwoValueEditModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacteristicModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.adapter.MasterGameSection;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.MasterGameEditView;
@@ -57,30 +59,31 @@ public class MasterGameEditPresenterImpl
   }
 
   @SuppressWarnings("unchecked") @Override public void getData() {
-    compositeSubscription.add(Observable.just(viewModel.getGameModel())
-        .zipWith(
-            gameCharacteristicsInteractor.getCharacteristicsByGameModel(viewModel.getGameModel()),
-            (gameModel, gameCharacteristicModel) -> {
-              return getInfoSections(gameCharacteristicModel);
-            })
-        .compose(RxTransformers.applySchedulers())
-        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-        .subscribe(infoSections -> {
-          viewModel.setInfoSections(infoSections);
-          view.setData(viewModel);
-          view.showContent();
-        }, Crashlytics::logException));
+    GameModel model = viewModel.getGameModel();
+    compositeSubscription.add(
+        Observable.zip(gameCharacteristicsInteractor.getCharacteristicsByGameModel(model),
+            gameClassesInteractor.getClassesByGameModel(model),
+            (gameCharacteristicModels, gameClassModels) -> (getInfoSections(
+                gameCharacteristicModels, gameClassModels)))
+            .compose(RxTransformers.applySchedulers())
+            .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+            .subscribe(infoSections -> {
+              viewModel.setInfoSections(infoSections);
+              view.setData(viewModel);
+              view.showContent();
+            }, Crashlytics::logException));
   }
 
   @NonNull @SuppressWarnings("unchecked") private ArrayList<InfoSection> getInfoSections(
-      List<GameCharacteristicModel> gameCharacteristicModel) {
+      List<GameCharacteristicModel> gameCharacteristicModels, List<GameClassModel> gameClasses) {
     ArrayList<InfoSection> infoSections = new ArrayList<>();
     ArrayList<StaticItem> data = new ArrayList<>();
     data.add(new StaticItem(TYPE_MASTER_GAME_NAME, getTitleModel()));
     data.add(new StaticItem(TYPE_MASTER_GAME_DESCRIPTION, getDescriptionModel()));
     MasterGameSection section = new MasterGameSection(data);
     infoSections.add(section);
-    addCharacteristicsSection(infoSections, gameCharacteristicModel);
+    addCharacteristicsSection(infoSections, gameCharacteristicModels);
+    addClassesSection(infoSections, gameClasses);
     return infoSections;
   }
 
@@ -176,6 +179,61 @@ public class MasterGameEditPresenterImpl
 
       }, Crashlytics::logException);
     });
+    return twoValueEditModel;
+  }
+
+  private void addClassesSection(ArrayList<InfoSection> infoSections,
+      List<GameClassModel> gameClassModels) {
+    ArrayList<TwoValueEditModel> data = new ArrayList<>();
+    for (GameClassModel classModel : gameClassModels) {
+      data.add(getTwoValueClassModel(classModel));
+    }
+    TwoValueExpandableSectionImpl section =
+        new TwoValueExpandableSectionImpl(StringUtils.getStringById(R.string.classes),
+            StringUtils.getStringById(R.string.add_class), data,
+            () -> getTwoValueClassModel(new GameClassModel()));
+    infoSections.add(section);
+  }
+
+  @NonNull private TwoValueEditModel getTwoValueClassModel(GameClassModel gameClassModel) {
+    TwoValueEditModel twoValueEditModel = new TwoValueEditModel();
+    twoValueEditModel.setId(gameClassModel.getId());
+    twoValueEditModel.setMainValue(new SimpleSingleValueEditModel(gameClassModel.getName(),
+        StringUtils.getStringById(R.string.name), s -> {
+      gameClassModel.setName(s);
+      gameClassModel.setDescription(twoValueEditModel.getSecondaryValue().getValue());
+      if (TextUtils.isEmpty(twoValueEditModel.getId())) {
+        gameClassesInteractor.createGameClass(viewModel.getGameModel(), gameClassModel)
+            .compose(RxTransformers.applySchedulers())
+            .subscribe(s1 -> {
+              gameClassModel.setId(s1);
+              twoValueEditModel.setId(s1);
+            }, Crashlytics::logException);
+      } else {
+        gameClassesInteractor.editGameClass(viewModel.getGameModel(), gameClassModel,
+            FireBaseUtils.FIELD_NAME, gameClassModel.getName())
+            .compose(RxTransformers.applySchedulers())
+            .subscribe(gameCharacteristicModel -> {
+
+            }, Crashlytics::logException);
+      }
+    }));
+    twoValueEditModel.setSecondaryValue(
+        new SimpleSingleValueEditModel(gameClassModel.getDescription(),
+            StringUtils.getStringById(R.string.description), s -> {
+          gameClassModel.setDescription(s);
+          gameClassesInteractor.editGameClass(viewModel.getGameModel(), gameClassModel,
+              FireBaseUtils.FIELD_DESCRIPTION, gameClassModel.getDescription())
+              .compose(RxTransformers.applySchedulers())
+              .subscribe(gameCharacteristicModel -> {
+
+              }, Crashlytics::logException);
+        }));
+    twoValueEditModel.setDeleteOnClickListener(
+        twoValueEditModel1 -> gameClassesInteractor.deleteClass(viewModel.getGameModel(),
+            gameClassModel).compose(RxTransformers.applySchedulers()).subscribe(aBoolean -> {
+
+        }, Crashlytics::logException));
     return twoValueEditModel;
   }
 }

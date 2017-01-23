@@ -49,5 +49,7 @@
   <string name="log">Log</string>
   <string name="add_characteristic">Add characteristic</string>
   <string name="delete_characteristic">Delete characteristic</string>
+  <string name="classes">Classes</string>
+  <string name="add_class">Add class</string>
 
 </resources>

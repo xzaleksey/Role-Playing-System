@@ -39,4 +39,6 @@
     <string name="log">Лог</string>
     <string name="add_characteristic">Добавить характеристику</string>
     <string name="delete_characteristic">Удалить характеристику</string>
+    <string name="classes">Классы</string>
+    <string name="add_class">Добавить класс</string>
 </resources>
