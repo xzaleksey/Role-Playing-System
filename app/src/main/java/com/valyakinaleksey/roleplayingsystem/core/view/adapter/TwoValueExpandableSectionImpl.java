@@ -2,7 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.core.view.adapter;
 
 import android.os.Parcel;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +75,7 @@ public class TwoValueExpandableSectionImpl extends EditExpandableSection<TwoValu
     builder.onPositive((dialog, which) -> {
       data.remove(model);
       adapter.notifyItemRangeRemoved(adapterPosition, 1);
-      model.getDeleteOnClickListener().onClick(model);
+      model.getOnItemClickListener().onClick(model);
     });
   }
 }

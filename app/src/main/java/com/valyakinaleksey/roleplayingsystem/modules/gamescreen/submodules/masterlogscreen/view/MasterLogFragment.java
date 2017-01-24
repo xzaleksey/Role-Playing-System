@@ -105,8 +105,19 @@ import butterknife.Bind;
           new MasterLogAdapter(MasterLogMessage.class, R.layout.master_log_item_test_constraint,
               MasterLogItemViewHolder.class, data.getDatabaseReference());
       masterLogAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        @Override public void onItemRangeChanged(int positionStart, int itemCount) {
+          super.onItemRangeChanged(positionStart, itemCount);
+          decor.clearHeaderCache();
+        }
+
+        @Override public void onItemRangeRemoved(int positionStart, int itemCount) {
+          super.onItemRangeRemoved(positionStart, itemCount);
+          decor.clearHeaderCache();
+        }
+
         @Override public void onItemRangeInserted(int positionStart, int itemCount) {
           super.onItemRangeInserted(positionStart, itemCount);
+          decor.clearHeaderCache();
           if (positionStart == 0) {
             getComponent().getPresenter().loadComplete();
           }

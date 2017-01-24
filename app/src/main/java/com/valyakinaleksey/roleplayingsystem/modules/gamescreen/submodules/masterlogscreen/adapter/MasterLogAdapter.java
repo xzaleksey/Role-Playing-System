@@ -1,13 +1,11 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.Bind;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
-import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseError;
@@ -16,10 +14,8 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.model.MasterLogMessage;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -32,6 +28,7 @@ public class MasterLogAdapter
   public MasterLogAdapter(Class<MasterLogMessage> modelClass, int modelLayout,
       Class<MasterLogItemViewHolder> viewHolderClass, Query ref) {
     super(modelClass, modelLayout, viewHolderClass, ref);
+
   }
 
   @Override protected void onCancelled(DatabaseError error) {
@@ -65,9 +62,12 @@ public class MasterLogAdapter
     return new HeaderHolder(view);
   }
 
+
+
   @Override public void onBindHeaderViewHolder(HeaderHolder viewholder, int position) {
-    viewholder.header.setText(new DateTime(dates.get(position)).toString(
-        DateTimeFormat.shortDate().withLocale(Locale.getDefault())));
+    viewholder.header.setText(
+        new DateTime(dates.get(Long.valueOf(getHeaderId(position)).intValue())).toString(
+            DateTimeFormat.shortDate().withLocale(Locale.getDefault())));
   }
 
   static class HeaderHolder extends ButterKnifeViewHolder {

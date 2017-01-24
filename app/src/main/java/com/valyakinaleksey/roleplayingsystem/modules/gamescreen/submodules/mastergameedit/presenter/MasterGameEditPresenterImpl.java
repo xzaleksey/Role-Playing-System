@@ -16,7 +16,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmode
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel.TwoValueEditModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacteristicModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
@@ -25,6 +24,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maste
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.MasterGameEditView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.model.MasterGameEditModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.ModelMapper;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +62,7 @@ public class MasterGameEditPresenterImpl
     GameModel model = viewModel.getGameModel();
     compositeSubscription.add(
         Observable.zip(gameCharacteristicsInteractor.getCharacteristicsByGameModel(model),
-            gameClassesInteractor.getClassesByGameModel(model),
+            gameClassesInteractor.getValuesByGameModel(model),
             (gameCharacteristicModels, gameClassModels) -> (getInfoSections(
                 gameCharacteristicModels, gameClassModels)))
             .compose(RxTransformers.applySchedulers())
@@ -88,41 +88,18 @@ public class MasterGameEditPresenterImpl
   }
 
   @NonNull private EditableSingleValueEditModel getTitleModel() {
-    EditableSingleValueEditModel singleValueEditModel = new EditableSingleValueEditModel();
-    singleValueEditModel.setTitle(RpsApp.app().getString(R.string.name));
-    singleValueEditModel.setValue(viewModel.getGameModel().getName());
-    singleValueEditModel.setValueHint(RpsApp.app().getString(R.string.super_game));
-    singleValueEditModel.setSaveOnclickListener(s -> {
-      GameModel gameModel = viewModel.getGameModel();
-      if (!gameModel.getName().equals(s)) {
-        gameModel.setName(s);
-        compositeSubscription.add(
-            editGameInteractor.saveField(gameModel, GameModel.FIELD_NAME, gameModel.getName())
-                .subscribe(s1 -> {
-                  Timber.d("Success save name " + s1);
-                }, Crashlytics::logException));
-      }
-    });
-    return singleValueEditModel;
-  }
-
-  @NonNull private EditableSingleValueEditModel getDescriptionModel() {
-    EditableSingleValueEditModel singleValueEditModel = new EditableSingleValueEditModel();
-    singleValueEditModel.setTitle(RpsApp.app().getString(R.string.description));
-    singleValueEditModel.setValue(viewModel.getGameModel().getDescription());
-    singleValueEditModel.setValueHint(RpsApp.app().getString(R.string.here_could_be_description));
-    singleValueEditModel.setSaveOnclickListener(s -> {
-      GameModel gameModel = viewModel.getGameModel();
-      if (!gameModel.getDescription().equals(s)) {
-        gameModel.setDescription(s);
-        compositeSubscription.add(
-            editGameInteractor.saveField(gameModel, GameModel.FIELD_DESCRIPTION,
-                gameModel.getDescription()).subscribe(s1 -> {
-              Timber.d("Success save name " + s1);
-            }, Crashlytics::logException));
-      }
-    });
-    return singleValueEditModel;
+    return ModelMapper.getEditableSingleValueEditModel(RpsApp.app().getString(R.string.name),
+        viewModel.getGameModel().getName(), RpsApp.app().getString(R.string.super_game), s -> {
+          GameModel gameModel = viewModel.getGameModel();
+          if (!gameModel.getName().equals(s)) {
+            gameModel.setName(s);
+            compositeSubscription.add(
+                editGameInteractor.saveField(gameModel, GameModel.FIELD_NAME, gameModel.getName())
+                    .subscribe(s1 -> {
+                      Timber.d("Success save name " + s1);
+                    }, Crashlytics::logException));
+          }
+        });
   }
 
   private void addCharacteristicsSection(ArrayList<InfoSection> infoSections,
@@ -173,7 +150,7 @@ public class MasterGameEditPresenterImpl
 
               }, Crashlytics::logException);
         }));
-    twoValueEditModel.setDeleteOnClickListener(twoValueEditModel1 -> {
+    twoValueEditModel.setOnItemClickListener(twoValueEditModel1 -> {
       gameCharacteristicsInteractor.deleteCharacteristic(viewModel.getGameModel(),
           characteristicModel).compose(RxTransformers.applySchedulers()).subscribe(aBoolean -> {
 
@@ -203,14 +180,14 @@ public class MasterGameEditPresenterImpl
       gameClassModel.setName(s);
       gameClassModel.setDescription(twoValueEditModel.getSecondaryValue().getValue());
       if (TextUtils.isEmpty(twoValueEditModel.getId())) {
-        gameClassesInteractor.createGameClass(viewModel.getGameModel(), gameClassModel)
+        gameClassesInteractor.createGameTModel(viewModel.getGameModel(), gameClassModel)
             .compose(RxTransformers.applySchedulers())
             .subscribe(s1 -> {
               gameClassModel.setId(s1);
               twoValueEditModel.setId(s1);
             }, Crashlytics::logException);
       } else {
-        gameClassesInteractor.editGameClass(viewModel.getGameModel(), gameClassModel,
+        gameClassesInteractor.editGameTmodel(viewModel.getGameModel(), gameClassModel,
             FireBaseUtils.FIELD_NAME, gameClassModel.getName())
             .compose(RxTransformers.applySchedulers())
             .subscribe(gameCharacteristicModel -> {
@@ -222,18 +199,34 @@ public class MasterGameEditPresenterImpl
         new SimpleSingleValueEditModel(gameClassModel.getDescription(),
             StringUtils.getStringById(R.string.description), s -> {
           gameClassModel.setDescription(s);
-          gameClassesInteractor.editGameClass(viewModel.getGameModel(), gameClassModel,
+          gameClassesInteractor.editGameTmodel(viewModel.getGameModel(), gameClassModel,
               FireBaseUtils.FIELD_DESCRIPTION, gameClassModel.getDescription())
               .compose(RxTransformers.applySchedulers())
               .subscribe(gameCharacteristicModel -> {
 
               }, Crashlytics::logException);
         }));
-    twoValueEditModel.setDeleteOnClickListener(
-        twoValueEditModel1 -> gameClassesInteractor.deleteClass(viewModel.getGameModel(),
+    twoValueEditModel.setOnItemClickListener(
+        twoValueEditModel1 -> gameClassesInteractor.deleteTModel(viewModel.getGameModel(),
             gameClassModel).compose(RxTransformers.applySchedulers()).subscribe(aBoolean -> {
 
         }, Crashlytics::logException));
     return twoValueEditModel;
+  }
+
+  @NonNull private EditableSingleValueEditModel getDescriptionModel() {
+    return ModelMapper.getEditableSingleValueEditModel(RpsApp.app().getString(R.string.description),
+        viewModel.getGameModel().getDescription(),
+        RpsApp.app().getString(R.string.here_could_be_description), s -> {
+          GameModel gameModel = viewModel.getGameModel();
+          if (!gameModel.getDescription().equals(s)) {
+            gameModel.setDescription(s);
+            compositeSubscription.add(
+                editGameInteractor.saveField(gameModel, GameModel.FIELD_DESCRIPTION,
+                    gameModel.getDescription()).subscribe(s1 -> {
+                  Timber.d("Success save name " + s1);
+                }, Crashlytics::logException));
+          }
+        });
   }
 }

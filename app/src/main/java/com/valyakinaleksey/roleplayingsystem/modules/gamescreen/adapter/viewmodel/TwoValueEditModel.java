@@ -8,7 +8,7 @@ public class TwoValueEditModel implements Serializable, HasId {
   private String id;
   private SimpleSingleValueEditModel mainValue;
   private SimpleSingleValueEditModel secondaryValue;
-  private transient OnItemClickListener<TwoValueEditModel> deleteOnClickListener;
+  private transient OnItemClickListener<TwoValueEditModel> onItemClickListener;
 
   public String getId() {
     return id;
@@ -23,10 +23,10 @@ public class TwoValueEditModel implements Serializable, HasId {
 
   public TwoValueEditModel(SimpleSingleValueEditModel mainValue,
       SimpleSingleValueEditModel secondaryValue,
-      OnItemClickListener<TwoValueEditModel> deleteOnClickListener) {
+      OnItemClickListener<TwoValueEditModel> onItemClickListener) {
     this.mainValue = mainValue;
     this.secondaryValue = secondaryValue;
-    this.deleteOnClickListener = deleteOnClickListener;
+    this.onItemClickListener = onItemClickListener;
   }
 
   public SimpleSingleValueEditModel getMainValue() {
@@ -45,13 +45,12 @@ public class TwoValueEditModel implements Serializable, HasId {
     this.secondaryValue = secondaryValue;
   }
 
-  public OnItemClickListener<TwoValueEditModel> getDeleteOnClickListener() {
-    return deleteOnClickListener;
+  public OnItemClickListener<TwoValueEditModel> getOnItemClickListener() {
+    return onItemClickListener;
   }
 
-  public void setDeleteOnClickListener(
-      OnItemClickListener<TwoValueEditModel> deleteOnClickListener) {
-    this.deleteOnClickListener = deleteOnClickListener;
+  public void setOnItemClickListener(OnItemClickListener<TwoValueEditModel> onItemClickListener) {
+    this.onItemClickListener = onItemClickListener;
   }
 }
       
