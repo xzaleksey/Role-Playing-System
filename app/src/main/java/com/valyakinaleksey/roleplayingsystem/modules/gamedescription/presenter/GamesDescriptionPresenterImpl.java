@@ -77,6 +77,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
 
   @Override public void restoreViewModel(GamesDescriptionModel viewModel) {
     super.restoreViewModel(viewModel);
+    viewModel.setEmpty(true);
   }
 
   @SuppressWarnings("unchecked") @Override public void getData() {
@@ -84,7 +85,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
     compositeSubscription.add(userGetInteractor.getUserByUid(gameModel.getMasterId())
         .compose(RxTransformers.applySchedulers())
         .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-        .zipWith(gameCharacteristicsInteractor.getCharacteristicsByGameModel(gameModel),
+        .zipWith(gameCharacteristicsInteractor.getValuesByGameModel(gameModel),
             (user, gameCharacteristicModels) -> {
               updateInfoSections(gameModel, user, gameCharacteristicModels);
               return viewModel.getInfoSections();

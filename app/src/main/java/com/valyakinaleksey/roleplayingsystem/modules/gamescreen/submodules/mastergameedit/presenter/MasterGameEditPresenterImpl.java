@@ -61,7 +61,7 @@ public class MasterGameEditPresenterImpl
   @SuppressWarnings("unchecked") @Override public void getData() {
     GameModel model = viewModel.getGameModel();
     compositeSubscription.add(
-        Observable.zip(gameCharacteristicsInteractor.getCharacteristicsByGameModel(model),
+        Observable.zip(gameCharacteristicsInteractor.getValuesByGameModel(model),
             gameClassesInteractor.getValuesByGameModel(model),
             (gameCharacteristicModels, gameClassModels) -> (getInfoSections(
                 gameCharacteristicModels, gameClassModels)))
@@ -72,6 +72,11 @@ public class MasterGameEditPresenterImpl
               view.setData(viewModel);
               view.showContent();
             }, Crashlytics::logException));
+  }
+
+  @Override public void restoreViewModel(MasterGameEditModel viewModel) {
+    super.restoreViewModel(viewModel);
+    viewModel.setEmpty(true);
   }
 
   @NonNull @SuppressWarnings("unchecked") private ArrayList<InfoSection> getInfoSections(
@@ -124,14 +129,14 @@ public class MasterGameEditPresenterImpl
       characteristicModel.setName(s);
       characteristicModel.setDescription(twoValueEditModel.getSecondaryValue().getValue());
       if (TextUtils.isEmpty(twoValueEditModel.getId())) {
-        gameCharacteristicsInteractor.createGameCharacteristic(viewModel.getGameModel(),
+        gameCharacteristicsInteractor.createGameTModel(viewModel.getGameModel(),
             characteristicModel).compose(RxTransformers.applySchedulers()).subscribe(s1 -> {
           characteristicModel.setId(s1);
           twoValueEditModel.setId(s1);
         }, Crashlytics::logException);
       } else {
-        gameCharacteristicsInteractor.editGameCharacteristic(viewModel.getGameModel(),
-            characteristicModel, FireBaseUtils.FIELD_NAME, characteristicModel.getName())
+        gameCharacteristicsInteractor.editGameTmodel(viewModel.getGameModel(), characteristicModel,
+            FireBaseUtils.FIELD_NAME, characteristicModel.getName())
             .compose(RxTransformers.applySchedulers())
             .subscribe(gameCharacteristicModel -> {
 
@@ -142,7 +147,7 @@ public class MasterGameEditPresenterImpl
         new SimpleSingleValueEditModel(characteristicModel.getDescription(),
             StringUtils.getStringById(R.string.description), s -> {
           characteristicModel.setDescription(s);
-          gameCharacteristicsInteractor.editGameCharacteristic(viewModel.getGameModel(),
+          gameCharacteristicsInteractor.editGameTmodel(viewModel.getGameModel(),
               characteristicModel, FireBaseUtils.FIELD_DESCRIPTION,
               characteristicModel.getDescription())
               .compose(RxTransformers.applySchedulers())
@@ -151,10 +156,11 @@ public class MasterGameEditPresenterImpl
               }, Crashlytics::logException);
         }));
     twoValueEditModel.setOnItemClickListener(twoValueEditModel1 -> {
-      gameCharacteristicsInteractor.deleteCharacteristic(viewModel.getGameModel(),
-          characteristicModel).compose(RxTransformers.applySchedulers()).subscribe(aBoolean -> {
+      gameCharacteristicsInteractor.deleteTModel(viewModel.getGameModel(), characteristicModel)
+          .compose(RxTransformers.applySchedulers())
+          .subscribe(aBoolean -> {
 
-      }, Crashlytics::logException);
+          }, Crashlytics::logException);
     });
     return twoValueEditModel;
   }

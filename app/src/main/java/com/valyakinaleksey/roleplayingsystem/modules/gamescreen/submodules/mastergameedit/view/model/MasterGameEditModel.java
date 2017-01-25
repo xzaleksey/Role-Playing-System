@@ -4,13 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MasterGameEditModel implements EmptyViewModel, Parcelable, Serializable {
+public class MasterGameEditModel extends BaseEmptyViewModel
+    implements EmptyViewModel, Parcelable, Serializable {
 
   private GameModel gameModel;
   private ArrayList<InfoSection> infoSections;
@@ -34,20 +36,18 @@ public class MasterGameEditModel implements EmptyViewModel, Parcelable, Serializ
     this.infoSections = infoSections;
   }
 
-  @Override public boolean isEmpty() {
-    return infoSections == null || infoSections.isEmpty();
-  }
-
   @Override public int describeContents() {
     return 0;
   }
 
   @Override public void writeToParcel(Parcel dest, int flags) {
+    super.writeToParcel(dest, flags);
     dest.writeParcelable(this.gameModel, flags);
     dest.writeSerializable(this.infoSections);
   }
 
   protected MasterGameEditModel(Parcel in) {
+    super(in);
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
     this.infoSections = (ArrayList<InfoSection>) in.readSerializable();
   }

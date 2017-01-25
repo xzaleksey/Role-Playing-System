@@ -66,6 +66,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
 
   @Override public void restoreViewModel(GamesListViewModel viewModel) {
     super.restoreViewModel(viewModel);
+    viewModel.setEmpty(true);
     setDatabaseReference(viewModel);
   }
 
@@ -152,6 +153,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
 
   @Override public void getData() {
     view.setData(viewModel);
+    viewModel.setEmpty(false);
     view.showContent();
     view.showLoading();
     compositeSubscription.add(

@@ -5,16 +5,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import java.util.List;
 import rx.Observable;
 
-public interface GameCharacteristicsInteractor {
-  Observable<List<GameCharacteristicModel>> getCharacteristicsByGameModel(GameModel gameModel);
+public interface GameCharacteristicsInteractor extends GameTEditInteractor<GameCharacteristicModel> {
 
-  Observable<Boolean> editGameCharacteristic(GameModel gameModel,
-      GameCharacteristicModel gameCharacteristicModel, String fieldName, Object o);
-
-  Observable<String> createGameCharacteristic(GameModel gameModel,
-      GameCharacteristicModel gameCharacteristicModel);
-
-  Observable<Boolean> deleteCharacteristic(GameModel gameModel,
-      GameCharacteristicModel characteristicModel);
 }
       

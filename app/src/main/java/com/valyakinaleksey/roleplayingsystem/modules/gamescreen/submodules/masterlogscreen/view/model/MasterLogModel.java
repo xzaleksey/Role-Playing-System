@@ -4,12 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.database.DatabaseReference;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import java.io.Serializable;
 
-public class MasterLogModel implements EmptyViewModel, Parcelable, Serializable {
+public class MasterLogModel extends BaseEmptyViewModel
+    implements EmptyViewModel, Parcelable, Serializable {
 
   private GameModel gameModel;
   private transient DatabaseReference databaseReference;
@@ -42,10 +44,12 @@ public class MasterLogModel implements EmptyViewModel, Parcelable, Serializable 
   }
 
   @Override public void writeToParcel(Parcel dest, int flags) {
+    super.writeToParcel(dest, flags);
     dest.writeParcelable(this.gameModel, flags);
   }
 
   protected MasterLogModel(Parcel in) {
+    super(in);
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
   }
 

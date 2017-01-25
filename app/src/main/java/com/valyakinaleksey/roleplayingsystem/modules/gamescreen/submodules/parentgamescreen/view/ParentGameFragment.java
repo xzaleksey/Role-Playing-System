@@ -110,16 +110,18 @@ public class ParentGameFragment
     inflater.inflate(R.menu.parent_game_menu, menu);
     super.onCreateOptionsMenu(menu, inflater);
     this.menu = menu;
+    MenuItem item = getDeleteItem(menu);
     if (data == null || !data.isMaster()) {
-      MenuItem item = getDeleteItem(menu);
       item.setVisible(false);
+    } else if (data != null && data.isMaster()) {
+      item.setVisible(true);
     }
   }
 
   @Override public void showContent() {
     super.showContent();
     preFillModel(data);
-    if (data.isMaster()) {
+    if (data.isMaster() && menu != null) {
       getDeleteItem(menu).setVisible(true);
     }
     if (viewPager.getAdapter() == null) {

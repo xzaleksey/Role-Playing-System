@@ -259,7 +259,6 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> im
             FirebaseUser user = task.getResult().getUser();
             Timber.d(user.toString());
             onAuthSuccess(user);
-            viewModel.setFirebaseUser(user);
             view.showMessage(appContext.getString(R.string.success), LceView.TOAST);
             view.performAction(context -> navigateToMainActivity((FragmentActivity) context));
         } else {

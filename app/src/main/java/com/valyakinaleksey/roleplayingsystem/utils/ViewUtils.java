@@ -53,7 +53,7 @@ public class ViewUtils {
                 recyclerView.scrollToPosition(position);
                 editText.requestFocus();
               }
-            }, 200);
+            }, 250);
             break;
           }
       }

@@ -3,11 +3,12 @@ package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
 import java.io.Serializable;
 
-public class ParentModel implements EmptyViewModel, Parcelable, Serializable {
+public class ParentModel extends BaseEmptyViewModel {
 
     private int navigationTag;
     private boolean firstNavigation = true;

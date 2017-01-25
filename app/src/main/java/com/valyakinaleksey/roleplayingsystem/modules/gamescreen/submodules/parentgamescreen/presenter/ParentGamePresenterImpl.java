@@ -46,6 +46,7 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
 
   @Override public void restoreViewModel(ParentGameModel viewModel) {
     super.restoreViewModel(viewModel);
+    initSubscriptions(viewModel.getGameModel());
   }
 
   @SuppressWarnings("unchecked") @Override public void getData() {
@@ -77,6 +78,10 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
               view.navigate();
             }));
 
+    initSubscriptions(gameModel);
+  }
+
+  private void initSubscriptions(GameModel gameModel) {
     compositeSubscription.add(
         observeGameInteractor.observeGameModelChanged(gameModel).subscribe(gameModel1 -> {
           viewModel.setGameModel(gameModel1);
