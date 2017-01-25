@@ -2,14 +2,12 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.google.firebase.database.PropertyName;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasDescription;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasName;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.io.Serializable;
 
-public class GameClassModel implements Serializable, Parcelable, HasId, HasName, HasDescription {
+public class GameRaceModel implements Serializable, Parcelable, HasId, HasName, HasDescription {
   private String id;
 
   private String name;
@@ -49,22 +47,22 @@ public class GameClassModel implements Serializable, Parcelable, HasId, HasName,
     dest.writeString(this.description);
   }
 
-  public GameClassModel() {
+  public GameRaceModel() {
   }
 
-  protected GameClassModel(Parcel in) {
+  protected GameRaceModel(Parcel in) {
     this.id = in.readString();
     this.name = in.readString();
     this.description = in.readString();
   }
 
-  public static final Creator<GameClassModel> CREATOR = new Creator<GameClassModel>() {
-    @Override public GameClassModel createFromParcel(Parcel source) {
-      return new GameClassModel(source);
+  public static final Creator<GameRaceModel> CREATOR = new Creator<GameRaceModel>() {
+    @Override public GameRaceModel createFromParcel(Parcel source) {
+      return new GameRaceModel(source);
     }
 
-    @Override public GameClassModel[] newArray(int size) {
-      return new GameClassModel[size];
+    @Override public GameRaceModel[] newArray(int size) {
+      return new GameRaceModel[size];
     }
   };
 }

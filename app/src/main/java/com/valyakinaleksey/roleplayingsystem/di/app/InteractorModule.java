@@ -14,6 +14,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesUsecase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameRacesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameRacesUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
@@ -85,6 +87,10 @@ import dagger.Provides;
 
   @Provides @Singleton GameClassesInteractor provideGameClassesInteractor() {
     return new GameClassesUsecase();
+  }
+
+  @Provides @Singleton GameRacesInteractor provideGameRacesInteractor() {
+    return new GameRacesUsecase();
   }
 }
       

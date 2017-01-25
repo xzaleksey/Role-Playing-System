@@ -51,5 +51,7 @@
   <string name="delete_characteristic">Delete characteristic</string>
   <string name="classes">Classes</string>
   <string name="add_class">Add class</string>
+  <string name="races">Races</string>
+  <string name="add_race">Add race</string>
 
 </resources>

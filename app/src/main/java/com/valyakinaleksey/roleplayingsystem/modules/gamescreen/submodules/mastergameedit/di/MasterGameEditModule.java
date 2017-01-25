@@ -3,11 +3,10 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mast
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.communication.MasterGameEditViewCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.presenter.MasterGameEditPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.presenter.MasterGameEditPresenterImpl;
@@ -39,9 +38,10 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
   @Provides @Named(PRESENTER) @GameScope MasterGameEditPresenter providePresenter(
       EditGameInteractor editGameInteractor, GameCharacteristicsInteractor gameCharInteractor,
-      GameClassesInteractor gameClassesInteractor) {
+      GameClassesInteractor gameClassesInteractor,
+      GameRacesInteractor gameRacesInteractorInteractor) {
     return new MasterGameEditPresenterImpl(editGameInteractor, gameCharInteractor,
-        gameClassesInteractor);
+        gameClassesInteractor, gameRacesInteractorInteractor);
   }
 
   @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {

@@ -5,6 +5,8 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.communication.GameDescriptionViewCommunicationBus;
@@ -39,9 +41,11 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
       UserGetInteractor userGetInteractor, JoinGameInteractor joinGameInteractor,
       ObserveGameInteractor observeGameInteractor,
       ObserveUsersInGameInteractor observeUsersInGameInteractor, ParentPresenter parentPresenter,
-      GameCharacteristicsInteractor gameCharInteractor) {
+      GameCharacteristicsInteractor gameCharInteractor, GameClassesInteractor gameClassesInteractor,
+      GameRacesInteractor gameRacesInteractor) {
     return new GamesDescriptionPresenterImpl(userGetInteractor, joinGameInteractor,
-        observeGameInteractor, observeUsersInGameInteractor, parentPresenter, gameCharInteractor);
+        observeGameInteractor, observeUsersInGameInteractor, parentPresenter, gameCharInteractor,
+        gameClassesInteractor, gameRacesInteractor);
   }
 
   @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {

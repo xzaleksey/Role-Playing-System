@@ -41,4 +41,6 @@
     <string name="delete_characteristic">Удалить характеристику</string>
     <string name="classes">Классы</string>
     <string name="add_class">Добавить класс</string>
+    <string name="races">Расы</string>
+    <string name="add_race">Добавить расу</string>
 </resources>

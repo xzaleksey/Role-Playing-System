@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasDescription;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasName;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.MaterialDrawableProviderImpl;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
@@ -20,13 +22,17 @@ import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.model.GamesDescriptionModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacteristicModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
@@ -35,6 +41,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.ArrayList;
 
 import java.util.List;
+import rx.Observable;
 import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.ELEMENT_TYPE_USERS_EXPANDABLE;
@@ -52,17 +59,22 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
   private ObserveUsersInGameInteractor observeUsersInGameInteractor;
   private ParentPresenter parentPresenter;
   private GameCharacteristicsInteractor gameCharacteristicsInteractor;
+  private GameClassesInteractor gameClassesInteractor;
+  private GameRacesInteractor gameRacesInteractor;
 
   public GamesDescriptionPresenterImpl(UserGetInteractor userGetInteractor,
       JoinGameInteractor joinGameInteractor, ObserveGameInteractor observeGameInteractor,
       ObserveUsersInGameInteractor observeUsersInGameInteractor, ParentPresenter parentPresenter,
-      GameCharacteristicsInteractor gameCharacteristicsInteractor) {
+      GameCharacteristicsInteractor gameCharacteristicsInteractor,
+      GameClassesInteractor gameClassesInteractor, GameRacesInteractor gameRacesInteractor) {
     this.userGetInteractor = userGetInteractor;
     this.joinGameInteractor = joinGameInteractor;
     this.observeGameInteractor = observeGameInteractor;
     this.observeUsersInGameInteractor = observeUsersInGameInteractor;
     this.parentPresenter = parentPresenter;
     this.gameCharacteristicsInteractor = gameCharacteristicsInteractor;
+    this.gameClassesInteractor = gameClassesInteractor;
+    this.gameRacesInteractor = gameRacesInteractor;
   }
 
   @SuppressWarnings("unchecked") @Override
@@ -82,20 +94,25 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
 
   @SuppressWarnings("unchecked") @Override public void getData() {
     GameModel gameModel = viewModel.getGameModel();
-    compositeSubscription.add(userGetInteractor.getUserByUid(gameModel.getMasterId())
-        .compose(RxTransformers.applySchedulers())
-        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-        .zipWith(gameCharacteristicsInteractor.getValuesByGameModel(gameModel),
-            (user, gameCharacteristicModels) -> {
-              updateInfoSections(gameModel, user, gameCharacteristicModels);
+
+    compositeSubscription.add(
+        Observable.zip(userGetInteractor.getUserByUid(gameModel.getMasterId()),
+            gameCharacteristicsInteractor.getValuesByGameModel(gameModel),
+            gameClassesInteractor.getValuesByGameModel(gameModel),
+            gameRacesInteractor.getValuesByGameModel(gameModel),
+            (user, gameCharacteristicModels, gameClassModels, gameRaceModels) -> {
+              updateInfoSections(gameModel, user, gameCharacteristicModels, gameClassModels,
+                  gameRaceModels);
               return viewModel.getInfoSections();
             })
-        .subscribe(user -> {
-          view.setData(viewModel);
-          view.showContent();
-          observeGameInfo(gameModel);
-          observeUsers();
-        }, Crashlytics::logException));
+            .compose(RxTransformers.applySchedulers())
+            .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+            .subscribe(user -> {
+              view.setData(viewModel);
+              view.showContent();
+              observeGameInfo(gameModel);
+              observeUsers();
+            }, Crashlytics::logException));
   }
 
   private void observeGameInfo(GameModel gameModel) {
@@ -159,7 +176,8 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
   }
 
   @SuppressWarnings("unchecked") private void updateInfoSections(GameModel gameModel, User user,
-      List<GameCharacteristicModel> gameCharacteristicModels) {
+      List<GameCharacteristicModel> gameCharacteristicModels, List<GameClassModel> gameClassModels,
+      List<GameRaceModel> gameRaceModels) {
     ArrayList<InfoSection> infoSections = new ArrayList<>();
     ArrayList<StaticItem> data = new ArrayList<>();
     data.add(new StaticItem(TYPE_DESCRIPTION, gameModel.getDescription()));
@@ -169,21 +187,28 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
             new MaterialDrawableProviderImpl(gameModel.getMasterName(), gameModel.getMasterId()),
             user.getPhotoUrl(), gameModel.getMasterId())));
     infoSections.add(new StaticFieldsSection(data));
-    ArrayList<TwoOrThreeLineTextModel> twoOrThreeLineTextModels = new ArrayList<>();
-    for (GameCharacteristicModel gameCharacteristicModel : gameCharacteristicModels) {
-      String description = gameCharacteristicModel.getDescription();
-      twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel(gameCharacteristicModel.getName(),
-          TextUtils.isEmpty(description) ? StringUtils.getStringById(
-              R.string.here_could_be_description) : description));
-    }
-    infoSections.add(
-        new DefaultExpandableSectionImpl(RpsApp.app().getString(R.string.characteristics),
-            twoOrThreeLineTextModels));
+
+    addSection(RpsApp.app().getString(R.string.characteristics), gameCharacteristicModels,
+        infoSections);
+    addSection(RpsApp.app().getString(R.string.classes), gameClassModels, infoSections);
+    addSection(RpsApp.app().getString(R.string.races), gameRaceModels, infoSections);
     ArrayList<AvatarWithTwoLineTextModel> avatarWithTwoLineTextModels = new ArrayList<>();
     infoSections.add(new TwoLineTextWithAvatarExpandableSectionImpl(
         AdapterConstants.ELEMENT_TYPE_USERS_EXPANDABLE,
         RpsApp.app().getString(R.string.game_players), avatarWithTwoLineTextModels));
     viewModel.setInfoSections(infoSections);
+  }
+
+  private <T extends HasName & HasDescription> void addSection(String title,
+      List<T> gameCharacteristicModels, ArrayList<InfoSection> infoSections) {
+    ArrayList<TwoOrThreeLineTextModel> twoOrThreeLineTextModels = new ArrayList<>();
+    for (T model : gameCharacteristicModels) {
+      String description = model.getDescription();
+      twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel(model.getName(),
+          TextUtils.isEmpty(description) ? StringUtils.getStringById(
+              R.string.here_could_be_description) : description));
+    }
+    infoSections.add(new DefaultExpandableSectionImpl(title, twoOrThreeLineTextModels));
   }
 
   private void addUser(ArrayList<AvatarWithTwoLineTextModel> avatarWithTwoLineTextModels,
