@@ -59,7 +59,7 @@ public class TwoValueEditViewHolder extends ButterKnifeViewHolder {
       handleMainValue(twoValueEditModel, mainValue, editExpandableSection, adapter);
     }));
     etValue.setOnFocusChangeListener((v, hasFocus) -> {
-      if (hasFocus) {
+      if (hasFocus || TextUtils.isEmpty(twoValueEditModel.getId())) {
         editIcon.setVisibility(View.VISIBLE);
       } else {
         editIcon.setVisibility(View.GONE);

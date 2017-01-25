@@ -14,5 +14,9 @@ public class StringUtils {
   public static String getPluralById(@PluralsRes int resId, int count) {
     return RpsApp.app().getResources().getQuantityString(resId, count, count);
   }
+
+  public static String formatWithCount(String s, int count) {
+    return s + " (" + String.valueOf(count) + ")";
+  }
 }
       

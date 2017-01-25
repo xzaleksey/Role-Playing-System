@@ -48,6 +48,8 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.ELEME
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_DESCRIPTION;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TITLE;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TWO_LINE_WITH_AVATAR;
+import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.formatWithCount;
+import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringById;
 
 @PerFragmentScope public class GamesDescriptionPresenterImpl
     extends BasePresenter<GamesDescriptionView, GamesDescriptionModel>
@@ -188,14 +190,20 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
             user.getPhotoUrl(), gameModel.getMasterId())));
     infoSections.add(new StaticFieldsSection(data));
 
-    addSection(RpsApp.app().getString(R.string.characteristics), gameCharacteristicModels,
-        infoSections);
-    addSection(RpsApp.app().getString(R.string.classes), gameClassModels, infoSections);
-    addSection(RpsApp.app().getString(R.string.races), gameRaceModels, infoSections);
+    addSection(
+        formatWithCount(getStringById(R.string.characteristics), gameCharacteristicModels.size()),
+        gameCharacteristicModels, infoSections);
+
+    addSection(formatWithCount(getStringById(R.string.classes), gameClassModels.size()),
+        gameClassModels, infoSections);
+
+    addSection(formatWithCount(getStringById(R.string.races), gameRaceModels.size()),
+        gameRaceModels, infoSections);
     ArrayList<AvatarWithTwoLineTextModel> avatarWithTwoLineTextModels = new ArrayList<>();
     infoSections.add(new TwoLineTextWithAvatarExpandableSectionImpl(
         AdapterConstants.ELEMENT_TYPE_USERS_EXPANDABLE,
-        RpsApp.app().getString(R.string.game_players), avatarWithTwoLineTextModels));
+        formatWithCount(getStringById(R.string.game_players), avatarWithTwoLineTextModels.size()),
+        avatarWithTwoLineTextModels));
     viewModel.setInfoSections(infoSections);
   }
 
@@ -205,8 +213,8 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
     for (T model : gameCharacteristicModels) {
       String description = model.getDescription();
       twoOrThreeLineTextModels.add(new TwoOrThreeLineTextModel(model.getName(),
-          TextUtils.isEmpty(description) ? StringUtils.getStringById(
-              R.string.here_could_be_description) : description));
+          TextUtils.isEmpty(description) ? getStringById(R.string.here_could_be_description)
+              : description));
     }
     infoSections.add(new DefaultExpandableSectionImpl(title, twoOrThreeLineTextModels));
   }
