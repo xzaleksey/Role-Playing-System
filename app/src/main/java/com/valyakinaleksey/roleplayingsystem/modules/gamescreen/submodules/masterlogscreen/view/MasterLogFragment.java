@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
@@ -49,6 +50,7 @@ import butterknife.Bind;
   @Bind(R.id.icon_send) View sendIcon;
 
   @Bind(R.id.input) EditText etInput;
+  @Bind(R.id.send_form) ViewGroup sendForm;
 
   private MasterLogAdapter masterLogAdapter;
 
@@ -76,6 +78,7 @@ import butterknife.Bind;
     super.setupViews(view);
     LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
     layoutManager.setStackFromEnd(true);
+    sendForm.setOnClickListener(v -> etInput.requestFocus());
     sendIcon.setOnClickListener(v -> {
       if (!TextUtils.isEmpty(etInput.getText().toString().trim())) {
         getComponent().getPresenter().sendMessage(etInput.getText().toString());
