@@ -69,6 +69,8 @@ public class MasterLogPresenterImpl extends BasePresenter<MasterLogView, MasterL
     masterLogModel.setDatabaseReference(FirebaseDatabase.getInstance()
         .getReference()
         .child(GAME_LOG)
-        .child(masterLogModel.getGameModel().getId()));
+        .child(masterLogModel.getGameModel().getId())
+        .orderByChild(FireBaseUtils.DATE_CREATE)
+        .getRef());
   }
 }

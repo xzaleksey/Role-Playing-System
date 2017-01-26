@@ -30,6 +30,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maste
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.model.MasterLogModel;
 
 import com.valyakinaleksey.roleplayingsystem.utils.HideKeyBoardOnScrollListener;
+import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 import javax.inject.Inject;
 
 import autodagger.AutoComponent;
@@ -76,15 +77,17 @@ import butterknife.Bind;
 
   @Override public void setupViews(View view) {
     super.setupViews(view);
-    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-    layoutManager.setStackFromEnd(true);
-    sendForm.setOnClickListener(v -> etInput.requestFocus());
+    //LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+    //layoutManager.setStackFromEnd(true);
+    sendForm.setOnClickListener(v -> KeyboardUtils.showSoftKeyboard(etInput));
     sendIcon.setOnClickListener(v -> {
       if (!TextUtils.isEmpty(etInput.getText().toString().trim())) {
         getComponent().getPresenter().sendMessage(etInput.getText().toString());
         etInput.setText("");
       }
     });
+    recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+        ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
     recyclerView.addOnLayoutChangeListener(
         (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
           if (bottom < oldBottom) {
@@ -95,6 +98,10 @@ import butterknife.Bind;
             }, 100);
           }
         });
+    if (decor != null) {
+      decor.clearHeaderCache();
+      recyclerView.addItemDecoration(decor);
+    }
   }
 
   @Override public void loadData() {
@@ -108,11 +115,6 @@ import butterknife.Bind;
           new MasterLogAdapter(MasterLogMessage.class, R.layout.master_log_item_test_constraint,
               MasterLogItemViewHolder.class, data.getDatabaseReference());
       masterLogAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-        @Override public void onItemRangeChanged(int positionStart, int itemCount) {
-          super.onItemRangeChanged(positionStart, itemCount);
-          decor.clearHeaderCache();
-        }
-
         @Override public void onItemRangeRemoved(int positionStart, int itemCount) {
           super.onItemRangeRemoved(positionStart, itemCount);
           decor.clearHeaderCache();
@@ -131,8 +133,6 @@ import butterknife.Bind;
       });
       decor = new StickyHeaderDecoration(masterLogAdapter);
       recyclerView.addItemDecoration(decor);
-      recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-          ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
     }
     if (recyclerView.getAdapter() == null) {
       recyclerView.setAdapter(masterLogAdapter);
