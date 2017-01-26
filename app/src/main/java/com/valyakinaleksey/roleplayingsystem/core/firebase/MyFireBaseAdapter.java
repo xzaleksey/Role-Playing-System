@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.core.firebase;
 
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -12,12 +13,16 @@ import java.util.List;
 public abstract class MyFireBaseAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private FirebaseArray mSnapshots;
   private Class<T> tClass;
+  private FirebaseArray.OnChangedListener onChangedListener;
 
   public MyFireBaseAdapter(Query ref, Class<T> tClass) {
     this.mSnapshots = new FirebaseArray(ref);
     this.tClass = tClass;
     this.mSnapshots.setOnChangedListener(new FirebaseArray.OnChangedListener() {
       @Override public void onChanged(EventType type, int index, int oldIndex) {
+        if (onChangedListener != null) {
+          onChangedListener.onChanged(type, index, oldIndex);
+        }
         switch (type) {
           case ADDED:
             notifyItemInserted(index);
@@ -37,9 +42,15 @@ public abstract class MyFireBaseAdapter<T> extends RecyclerView.Adapter<Recycler
       }
 
       @Override public void onCancelled(DatabaseError databaseError) {
-
+        if (onChangedListener != null) {
+          onChangedListener.onCancelled(databaseError);
+        }
       }
     });
+  }
+
+  public void setOnChangedListener(FirebaseArray.OnChangedListener onChangedListener) {
+    this.onChangedListener = onChangedListener;
   }
 
   public void cleanup() {
