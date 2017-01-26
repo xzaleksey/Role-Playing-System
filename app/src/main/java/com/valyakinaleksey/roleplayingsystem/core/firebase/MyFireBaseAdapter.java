@@ -9,12 +9,14 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MyFireBaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class MyFireBaseAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private FirebaseArray mSnapshots;
+  private Class<T> tClass;
 
-  public MyFireBaseAdapter(Query ref) {
-    mSnapshots = new FirebaseArray(ref);
-    mSnapshots.setOnChangedListener(new FirebaseArray.OnChangedListener() {
+  public MyFireBaseAdapter(Query ref, Class<T> tClass) {
+    this.mSnapshots = new FirebaseArray(ref);
+    this.tClass = tClass;
+    this.mSnapshots.setOnChangedListener(new FirebaseArray.OnChangedListener() {
       @Override public void onChanged(EventType type, int index, int oldIndex) {
         switch (type) {
           case ADDED:
@@ -52,7 +54,7 @@ public abstract class MyFireBaseAdapter extends RecyclerView.Adapter<RecyclerVie
     return mSnapshots.getItem(position).getRef();
   }
 
-  public <T> T getItem(int position, Class<T> tClass) {
+  public T getItem(int position) {
     return mSnapshots.getItem(position).getValue(tClass);
   }
 
