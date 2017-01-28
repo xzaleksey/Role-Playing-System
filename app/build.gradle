@@ -122,6 +122,7 @@ dependencies {
   androidTestCompile 'com.android.support:multidex-instrumentation:1.0.1'
   compile 'net.danlew:android.joda:2.9.5.1'
   compile 'com.kbeanie:multipicker:1.1.31@aar'
+  compile 'id.zelory:compressor:1.0.4'
   //Unit test
   testCompile 'junit:junit:4.12'
   testCompile 'org.mockito:mockito-core:2.0.33-beta'
