@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.communication;
 
 import com.kbeanie.multipicker.api.entity.ChosenImage;
+import com.valyakinaleksey.roleplayingsystem.core.proxy.AdapterNotifierCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter.MapsPresenter;
@@ -9,8 +10,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.state.MapsViewState;
 import javax.inject.Inject;
 
-@PerFragmentScope public class MapsViewCommunicationBus extends
-    SelfRestorableNavigationLceCommunicationBus<MapsViewModel, MapsView, MapsPresenter, MapsViewState>
+@PerFragmentScope public class MapsViewCommunicationBus
+    extends AdapterNotifierCommunicationBus<MapsViewModel, MapsView, MapsPresenter, MapsViewState>
     implements MapsPresenter, MapsView {
 
   @Override public void attachView(MapsView view) {

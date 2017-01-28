@@ -6,23 +6,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsViewModel extends BaseEmptyViewModel
     implements EmptyViewModel, Parcelable, Serializable {
 
   private GameModel gameModel;
-  private transient DatabaseReference databaseReference;
+  private transient List<MapModel> mapModels;
 
   public MapsViewModel() {
+    mapModels = new ArrayList<>();
   }
 
-  public DatabaseReference getDatabaseReference() {
-    return databaseReference;
+  public List<MapModel> getMapModels() {
+    return mapModels;
   }
 
-  public void setDatabaseReference(DatabaseReference databaseReference) {
-    this.databaseReference = databaseReference;
+  public void setMapModels(List<MapModel> mapModels) {
+    this.mapModels = mapModels;
   }
 
   public GameModel getGameModel() {
@@ -34,7 +38,7 @@ public class MapsViewModel extends BaseEmptyViewModel
   }
 
   @Override public boolean isEmpty() {
-    return databaseReference == null;
+    return mapModels.isEmpty();
   }
 
   @Override public int describeContents() {
@@ -44,11 +48,13 @@ public class MapsViewModel extends BaseEmptyViewModel
   @Override public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeParcelable(this.gameModel, flags);
+    dest.writeTypedList(this.mapModels);
   }
 
   protected MapsViewModel(Parcel in) {
     super(in);
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
+    this.mapModels = in.createTypedArrayList(MapModel.CREATOR);
   }
 
   public static final Creator<MapsViewModel> CREATOR = new Creator<MapsViewModel>() {

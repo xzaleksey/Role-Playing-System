@@ -12,7 +12,7 @@ public class PathManager {
     static final String TAG = "PathManager";
 
     private static final String LOG_DIR = "log/";
-    private static final String CACHE_DIR = "cache/";
+    public static final String CACHE_DIR = "cache/";
     private String resourcesDirectory;
 
     public PathManager(final Context context) {

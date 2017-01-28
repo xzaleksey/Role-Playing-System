@@ -24,5 +24,9 @@ public class StringUtils {
   public static String formatWithSlashes(String s) {
     return String.format(FORMAT_SLASHES, s);
   }
+
+  public static String formatRightSlash(String s) {
+    return s.concat("/");
+  }
 }
       

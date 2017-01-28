@@ -5,6 +5,6 @@ import rx.Observable;
 
 public interface MapsRepository {
 
-  Observable<File> createLocalFileCopy(String gameId, File file);
+  Observable<File> createLocalFileCopy(String gameId, String key, File file);
 }
       

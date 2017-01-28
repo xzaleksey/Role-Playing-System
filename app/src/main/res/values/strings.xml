@@ -57,5 +57,6 @@
   <string name="progress_uploading">Uploading file</string>
   <string name="fail">Fail</string>
   <string name="maps">Maps</string>
+  <string name="error">Error</string>
 
 </resources>

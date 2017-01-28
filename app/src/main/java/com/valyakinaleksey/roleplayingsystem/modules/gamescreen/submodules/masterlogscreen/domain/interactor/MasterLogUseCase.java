@@ -19,7 +19,7 @@ public class MasterLogUseCase implements MasterLogInteractor {
   @Override public Observable<MasterLogMessage> sendMessage(GameModel gameModel,
       MasterLogMessage masterLogMessage) {
     DatabaseReference reference = getReference(gameModel);
-    masterLogMessage.setDateCreate(DateTime.now().getMillis());
+    masterLogMessage.setTempDateCreate(DateTime.now().getMillis());
     return RxFirebaseDatabase.getInstance()
         .observeSetValuePush(reference, masterLogMessage)
         .map(s -> {

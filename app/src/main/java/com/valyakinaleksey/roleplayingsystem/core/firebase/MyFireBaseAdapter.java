@@ -1,6 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.core.firebase;
 
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -9,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
+import rx.Observable;
 
 public abstract class MyFireBaseAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private FirebaseArray mSnapshots;

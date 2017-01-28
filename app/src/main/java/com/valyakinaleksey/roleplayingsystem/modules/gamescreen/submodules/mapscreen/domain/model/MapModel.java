@@ -16,19 +16,13 @@ public class MapModel implements Serializable, Parcelable {
   public static final int SUCCESS = 1;
 
   private String id;
+  private String gameId;
   private String fileName;
+
   private boolean visible;
   private int status = IN_PROGRESS;
-  @PropertyName(DATE_CREATE) private Object dateCreate;
-  @PropertyName(TEMP_DATE_CREATE) private Long tempDateCreate;
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
+  private Object dateCreate;
+  private Long tempDateCreate;
 
   @Exclude public long getDateCreateLong() {
     if (dateCreate == null || dateCreate == ServerValue.TIMESTAMP) {
@@ -37,16 +31,28 @@ public class MapModel implements Serializable, Parcelable {
     return (long) dateCreate;
   }
 
+  @Exclude public String getId() {
+    return id;
+  }
+
+  @Exclude public void setId(String id) {
+    this.id = id;
+  }
+
+  @Exclude public String getGameId() {
+    return gameId;
+  }
+
+  @Exclude public void setGameId(String gameId) {
+    this.gameId = gameId;
+  }
+
   public int getStatus() {
     return status;
   }
 
   public void setStatus(int status) {
     this.status = status;
-  }
-
-  public void setTempDateCreate(long dateCreate) {
-    this.tempDateCreate = dateCreate;
   }
 
   public Long getTempDateCreate() {
@@ -94,20 +100,20 @@ public class MapModel implements Serializable, Parcelable {
   }
 
   @Override public void writeToParcel(Parcel dest, int flags) {
-    dest.writeString(this.id);
     dest.writeString(this.fileName);
     dest.writeByte(this.visible ? (byte) 1 : (byte) 0);
     dest.writeSerializable((Serializable) this.dateCreate);
     dest.writeValue(this.tempDateCreate);
     dest.writeInt(this.status);
+    dest.writeString(this.gameId);
   }
 
   protected MapModel(Parcel in) {
-    this.id = in.readString();
     this.fileName = in.readString();
     this.visible = in.readByte() != 0;
     this.dateCreate = in.readSerializable();
     this.status = in.readInt();
+    this.gameId = in.readString();
   }
 
   public static final Creator<MapModel> CREATOR = new Creator<MapModel>() {

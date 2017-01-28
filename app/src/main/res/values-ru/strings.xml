@@ -47,5 +47,6 @@
     <string name="progress_uploading">Загрузка файла</string>
     <string name="fail">Не удалось загрузить файл</string>
     <string name="maps">Карты</string>
+    <string name="error">Ошибка</string>
 
 </resources>
