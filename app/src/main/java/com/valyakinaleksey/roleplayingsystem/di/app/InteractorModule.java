@@ -1,9 +1,10 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
-import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.maps.MapsRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetUseCase;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameInteractor;
@@ -95,8 +96,8 @@ import dagger.Provides;
     return new GameRacesUsecase();
   }
 
-  @Provides @Singleton MapsInteractor provideMapsInteractor() {
-    return new MapUseCase();
+  @Provides @Singleton MapsInteractor provideMapsInteractor(MapsRepository mapsRepository) {
+    return new MapUseCase(mapsRepository);
   }
 }
       

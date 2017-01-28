@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.auth.data;
+package com.valyakinaleksey.roleplayingsystem.data.repository.user;
 
 import com.crashlytics.android.Crashlytics;
 import com.ezhome.rxfirebase2.FirebaseChildEvent;
@@ -12,7 +12,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Use
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

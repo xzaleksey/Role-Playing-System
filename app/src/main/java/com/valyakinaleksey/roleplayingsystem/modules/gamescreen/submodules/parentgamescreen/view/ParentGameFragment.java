@@ -21,6 +21,7 @@ import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseDialogFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ViewPagerAdapter;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.MasterGameEditFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.MasterLogFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.DaggerParentGameComponent;
@@ -96,16 +97,6 @@ public class ParentGameFragment
     getComponent().getPresenter().getData();
   }
 
-  @Override public void onStart() {
-    super.onStart();
-    tabLayout.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void onStop() {
-    tabLayout.setVisibility(View.GONE);
-    super.onStop();
-  }
-
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.parent_game_menu, menu);
     super.onCreateOptionsMenu(menu, inflater);
@@ -132,7 +123,7 @@ public class ParentGameFragment
             getString(R.string.info));
         adapter.addFragment(MasterLogFragment.newInstance(arguments), getString(R.string.log));
       }
-      adapter.addFragment(new Fragment(), "TWO");
+      adapter.addFragment(MapsFragment.newInstance(arguments), getString(R.string.maps));
       adapter.addFragment(new Fragment(), "THREE");
       viewPager.setAdapter(adapter);
     }
@@ -164,6 +155,16 @@ public class ParentGameFragment
 
   @Override public void navigate() {
 
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    tabLayout.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void onStop() {
+    tabLayout.setVisibility(View.GONE);
+    super.onStop();
   }
 
   private MenuItem getDeleteItem(Menu menu) {

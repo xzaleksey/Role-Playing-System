@@ -8,7 +8,7 @@
     <string name="error_invalid_email">Этот email не валиден</string>
     <string name="error_invalid_password">Пароль слишком короткий</string>
     <string name="error_min_symbols">%s должен содержать 6 символов</string>
-    <string name="error_subtitle_no_connection"></string>
+    <string name="error_subtitle_no_connection">Попробуйте снова</string>
     <string name="error_title_no_connection">Проблемы с сетью</string>
     <string name="error_title_no_loaded">Проблемы с загрузкой данных</string>
     <string name="forgot_password">Забыли пароль?</string>
@@ -44,4 +44,8 @@
     <string name="races">Расы</string>
     <string name="add_race">Добавить расу</string>
     <string name="settings">Настройки</string>
+    <string name="progress_uploading">Загрузка файла</string>
+    <string name="fail">Не удалось загрузить файл</string>
+    <string name="maps">Карты</string>
+
 </resources>

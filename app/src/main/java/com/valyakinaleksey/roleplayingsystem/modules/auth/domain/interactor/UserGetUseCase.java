@@ -1,6 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor;
 
-import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 
 import java.util.List;

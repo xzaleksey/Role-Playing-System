@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data;
+package com.valyakinaleksey.roleplayingsystem.data.repository.game;
 
 import com.ezhome.rxfirebase2.FirebaseChildEvent;
 import com.google.firebase.database.DataSnapshot;

@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maps
 import android.os.Bundle;
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -11,6 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_LOG;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_MAPS;
@@ -38,7 +40,7 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
     view.showContent();
     view.showLoading();
     compositeSubscription.add(FireBaseUtils.checkReferenceExists(
-        FireBaseUtils.getTableReference(GAME_LOG).child(viewModel.getGameModel().getId()))
+        FireBaseUtils.getTableReference(GAME_MAPS).child(viewModel.getGameModel().getId()))
         .compose(RxTransformers.applySchedulers())
         .subscribe(exists -> {
           if (!exists) {
@@ -49,6 +51,17 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
 
   @Override public void loadComplete() {
     view.hideLoading();
+  }
+
+  @Override public void uploadImage(ChosenImage chosenImage) {
+    mapsInteractor.createNewMap(viewModel.getGameModel(), chosenImage)
+        .compose(RxTransformers.applySchedulers())
+        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+        .subscribe(mapModel -> {
+          Timber.d("success");
+        }, throwable -> {
+
+        });
   }
 
   @Override public void restoreViewModel(MapsViewModel viewModel) {

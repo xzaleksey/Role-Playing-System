@@ -2,7 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interact
 
 import com.ezhome.rxfirebase2.FirebaseChildEvent;
 import com.google.firebase.database.DataSnapshot;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.data.UserRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
 
 import rx.Observable;

@@ -11,10 +11,14 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.DATE_CRE
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
 
 public class MapModel implements Serializable, Parcelable {
+  public static final int IN_PROGRESS = 0;
+  public static final int ERROR = -1;
+  public static final int SUCCESS = 1;
 
   private String id;
   private String fileName;
   private boolean visible;
+  private int status = IN_PROGRESS;
   @PropertyName(DATE_CREATE) private Object dateCreate;
   @PropertyName(TEMP_DATE_CREATE) private Long tempDateCreate;
 
@@ -31,6 +35,14 @@ public class MapModel implements Serializable, Parcelable {
       return tempDateCreate;
     }
     return (long) dateCreate;
+  }
+
+  public int getStatus() {
+    return status;
+  }
+
+  public void setStatus(int status) {
+    this.status = status;
   }
 
   public void setTempDateCreate(long dateCreate) {
@@ -87,6 +99,7 @@ public class MapModel implements Serializable, Parcelable {
     dest.writeByte(this.visible ? (byte) 1 : (byte) 0);
     dest.writeSerializable((Serializable) this.dateCreate);
     dest.writeValue(this.tempDateCreate);
+    dest.writeInt(this.status);
   }
 
   protected MapModel(Parcel in) {
@@ -94,7 +107,7 @@ public class MapModel implements Serializable, Parcelable {
     this.fileName = in.readString();
     this.visible = in.readByte() != 0;
     this.dateCreate = in.readSerializable();
-    this.tempDateCreate = (Long) in.readValue(Long.class.getClassLoader());
+    this.status = in.readInt();
   }
 
   public static final Creator<MapModel> CREATOR = new Creator<MapModel>() {

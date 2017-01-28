@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data;
+package com.valyakinaleksey.roleplayingsystem.data.repository.game;
 
 import com.crashlytics.android.Crashlytics;
 import com.ezhome.rxfirebase2.FirebaseChildEvent;
@@ -6,9 +6,7 @@ import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
 import java.util.HashMap;
 import java.util.Map;

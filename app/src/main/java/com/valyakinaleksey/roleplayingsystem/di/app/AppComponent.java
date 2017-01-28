@@ -7,8 +7,7 @@ import dagger.Component;
 /**
  * Base app component
  */
-@Singleton
-@Component(modules = {AppModule.class, InteractorModule.class})
-public interface AppComponent extends  GlobalComponent {
+@Singleton @Component(modules = { AppModule.class, InteractorModule.class, RepositoryModule.class })
+public interface AppComponent extends GlobalComponent {
 
 }
