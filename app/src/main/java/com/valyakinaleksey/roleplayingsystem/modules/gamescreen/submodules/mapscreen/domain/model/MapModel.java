@@ -1,19 +1,26 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.PropertyName;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.storage.FirebaseStorage;
+import com.kelvinapps.rxfirebase.RxFirebaseStorage;
 import java.io.Serializable;
+import rx.Observable;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.DATE_CREATE;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_MAPS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
 
 public class MapModel implements Serializable, Parcelable {
   public static final int IN_PROGRESS = 0;
   public static final int ERROR = -1;
   public static final int SUCCESS = 1;
+  public static final String MAP_MODEL_ID = "map_model_id";
 
   private String id;
   private String gameId;
@@ -90,6 +97,15 @@ public class MapModel implements Serializable, Parcelable {
 
   public void setTempDateCreate(Long tempDateCreate) {
     this.tempDateCreate = tempDateCreate;
+  }
+
+  @Exclude public Observable<Uri> getDownloadUrlObservable() {
+    return RxFirebaseStorage.getDownloadUrl(FirebaseStorage.getInstance()
+        .getReference()
+        .child(GAME_MAPS)
+        .child(gameId)
+        .child(id)
+        .child(fileName));
   }
 
   public MapModel() {

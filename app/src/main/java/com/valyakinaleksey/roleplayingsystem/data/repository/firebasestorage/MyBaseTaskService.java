@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.data.repository.firebasestorage;
 
+import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -13,13 +14,22 @@ import timber.log.Timber;
  * Base class for Services that keep track of the number of active jobs and self-stop when the
  * count is zero.
  */
-public abstract class MyBaseTaskService extends Service {
+public abstract class MyBaseTaskService extends IntentService {
 
   static final int PROGRESS_NOTIFICATION_ID = 0;
   static final int FINISHED_NOTIFICATION_ID = 1;
 
   private static final String TAG = "MyBaseTaskService";
   private int mNumTasks = 0;
+
+  /**
+   * Creates an IntentService.  Invoked by your subclass's constructor.
+   *
+   * @param name Used to name the worker thread, important only for debugging.
+   */
+  public MyBaseTaskService(String name) {
+    super(name);
+  }
 
   public void taskStarted() {
     changeNumberOfTasks(1);

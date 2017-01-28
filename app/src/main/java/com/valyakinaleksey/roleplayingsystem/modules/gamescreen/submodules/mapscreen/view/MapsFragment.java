@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
@@ -66,6 +68,7 @@ public class MapsFragment
     super.setupViews(view);
     fab.setOnClickListener(v -> imagePicker.pickImage());
     recyclerView.setAdapter(mapAdapter);
+    ((LinearLayoutManager) recyclerView.getLayoutManager()).setReverseLayout(true);
   }
 
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

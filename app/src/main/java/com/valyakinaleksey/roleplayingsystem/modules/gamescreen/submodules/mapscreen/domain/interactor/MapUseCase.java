@@ -1,10 +1,14 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.interactor;
 
+import android.content.Intent;
+import android.net.Uri;
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kbeanie.multipicker.api.entity.ChosenFile;
+import com.valyakinaleksey.roleplayingsystem.data.repository.firebasestorage.MyUploadService;
 import com.valyakinaleksey.roleplayingsystem.data.repository.maps.MapsRepository;
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
@@ -29,7 +33,8 @@ public class MapUseCase implements MapsInteractor {
   @Override public Observable<MapModel> createNewMap(GameModel gameModel, ChosenFile chosenFile) {
     DatabaseReference fileReference = getReference(gameModel.getId());
     DatabaseReference push = fileReference.push();
-    return mapsRepository.createLocalFileCopy(gameModel.getId(), push.getKey(),
+    String key = push.getKey();
+    return mapsRepository.createLocalFileCopy(gameModel.getId(), key,
         new File(chosenFile.getOriginalPath())).switchMap(file -> {
       String fileName = file.getName();
       MapModel mapModel = new MapModel(fileName);
@@ -38,6 +43,13 @@ public class MapUseCase implements MapsInteractor {
       push.setValue(mapModel);
       return RxFirebaseDatabase.getInstance().observeSingleValue(push).map(dataSnapshot -> {
         push.child(FireBaseUtils.TEMP_DATE_CREATE).setValue(null);
+        Intent intent = new Intent(RpsApp.app(), MyUploadService.class);
+        intent.setAction(MyUploadService.ACTION_UPLOAD);
+        intent.putExtra(MyUploadService.REPOSITORY_TYPE, MapsRepository.MAP_REPOSOTORY);
+        intent.putExtra(MyUploadService.EXTRA_FILE_URI, Uri.fromFile(file));
+        intent.putExtra(FireBaseUtils.ID, gameModel.getId());
+        intent.putExtra(MapModel.MAP_MODEL_ID, key);
+        RpsApp.app().startService(intent);
         return mapModel;
       });
     });

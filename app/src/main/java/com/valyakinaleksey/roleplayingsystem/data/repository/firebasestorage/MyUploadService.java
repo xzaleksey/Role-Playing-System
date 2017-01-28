@@ -15,8 +15,12 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.data.repository.maps.MapsRepository;
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
@@ -34,96 +38,38 @@ public class MyUploadService extends MyBaseTaskService {
   /** Intent Extras **/
   public static final String EXTRA_FILE_URI = "extra_file_uri";
   public static final String EXTRA_DOWNLOAD_URL = "extra_download_url";
+  public static final String REPOSITORY_TYPE = "REPOSITORY_TYPE";
 
-  // [START declare_ref]
-  private StorageReference mStorageRef;
+  @Inject MapsRepository mapsRepository;
+
+  public MyUploadService() {
+    super(MyUploadService.class.getSimpleName());
+  }
   // [END declare_ref]
 
   @Override public void onCreate() {
     super.onCreate();
-
-    // [START get_storage_ref]
-    mStorageRef = FirebaseStorage.getInstance().getReference();
-    // [END get_storage_ref]
+    RpsApp.getAppComponent(RpsApp.app()).inject(this);
   }
 
-  @Nullable @Override public IBinder onBind(Intent intent) {
-    return null;
+  @Override protected void onHandleIntent(Intent intent) {
+
   }
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
     Timber.d("onStartCommand:" + intent + ":" + startId);
     if (ACTION_UPLOAD.equals(intent.getAction())) {
-      Uri fileUri = intent.getParcelableExtra(EXTRA_FILE_URI);
-      String gameId = intent.getStringExtra(FireBaseUtils.ID);
-      uploadMap(fileUri, gameId);
+      switch (intent.getStringExtra(REPOSITORY_TYPE)) {
+        case MapsRepository.MAP_REPOSOTORY:
+          Uri fileUri = intent.getParcelableExtra(EXTRA_FILE_URI);
+          String gameId = intent.getStringExtra(FireBaseUtils.ID);
+          String mapId = intent.getStringExtra(MapModel.MAP_MODEL_ID);
+          mapsRepository.uploadMapToFirebase(fileUri, gameId, mapId);
+          break;
+      }
     }
 
     return START_REDELIVER_INTENT;
-  }
-
-  // [START upload_from_uri]
-  private void uploadMap(final Uri fileUri, String gameId) {
-    Timber.d("uploadMap:src:" + fileUri.toString());
-
-    // [START_EXCLUDE]
-    taskStarted();
-    showProgressNotification(getString(R.string.progress_uploading), 0, 0);
-    // [END_EXCLUDE]
-
-    // [START get_child_ref]
-    // Get a reference to store file at photos/<FILENAME>.jpg
-    final StorageReference photoRef = mStorageRef.child(gameId)
-        .child(FireBaseUtils.GAME_MAPS)
-        .child(fileUri.getLastPathSegment());
-    // [END get_child_ref]
-
-    // Upload file to Firebase Storage
-    Timber.d(TAG, "uploadMap:dst:" + photoRef.getPath());
-    photoRef.putFile(fileUri)
-        .
-            addOnProgressListener(
-                taskSnapshot -> showProgressNotification(getString(R.string.progress_uploading),
-                    taskSnapshot.getBytesTransferred(), taskSnapshot.getTotalByteCount()))
-        .addOnSuccessListener(taskSnapshot -> {
-          // Upload succeeded
-          Timber.d("uploadMap:onSuccess");
-
-          // Get the public download URL
-          Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
-
-          // [START_EXCLUDE]
-          broadcastUploadFinished(downloadUri, fileUri);
-          showUploadFinishedNotification(downloadUri, fileUri);
-          taskCompleted();
-          // [END_EXCLUDE]
-        })
-        .addOnFailureListener(exception -> {
-          // Upload failed
-          Log.w(TAG, "uploadMap:onFailure", exception);
-
-          // [START_EXCLUDE]
-          broadcastUploadFinished(null, fileUri);
-          showUploadFinishedNotification(null, fileUri);
-          taskCompleted();
-          // [END_EXCLUDE]
-        });
-  }
-  // [END upload_from_uri]
-
-  /**
-   * Broadcast finished upload (success or failure).
-   *
-   * @return true if a running receiver received the broadcast.
-   */
-  private boolean broadcastUploadFinished(@Nullable Uri downloadUrl, @Nullable Uri fileUri) {
-    boolean success = downloadUrl != null;
-
-    String action = success ? UPLOAD_COMPLETED : UPLOAD_ERROR;
-
-    Intent broadcast = new Intent(action).putExtra(EXTRA_DOWNLOAD_URL, downloadUrl)
-        .putExtra(EXTRA_FILE_URI, fileUri);
-    return LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(broadcast);
   }
 
   /**
@@ -149,6 +95,11 @@ public class MyUploadService extends MyBaseTaskService {
     filter.addAction(UPLOAD_ERROR);
 
     return filter;
+  }
+
+  // [END upload_from_uri]
+  @Nullable @Override public IBinder onBind(Intent intent) {
+    return null;
   }
 }
       
