@@ -53,5 +53,6 @@
   <string name="add_class">Add class</string>
   <string name="races">Races</string>
   <string name="add_race">Add race</string>
+  <string name="settings">Settings</string>
 
 </resources>

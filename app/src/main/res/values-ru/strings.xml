@@ -43,4 +43,5 @@
     <string name="add_class">Добавить класс</string>
     <string name="races">Расы</string>
     <string name="add_race">Добавить расу</string>
+    <string name="settings">Настройки</string>
 </resources>

@@ -13,11 +13,14 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
 
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.HashMap;
+import java.util.Map;
 import org.joda.time.DateTime;
 
 import rx.Observable;
 
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES_IN_USERS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
 
@@ -48,6 +51,13 @@ public class CreateNewGameUseCase implements CreateNewGameInteractor {
         return RxFirebaseDatabase.getInstance()
             .observeSingleValue(reference.child(FireBaseUtils.USERS).child(gameModel.getMasterId()))
             .doOnNext(dataSnapshot -> {
+              Map<String, Object> childUpdates = new HashMap<>();
+              childUpdates.put(
+                  String.format(FireBaseUtils.FORMAT_SLASHES, FireBaseUtils.GAMES_IN_USERS)
+                      + currentUser.getUid()
+                      + "/"
+                      + gameModel.getId(), gameModel.toMap());
+              reference.updateChildren(childUpdates);
               User user = dataSnapshot.getValue(User.class);
               gameModel.setMasterName(user.getName());
             })

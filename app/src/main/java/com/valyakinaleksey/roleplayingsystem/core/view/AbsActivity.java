@@ -12,60 +12,60 @@ import com.valyakinaleksey.roleplayingsystem.core.firebase.listener.AuthStateLis
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-
 public abstract class AbsActivity extends AppCompatActivity {
-    protected FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    protected FirebaseAuth.AuthStateListener mAuthListener = new AuthStateListener(this);
+  protected FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+  protected FirebaseAuth.AuthStateListener mAuthListener = new AuthStateListener(this);
+  private Toolbar toolbar;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView();
-        setupViews();
+  @Override public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView();
+    setupViews();
+  }
+
+  public void setContentView() {
+    super.setContentView(getLayoutId());
+  }
+
+  protected void setupViews() {
+    setupToolbar();
+  }
+
+  protected void setupToolbar() {
+    toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+    getSupportActionBar().setTitle(null);
+    fillToolbarItems();
+  }
+
+  public void setToolbarTitle(String title) {
+    ActionBar supportActionBar = getSupportActionBar();
+    if (supportActionBar != null) {
+      supportActionBar.setTitle(title);
     }
+  }
 
-    public void setContentView() {
-        super.setContentView(getLayoutId());
-    }
+  protected void fillToolbarItems() {
 
-    protected void setupViews() {
-        setupToolbar();
-    }
+  }
 
-    protected void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
-        fillToolbarItems();
-    }
+  protected abstract int getLayoutId();
 
-    public void setToolbarTitle(String title) {
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(title);
-        }
-    }
+  @Override protected void attachBaseContext(Context newBase) {
+    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+  }
 
-    protected void fillToolbarItems() {
+  @Override protected void onStart() {
+    super.onStart();
+    firebaseAuth.addAuthStateListener(mAuthListener);
+  }
 
-    }
+  @Override protected void onStop() {
+    firebaseAuth.removeAuthStateListener(mAuthListener);
+    super.onStop();
+  }
 
-    protected abstract int getLayoutId();
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        firebaseAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    protected void onStop() {
-        firebaseAuth.removeAuthStateListener(mAuthListener);
-        super.onStop();
-    }
+  public Toolbar getToolbar() {
+    return toolbar;
+  }
 }
