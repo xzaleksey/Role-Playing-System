@@ -21,8 +21,8 @@ public class MapsRepositoryImpl implements MapsRepository {
 
     return Observable.just(file).compose(RxTransformers.applyIoSchedulers()).map(file1 -> {
       String newDirectory = pathManager.getCachePath()
-          .concat(StringUtils.formatWithSlashes(gameId))
-          .concat(FireBaseUtils.GAME_MAPS)
+          .concat(StringUtils.formatWithSlashes(FireBaseUtils.GAME_MAPS))
+          .concat(gameId)
           .concat("/")
           .concat(key);
       Compressor compressor =

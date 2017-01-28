@@ -58,8 +58,9 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
           .load(new File(StorageUtils.getCacheDirectory()
               .concat("/")
               .concat(GAME_MAPS)
-              .concat(StringUtils.formatWithSlashes(mapModel.getGameId()
-                  .concat(mapModel.getId().concat("/").concat(mapModel.getFileName()))))))
+              .concat(StringUtils.formatWithSlashes(
+                  StringUtils.formatRightSlash(mapModel.getGameId())
+                      .concat(mapModel.getId().concat("/").concat(mapModel.getFileName()))))))
           .into(ivMap);
     }
   }
