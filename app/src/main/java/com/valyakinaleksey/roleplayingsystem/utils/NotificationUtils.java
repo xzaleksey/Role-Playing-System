@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
@@ -29,7 +30,7 @@ public class NotificationUtils {
 
     android.support.v4.app.NotificationCompat.Builder builder =
         new android.support.v4.app.NotificationCompat.Builder(RpsApp.app()).setSmallIcon(
-            R.mipmap.ic_launcher)
+            android.R.drawable.ic_lock_lock)
             .setContentTitle(getStringById(R.string.app_name))
             .setContentText(caption)
             .setProgress(100, percentComplete, false)

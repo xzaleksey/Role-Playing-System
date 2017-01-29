@@ -1,11 +1,11 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter;
 
 import android.os.Bundle;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.MyFireBaseAdapter;
@@ -23,6 +23,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_MAPS;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.VISIBLE;
 
 public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
     implements MapsPresenter {
@@ -39,6 +40,8 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
     final MapsViewModel mapsViewModel = new MapsViewModel();
     GameModel gameModel = arguments.getParcelable(GameModel.KEY);
     mapsViewModel.setGameModel(gameModel);
+    mapsViewModel.setMaster(
+        gameModel.getMasterId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
     return mapsViewModel;
   }
 
@@ -46,14 +49,14 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
     view.setData(viewModel);
     view.showContent();
     view.showLoading();
-    compositeSubscription.add(FireBaseUtils.checkReferenceExists(
-        FireBaseUtils.getTableReference(GAME_MAPS).child(viewModel.getGameModel().getId()))
-        .compose(RxTransformers.applySchedulers())
-        .subscribe(exists -> {
-          if (!exists) {
-            view.hideLoading();
-          }
-        }, this::handleThrowable));
+    compositeSubscription.add(
+        FireBaseUtils.checkReferenceExistsAndNotEmpty(getDatabaseQuery(viewModel))
+            .compose(RxTransformers.applySchedulers())
+            .subscribe(exists -> {
+              if (!exists) {
+                view.hideLoading();
+              }
+            }, this::handleThrowable));
     initUpdates();
   }
 
@@ -69,7 +72,6 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
           Timber.d("success map create");
         }, throwable -> {
           if (view != null) {
-
             BaseError snack = BaseError.SNACK;
             snack.setValue(StringUtils.getStringById(R.string.error));
             view.showError(snack);
@@ -77,18 +79,29 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
         });
   }
 
-  private DatabaseReference getDatabaseReference(MapsViewModel mapsViewModel) {
-    return FirebaseDatabase.getInstance()
-        .getReference()
-        .child(GAME_MAPS)
-        .child(mapsViewModel.getGameModel().getId())
-        .orderByChild(FireBaseUtils.DATE_CREATE)
-        .getRef();
+  @Override public void changeMapVisibility(MapModel mapModel, boolean isChecked) {
+    mapsInteractor.changeMapVisibility(mapModel, isChecked);
+  }
+
+  private Query getDatabaseQuery(MapsViewModel mapsViewModel) {
+    if (viewModel.isMaster()) {
+      return FirebaseDatabase.getInstance()
+          .getReference()
+          .child(GAME_MAPS)
+          .child(mapsViewModel.getGameModel().getId());
+    } else {
+      return FirebaseDatabase.getInstance()
+          .getReference()
+          .child(GAME_MAPS)
+          .child(mapsViewModel.getGameModel().getId())
+          .orderByChild(VISIBLE)
+          .equalTo(true);
+    }
   }
 
   private void initUpdates() {
     if (firebaseArray == null) {
-      firebaseArray = new MyFireBaseAdapter.FirebaseArray(getDatabaseReference(viewModel));
+      firebaseArray = new MyFireBaseAdapter.FirebaseArray(getDatabaseQuery(viewModel));
       List<MapModel> mapModels = viewModel.getMapModels();
       firebaseArray.setOnChangedListener(new MyFireBaseAdapter.FirebaseArray.OnChangedListener() {
         @Override public void onChanged(EventType type, int index, int oldIndex) {

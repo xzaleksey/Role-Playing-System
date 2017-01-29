@@ -22,7 +22,7 @@ public abstract class BaseGameTEditInteractorImpl<T extends HasId>
 
   @Override public Observable<List<T>> getValuesByGameModel(GameModel gameModel) {
     DatabaseReference reference = getDatabaseReference(gameModel);
-    return FireBaseUtils.checkReferenceExists(reference).switchMap(aBoolean -> {
+    return FireBaseUtils.checkReferenceExistsAndNotEmpty(reference).switchMap(aBoolean -> {
       if (!aBoolean) {
         return Observable.just(new ArrayList<>());
       } else {

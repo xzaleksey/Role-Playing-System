@@ -4,6 +4,7 @@ import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.core.proxy.AdapterNotifierCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter.MapsPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
@@ -32,5 +33,9 @@ import javax.inject.Inject;
 
   @Override public void uploadImage(ChosenImage chosenImage) {
     presenter.uploadImage(chosenImage);
+  }
+
+  @Override public void changeMapVisibility(MapModel mapModel, boolean isChecked) {
+    presenter.changeMapVisibility(mapModel, isChecked);
   }
 }

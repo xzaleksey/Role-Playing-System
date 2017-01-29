@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
@@ -61,11 +60,12 @@ public class MapsFragment
     super.onCreate(savedInstanceState);
     imagePicker = new ImagePicker(this);
     imagePicker.setImagePickerCallback(getImagePickerCallback());
-    mapAdapter = new MapAdapter(new ArrayList<>());
+    mapAdapter = new MapAdapter(new ArrayList<>(), false, getComponent().getPresenter());
   }
 
   @Override public void setupViews(View view) {
     super.setupViews(view);
+    fab.setVisibility(View.GONE);
     fab.setOnClickListener(v -> imagePicker.pickImage());
     recyclerView.setAdapter(mapAdapter);
     ((LinearLayoutManager) recyclerView.getLayoutManager()).setReverseLayout(true);
@@ -89,6 +89,10 @@ public class MapsFragment
 
   @Override public void showContent() {
     super.showContent();
+    if (data.isMaster()) {
+      mapAdapter.setIsMaster(true);
+      fab.setVisibility(View.VISIBLE);
+    }
     mapAdapter.update(data.getMapModels());
   }
 

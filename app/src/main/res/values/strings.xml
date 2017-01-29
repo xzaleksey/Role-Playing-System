@@ -58,5 +58,7 @@
   <string name="fail">Fail</string>
   <string name="maps">Maps</string>
   <string name="error">Error</string>
+  <string name="all">All</string>
+  <string name="only_master">Master only</string>
 
 </resources>

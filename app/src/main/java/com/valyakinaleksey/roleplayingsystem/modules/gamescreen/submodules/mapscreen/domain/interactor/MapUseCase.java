@@ -54,5 +54,11 @@ public class MapUseCase implements MapsInteractor {
       });
     });
   }
+
+  @Override public void changeMapVisibility(MapModel mapModel, boolean isChecked) {
+    getReference(mapModel.getGameId()).child(mapModel.getId())
+        .child(FireBaseUtils.VISIBLE)
+        .setValue(isChecked);
+  }
 }
       

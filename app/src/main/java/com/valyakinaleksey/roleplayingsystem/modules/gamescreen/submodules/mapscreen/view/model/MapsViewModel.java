@@ -16,6 +16,7 @@ public class MapsViewModel extends BaseEmptyViewModel
 
   private GameModel gameModel;
   private transient List<MapModel> mapModels;
+  private boolean isMaster;
 
   public MapsViewModel() {
     mapModels = new ArrayList<>();
@@ -41,6 +42,14 @@ public class MapsViewModel extends BaseEmptyViewModel
     return mapModels.isEmpty();
   }
 
+  public boolean isMaster() {
+    return isMaster;
+  }
+
+  public void setMaster(boolean master) {
+    isMaster = master;
+  }
+
   @Override public int describeContents() {
     return 0;
   }
@@ -48,13 +57,13 @@ public class MapsViewModel extends BaseEmptyViewModel
   @Override public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeParcelable(this.gameModel, flags);
-    dest.writeTypedList(this.mapModels);
+    dest.writeByte(this.isMaster ? (byte) 1 : (byte) 0);
   }
 
   protected MapsViewModel(Parcel in) {
     super(in);
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
-    this.mapModels = in.createTypedArrayList(MapModel.CREATOR);
+    this.isMaster = in.readByte() != 0;
   }
 
   public static final Creator<MapsViewModel> CREATOR = new Creator<MapsViewModel>() {

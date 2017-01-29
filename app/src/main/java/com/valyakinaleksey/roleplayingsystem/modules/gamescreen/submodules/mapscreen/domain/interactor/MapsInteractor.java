@@ -7,5 +7,7 @@ import rx.Observable;
 
 public interface MapsInteractor {
   Observable<MapModel> createNewMap(GameModel gameModel, ChosenFile chosenFile);
+
+  void changeMapVisibility(MapModel mapModel, boolean isChecked);
 }
       

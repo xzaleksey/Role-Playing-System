@@ -48,5 +48,7 @@
     <string name="fail">Не удалось загрузить файл</string>
     <string name="maps">Карты</string>
     <string name="error">Ошибка</string>
+    <string name="all">Все</string>
+    <string name="only_master">Только мастер</string>
 
 </resources>

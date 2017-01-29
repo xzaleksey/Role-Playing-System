@@ -37,7 +37,7 @@ public class MasterLogPresenterImpl extends BasePresenter<MasterLogView, MasterL
     view.setData(viewModel);
     view.showContent();
     view.showLoading();
-    compositeSubscription.add(FireBaseUtils.checkReferenceExists(
+    compositeSubscription.add(FireBaseUtils.checkReferenceExistsAndNotEmpty(
         FireBaseUtils.getTableReference(GAME_LOG).child(viewModel.getGameModel().getId()))
         .compose(RxTransformers.applySchedulers())
         .subscribe(exists -> {

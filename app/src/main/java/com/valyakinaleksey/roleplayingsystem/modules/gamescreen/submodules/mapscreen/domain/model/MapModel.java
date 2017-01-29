@@ -9,6 +9,10 @@ import com.google.firebase.database.PropertyName;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.kelvinapps.rxfirebase.RxFirebaseStorage;
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
+import java.io.File;
 import java.io.Serializable;
 import rx.Observable;
 
@@ -106,6 +110,19 @@ public class MapModel implements Serializable, Parcelable {
         .child(fileName));
   }
 
+  @Exclude public File getLocalFile() {
+    return new File(StorageUtils.getCacheDirectory()
+        .concat(StringUtils.formatWithSlashes(FireBaseUtils.GAME_MAPS))
+        .concat(gameId)
+        .concat("/")
+        .concat(id)
+        .concat("/")
+        .concat(fileName));
+  }
+
+  /**
+   * Default constructor for mapping
+   */
   public MapModel() {
   }
 

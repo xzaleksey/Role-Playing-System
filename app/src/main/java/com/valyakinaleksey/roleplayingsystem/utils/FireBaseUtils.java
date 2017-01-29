@@ -5,6 +5,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import com.google.firebase.database.Query;
 import java.util.concurrent.TimeUnit;
 import rx.Observable;
 
@@ -24,6 +25,7 @@ public class FireBaseUtils {
   public static final String TIMESTAMP = "timestamp";
   public static final String ALL = "all";
   public static final String STATUS = "status";
+  public static final String VISIBLE = "visible";
 
   //Tables
   public static final String USERS = "users";
@@ -60,10 +62,10 @@ public class FireBaseUtils {
         .map(DataSnapshot::exists);
   }
 
-  public static Observable<Boolean> checkReferenceExists(DatabaseReference databaseReference) {
+  public static Observable<Boolean> checkReferenceExistsAndNotEmpty(Query query) {
     return RxFirebaseDatabase.getInstance()
-        .observeSingleValue(databaseReference)
-        .map(DataSnapshot::exists);
+        .observeSingleValue(query)
+        .map(dataSnapshot -> dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0);
   }
 
   public static DatabaseReference getTableReference(String name) {

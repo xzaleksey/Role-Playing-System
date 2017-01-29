@@ -157,7 +157,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
     view.showContent();
     view.showLoading();
     compositeSubscription.add(
-        FireBaseUtils.checkReferenceExists(FireBaseUtils.getTableReference(GAMES))
+        FireBaseUtils.checkReferenceExistsAndNotEmpty(FireBaseUtils.getTableReference(GAMES))
             .subscribe(exists -> {
               if (!exists) {
                 view.hideLoading();
