@@ -102,6 +102,8 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       File localFile = mapModel.getLocalFile();
       if (localFile.exists() && Uri.fromFile(localFile).equals(this.uri)) {
         return;
+      } else {
+        ivMap.setImageDrawable(null);
       }
       subscription = Observable.just(localFile.exists()).switchMap(exists -> {
         if (exists) { // load from local storage

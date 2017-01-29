@@ -74,7 +74,6 @@ public class MapsFragment
     recyclerView.setLayoutManager(gridLayoutManager);
     recyclerView.addItemDecoration(
         new ItemOffsetDecoration(getContext(), R.dimen.common_margin_between_elements));
-    gridLayoutManager.setReverseLayout(true);
   }
 
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
