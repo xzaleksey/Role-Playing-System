@@ -9,6 +9,10 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 
 public class FireBaseUtils {
+  public static final int IN_PROGRESS = 0;
+  public static final int ERROR = -1;
+  public static final int SUCCESS = 1;
+
   //Fields
   public static final String ID = "id";
   public static final String UID = "uid";
@@ -19,6 +23,7 @@ public class FireBaseUtils {
   public static final String FIELD_DESCRIPTION = "description";
   public static final String TIMESTAMP = "timestamp";
   public static final String ALL = "all";
+  public static final String STATUS = "status";
 
   //Tables
   public static final String USERS = "users";

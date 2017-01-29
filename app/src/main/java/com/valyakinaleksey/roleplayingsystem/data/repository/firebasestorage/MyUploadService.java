@@ -15,6 +15,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.data.repository.maps.MapsRepository;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
@@ -43,58 +44,36 @@ public class MyUploadService extends MyBaseTaskService {
   @Inject MapsRepository mapsRepository;
 
   public MyUploadService() {
-    super(MyUploadService.class.getSimpleName());
   }
-  // [END declare_ref]
 
   @Override public void onCreate() {
     super.onCreate();
+
     RpsApp.getAppComponent(RpsApp.app()).inject(this);
   }
 
-  @Override protected void onHandleIntent(Intent intent) {
-
-  }
-
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
-    Timber.d("onStartCommand:" + intent + ":" + startId);
     if (ACTION_UPLOAD.equals(intent.getAction())) {
       switch (intent.getStringExtra(REPOSITORY_TYPE)) {
         case MapsRepository.MAP_REPOSOTORY:
           Uri fileUri = intent.getParcelableExtra(EXTRA_FILE_URI);
           String gameId = intent.getStringExtra(FireBaseUtils.ID);
           String mapId = intent.getStringExtra(MapModel.MAP_MODEL_ID);
-          mapsRepository.uploadMapToFirebase(fileUri, gameId, mapId);
+          mapsRepository.uploadMapToFirebase(fileUri, gameId, mapId)
+              .compose(RxTransformers.applyIoSchedulers())
+              .doOnSubscribe(this::taskStarted)
+              .subscribe(integer -> {
+                taskCompleted();
+              });
           break;
       }
     }
-
     return START_REDELIVER_INTENT;
   }
 
-  /**
-   * Show a notification for a finished upload.
-   */
-  private void showUploadFinishedNotification(@Nullable Uri downloadUrl, @Nullable Uri fileUri) {
-    // Hide the progress notification
-    dismissProgressNotification();
-
-    // Make Intent to MainActivity
-    Intent intent = new Intent(this, ParentActivity.class).putExtra(EXTRA_DOWNLOAD_URL, downloadUrl)
-        .putExtra(EXTRA_FILE_URI, fileUri)
-        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-    boolean success = downloadUrl != null;
-    String caption = success ? getString(R.string.success) : getString(R.string.fail);
-    showFinishedNotification(caption, intent, success);
-  }
-
-  public static IntentFilter getIntentFilter() {
-    IntentFilter filter = new IntentFilter();
-    filter.addAction(UPLOAD_COMPLETED);
-    filter.addAction(UPLOAD_ERROR);
-
-    return filter;
+  @Override public void onDestroy() {
+    Timber.d("OnDestroy Service");
+    super.onDestroy();
   }
 
   // [END upload_from_uri]

@@ -9,6 +9,6 @@ public interface MapsRepository {
 
   Observable<File> createLocalFileCopy(String gameId, String key, File file);
 
-  void uploadMapToFirebase(Uri fileUri, String gameId, String mapId);
+  Observable<Integer> uploadMapToFirebase(Uri fileUri, String gameId, String mapId);
 }
       

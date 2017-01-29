@@ -14,12 +14,10 @@ import rx.Observable;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.DATE_CREATE;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_MAPS;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.IN_PROGRESS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
 
 public class MapModel implements Serializable, Parcelable {
-  public static final int IN_PROGRESS = 0;
-  public static final int ERROR = -1;
-  public static final int SUCCESS = 1;
   public static final String MAP_MODEL_ID = "map_model_id";
 
   private String id;
@@ -141,5 +139,18 @@ public class MapModel implements Serializable, Parcelable {
       return new MapModel[size];
     }
   };
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof MapModel)) return false;
+
+    MapModel mapModel = (MapModel) o;
+
+    return getId() != null ? getId().equals(mapModel.getId()) : mapModel.getId() == null;
+  }
+
+  @Override public int hashCode() {
+    return getId() != null ? getId().hashCode() : 0;
+  }
 }
       

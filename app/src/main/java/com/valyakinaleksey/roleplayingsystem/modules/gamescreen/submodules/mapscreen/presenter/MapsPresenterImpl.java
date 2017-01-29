@@ -66,7 +66,7 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
         .compose(RxTransformers.applySchedulers())
         .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
         .subscribe(mapModel -> {
-          Timber.d("success");
+          Timber.d("success map create");
         }, throwable -> {
           if (view != null) {
 

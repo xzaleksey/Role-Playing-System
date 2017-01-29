@@ -14,22 +14,9 @@ import timber.log.Timber;
  * Base class for Services that keep track of the number of active jobs and self-stop when the
  * count is zero.
  */
-public abstract class MyBaseTaskService extends IntentService {
+public abstract class MyBaseTaskService extends Service {
 
-  static final int PROGRESS_NOTIFICATION_ID = 0;
-  static final int FINISHED_NOTIFICATION_ID = 1;
-
-  private static final String TAG = "MyBaseTaskService";
   private int mNumTasks = 0;
-
-  /**
-   * Creates an IntentService.  Invoked by your subclass's constructor.
-   *
-   * @param name Used to name the worker thread, important only for debugging.
-   */
-  public MyBaseTaskService(String name) {
-    super(name);
-  }
 
   public void taskStarted() {
     changeNumberOfTasks(1);
@@ -48,61 +35,6 @@ public abstract class MyBaseTaskService extends IntentService {
       Timber.d("stopping");
       stopSelf();
     }
-  }
-
-  /**
-   * Show notification with a progress bar.
-   */
-  protected void showProgressNotification(String caption, long completedUnits, long totalUnits) {
-    int percentComplete = 0;
-    if (totalUnits > 0) {
-      percentComplete = (int) (100 * completedUnits / totalUnits);
-    }
-
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setSmallIcon(
-        R.drawable.quantum_ic_play_circle_filled_grey600_36)
-        .setContentTitle(getString(R.string.app_name))
-        .setContentText(caption)
-        .setProgress(100, percentComplete, false)
-        .setOngoing(true)
-        .setAutoCancel(false);
-
-    NotificationManager manager =
-        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-    manager.notify(PROGRESS_NOTIFICATION_ID, builder.build());
-  }
-
-  /**
-   * Show notification that the activity finished.
-   */
-  protected void showFinishedNotification(String caption, Intent intent, boolean success) {
-    // Make PendingIntent for notification
-    PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* requestCode */, intent,
-        PendingIntent.FLAG_UPDATE_CURRENT);
-
-    int icon = success ? R.drawable.ic_done_black_24dp : R.drawable.ic_cast_disabled_light;
-
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setSmallIcon(icon)
-        .setContentTitle(getString(R.string.app_name))
-        .setContentText(caption)
-        .setAutoCancel(true)
-        .setContentIntent(pendingIntent);
-
-    NotificationManager manager =
-        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-    manager.notify(FINISHED_NOTIFICATION_ID, builder.build());
-  }
-
-  /**
-   * Dismiss the progress notification.
-   */
-  protected void dismissProgressNotification() {
-    NotificationManager manager =
-        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-    manager.cancel(PROGRESS_NOTIFICATION_ID);
   }
 }
       
