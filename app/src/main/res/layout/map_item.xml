@@ -35,10 +35,11 @@
           android:layout_height="@dimen/icon_minimum_size"
           android:layout_alignParentEnd="true"
           android:layout_alignParentRight="true"
+          android:layout_marginBottom="@dimen/common_margin_between_elements"
           android:background="?attr/selectableItemBackgroundBorderless"
           android:scaleType="centerCrop"
           android:tint="@color/colorTextSecondary"
-          android:visibility="invisible"
+          android:visibility="gone"
           app:srcCompat="@drawable/ic_delete_black_24dp"
           tools:visibility="visible"
           />
@@ -46,6 +47,7 @@
           android:id="@+id/tv_name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/common_margin_between_elements"
           android:layout_toLeftOf="@+id/iv_delete"
           android:layout_toStartOf="@+id/iv_delete"
           android:singleLine="true"
@@ -58,11 +60,11 @@
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_below="@+id/iv_delete"
-          android:layout_marginTop="@dimen/common_margin_between_elements"
           android:background="@color/colorDivider"
           />
 
       <RelativeLayout
+          android:id="@+id/bottom_container"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/divider"

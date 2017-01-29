@@ -67,6 +67,8 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Bind(R.id.switcher) SwitchCompat switchCompat;
     @Bind(R.id.tv_name) TextView tvName;
     @Bind(R.id.iv_delete) ImageView ivDelete;
+    @Bind(R.id.divider) View divider;
+    @Bind(R.id.bottom_container) View bottomContainer;
     private Uri uri;
 
     public MapViewHolder(View itemView) {
@@ -93,7 +95,9 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         });
       } else {
-        switchCompat.setEnabled(false);
+        ivDelete.setVisibility(View.GONE);
+        bottomContainer.setVisibility(View.GONE);
+        divider.setVisibility(View.GONE);
       }
       tvName.setText(mapModel.getFileName());
       if (subscription != null) {
