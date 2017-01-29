@@ -4,6 +4,7 @@
   <dimen name="activity_vertical_margin">16dp</dimen>
   <dimen name="common_radius">4dp</dimen>
   <dimen name="common_margin_between_elements">8dp</dimen>
+  <dimen name="half_common_margin">4dp</dimen>
 
   <!-- Login -->
   <dimen name="login_vertical_margin">40dp</dimen>
@@ -16,4 +17,8 @@
 
   <!-- text sizes-->
   <dimen name="expanded_title_size">15sp</dimen>
+  <dimen name="map_width">156dp</dimen>
+
+  <!-- icons -->
+  <dimen name="icon_minimum_size">18dp</dimen>
 </resources>

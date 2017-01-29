@@ -1,47 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:id="@+id/card_view"
+    android:layout_width="@dimen/map_width"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/common_margin_between_elements"
-    android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
-    android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
-    android:paddingTop="@dimen/common_margin_between_elements"
+    android:layout_gravity="center"
+    app:cardCornerRadius="2dp"
     >
-  <android.support.v7.widget.SwitchCompat
-      android:id="@+id/switcher"
-      android:layout_width="wrap_content"
+  <RelativeLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      android:layout_marginLeft="@dimen/common_margin_between_elements"
-      android:layout_marginStart="@dimen/common_margin_between_elements"
-      android:visibility="gone"
-      tools:visibility="visible"
-      />
-  <TextView
-      android:id="@+id/checkbox_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerVertical="true"
-      android:layout_toLeftOf="@+id/switcher"
-      android:layout_toStartOf="@+id/switcher"
-      android:visibility="gone"
-      tools:text="only master"
-      tools:visibility="visible"
-      />
-  <android.support.v7.widget.AppCompatImageView
-      android:id="@+id/icon"
-      android:layout_width="wrap_content"
-      android:layout_height="100dp"
-      android:layout_alignParentLeft="true"
-      android:layout_alignParentStart="true"
-      android:layout_toLeftOf="@+id/checkbox_text"
-      android:layout_toStartOf="@+id/checkbox_text"
-      android:scaleType="fitStart"
-      tools:src="@drawable/ic_done_black_24dp"
-      />
+      >
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/icon"
+        android:layout_width="match_parent"
+        android:layout_height="132dp"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/ic_done_black_24dp"
+        />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/icon"
+        android:paddingLeft="@dimen/common_margin_between_elements"
+        android:paddingRight="@dimen/common_margin_between_elements"
+        android:paddingTop="@dimen/common_margin_between_elements"
+        >
 
-</RelativeLayout>
+      <android.support.v7.widget.AppCompatImageView
+          android:id="@+id/iv_delete"
+          android:layout_width="@dimen/icon_minimum_size"
+          android:layout_height="@dimen/icon_minimum_size"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:background="?attr/selectableItemBackgroundBorderless"
+          android:scaleType="centerCrop"
+          android:tint="@color/colorTextSecondary"
+          android:visibility="invisible"
+          app:srcCompat="@drawable/ic_delete_black_24dp"
+          tools:visibility="visible"
+          />
+      <TextView
+          android:id="@+id/tv_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_toLeftOf="@+id/iv_delete"
+          android:layout_toStartOf="@+id/iv_delete"
+          android:singleLine="true"
+          android:textColor="@color/colorTextPrimary"
+          android:textSize="@dimen/material_component_lists_two_line_secondary_text_size"
+          tools:text="Nameewwew weewew ewwew"
+          />
+      <View
+          android:id="@+id/divider"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_below="@+id/iv_delete"
+          android:layout_marginTop="@dimen/common_margin_between_elements"
+          android:background="@color/colorDivider"
+          />
+
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/divider"
+          >
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="@dimen/half_common_margin"
+            android:layout_marginLeft="@dimen/half_common_margin"
+            android:layout_marginRight="@dimen/half_common_margin"
+            android:layout_marginStart="@dimen/half_common_margin"
+            tools:visibility="visible"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/common_margin_between_elements"
+            android:layout_toLeftOf="@+id/switcher"
+            android:layout_toStartOf="@+id/switcher"
+            android:text="@string/master"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="11sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/switcher"
+            android:layout_toRightOf="@+id/switcher"
+            android:text="@string/game_players"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="11sp"
+            />
+      </RelativeLayout>
+
+    </RelativeLayout>
+  </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -42,7 +42,9 @@ public class MapsRepositoryImpl implements MapsRepository {
           .concat("/")
           .concat(key);
       Compressor compressor =
-          new Compressor.Builder(RpsApp.app()).setDestinationDirectoryPath(newDirectory).build();
+          new Compressor.Builder(RpsApp.app()).setDestinationDirectoryPath(newDirectory)
+              .setQuality(100)
+              .build();
       return compressor.compressToFile(file);
     });
   }

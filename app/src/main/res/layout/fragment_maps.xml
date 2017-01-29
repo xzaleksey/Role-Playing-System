@@ -12,8 +12,10 @@
       android:id="@+id/recycler_view"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:clipToPadding="false"
+      android:paddingLeft="@dimen/common_margin_between_elements"
+      android:paddingRight="@dimen/common_margin_between_elements"
       android:scrollbars="vertical"
-      app:layoutManager="android.support.v7.widget.LinearLayoutManager"
       />
 
 
