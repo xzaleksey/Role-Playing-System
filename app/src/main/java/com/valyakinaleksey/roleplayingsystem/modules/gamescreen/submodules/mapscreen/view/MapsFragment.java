@@ -73,9 +73,9 @@ public class MapsFragment
     recyclerView.setAdapter(mapAdapter);
     GridLayoutManager gridLayoutManager;
     if (ScreenUtils.getScreenOrientation(getActivity()) == Configuration.ORIENTATION_LANDSCAPE) {
-      gridLayoutManager = new GridLayoutManager(getContext(), 3);
+      gridLayoutManager = new GridLayoutManager(getContext(), MapAdapter.COLUMSN_COUNT_LANDSCAPE);
     } else {
-      gridLayoutManager = new GridLayoutManager(getContext(), 2);
+      gridLayoutManager = new GridLayoutManager(getContext(), MapAdapter.COLUMSN_COUNT);
     }
     recyclerView.setLayoutManager(gridLayoutManager);
     recyclerView.addItemDecoration(

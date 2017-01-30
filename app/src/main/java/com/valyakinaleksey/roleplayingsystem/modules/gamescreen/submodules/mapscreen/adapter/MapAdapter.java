@@ -30,6 +30,8 @@ import rx.Subscription;
 import timber.log.Timber;
 
 public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+  public static final int COLUMSN_COUNT = 2;
+  public static final int COLUMSN_COUNT_LANDSCAPE = 3;
   private List<MapModel> mapModels;
   private boolean isMaster = false;
   private MapsPresenter mapsPresenter;
@@ -75,11 +77,11 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public MapViewHolder(View itemView) {
       super(itemView);
       Context context = itemView.getContext();
-      int countOfPaddings = 6;
-      int countOfColumns = 2;
+      int countOfPaddings = 2 + 2 * COLUMSN_COUNT;
+      int countOfColumns = COLUMSN_COUNT;
       if (ScreenUtils.getScreenOrientation(context) == Configuration.ORIENTATION_LANDSCAPE) {
-        countOfPaddings = 8;
-        countOfColumns = 3;
+        countOfPaddings = 2 + 2 * COLUMSN_COUNT_LANDSCAPE;
+        countOfColumns = COLUMSN_COUNT_LANDSCAPE;
       }
       int param =
           (ScreenUtils.getDisplayWidth(context) - (ScreenUtils.getDimensionSizeFromResources(
