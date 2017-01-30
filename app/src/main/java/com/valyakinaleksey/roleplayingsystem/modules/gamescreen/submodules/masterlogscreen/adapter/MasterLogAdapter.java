@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.MyFireBaseAdapter;
+import com.valyakinaleksey.roleplayingsystem.core.model.DataEvent;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.AddItemViewHolder;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ExpandableTitleViewHolder;
@@ -35,7 +36,7 @@ public class MasterLogAdapter extends MyFireBaseAdapter<MasterLogMessage> {
   public MasterLogAdapter(Query ref) {
     super(ref, MasterLogMessage.class);
     setOnChangedListener(new FirebaseArray.OnChangedListener() {
-      @Override public void onChanged(EventType type, int index, int oldIndex) {
+      @Override public void onChanged(DataEvent.EventType type, int index, int oldIndex) {
         switch (type) {
           case REMOVED:
             if (getItemCount() > index + 1) {

@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.adapter;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -74,9 +75,15 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public MapViewHolder(View itemView) {
       super(itemView);
       Context context = itemView.getContext();
+      int countOfPaddings = 6;
+      int countOfColumns = 2;
+      if (ScreenUtils.getScreenOrientation(context) == Configuration.ORIENTATION_LANDSCAPE) {
+        countOfPaddings = 8;
+        countOfColumns = 3;
+      }
       int param =
           (ScreenUtils.getDisplayWidth(context) - (ScreenUtils.getDimensionSizeFromResources(
-              context, R.dimen.common_margin_between_elements) * 6)) / 2;
+              context, R.dimen.common_margin_between_elements) * countOfPaddings)) / countOfColumns;
       itemView.getLayoutParams().width = param;
       ivMap.getLayoutParams().height = param;
     }

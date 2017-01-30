@@ -14,64 +14,59 @@ import java.util.Map;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.UID;
 
 public class UserInGameModel implements Serializable {
-    public static final String FIELD_NAME = "name";
+  public static final String FIELD_NAME = "name";
 
-    @PropertyName(UID)
-    private String uid;
-    @PropertyName(FIELD_NAME)
-    private String name;
+  private String uid;
+  private String name;
 
-    @Exclude
-    private User user;
-    @Exclude
-    private FirebaseChildEvent.EventType eventType;
+  @Exclude private User user;
+  @Exclude private FirebaseChildEvent.EventType eventType;
 
-    public UserInGameModel() {
-    }
+  public UserInGameModel() {
+  }
 
-    public UserInGameModel(String uid, String name) {
-        this.uid = uid;
-        this.name = name;
-    }
+  public UserInGameModel(String uid, String name) {
+    this.uid = uid;
+    this.name = name;
+  }
 
-    public User getUser() {
-        return user;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-    public FirebaseChildEvent.EventType getEventType() {
-        return eventType;
-    }
+  @Exclude public FirebaseChildEvent.EventType getEventType() {
+    return eventType;
+  }
 
-    public void setEventType(FirebaseChildEvent.EventType eventType) {
-        this.eventType = eventType;
-    }
+  @Exclude public void setEventType(FirebaseChildEvent.EventType eventType) {
+    this.eventType = eventType;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getUid() {
-        return uid;
-    }
+  public String getUid() {
+    return uid;
+  }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+  public void setUid(String uid) {
+    this.uid = uid;
+  }
 
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new LinkedHashMap<>();
-        result.put(UID, uid);
-        result.put(FIELD_NAME, name);
-        return result;
-    }
+  @Exclude public Map<String, Object> toMap() {
+    HashMap<String, Object> result = new LinkedHashMap<>();
+    result.put(UID, uid);
+    result.put(FIELD_NAME, name);
+    return result;
+  }
 }
       

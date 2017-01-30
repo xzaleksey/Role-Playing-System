@@ -9,6 +9,7 @@ import com.google.firebase.database.Query;
 import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.MyFireBaseAdapter;
+import com.valyakinaleksey.roleplayingsystem.core.model.DataEvent;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
@@ -104,7 +105,7 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
       firebaseArray = new MyFireBaseAdapter.FirebaseArray(getDatabaseQuery(viewModel));
       List<MapModel> mapModels = viewModel.getMapModels();
       firebaseArray.setOnChangedListener(new MyFireBaseAdapter.FirebaseArray.OnChangedListener() {
-        @Override public void onChanged(EventType type, int index, int oldIndex) {
+        @Override public void onChanged(DataEvent.EventType type, int index, int oldIndex) {
           switch (type) {
             case ADDED:
               if (index == 0) {

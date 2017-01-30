@@ -4,28 +4,32 @@ import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.valyakinaleksey.roleplayingsystem.core.model.DataEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public interface InfoSection<T extends Serializable> extends Serializable, Parcelable {
-	int getSectionType();
+  int getSectionType();
 
-	boolean isActive();
+  boolean isActive();
 
-	void setActive(boolean active);
+  void setActive(boolean active);
 
-	ArrayList<T> getData();
+  void setTitle(String title);
 
-	void setData(ArrayList<T> data);
+  ArrayList<T> getData();
 
-	String getTitle();
+  void setData(ArrayList<T> data);
 
-	int getItemCount();
+  String getTitle();
 
-	RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType);
+  int getItemCount();
 
-	void onBindViewHolder(RecyclerView.ViewHolder holder, int position, RecyclerView.Adapter adapter);
+  RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType);
 
-	int getItemViewType(int position);
+  void onBindViewHolder(RecyclerView.ViewHolder holder, int position, RecyclerView.Adapter adapter);
 
+  int getItemViewType(int position);
+
+  void update(RecyclerView.Adapter sectionsAdapter, int sectionPosition, DataEvent dataEvent);
 }

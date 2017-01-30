@@ -8,9 +8,11 @@ import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.model.DataEvent;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.DaggerGamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.GamesDescriptionComponent;
@@ -83,5 +85,11 @@ public class GamesDescriptionFragment extends
   @Override public void updateView() {
     ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
     sectionsAdapter.notifyDataSetChanged();
+  }
+
+  @Override public void updateView(InfoSection userInfosection, DataEvent dataEvent) {
+    if (sectionsAdapter != null) {
+      sectionsAdapter.updateSection(userInfosection, dataEvent);
+    }
   }
 }

@@ -1,11 +1,11 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import autodagger.AutoComponent;
@@ -24,6 +24,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.MapsModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
+import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.decor.ItemOffsetDecoration;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,12 @@ public class MapsFragment
     fab.setVisibility(View.GONE);
     fab.setOnClickListener(v -> imagePicker.pickImage());
     recyclerView.setAdapter(mapAdapter);
-    GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+    GridLayoutManager gridLayoutManager;
+    if (ScreenUtils.getScreenOrientation(getActivity()) == Configuration.ORIENTATION_LANDSCAPE) {
+      gridLayoutManager = new GridLayoutManager(getContext(), 3);
+    } else {
+      gridLayoutManager = new GridLayoutManager(getContext(), 2);
+    }
     recyclerView.setLayoutManager(gridLayoutManager);
     recyclerView.addItemDecoration(
         new ItemOffsetDecoration(getContext(), R.dimen.common_margin_between_elements));

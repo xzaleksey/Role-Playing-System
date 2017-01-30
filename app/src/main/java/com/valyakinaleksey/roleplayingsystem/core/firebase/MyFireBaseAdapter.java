@@ -6,9 +6,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.valyakinaleksey.roleplayingsystem.core.model.DataEvent;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
+
+import static com.valyakinaleksey.roleplayingsystem.core.model.DataEvent.*;
+import static com.valyakinaleksey.roleplayingsystem.core.model.DataEvent.EventType.CHANGED;
 
 public abstract class MyFireBaseAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private FirebaseArray mSnapshots;
@@ -71,7 +75,6 @@ public abstract class MyFireBaseAdapter<T> extends RecyclerView.Adapter<Recycler
 
   public static class FirebaseArray implements ChildEventListener {
     public interface OnChangedListener {
-      enum EventType {ADDED, CHANGED, REMOVED, MOVED}
 
       void onChanged(EventType type, int index, int oldIndex);
 
@@ -117,19 +120,19 @@ public abstract class MyFireBaseAdapter<T> extends RecyclerView.Adapter<Recycler
         index = getIndexForKey(previousChildKey) + 1;
       }
       mSnapshots.add(index, snapshot);
-      notifyChangedListeners(OnChangedListener.EventType.ADDED, index);
+      notifyChangedListeners(EventType.ADDED, index);
     }
 
     @Override public void onChildChanged(DataSnapshot snapshot, String previousChildKey) {
       int index = getIndexForKey(snapshot.getKey());
       mSnapshots.set(index, snapshot);
-      notifyChangedListeners(OnChangedListener.EventType.CHANGED, index);
+      notifyChangedListeners(CHANGED, index);
     }
 
     @Override public void onChildRemoved(DataSnapshot snapshot) {
       int index = getIndexForKey(snapshot.getKey());
       mSnapshots.remove(index);
-      notifyChangedListeners(OnChangedListener.EventType.REMOVED, index);
+      notifyChangedListeners(EventType.REMOVED, index);
     }
 
     @Override public void onChildMoved(DataSnapshot snapshot, String previousChildKey) {
@@ -137,7 +140,7 @@ public abstract class MyFireBaseAdapter<T> extends RecyclerView.Adapter<Recycler
       mSnapshots.remove(oldIndex);
       int newIndex = previousChildKey == null ? 0 : (getIndexForKey(previousChildKey) + 1);
       mSnapshots.add(newIndex, snapshot);
-      notifyChangedListeners(OnChangedListener.EventType.MOVED, newIndex, oldIndex);
+      notifyChangedListeners(EventType.MOVED, newIndex, oldIndex);
     }
 
     @Override public void onCancelled(DatabaseError error) {
@@ -148,11 +151,11 @@ public abstract class MyFireBaseAdapter<T> extends RecyclerView.Adapter<Recycler
       mListener = listener;
     }
 
-    protected void notifyChangedListeners(OnChangedListener.EventType type, int index) {
+    protected void notifyChangedListeners(EventType type, int index) {
       notifyChangedListeners(type, index, -1);
     }
 
-    protected void notifyChangedListeners(OnChangedListener.EventType type, int index,
+    protected void notifyChangedListeners(EventType type, int index,
         int oldIndex) {
       if (mListener != null) {
         mListener.onChanged(type, index, oldIndex);

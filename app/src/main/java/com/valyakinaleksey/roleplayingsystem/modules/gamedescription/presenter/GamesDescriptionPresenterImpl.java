@@ -8,6 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasDescription;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasName;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.MaterialDrawableProviderImpl;
+import com.valyakinaleksey.roleplayingsystem.core.model.DataEvent;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
@@ -133,27 +134,42 @@ import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringB
     compositeSubscription.add(
         observeUsersInGameInteractor.observeUserJoinedToGame(viewModel.getGameModel().getId())
             .subscribe(userInGameModel -> {
+              InfoSection userInfosection = null;
               User userModel = userInGameModel.getUser();
               for (InfoSection infoSection : viewModel.getInfoSections()) {
                 if (infoSection.getSectionType() == ELEMENT_TYPE_USERS_EXPANDABLE) {
+                  userInfosection = infoSection;
                   ArrayList<AvatarWithTwoLineTextModel> data = infoSection.getData();
                   switch (userInGameModel.getEventType()) {
                     case ADDED:
                       addUser(data, userModel);
+                      infoSection.setTitle(
+                          formatWithCount(getStringById(R.string.game_players), data.size()));
+                      view.updateView(userInfosection,
+                          new DataEvent(DataEvent.EventType.ADDED, data.size()));
                       break;
                     case REMOVED:
-                      for (AvatarWithTwoLineTextModel avatarWithTwoLineTextModel : data) {
+                      int index = -1;
+                      AvatarWithTwoLineTextModel avatarWithTwoLineTextModel = null;
+                      for (int i = 0; i < data.size(); i++) {
+                        avatarWithTwoLineTextModel = data.get(i);
                         if (avatarWithTwoLineTextModel.getModel().equals(userModel)) {
-                          data.remove(avatarWithTwoLineTextModel);
+                          index = i;
                           break;
                         }
+                      }
+                      if (index >= 0) {
+                        data.remove(avatarWithTwoLineTextModel);
+                        infoSection.setTitle(
+                            formatWithCount(getStringById(R.string.game_players), data.size()));
+                        view.updateView(userInfosection,
+                            new DataEvent(DataEvent.EventType.REMOVED, index));
                       }
                       break;
                   }
                   break;
                 }
               }
-              view.updateView();
             }, Crashlytics::logException));
   }
 
