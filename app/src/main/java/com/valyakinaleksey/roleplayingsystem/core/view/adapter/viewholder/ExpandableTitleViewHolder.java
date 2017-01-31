@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder;
 
+import android.app.Activity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,6 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ExpandableSection
 
 import butterknife.Bind;
 import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
 public class ExpandableTitleViewHolder extends TitleViewHolder {
   @Bind(R.id.iv_icon) AppCompatImageView appCompatImageView;
@@ -31,6 +33,7 @@ public class ExpandableTitleViewHolder extends TitleViewHolder {
       if (expandableSection.isExpanded()) {
         int size = expandableSection.getItemCount() - 1;
         expandableSection.setExpanded(false);
+        KeyboardUtils.hideKeyboard((Activity) itemView.getContext());
         adapter.notifyItemRangeRemoved(positionStart, size);
       } else {
         expandableSection.setExpanded(true);
