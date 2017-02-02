@@ -12,4 +12,6 @@ public interface MapsPresenter extends Presenter<MapsView> {
     void uploadImage(ChosenImage chosenImage);
 
     void changeMapVisibility(MapModel mapModel, boolean isChecked);
+
+    void deleteMap(MapModel mapModel);
 }

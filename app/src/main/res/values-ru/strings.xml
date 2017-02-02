@@ -50,5 +50,6 @@
   <string name="error">Ошибка</string>
   <string name="all">Все</string>
   <string name="master">Мастер</string>
+  <string name="delete_map">Удалить карту</string>
 
 </resources>

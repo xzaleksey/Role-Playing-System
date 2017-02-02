@@ -20,6 +20,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
+import java.util.ArrayList;
 import java.util.List;
 import timber.log.Timber;
 
@@ -47,6 +48,7 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
   }
 
   @SuppressWarnings("unchecked") @Override public void getData() {
+    viewModel.setMapModels(new ArrayList<>());
     view.setData(viewModel);
     view.showContent();
     view.showLoading();
@@ -82,6 +84,14 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
 
   @Override public void changeMapVisibility(MapModel mapModel, boolean isChecked) {
     mapsInteractor.changeMapVisibility(mapModel, isChecked);
+  }
+
+  @Override public void deleteMap(MapModel mapModel) {
+    mapsInteractor.deleteMap(mapModel)
+        .compose(RxTransformers.applySchedulers())
+        .subscribe(aVoid -> {
+
+        }, this::handleThrowable);
   }
 
   private Query getDatabaseQuery(MapsViewModel mapsViewModel) {

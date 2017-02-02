@@ -13,6 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel
 import java.util.concurrent.TimeoutException;
 
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public abstract class BasePresenter<V extends LceView<DATA>, DATA extends EmptyViewModel>
     implements Presenter<V>, RestorablePresenter<DATA> {
@@ -65,6 +66,7 @@ public abstract class BasePresenter<V extends LceView<DATA>, DATA extends EmptyV
     } else {
       Crashlytics.logException(throwable);
     }
+    Timber.d(throwable);
     return false;
   }
 

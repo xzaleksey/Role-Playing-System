@@ -19,7 +19,6 @@ public class MapsViewModel extends BaseEmptyViewModel
   private boolean isMaster;
 
   public MapsViewModel() {
-    mapModels = new ArrayList<>();
   }
 
   public List<MapModel> getMapModels() {
@@ -39,7 +38,7 @@ public class MapsViewModel extends BaseEmptyViewModel
   }
 
   @Override public boolean isEmpty() {
-    return mapModels.isEmpty();
+    return mapModels == null;
   }
 
   public boolean isMaster() {

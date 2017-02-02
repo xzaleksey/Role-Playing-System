@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.data.repository.maps;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -20,6 +21,7 @@ import rx.subjects.PublishSubject;
 import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ERROR;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_MAPS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.STATUS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.SUCCESS;
 
@@ -36,11 +38,7 @@ public class MapsRepositoryImpl implements MapsRepository {
   @Override public Observable<File> createLocalFileCopy(String gameId, String key, File file) {
 
     return Observable.just(file).compose(RxTransformers.applyIoSchedulers()).map(file1 -> {
-      String newDirectory = pathManager.getCachePath()
-          .concat(StringUtils.formatWithSlashes(FireBaseUtils.GAME_MAPS))
-          .concat(gameId)
-          .concat("/")
-          .concat(key);
+      String newDirectory = getLocalDirectory(gameId, key);
       Compressor compressor =
           new Compressor.Builder(RpsApp.app()).setDestinationDirectoryPath(newDirectory)
               .setQuality(100)
@@ -51,7 +49,7 @@ public class MapsRepositoryImpl implements MapsRepository {
 
   @Override
   public Observable<Integer> uploadMapToFirebase(Uri fileUri, String gameId, String mapId) {
-    final StorageReference photoRef = storageReference.child(FireBaseUtils.GAME_MAPS)
+    final StorageReference photoRef = storageReference.child(GAME_MAPS)
         .child(gameId)
         .child(mapId)
         .child(fileUri.getLastPathSegment());
@@ -85,11 +83,29 @@ public class MapsRepositoryImpl implements MapsRepository {
     return integerPublishSubject;
   }
 
+  @Override public Observable<Void> deleteMap(String gameId, String mapId, String fileName) {
+    return RxFirebaseStorage.delete(
+        storageReference.child(GAME_MAPS).child(gameId).child(mapId).child(fileName))
+        .doOnNext(aVoid -> {
+          String newDirectory = getLocalDirectory(gameId, mapId);
+          File file = new File(newDirectory);
+          if (file.exists()) {
+            boolean success = file.delete();
+            Timber.d("delete local file success " + success);
+          }
+        });
+  }
+
   private DatabaseReference getReference(String gameModelId) {
-    return FirebaseDatabase.getInstance()
-        .getReference()
-        .child(FireBaseUtils.GAME_MAPS)
-        .child(gameModelId);
+    return FirebaseDatabase.getInstance().getReference().child(GAME_MAPS).child(gameModelId);
+  }
+
+  @NonNull private String getLocalDirectory(String gameId, String key) {
+    return pathManager.getCachePath()
+        .concat(StringUtils.formatWithSlashes(GAME_MAPS))
+        .concat(gameId)
+        .concat("/")
+        .concat(key);
   }
 }
       

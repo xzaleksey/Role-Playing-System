@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.utils.decor;
+package com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor;
 
 import android.content.Context;
 import android.graphics.Rect;

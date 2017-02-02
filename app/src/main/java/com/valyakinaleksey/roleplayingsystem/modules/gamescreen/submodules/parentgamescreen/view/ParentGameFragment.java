@@ -31,9 +31,14 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 import java.util.ArrayList;
 
 import butterknife.Bind;
+
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MAPS_FRAGMENT;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MASTER_EDIT_FRAGMENT;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MASTER_LOG_FRAGMENT;
 
 public class ParentGameFragment
     extends AbsButterLceFragment<ParentGameComponent, ParentGameModel, ParentView>
@@ -64,6 +69,7 @@ public class ParentGameFragment
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getComponent().inject(this);
+    adapter = new ViewPagerAdapter(getChildFragmentManager(), new ArrayList<>(), getArguments());
   }
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +82,6 @@ public class ParentGameFragment
     super.setupViews(view);
     tabLayout = ((TabLayout) getActivity().findViewById(R.id.tabs));
     tabLayout.setupWithViewPager(viewPager);
-    adapter = new ViewPagerAdapter(getChildFragmentManager(), new ArrayList<>());
     viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -119,12 +124,10 @@ public class ParentGameFragment
       Bundle arguments = new Bundle();
       arguments.putParcelable(GameModel.KEY, data.getGameModel());
       if (data.isMaster()) {
-        adapter.addFragment(MasterGameEditFragment.newInstance(arguments),
-            getString(R.string.info));
-        adapter.addFragment(MasterLogFragment.newInstance(arguments), getString(R.string.log));
+        adapter.addFragment(GAME_MASTER_EDIT_FRAGMENT, getString(R.string.info));
+        adapter.addFragment(GAME_MASTER_LOG_FRAGMENT, getString(R.string.log));
       }
-      adapter.addFragment(MapsFragment.newInstance(arguments), getString(R.string.maps));
-      adapter.addFragment(new Fragment(), "THREE");
+      adapter.addFragment(GAME_MAPS_FRAGMENT, getString(R.string.maps));
       viewPager.setAdapter(adapter);
     }
   }

@@ -38,4 +38,8 @@ import javax.inject.Inject;
   @Override public void changeMapVisibility(MapModel mapModel, boolean isChecked) {
     presenter.changeMapVisibility(mapModel, isChecked);
   }
+
+  @Override public void deleteMap(MapModel mapModel) {
+    presenter.deleteMap(mapModel);
+  }
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -95,13 +96,19 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switchCompat.setEnabled(true);
         boolean visible = mapModel.isVisible();
         ivDelete.setVisibility(View.VISIBLE);
+        ivDelete.setOnClickListener(v -> {
+          new MaterialDialog.Builder(v.getContext()).negativeText(android.R.string.cancel)
+              .title(R.string.delete_map)
+              .positiveText(android.R.string.ok)
+              .onPositive((dialog, which) -> {
+                mapsPresenter.deleteMap(mapModel);
+              })
+              .show();
+        });
         switchCompat.setOnCheckedChangeListener(null);
         switchCompat.setChecked(visible);
         switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
           mapsPresenter.changeMapVisibility(mapModel, isChecked);
-        });
-        ivDelete.setOnClickListener(v -> {
-
         });
       } else {
         ivDelete.setVisibility(View.GONE);

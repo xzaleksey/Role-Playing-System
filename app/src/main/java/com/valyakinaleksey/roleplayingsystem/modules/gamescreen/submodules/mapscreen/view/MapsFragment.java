@@ -25,7 +25,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.decor.ItemOffsetDecoration;
+import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.ItemOffsetDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +109,6 @@ public class MapsFragment
 
   @Override public void onResume() {
     super.onResume();
-    initSubscriptions();
   }
 
   @Override protected void initSubscriptions() {
