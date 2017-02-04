@@ -18,6 +18,8 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.DialogProvider;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
+import com.valyakinaleksey.roleplayingsystem.core.utils.SerializebleTuple;
+import com.valyakinaleksey.roleplayingsystem.core.utils.Tuple;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseDialogFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ViewPagerAdapter;
@@ -69,7 +71,6 @@ public class ParentGameFragment
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getComponent().inject(this);
-    adapter = new ViewPagerAdapter(getChildFragmentManager(), new ArrayList<>(), getArguments());
   }
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,6 +81,13 @@ public class ParentGameFragment
 
   @Override public void setupViews(View view) {
     super.setupViews(view);
+    ArrayList<SerializebleTuple<Integer, String>> fragmentTitlePairs;
+    if (data == null) {
+      fragmentTitlePairs = new ArrayList<>();
+    } else {
+      fragmentTitlePairs = data.getFragmentsInfo();
+    }
+    adapter = new ViewPagerAdapter(getChildFragmentManager(), fragmentTitlePairs, getArguments());
     tabLayout = ((TabLayout) getActivity().findViewById(R.id.tabs));
     tabLayout.setupWithViewPager(viewPager);
     viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -121,13 +129,11 @@ public class ParentGameFragment
       getDeleteItem(menu).setVisible(true);
     }
     if (viewPager.getAdapter() == null) {
-      Bundle arguments = new Bundle();
-      arguments.putParcelable(GameModel.KEY, data.getGameModel());
-      if (data.isMaster()) {
-        adapter.addFragment(GAME_MASTER_EDIT_FRAGMENT, getString(R.string.info));
-        adapter.addFragment(GAME_MASTER_LOG_FRAGMENT, getString(R.string.log));
+      if (data.isFirstNavigation()) {
+        for (SerializebleTuple<Integer, String> integerStringSerializebleTuple : data.getFragmentsInfo()) {
+          adapter.addFragment(integerStringSerializebleTuple);
+        }
       }
-      adapter.addFragment(GAME_MAPS_FRAGMENT, getString(R.string.maps));
       viewPager.setAdapter(adapter);
     }
   }

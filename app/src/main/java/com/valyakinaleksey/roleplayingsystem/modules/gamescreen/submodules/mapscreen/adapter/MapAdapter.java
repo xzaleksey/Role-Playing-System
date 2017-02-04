@@ -24,6 +24,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter.MapsPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils;
 import java.io.File;
 import java.util.List;
 import rx.Observable;
@@ -146,14 +147,17 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @NonNull private Observable<?> loadFileFromInternet(MapModel mapModel) {
       if (mapModel.getStatus() == FireBaseUtils.SUCCESS) { // map was uploaded by master
-        return mapModel.getDownloadUrlObservable().map(uri -> {
-          if (uri.equals(this.uri)) {
-            return Observable.just(true);
-          }
-          this.uri = uri;
-          loadImage(uri);
-          return Observable.just(true);
-        });
+        return mapModel.getDownloadUrlObservable()
+            .onErrorReturn(
+                throwable -> StorageUtils.resourceToUri(R.drawable.common_full_open_on_phone))
+            .map(uri -> {
+              if (uri.equals(this.uri)) {
+                return Observable.just(true);
+              }
+              this.uri = uri;
+              loadImage(uri);
+              return Observable.just(true);
+            });
       } else { // map uploading or failed, no picture to display
         //TODO load placeHolder
         return Observable.just(true);
@@ -161,20 +165,17 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void loadImage(Uri uri) {
-      Glide.with(ivMap.getContext())
-          .load(uri)
-          .dontAnimate()
-          .into(new SimpleTarget<GlideDrawable>() {
-            @Override public void onResourceReady(GlideDrawable resource,
-                GlideAnimation<? super GlideDrawable> glideAnimation) {
-              ivMap.setImageDrawable(resource);
-            }
+      Glide.with(ivMap.getContext()).load(uri).into(new SimpleTarget<GlideDrawable>() {
+        @Override public void onResourceReady(GlideDrawable resource,
+            GlideAnimation<? super GlideDrawable> glideAnimation) {
+          ivMap.setImageDrawable(resource);
+        }
 
-            @Override public void onLoadFailed(Exception e, Drawable errorDrawable) {
-              Timber.d("Load failed");
-              super.onLoadFailed(e, errorDrawable);
-            }
-          });
+        @Override public void onLoadFailed(Exception e, Drawable errorDrawable) {
+          Timber.d("Load failed");
+          super.onLoadFailed(e, errorDrawable);
+        }
+      });
     }
   }
 }

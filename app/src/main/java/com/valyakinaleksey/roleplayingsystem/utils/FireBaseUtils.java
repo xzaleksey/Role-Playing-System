@@ -2,12 +2,15 @@ package com.valyakinaleksey.roleplayingsystem.utils;
 
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.Query;
+import com.kelvinapps.rxfirebase.RxHandler;
 import java.util.concurrent.TimeUnit;
 import rx.Observable;
+import rx.Subscriber;
 
 public class FireBaseUtils {
   public static final int IN_PROGRESS = 0;
@@ -83,6 +86,22 @@ public class FireBaseUtils {
 
     return getConnectionObservable().switchMap(
         aBoolean -> Observable.timer(aBoolean ? 0 : 5, TimeUnit.SECONDS).map(aLong -> aBoolean));
+  }
+
+  public static Observable<Void> deleteValue(DatabaseReference databaseReference) {
+    return Observable.create(new Observable.OnSubscribe<Void>() {
+      @Override public void call(Subscriber<? super Void> subscriber) {
+        RxHandler.assignOnTask(subscriber, databaseReference.removeValue());
+      }
+    });
+  }
+
+  public static Observable<Void> setValue(Object o, DatabaseReference databaseReference) {
+    return Observable.create(new Observable.OnSubscribe<Void>() {
+      @Override public void call(Subscriber<? super Void> subscriber) {
+        RxHandler.assignOnTask(subscriber, databaseReference.setValue(o));
+      }
+    });
   }
 }
       

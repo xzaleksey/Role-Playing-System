@@ -4,9 +4,12 @@ import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
+import com.valyakinaleksey.roleplayingsystem.core.utils.SerializebleTuple;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
@@ -16,6 +19,11 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
+import java.util.ArrayList;
+
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MAPS_FRAGMENT;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MASTER_EDIT_FRAGMENT;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MASTER_LOG_FRAGMENT;
 
 public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGameModel>
     implements ParentGamePresenter {
@@ -60,22 +68,30 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
             .compose(RxTransformers.applySchedulers())
             .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
             .subscribe(aBoolean -> {
-              if (viewModel.isMaster()) {
-                viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
-              } else {
-                if (!aBoolean) {
-                  Bundle bundle = new Bundle();
-                  bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
-                  parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT,
-                      bundle);
-                } else {
-                  viewModel.setNavigationTag(ParentGameModel.USER_SCREEN);
+              ArrayList<SerializebleTuple<Integer, String>> fragmentsInfo =
+                  viewModel.getFragmentsInfo();
+
+              if (aBoolean) {
+                if (viewModel.isMaster()) {
+                  viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
+                  fragmentsInfo.add(new SerializebleTuple<>(GAME_MASTER_EDIT_FRAGMENT,
+                      RpsApp.app().getString(R.string.info)));
+                  fragmentsInfo.add(new SerializebleTuple<>(GAME_MASTER_LOG_FRAGMENT,
+                      RpsApp.app().getString(R.string.log)));
+                } else { // user
+
                 }
+                fragmentsInfo.add(new SerializebleTuple<>(GAME_MAPS_FRAGMENT,
+                    RpsApp.app().getString(R.string.maps)));
+              } else {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
+                parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT,
+                    bundle);
               }
               view.setData(viewModel);
-              viewModel.setFirstNavigation(false);
               view.showContent();
-              view.navigate();
+              viewModel.setFirstNavigation(false);
             }));
 
     initSubscriptions(gameModel);

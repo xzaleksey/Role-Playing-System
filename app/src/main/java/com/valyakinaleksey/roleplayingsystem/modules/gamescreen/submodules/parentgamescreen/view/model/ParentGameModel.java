@@ -3,11 +3,15 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.pare
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.valyakinaleksey.roleplayingsystem.core.utils.SerializebleTuple;
+import com.valyakinaleksey.roleplayingsystem.core.utils.Tuple;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParentGameModel extends BaseEmptyViewModel {
   public static final String USER_SCREEN = "user_screen";
@@ -17,8 +21,10 @@ public class ParentGameModel extends BaseEmptyViewModel {
   private boolean isMaster;
   private String navigationTag;
   private boolean firstNavigation = true;
+  private ArrayList<SerializebleTuple<Integer, String>> fragmentsInfo;
 
   public ParentGameModel() {
+    fragmentsInfo = new ArrayList<>();
   }
 
   public boolean isMaster() {
@@ -62,17 +68,29 @@ public class ParentGameModel extends BaseEmptyViewModel {
   }
 
   @Override public void writeToParcel(Parcel dest, int flags) {
+    super.writeToParcel(dest, flags);
     dest.writeParcelable(this.gameModel, flags);
     dest.writeByte(this.isMaster ? (byte) 1 : (byte) 0);
     dest.writeString(this.navigationTag);
     dest.writeByte(this.firstNavigation ? (byte) 1 : (byte) 0);
+    dest.writeSerializable(this.fragmentsInfo);
   }
 
-  protected ParentGameModel(Parcel in) {
+  public ArrayList<SerializebleTuple<Integer, String>> getFragmentsInfo() {
+    return fragmentsInfo;
+  }
+
+  public void setFragmentsInfo(ArrayList<SerializebleTuple<Integer, String>> fragmentsInfo) {
+    this.fragmentsInfo = fragmentsInfo;
+  }
+
+  @SuppressWarnings("unchecked") protected ParentGameModel(Parcel in) {
+    super(in);
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
     this.isMaster = in.readByte() != 0;
     this.navigationTag = in.readString();
     this.firstNavigation = in.readByte() != 0;
+    this.fragmentsInfo = (ArrayList<SerializebleTuple<Integer, String>>) in.readSerializable();
   }
 
   public static final Creator<ParentGameModel> CREATOR = new Creator<ParentGameModel>() {

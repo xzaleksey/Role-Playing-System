@@ -63,10 +63,9 @@ public class MapUseCase implements MapsInteractor {
 
   @Override public Observable<Void> deleteMap(MapModel mapModel) {
     return Observable.just(getReference(mapModel.getGameId()))
-        .map(databaseReference -> {
+        .switchMap(databaseReference -> {
           DatabaseReference mapReference = databaseReference.child(mapModel.getId());
-          mapReference.removeValue();
-         return RxFirebaseDatabase.getInstance().observeSingleValue(mapReference);
+          return FireBaseUtils.deleteValue(mapReference);
         })
         .switchMap(r -> mapsRepository.deleteMap(mapModel.getGameId(), mapModel.getId(),
             mapModel.getFileName()));
