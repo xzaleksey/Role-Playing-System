@@ -31,11 +31,12 @@ public abstract class AbsActivity extends AppCompatActivity {
     setupToolbar();
   }
 
-  protected void setupToolbar() {
+  public void setupToolbar() {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setTitle(null);
-    fillToolbarItems();
+    if (toolbar != null) {
+      setSupportActionBar(toolbar);
+      fillToolbarItems();
+    }
   }
 
   public void setToolbarTitle(String title) {

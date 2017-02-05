@@ -19,49 +19,17 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ParentActivity extends AbsSingleFragmentActivity {
-  private GoogleApiClient googleApiClient;
 
   @Override public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     if (savedInstanceState == null) {
       initNavigate();
     }
-    GoogleSignInOptions gso =
-        new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(
-            this.getString(R.string.default_web_client_id)).requestEmail().build();
-    googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, connectionResult -> {
 
-    }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
   }
 
   @Override protected int getLayoutId() {
     return R.layout.parent_fragment_activity;
-  }
-
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.main_menu, menu);
-    return true;
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.sign_out_menu:
-        FirebaseAuth.getInstance().signOut();
-        Auth.GoogleSignInApi.signOut(googleApiClient);
-        return true;
-      default:
-        return super.onOptionsItemSelected(item);
-    }
-  }
-
-  @Override protected void onStart() {
-    super.onStart();
-    googleApiClient.connect();
-  }
-
-  @Override protected void onStop() {
-    super.onStop();
-    googleApiClient.disconnect();
   }
 
   @Override public void onBackPressed() {
