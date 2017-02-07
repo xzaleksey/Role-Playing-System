@@ -61,5 +61,7 @@
   <string name="all">All</string>
   <string name="master">Master</string>
   <string name="delete_map">Delete map</string>
+  <string name="play">Play</string>
+  <string name="player">Player</string>
 
 </resources>

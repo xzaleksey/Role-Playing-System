@@ -40,6 +40,7 @@ public class FireBaseUtils {
   public static final String GAME_CHARACTERISTICS = "game_characteristics";
   public static final String GAME_CLASSES = "game_classes";
   public static final String GAME_RACES = "game_races";
+  public static final String GAME_CHARACTERS = "game_characters";
 
   //formats
   public static final String FORMAT_SLASHES = "/%s/";

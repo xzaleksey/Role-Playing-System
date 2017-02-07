@@ -51,5 +51,7 @@
   <string name="all">Все</string>
   <string name="master">Мастер</string>
   <string name="delete_map">Удалить карту</string>
+  <string name="play">Играть</string>
+  <string name="player">Игрок</string>
 
 </resources>

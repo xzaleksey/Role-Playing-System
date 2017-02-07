@@ -21,4 +21,7 @@
 
   <!-- icons -->
   <dimen name="icon_minimum_size">18dp</dimen>
+  <dimen name="character_avatar_width">108dp</dimen>
+  <dimen name="character_avatar_height">130dp</dimen>
+  <dimen name="avatar_small_size">32dp</dimen>
 </resources>

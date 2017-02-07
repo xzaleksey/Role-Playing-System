@@ -1,24 +1,22 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gameuserscreen.view.model;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.view.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GamesUserModel extends BaseEmptyViewModel
+public class CopyViewModel extends BaseEmptyViewModel
     implements EmptyViewModel, Parcelable, Serializable {
 
   private String toolbarTitle;
   private GameModel gameModel;
   private ArrayList<InfoSection> infoSections;
 
-  public GamesUserModel() {
+  public CopyViewModel() {
   }
 
   public String getToolbarTitle() {
@@ -60,20 +58,20 @@ public class GamesUserModel extends BaseEmptyViewModel
     dest.writeSerializable(this.infoSections);
   }
 
-  protected GamesUserModel(Parcel in) {
+  protected CopyViewModel(Parcel in) {
     super(in);
     this.toolbarTitle = in.readString();
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
     this.infoSections = (ArrayList<InfoSection>) in.readSerializable();
   }
 
-  public static final Creator<GamesUserModel> CREATOR = new Creator<GamesUserModel>() {
-    @Override public GamesUserModel createFromParcel(Parcel source) {
-      return new GamesUserModel(source);
+  public static final Creator<CopyViewModel> CREATOR = new Creator<CopyViewModel>() {
+    @Override public CopyViewModel createFromParcel(Parcel source) {
+      return new CopyViewModel(source);
     }
 
-    @Override public GamesUserModel[] newArray(int size) {
-      return new GamesUserModel[size];
+    @Override public CopyViewModel[] newArray(int size) {
+      return new CopyViewModel[size];
     }
   };
 }
