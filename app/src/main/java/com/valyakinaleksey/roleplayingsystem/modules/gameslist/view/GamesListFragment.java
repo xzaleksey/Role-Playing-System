@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,11 +34,16 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Create
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.utils.AndroidUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.ViewTouchMoveUpDownObservable;
+import com.valyakinaleksey.roleplayingsystem.utils.animation.CollapseAnimation;
+import com.valyakinaleksey.roleplayingsystem.utils.animation.ExpandAnimation;
+import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
 public class GamesListFragment
@@ -82,14 +88,18 @@ public class GamesListFragment
         ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if (dy > 0 || dy < 0 && fab.isShown()) {
-          fab.hide();
+        if (fab != null) {
+          if (dy > 0 || dy < 0 && fab.isShown()) {
+            fab.hide();
+          }
         }
       }
 
       @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-          fab.show();
+          if (fab != null) {
+            fab.show();
+          }
         }
 
         super.onScrollStateChanged(recyclerView, newState);
@@ -99,10 +109,6 @@ public class GamesListFragment
 
   @Override public void loadData() {
     getComponent().getPresenter().getData();
-  }
-
-  @Override public void onResume() {
-    super.onResume();
   }
 
   @Override public void showContent() {
