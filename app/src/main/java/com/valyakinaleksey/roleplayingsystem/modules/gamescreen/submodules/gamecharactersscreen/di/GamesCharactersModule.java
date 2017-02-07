@@ -3,10 +3,8 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.communication.GameCharactersViewCommunicationBus;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.state.GamesCharactersViewState;
@@ -32,8 +30,9 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
     return new GameCharactersViewCommunicationBus(presenter, viewState);
   }
 
-  @Provides @Named(PRESENTER) @GameScope GamesCharactersPresenter providePresenter() {
-    return new GamesCharactersPresenterImpl();
+  @Provides @Named(PRESENTER) @GameScope GamesCharactersPresenter providePresenter(
+      GameCharactersInteractor gameCharactersInteractor) {
+    return new GamesCharactersPresenterImpl(gameCharactersInteractor);
   }
 
   @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {

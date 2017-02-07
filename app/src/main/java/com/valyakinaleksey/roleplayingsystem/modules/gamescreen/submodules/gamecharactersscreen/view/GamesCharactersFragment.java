@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import autodagger.AutoComponent;
@@ -29,6 +30,7 @@ import javax.inject.Inject;
   public static final String TAG = GamesCharactersFragment.class.getSimpleName();
 
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
+  @Bind(R.id.fab) FloatingActionButton fab;
 
   @Inject SectionsAdapter sectionsAdapter;
 
@@ -66,7 +68,9 @@ import javax.inject.Inject;
   @Override public void showContent() {
     super.showContent();
     sectionsAdapter.update(data.getInfoSections());
-    recyclerView.setAdapter(sectionsAdapter);
+    if (recyclerView.getAdapter() == null) {
+      recyclerView.setAdapter(sectionsAdapter);
+    }
   }
 
   @Override public void onDestroy() {
@@ -74,6 +78,6 @@ import javax.inject.Inject;
   }
 
   @Override protected int getContentResId() {
-    return R.layout.fragment_game_description;
+    return R.layout.coordinator_recycler_fab_layout;
   }
 }

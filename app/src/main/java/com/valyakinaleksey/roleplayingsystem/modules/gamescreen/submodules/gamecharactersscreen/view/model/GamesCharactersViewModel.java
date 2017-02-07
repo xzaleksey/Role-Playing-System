@@ -14,15 +14,11 @@ import java.util.ArrayList;
 public class GamesCharactersViewModel extends BaseEmptyViewModel
     implements EmptyViewModel, Parcelable, Serializable {
 
-  private String toolbarTitle;
   private GameModel gameModel;
   private ArrayList<InfoSection> infoSections;
 
   public GamesCharactersViewModel() {
-  }
-
-  public String getToolbarTitle() {
-    return toolbarTitle;
+    infoSections = new ArrayList<>();
   }
 
   public GameModel getGameModel() {
@@ -41,12 +37,8 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
     this.infoSections = infoSections;
   }
 
-  public void setToolbarTitle(String toolbarTitle) {
-    this.toolbarTitle = toolbarTitle;
-  }
-
   @Override public boolean isEmpty() {
-    return false;
+    return infoSections.isEmpty();
   }
 
   @Override public int describeContents() {
@@ -55,25 +47,24 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
 
   @Override public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
-    dest.writeString(this.toolbarTitle);
     dest.writeParcelable(this.gameModel, flags);
     dest.writeSerializable(this.infoSections);
   }
 
   protected GamesCharactersViewModel(Parcel in) {
     super(in);
-    this.toolbarTitle = in.readString();
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
     this.infoSections = (ArrayList<InfoSection>) in.readSerializable();
   }
 
-  public static final Creator<GamesCharactersViewModel> CREATOR = new Creator<GamesCharactersViewModel>() {
-    @Override public GamesCharactersViewModel createFromParcel(Parcel source) {
-      return new GamesCharactersViewModel(source);
-    }
+  public static final Creator<GamesCharactersViewModel> CREATOR =
+      new Creator<GamesCharactersViewModel>() {
+        @Override public GamesCharactersViewModel createFromParcel(Parcel source) {
+          return new GamesCharactersViewModel(source);
+        }
 
-    @Override public GamesCharactersViewModel[] newArray(int size) {
-      return new GamesCharactersViewModel[size];
-    }
-  };
+        @Override public GamesCharactersViewModel[] newArray(int size) {
+          return new GamesCharactersViewModel[size];
+        }
+      };
 }

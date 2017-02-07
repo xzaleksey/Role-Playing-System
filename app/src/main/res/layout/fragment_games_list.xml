@@ -25,26 +25,8 @@
         tools:text="5 игр"
         />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="com.valyakinaleksey.roleplayingsystem.utils.ScrollViewBehaviorFix"
-        android:scrollbars="vertical"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        />
+    <include layout="@layout/recycler_view" />
   </LinearLayout>
 
-
-  <android.support.design.widget.FloatingActionButton
-      android:id="@+id/fab"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="end|bottom"
-      android:layout_margin="@dimen/material_component_floating_action_button_margin"
-      android:tint="@color/material_light_white"
-      app:fabSize="normal"
-      app:srcCompat="@drawable/ic_add_black_24dp"
-      />
-
+  <include layout="@layout/fab_plus" />
 </android.support.design.widget.CoordinatorLayout>
