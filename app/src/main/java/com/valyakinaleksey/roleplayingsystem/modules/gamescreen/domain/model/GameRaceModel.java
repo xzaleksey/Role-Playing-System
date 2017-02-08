@@ -65,5 +65,18 @@ public class GameRaceModel implements Serializable, Parcelable, HasId, HasName, 
       return new GameRaceModel[size];
     }
   };
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof GameRaceModel)) return false;
+
+    GameRaceModel that = (GameRaceModel) o;
+
+    return getId() != null ? getId().equals(that.getId()) : that.getId() == null;
+  }
+
+  @Override public int hashCode() {
+    return getId() != null ? getId().hashCode() : 0;
+  }
 }
       

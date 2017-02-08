@@ -63,5 +63,10 @@
   <string name="delete_map">Delete map</string>
   <string name="play">Play</string>
   <string name="player">Player</string>
+  <string name="characters">Characters</string>
+  <string name="occupied">Occupied</string>
+  <string name="warrior">Warrior</string>
+  <string name="human">Human</string>
+  <string name="free">Free</string>
 
 </resources>

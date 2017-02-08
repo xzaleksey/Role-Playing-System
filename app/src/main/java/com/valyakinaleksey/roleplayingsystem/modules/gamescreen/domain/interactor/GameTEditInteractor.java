@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor;
 
 import com.google.firebase.database.DatabaseReference;
+import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacteristicModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import java.util.List;
@@ -17,5 +18,9 @@ public interface GameTEditInteractor<T> {
   Observable<Boolean> deleteTModel(GameModel gameModel, T model);
 
   DatabaseReference getDatabaseReference(GameModel gameModel);
+
+  Observable<RxFirebaseChildEvent<T>> observeChildren(GameModel gameModel);
+
+  Observable<T> getSingleChild(GameModel gameModel, String id);
 }
       

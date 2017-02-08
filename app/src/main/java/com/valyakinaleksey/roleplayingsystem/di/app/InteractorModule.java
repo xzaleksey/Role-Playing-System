@@ -102,8 +102,10 @@ import dagger.Provides;
     return new MapUseCase(mapsRepository);
   }
 
-  @Provides @Singleton GameCharactersInteractor provideGameCharactersInteractor() {
-    return new GameCharactersUseCase();
+  @Provides @Singleton GameCharactersInteractor provideGameCharactersInteractor(
+      GameClassesInteractor gameClassesInteractor, GameRacesInteractor gameRacesInteractor,
+      UserRepository userRepository) {
+    return new GameCharactersUseCase(gameClassesInteractor, gameRacesInteractor, userRepository);
   }
 }
       

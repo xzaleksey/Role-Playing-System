@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SerializebleTuple;
 import com.valyakinaleksey.roleplayingsystem.core.utils.Tuple;
 
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.MasterGameEditFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.MasterLogFragment;
@@ -37,6 +38,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         return MasterLogFragment.newInstance(bundle);
       case NavigationUtils.GAME_MAPS_FRAGMENT:
         return MapsFragment.newInstance(bundle);
+      case NavigationUtils.GAME_CHARACTERS_FRAGMENT:
+        return GamesCharactersFragment.newInstance(bundle);
     }
     return null;
   }

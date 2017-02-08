@@ -5,10 +5,10 @@ import android.widget.TextView;
 import butterknife.Bind;
 import com.valyakinaleksey.roleplayingsystem.R;
 
-public class SingleTextViewHolder extends ButterKnifeViewHolder {
+public class SubheaderViewHolder extends ButterKnifeViewHolder {
   @Bind(R.id.text) protected TextView tvTitle;
 
-  public SingleTextViewHolder(View itemView) {
+  public SubheaderViewHolder(View itemView) {
     super(itemView);
   }
 

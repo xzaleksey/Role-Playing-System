@@ -6,4 +6,5 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamec
 
 public interface GamesCharactersView extends LceView<GamesCharactersViewModel> {
 
+  void updateView();
 }

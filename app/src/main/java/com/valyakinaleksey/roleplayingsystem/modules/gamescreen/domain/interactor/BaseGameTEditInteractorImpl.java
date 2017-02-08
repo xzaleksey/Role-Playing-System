@@ -3,7 +3,9 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interact
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.util.ArrayList;
@@ -51,9 +53,10 @@ public abstract class BaseGameTEditInteractorImpl<T extends HasId>
 
   @Override public Observable<String> createGameTModel(GameModel gameModel, T model) {
     DatabaseReference reference = getDatabaseReference(gameModel);
-    return RxFirebaseDatabase.getInstance()
-        .observeSetValuePush(reference, model)
-        .doOnNext(s -> reference.child(s).child(ID).setValue(s));
+    DatabaseReference push = reference.push();
+    model.setId(push.getKey());
+    push.setValue(model);
+    return RxFirebaseDatabase.getInstance().observeSingleValue(push).map(DataSnapshot::getKey);
   }
 
   @Override public Observable<Boolean> deleteTModel(GameModel gameModel, T model) {
@@ -62,6 +65,16 @@ public abstract class BaseGameTEditInteractorImpl<T extends HasId>
     return RxFirebaseDatabase.getInstance()
         .observeChildRemoved(reference)
         .map(firebaseChildEvent -> true);
+  }
+
+  @Override public Observable<RxFirebaseChildEvent<T>> observeChildren(GameModel gameModel) {
+    return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeChildEvent(
+        getDatabaseReference(gameModel), tClass);
+  }
+
+  @Override public Observable<T> getSingleChild(GameModel gameModel, String id) {
+    return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(
+        getDatabaseReference(gameModel).child(id), tClass);
   }
 }
       

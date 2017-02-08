@@ -1,12 +1,14 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain;
 
-import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameTEditInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
 import rx.Observable;
 
-public interface GameCharactersInteractor {
+public interface GameCharactersInteractor extends GameTEditInteractor<GameCharacterModel> {
 
-  Observable<RxFirebaseChildEvent<GameCharacterModel>> observeGameCharacters(GameModel gameModel);
+  Observable<AbstractGameCharacterListItem> getAbstractGameCharacterListItem(GameModel gameModel,
+      GameCharacterModel gameCharacterModel);
 }
       

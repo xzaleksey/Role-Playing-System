@@ -71,6 +71,7 @@ dependencies {
   compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
   compile 'ca.barrenechea.header-decor:header-decor:0.2.8'
   compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+  compile 'eu.davidea:flexible-adapter:5.0.0-rc1'
   compile('com.mikepenz:materialdrawer:5.8.1@aar') {
     transitive = true
   }

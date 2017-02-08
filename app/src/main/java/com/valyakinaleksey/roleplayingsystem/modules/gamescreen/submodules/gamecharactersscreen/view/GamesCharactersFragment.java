@@ -12,12 +12,14 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
 import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.GamesCharactersModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.HasGameCharactersPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
+import java.util.ArrayList;
 import javax.inject.Inject;
 
 @AutoComponent(dependencies = { ParentGameComponent.class },
@@ -32,7 +34,7 @@ import javax.inject.Inject;
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
   @Bind(R.id.fab) FloatingActionButton fab;
 
-  @Inject SectionsAdapter sectionsAdapter;
+  FlexibleAdapter<IFlexible> flexibleAdapter;
 
   public static GamesCharactersFragment newInstance(Bundle arguments) {
     GamesCharactersFragment gamesDescriptionFragment = new GamesCharactersFragment();
@@ -51,10 +53,12 @@ import javax.inject.Inject;
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getComponent().inject(this);
+    flexibleAdapter = new FlexibleAdapter<>(new ArrayList<>());
   }
 
   @Override public void setupViews(View view) {
     super.setupViews(view);
+    fab.setOnClickListener(v -> getComponent().getPresenter().createCharacter());
   }
 
   @Override public void loadData() {
@@ -67,9 +71,9 @@ import javax.inject.Inject;
 
   @Override public void showContent() {
     super.showContent();
-    sectionsAdapter.update(data.getInfoSections());
+    updateView();
     if (recyclerView.getAdapter() == null) {
-      recyclerView.setAdapter(sectionsAdapter);
+      recyclerView.setAdapter(flexibleAdapter);
     }
   }
 
@@ -79,5 +83,9 @@ import javax.inject.Inject;
 
   @Override protected int getContentResId() {
     return R.layout.coordinator_recycler_fab_layout;
+  }
+
+  @Override public void updateView() {
+    flexibleAdapter.updateDataSet(data.getiFlexibles(), true);
   }
 }

@@ -21,6 +21,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 import java.util.ArrayList;
 
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_CHARACTERS_FRAGMENT;
 import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MAPS_FRAGMENT;
 import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MASTER_EDIT_FRAGMENT;
 import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MASTER_LOG_FRAGMENT;
@@ -81,6 +82,8 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
                 } else { // user
 
                 }
+                fragmentsInfo.add(new SerializebleTuple<>(GAME_CHARACTERS_FRAGMENT,
+                    RpsApp.app().getString(R.string.characters)));
                 fragmentsInfo.add(new SerializebleTuple<>(GAME_MAPS_FRAGMENT,
                     RpsApp.app().getString(R.string.maps)));
               } else {

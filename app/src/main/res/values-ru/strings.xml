@@ -53,5 +53,10 @@
   <string name="delete_map">Удалить карту</string>
   <string name="play">Играть</string>
   <string name="player">Игрок</string>
+  <string name="characters">Персонажи</string>
+  <string name="occupied">Занятые</string>
+  <string name="warrior">Воин</string>
+  <string name="human">Человек</string>
+  <string name="free">Свободные</string>
 
 </resources>

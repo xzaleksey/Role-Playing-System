@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.utils;
 
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -87,6 +88,10 @@ public class FireBaseUtils {
 
     return getConnectionObservable().switchMap(
         aBoolean -> Observable.timer(aBoolean ? 0 : 5, TimeUnit.SECONDS).map(aLong -> aBoolean));
+  }
+
+  public static String getCurrentUserId() {
+    return FirebaseAuth.getInstance().getCurrentUser().getUid();
   }
 
   public static Observable<Void> deleteValue(DatabaseReference databaseReference) {

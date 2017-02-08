@@ -8,17 +8,28 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewM
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
+import eu.davidea.flexibleadapter.items.IFlexible;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GamesCharactersViewModel extends BaseEmptyViewModel
     implements EmptyViewModel, Parcelable, Serializable {
 
   private GameModel gameModel;
-  private ArrayList<InfoSection> infoSections;
+  private transient List<IFlexible> iFlexibles;
+  private boolean master;
+
+  public boolean isMaster() {
+    return master;
+  }
+
+  public void setMaster(boolean master) {
+    this.master = master;
+  }
 
   public GamesCharactersViewModel() {
-    infoSections = new ArrayList<>();
+    iFlexibles = new ArrayList<>();
   }
 
   public GameModel getGameModel() {
@@ -29,16 +40,16 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
     this.gameModel = gameModel;
   }
 
-  public ArrayList<InfoSection> getInfoSections() {
-    return infoSections;
+  public List<IFlexible> getiFlexibles() {
+    return iFlexibles;
   }
 
-  public void setInfoSections(ArrayList<InfoSection> infoSections) {
-    this.infoSections = infoSections;
+  public void setiFlexibles(List<IFlexible> iFlexibles) {
+    this.iFlexibles = iFlexibles;
   }
 
   @Override public boolean isEmpty() {
-    return infoSections.isEmpty();
+    return iFlexibles.isEmpty();
   }
 
   @Override public int describeContents() {
@@ -48,13 +59,13 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
   @Override public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeParcelable(this.gameModel, flags);
-    dest.writeSerializable(this.infoSections);
+    dest.writeInt(master ? 1 : 0);
   }
 
   protected GamesCharactersViewModel(Parcel in) {
     super(in);
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
-    this.infoSections = (ArrayList<InfoSection>) in.readSerializable();
+    this.master = in.readInt() == 1;
   }
 
   public static final Creator<GamesCharactersViewModel> CREATOR =

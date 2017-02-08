@@ -86,25 +86,6 @@ public class GamesListFragment
     setupFabButton();
     recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
         ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
-    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if (fab != null) {
-          if (dy > 0 || dy < 0 && fab.isShown()) {
-            fab.hide();
-          }
-        }
-      }
-
-      @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-          if (fab != null) {
-            fab.show();
-          }
-        }
-
-        super.onScrollStateChanged(recyclerView, newState);
-      }
-    });
   }
 
   @Override public void loadData() {

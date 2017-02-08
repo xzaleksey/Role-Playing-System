@@ -21,4 +21,14 @@ import javax.inject.Inject;
       GamesCharactersViewState viewState) {
     super(presenter, viewState);
   }
+
+  @Override public void updateView() {
+    if (view != null) {
+      view.updateView();
+    }
+  }
+
+  @Override public void createCharacter() {
+    presenter.createCharacter();
+  }
 }
