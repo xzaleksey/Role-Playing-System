@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.core.exceptions.NetworkConnectionException;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.AccessFirebaseException;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
@@ -63,6 +64,10 @@ public abstract class BasePresenter<V extends LceView<DATA>, DATA extends EmptyV
     if (throwable instanceof NetworkConnectionException || throwable instanceof TimeoutException) {
       view.showError(BaseError.NO_CONNECTION);
       return true;
+    } else if (throwable instanceof AccessFirebaseException) {
+      BaseError toast = BaseError.TOAST;
+      toast.setValue(throwable.getMessage());
+      view.showError(toast);
     } else {
       Crashlytics.logException(throwable);
     }

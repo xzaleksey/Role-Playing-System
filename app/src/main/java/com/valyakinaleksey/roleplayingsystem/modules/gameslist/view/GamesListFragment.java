@@ -43,6 +43,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ViewTouchMoveUpDownObservable;
 import com.valyakinaleksey.roleplayingsystem.utils.animation.CollapseAnimation;
 import com.valyakinaleksey.roleplayingsystem.utils.animation.ExpandAnimation;
+import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener;
 import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
@@ -84,6 +85,7 @@ public class GamesListFragment
     layoutManager.setReverseLayout(true);
     layoutManager.setStackFromEnd(true);
     setupFabButton();
+    recyclerView.addOnScrollListener(new HideFablListener(fab));
     recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
         ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
   }

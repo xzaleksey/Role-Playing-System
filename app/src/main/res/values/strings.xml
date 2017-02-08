@@ -68,5 +68,6 @@
   <string name="warrior">Warrior</string>
   <string name="human">Human</string>
   <string name="free">Free</string>
+  <string name="access_error">Access error</string>
 
 </resources>

@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 import android.text.TextUtils;
 import com.google.firebase.database.DatabaseReference;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.AccessFirebaseException;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.BaseGameTEditInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
@@ -14,6 +15,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithUser;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithoutUser;
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import rx.Observable;
 
@@ -86,6 +88,19 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
           abstractGameCharacterListItem1.setGameRaceModel(gameRaceModel);
           return abstractGameCharacterListItem1;
         });
+      }
+    });
+  }
+
+  @Override public Observable<Void> chooseCharacter(GameModel gameModel,
+      GameCharacterModel gameCharacterModel) {
+    return getSingleChild(gameModel, gameCharacterModel.getId()).switchMap(gameCharacterModel1 -> {
+      if (TextUtils.isEmpty(gameCharacterModel1.getUid())) {
+        return FireBaseUtils.setValue(FireBaseUtils.getCurrentUserId(),
+            getDatabaseReference(gameModel).child(gameCharacterModel.getId())
+                .child(FireBaseUtils.UID));
+      } else {
+        return Observable.error(new AccessFirebaseException());
       }
     });
   }

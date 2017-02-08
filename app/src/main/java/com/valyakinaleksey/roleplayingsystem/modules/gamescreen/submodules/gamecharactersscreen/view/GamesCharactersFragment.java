@@ -17,6 +17,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamec
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.HasGameCharactersPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
+import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.RecyclerViewUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ import javax.inject.Inject;
   @Override public void setupViews(View view) {
     super.setupViews(view);
     fab.setOnClickListener(v -> getComponent().getPresenter().createCharacter());
+    recyclerView.addOnScrollListener(new HideFablListener(fab));
   }
 
   @Override public void loadData() {
@@ -75,6 +78,9 @@ import javax.inject.Inject;
     if (recyclerView.getAdapter() == null) {
       recyclerView.setAdapter(flexibleAdapter);
     }
+    recyclerView.post(() -> {
+      RecyclerViewUtils.checkFabShow(recyclerView, fab);
+    });
   }
 
   @Override public void onDestroy() {

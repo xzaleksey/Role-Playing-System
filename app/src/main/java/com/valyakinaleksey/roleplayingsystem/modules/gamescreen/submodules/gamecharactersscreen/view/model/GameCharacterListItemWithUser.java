@@ -9,6 +9,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import java.util.List;
@@ -26,11 +27,11 @@ public class GameCharacterListItemWithUser extends
 
   @Override public void bindViewHolder(FlexibleAdapter adapter,
       GameCharacterListItemWithUserViewHolder holder, int position, List payloads) {
-    holder.bind(this);
+    holder.bind(this, getGamesCharactersPresenter());
   }
 
   public static class GameCharacterListItemWithUserViewHolder
-      extends GameCharacterListItemWithoutUser.GameCharacterListItemWithoutUserViewHolder {
+      extends AbstractGameCharacterItemViewHolder {
 
     @Bind(R.id.user_avatar) AppCompatImageView userAvatar;
     @Bind(R.id.user_name) TextView userName;
@@ -40,8 +41,9 @@ public class GameCharacterListItemWithUser extends
       super(view, adapter);
     }
 
-    public void bind(GameCharacterListItemWithUser gameCharacterListItemWithUser) {
-      super.bind(gameCharacterListItemWithUser);
+    public void bind(GameCharacterListItemWithUser gameCharacterListItemWithUser,
+        GamesCharactersPresenter gamesCharactersPresenter) {
+      super.bind(gameCharacterListItemWithUser, gamesCharactersPresenter);
       User user = gameCharacterListItemWithUser.getUser();
       userName.setText(user.getName());
       userDescription.setText("Участвовал во многих играх");

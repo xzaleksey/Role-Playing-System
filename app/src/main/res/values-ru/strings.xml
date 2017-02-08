@@ -58,5 +58,6 @@
   <string name="warrior">Воин</string>
   <string name="human">Человек</string>
   <string name="free">Свободные</string>
+  <string name="access_error">Ошибка доступа</string>
 
 </resources>

@@ -1,21 +1,21 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithoutUser;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
@@ -27,16 +27,14 @@ import java.util.List;
 import java.util.UUID;
 import rx.Observable;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERISTICS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERS;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.UID;
 
 public class GamesCharactersPresenterImpl
     extends BasePresenter<GamesCharactersView, GamesCharactersViewModel>
     implements GamesCharactersPresenter {
 
   private GameCharactersInteractor gameCharactersInteractor;
-  private List<IFlexible> flexibles = new ArrayList<>();
+  private List<IFlexible> itemsAll = new ArrayList<>();
   private SubHeaderViewModel free;
 
   public GamesCharactersPresenterImpl(GameCharactersInteractor gameCharactersInteractor) {
@@ -57,10 +55,10 @@ public class GamesCharactersPresenterImpl
     SubHeaderViewModel occupied = new SubHeaderViewModel();
     free = new SubHeaderViewModel();
     free.setTitle(StringUtils.getStringById(R.string.free));
-    flexibles.add(occupied);
-    flexibles.add(free);
+    itemsAll.add(occupied);
+    itemsAll.add(free);
     occupied.setTitle(StringUtils.getStringById(R.string.occupied));
-    viewModel.setiFlexibles(new ArrayList<>(flexibles));
+    viewModel.setiFlexibles(new ArrayList<>(itemsAll));
     view.setData(viewModel);
     view.showContent();
     view.showLoading();
@@ -82,18 +80,18 @@ public class GamesCharactersPresenterImpl
             case ADDED:
               return getAddObservable(gameModel, gameCharacterModelRxFirebaseChildEvent);
             case REMOVED:
-              for (Iterator<IFlexible> iterator = flexibles.iterator(); iterator.hasNext(); ) {
+              for (Iterator<IFlexible> iterator = itemsAll.iterator(); iterator.hasNext(); ) {
                 IFlexible flexible = iterator.next();
                 if (flexible instanceof AbstractGameCharacterListItem) {
                   if ((((AbstractGameCharacterListItem) flexible).getGameCharacterModel()).equals(
                       gameCharacterModelRxFirebaseChildEvent.getValue())) {
-                    return Observable.just(flexibles.remove(flexible));
+                    return Observable.just(itemsAll.remove(flexible));
                   }
                 }
               }
             case CHANGED:
               int index = -1;
-              for (Iterator<IFlexible> iterator = flexibles.iterator(); iterator.hasNext(); ) {
+              for (Iterator<IFlexible> iterator = itemsAll.iterator(); iterator.hasNext(); ) {
                 IFlexible flexible = iterator.next();
                 index++;
                 if (flexible instanceof AbstractGameCharacterListItem) {
@@ -117,16 +115,33 @@ public class GamesCharactersPresenterImpl
               }
               final int finalIndex = index;
               return getCharacterFilled(gameModel, gameCharacterModelRxFirebaseChildEvent).doOnNext(
-                  abstractGameCharacterListItem -> {
-                    flexibles.set(finalIndex, abstractGameCharacterListItem);
-                  });
+                  abstractGameCharacterListItem -> itemsAll.set(finalIndex,
+                      abstractGameCharacterListItem));
             default:
               return Observable.just(gameCharacterModelRxFirebaseChildEvent);
           }
         })
         .compose(RxTransformers.applySchedulers())
         .subscribe(gameCharacterModelRxFirebaseChildEvent -> {
-          viewModel.setiFlexibles(new ArrayList<>(flexibles));
+          List<IFlexible> iFlexibles = new ArrayList<>(itemsAll);
+          if (!viewModel.isMaster()) {
+            boolean hasChar = false;
+            for (IFlexible iFlexible : iFlexibles) {
+              if (iFlexible instanceof AbstractGameCharacterListItem) {
+                if (FireBaseUtils.getCurrentUserId()
+                    .equals(((AbstractGameCharacterListItem) iFlexible).getGameCharacterModel()
+                        .getUid())) {
+                  hasChar = true;
+                  break;
+                }
+              }
+            }
+            if (hasChar) {
+              iFlexibles = iFlexibles.subList(0, iFlexibles.indexOf(free));
+            }
+          }
+
+          viewModel.setiFlexibles(iFlexibles);
           view.showContent();
         }, this::handleThrowable));
   }
@@ -135,10 +150,13 @@ public class GamesCharactersPresenterImpl
       RxFirebaseChildEvent<GameCharacterModel> gameCharacterModelRxFirebaseChildEvent) {
     return getCharacterFilled(gameModel, gameCharacterModelRxFirebaseChildEvent).doOnNext(
         abstractGameCharacterListItem -> {
+          abstractGameCharacterListItem.setGamesCharactersPresenter(this);
+          abstractGameCharacterListItem.setMaster(
+              viewModel.getGameModel().getMasterId().equals(FireBaseUtils.getCurrentUserId()));
           if (TextUtils.isEmpty(abstractGameCharacterListItem.getGameCharacterModel().getUid())) {
-            flexibles.add(abstractGameCharacterListItem);
+            itemsAll.add(abstractGameCharacterListItem);
           } else {
-            flexibles.add(flexibles.indexOf(free), abstractGameCharacterListItem);
+            itemsAll.add(itemsAll.indexOf(free), abstractGameCharacterListItem);
           }
         });
   }
@@ -156,6 +174,14 @@ public class GamesCharactersPresenterImpl
       model.setUid(FireBaseUtils.getCurrentUserId());
     }
     gameCharactersInteractor.createGameTModel(viewModel.getGameModel(), model).subscribe(s -> {
+
+    }, this::handleThrowable);
+  }
+
+  @Override
+  public void play(Context context, AbstractGameCharacterListItem abstractGameCharacterListItem) {
+    gameCharactersInteractor.chooseCharacter(viewModel.getGameModel(),
+        abstractGameCharacterListItem.getGameCharacterModel()).subscribe(aVoid -> {
 
     }, this::handleThrowable);
   }

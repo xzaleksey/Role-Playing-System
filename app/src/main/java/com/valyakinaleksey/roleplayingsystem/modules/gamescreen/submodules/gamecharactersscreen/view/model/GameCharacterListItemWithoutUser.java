@@ -5,17 +5,20 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import java.util.List;
 
-public class GameCharacterListItemWithoutUser extends AbstractGameCharacterListItem<GameCharacterListItemWithoutUser.GameCharacterListItemWithoutUserViewHolder> {
+public class GameCharacterListItemWithoutUser extends
+    AbstractGameCharacterListItem<GameCharacterListItemWithoutUser.GameCharacterListItemWithoutUserViewHolder> {
 
   @Override
   public GameCharacterListItemWithoutUserViewHolder createViewHolder(FlexibleAdapter adapter,
@@ -26,26 +29,22 @@ public class GameCharacterListItemWithoutUser extends AbstractGameCharacterListI
 
   @Override public void bindViewHolder(FlexibleAdapter adapter,
       GameCharacterListItemWithoutUserViewHolder holder, int position, List payloads) {
-    holder.bind(this);
+    holder.bind(this, getGamesCharactersPresenter());
   }
 
-  public static class GameCharacterListItemWithoutUserViewHolder extends FlexibleViewHolder {
-    @Bind(R.id.avatar) AppCompatImageView avatar;
-    @Bind(R.id.character_name) TextView characterName;
-    @Bind(R.id.character_class_race) TextView characterClassRace;
+  public static class GameCharacterListItemWithoutUserViewHolder
+      extends AbstractGameCharacterItemViewHolder {
+
+    @Bind(R.id.btn_play) Button play;
 
     public GameCharacterListItemWithoutUserViewHolder(View view, FlexibleAdapter adapter) {
       super(view, adapter);
-      ButterKnife.bind(this, view);
     }
 
-    public void bind(AbstractGameCharacterListItem abstractGameCharacterListItem) {
-      avatar.setImageResource(R.drawable.ic_done_black_24dp);
-      characterName.setText(abstractGameCharacterListItem.getGameCharacterModel().getName());
-      GameRaceModel gameRaceModel = abstractGameCharacterListItem.getGameRaceModel();
-      GameClassModel gameClassModelModel = abstractGameCharacterListItem.getGameClassModel();
-      characterClassRace.setText(
-          gameRaceModel.getName().concat(", ").concat(gameClassModelModel.getName()));
+    public void bind(AbstractGameCharacterListItem abstractGameCharacterListItem,
+        GamesCharactersPresenter gamesCharactersPresenter) {
+      super.bind(abstractGameCharacterListItem, gamesCharactersPresenter);
+      play.setOnClickListener(v -> gamesCharactersPresenter.play(itemView.getContext(), abstractGameCharacterListItem));
     }
   }
 

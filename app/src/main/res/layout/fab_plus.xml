@@ -8,6 +8,5 @@
     android:layout_margin="@dimen/material_component_floating_action_button_margin"
     android:tint="@color/material_light_white"
     app:fabSize="normal"
-    app:layout_behavior="com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.FABScrollBehavior"
     app:srcCompat="@drawable/ic_add_black_24dp"
     />
