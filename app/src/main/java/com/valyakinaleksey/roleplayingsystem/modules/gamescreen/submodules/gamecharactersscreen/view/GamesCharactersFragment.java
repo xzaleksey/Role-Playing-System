@@ -55,7 +55,6 @@ import java.util.ArrayList;
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getComponent().inject(this);
-    flexibleAdapter = new FlexibleAdapter<>(new ArrayList<>());
   }
 
   @Override public void setupViews(View view) {
@@ -74,15 +73,14 @@ import java.util.ArrayList;
 
   @Override public void showContent() {
     super.showContent();
-    updateView();
     if (recyclerView.getAdapter() == null) {
+      flexibleAdapter = new FlexibleAdapter<>(new ArrayList<>());
       recyclerView.setAdapter(flexibleAdapter);
     }
+    updateView();
     if (data.hasCharacter()) { // if has character - no creation
       recyclerView.removeOnScrollListener(listener);
-      if (fab.isShown()) {
-        fab.hide();
-      }
+      fab.hide();
     } else {
       recyclerView.clearOnScrollListeners();
       recyclerView.addOnScrollListener(listener);

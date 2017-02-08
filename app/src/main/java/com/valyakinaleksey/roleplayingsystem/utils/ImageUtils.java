@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -51,6 +52,7 @@ public class ImageUtils {
     }
     Drawable placeHolder =
         new MaterialDrawableProviderImpl(user.getName(), user.getUid()).getDrawable();
+    Activity context = (Activity) ivAvatar.getContext();
     loadAvatar(ivAvatar, uri, placeHolder);
   }
 }
