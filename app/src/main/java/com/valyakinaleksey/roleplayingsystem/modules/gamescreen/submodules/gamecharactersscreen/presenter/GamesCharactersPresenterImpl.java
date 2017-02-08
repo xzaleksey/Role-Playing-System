@@ -109,8 +109,8 @@ public class GamesCharactersPresenterImpl
                       iterator.remove();
                       return getAddObservable(gameModel, gameCharacterModelRxFirebaseChildEvent);
                     }
+                    break;
                   }
-                  break;
                 }
               }
               final int finalIndex = index;
@@ -181,7 +181,7 @@ public class GamesCharactersPresenterImpl
 
   @Override
   public void play(Context context, AbstractGameCharacterListItem abstractGameCharacterListItem) {
-    if (!viewModel.isEmpty()) {
+    if (!viewModel.isEmpty() && context != null) {
       gameCharactersInteractor.chooseCharacter(viewModel.getGameModel(),
           abstractGameCharacterListItem.getGameCharacterModel()).subscribe(aVoid -> {
 
