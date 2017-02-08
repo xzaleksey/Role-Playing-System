@@ -19,6 +19,7 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
   private GameModel gameModel;
   private transient List<IFlexible> iFlexibles;
   private boolean master;
+  private boolean hasCharacter;
 
   public boolean isMaster() {
     return master;
@@ -60,12 +61,14 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
     super.writeToParcel(dest, flags);
     dest.writeParcelable(this.gameModel, flags);
     dest.writeInt(master ? 1 : 0);
+    dest.writeInt(hasCharacter ? 1 : 0);
   }
 
   protected GamesCharactersViewModel(Parcel in) {
     super(in);
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
     this.master = in.readInt() == 1;
+    this.hasCharacter = in.readInt() == 1;
   }
 
   public static final Creator<GamesCharactersViewModel> CREATOR =
@@ -78,4 +81,12 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
           return new GamesCharactersViewModel[size];
         }
       };
+
+  public void setHasCharacter(boolean hasCharacter) {
+    this.hasCharacter = hasCharacter;
+  }
+
+  public boolean hasCharacter() {
+    return hasCharacter;
+  }
 }

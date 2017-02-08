@@ -52,15 +52,7 @@ public class GamesCharactersPresenterImpl
   }
 
   @SuppressWarnings("unchecked") @Override public void getData() {
-    SubHeaderViewModel occupied = new SubHeaderViewModel();
-    free = new SubHeaderViewModel();
-    free.setTitle(StringUtils.getStringById(R.string.free));
-    itemsAll.add(occupied);
-    itemsAll.add(free);
-    occupied.setTitle(StringUtils.getStringById(R.string.occupied));
     viewModel.setiFlexibles(new ArrayList<>(itemsAll));
-    view.setData(viewModel);
-    view.showContent();
     view.showLoading();
     compositeSubscription.add(FireBaseUtils.checkReferenceExistsAndNotEmpty(
         FireBaseUtils.getTableReference(GAME_CHARACTERS).child(viewModel.getGameModel().getId()))
@@ -76,6 +68,14 @@ public class GamesCharactersPresenterImpl
     GameModel gameModel = viewModel.getGameModel();
     compositeSubscription.add(gameCharactersInteractor.observeChildren(gameModel)
         .concatMap(gameCharacterModelRxFirebaseChildEvent -> {
+          if (itemsAll.isEmpty()) {
+            SubHeaderViewModel occupied = new SubHeaderViewModel();
+            free = new SubHeaderViewModel();
+            free.setTitle(StringUtils.getStringById(R.string.free));
+            itemsAll.add(occupied);
+            itemsAll.add(free);
+            occupied.setTitle(StringUtils.getStringById(R.string.occupied));
+          }
           switch (gameCharacterModelRxFirebaseChildEvent.getEventType()) {
             case ADDED:
               return getAddObservable(gameModel, gameCharacterModelRxFirebaseChildEvent);
@@ -136,11 +136,12 @@ public class GamesCharactersPresenterImpl
                 }
               }
             }
+            viewModel.setHasCharacter(hasChar);
             if (hasChar) {
               iFlexibles = iFlexibles.subList(0, iFlexibles.indexOf(free));
             }
           }
-
+          view.setData(viewModel);
           viewModel.setiFlexibles(iFlexibles);
           view.showContent();
         }, this::handleThrowable));
@@ -180,9 +181,11 @@ public class GamesCharactersPresenterImpl
 
   @Override
   public void play(Context context, AbstractGameCharacterListItem abstractGameCharacterListItem) {
-    gameCharactersInteractor.chooseCharacter(viewModel.getGameModel(),
-        abstractGameCharacterListItem.getGameCharacterModel()).subscribe(aVoid -> {
+    if (!viewModel.isEmpty()) {
+      gameCharactersInteractor.chooseCharacter(viewModel.getGameModel(),
+          abstractGameCharacterListItem.getGameCharacterModel()).subscribe(aVoid -> {
 
-    }, this::handleThrowable);
+      }, this::handleThrowable);
+    }
   }
 }

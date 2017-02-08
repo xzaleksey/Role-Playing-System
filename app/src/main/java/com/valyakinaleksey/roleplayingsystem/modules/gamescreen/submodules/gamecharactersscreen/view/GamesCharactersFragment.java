@@ -22,7 +22,6 @@ import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablL
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.ArrayList;
-import javax.inject.Inject;
 
 @AutoComponent(dependencies = { ParentGameComponent.class },
     modules = GamesCharactersModule.class,
@@ -37,6 +36,7 @@ import javax.inject.Inject;
   @Bind(R.id.fab) FloatingActionButton fab;
 
   FlexibleAdapter<IFlexible> flexibleAdapter;
+  private HideFablListener listener;
 
   public static GamesCharactersFragment newInstance(Bundle arguments) {
     GamesCharactersFragment gamesDescriptionFragment = new GamesCharactersFragment();
@@ -61,7 +61,7 @@ import javax.inject.Inject;
   @Override public void setupViews(View view) {
     super.setupViews(view);
     fab.setOnClickListener(v -> getComponent().getPresenter().createCharacter());
-    recyclerView.addOnScrollListener(new HideFablListener(fab));
+    listener = new HideFablListener(fab);
   }
 
   @Override public void loadData() {
@@ -78,9 +78,16 @@ import javax.inject.Inject;
     if (recyclerView.getAdapter() == null) {
       recyclerView.setAdapter(flexibleAdapter);
     }
-    recyclerView.post(() -> {
-      RecyclerViewUtils.checkFabShow(recyclerView, fab);
-    });
+    if (data.hasCharacter()) { // if has character - no creation
+      recyclerView.removeOnScrollListener(listener);
+      if (fab.isShown()) {
+        fab.hide();
+      }
+    } else {
+      recyclerView.clearOnScrollListeners();
+      recyclerView.addOnScrollListener(listener);
+      recyclerView.post(() -> RecyclerViewUtils.checkFabShow(recyclerView, fab));
+    }
   }
 
   @Override public void onDestroy() {
