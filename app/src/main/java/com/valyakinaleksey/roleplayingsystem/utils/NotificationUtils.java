@@ -30,7 +30,7 @@ public class NotificationUtils {
 
     android.support.v4.app.NotificationCompat.Builder builder =
         new android.support.v4.app.NotificationCompat.Builder(RpsApp.app()).setSmallIcon(
-            android.R.drawable.ic_lock_lock)
+            R.drawable.ic_launcher)
             .setContentTitle(getStringById(R.string.app_name))
             .setContentText(caption)
             .setProgress(100, percentComplete, false)

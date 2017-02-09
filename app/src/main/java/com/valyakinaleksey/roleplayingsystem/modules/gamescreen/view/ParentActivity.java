@@ -25,7 +25,6 @@ public class ParentActivity extends AbsSingleFragmentActivity {
     if (savedInstanceState == null) {
       initNavigate();
     }
-
   }
 
   @Override protected int getLayoutId() {

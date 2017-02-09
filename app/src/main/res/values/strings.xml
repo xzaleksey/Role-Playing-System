@@ -69,5 +69,7 @@
   <string name="human">Human</string>
   <string name="free">Free</string>
   <string name="access_error">Access error</string>
+  <string name="action_progress">Progress</string>
+  <string name="connecting">Connecting…</string>
 
 </resources>

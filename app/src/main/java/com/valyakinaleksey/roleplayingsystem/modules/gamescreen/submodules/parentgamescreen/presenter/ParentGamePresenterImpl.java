@@ -110,14 +110,6 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         observeGameInteractor.observeGameModelRemoved(gameModel).subscribe(gameModel1 -> {
           parentPresenter.navigateBack();
         }, Crashlytics::logException));
-    compositeSubscription.add(FireBaseUtils.getConnectionObservableWithTimeInterval()
-        .compose(RxTransformers.applySchedulers())
-        .subscribe(aBoolean -> {
-          if (!aBoolean) {
-            view.hideLoading();
-            view.showError(BaseError.NO_CONNECTION);
-          }
-        }));
   }
 
   @Override public void deleteGame() {

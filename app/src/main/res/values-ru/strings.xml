@@ -59,5 +59,6 @@
   <string name="human">Человек</string>
   <string name="free">Свободные</string>
   <string name="access_error">Ошибка доступа</string>
+  <string name="connecting">Соединение…</string>
 
 </resources>

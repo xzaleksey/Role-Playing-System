@@ -1,14 +1,19 @@
 package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.ProgressBar;
 import butterknife.Bind;
+import butterknife.BindString;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -20,8 +25,10 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.OnToolbarChangedListener;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
+import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.ParentScope;
 import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
 import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
@@ -38,13 +45,16 @@ import autodagger.AutoInjector;
     superinterfaces = { HasParentPresenter.class, GlobalComponent.class }) @ParentScope
 @AutoInjector public class ParentFragment
     extends AbsButterLceFragment<ParentFragmentComponent, ParentModel, ParentView>
-    implements ParentView {
-
-  private GoogleApiClient googleApiClient;
-
-  @Bind(R.id.toolbar) Toolbar toolbar;
+    implements ParentView, OnToolbarChangedListener {
 
   public static final String TAG = ParentFragment.class.getSimpleName();
+
+  private GoogleApiClient googleApiClient;
+  @Bind(R.id.toolbar) Toolbar toolbar;
+  @Bind(R.id.toolbar_progress_bar) ProgressBar progressBar;
+
+  @BindString(R.string.app_name) protected String toolbarTitle;
+  @BindString(R.string.connecting) protected String connectionString;
 
   public static ParentFragment newInstance(Bundle arguments) {
     ParentFragment gamesDescriptionFragment = new ParentFragment();
@@ -78,7 +88,12 @@ import autodagger.AutoInjector;
 
   @Override public void setupViews(View view) {
     super.setupViews(view);
-    ((AbsActivity) getActivity()).setupToolbar();
+    AbsActivity activity = (AbsActivity) getActivity();
+    activity.setupToolbar();
+    activity.addOnToolBarChangedListener(this);
+    progressBar.getIndeterminateDrawable()
+        .setColorFilter(ContextCompat.getColor(getActivity(), R.color.md_white_1000),
+            PorterDuff.Mode.MULTIPLY);
     //Drawer result = new DrawerBuilder()
     //    .withActivity(getActivity())
     //    .withToolbar(((AbsActivity) getActivity()).getToolbar())
@@ -122,6 +137,14 @@ import autodagger.AutoInjector;
     googleApiClient.disconnect();
   }
 
+  @Override public void showToolbarLoading(boolean visible) {
+    progressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
+    ActionBar supportActionBar = ((AbsActivity) getActivity()).getSupportActionBar();
+    if (supportActionBar != null) {
+      supportActionBar.setTitle(visible ? connectionString : toolbarTitle);
+    }
+  }
+
   @Override public void loadData() {
     getComponent().getPresenter().getData();
   }
@@ -144,5 +167,9 @@ import autodagger.AutoInjector;
 
   @Override public void getNavigationFragment(Bundle args) {
     getComponent().getPresenter().navigateTo(this, args);
+  }
+
+  @Override public void onTitleChanged(String title) {
+    toolbarTitle = title;
   }
 }

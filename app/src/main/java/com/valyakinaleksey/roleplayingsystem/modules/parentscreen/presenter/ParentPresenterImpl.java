@@ -6,11 +6,14 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
+import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.GamesDescriptionFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.BACK;
@@ -36,6 +39,11 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel>
     viewModel.setFirstNavigation(false);
     view.getNavigationFragment(null);
     view.setData(viewModel);
+    compositeSubscription.add(FireBaseUtils.getConnectionObservableWithTimeInterval()
+        .compose(RxTransformers.applySchedulers())
+        .subscribe(connected -> {
+          view.showToolbarLoading(!connected);
+        }));
   }
 
   @Override public void navigateTo(Fragment fragment, Bundle args) {

@@ -17,6 +17,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FORMAT_S
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES_IN_USERS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERISTICS;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CLASSES;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_LOG;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_RACES;
@@ -62,6 +63,7 @@ public class GameRepositoryImpl implements GameRepository {
       childUpdates.put(String.format(FORMAT_SLASHES, GAME_CLASSES) + id, null);
       childUpdates.put(String.format(FORMAT_SLASHES, GAME_RACES) + id, null);
       childUpdates.put(String.format(FORMAT_SLASHES, GAME_LOG) + id, null);
+      childUpdates.put(String.format(FORMAT_SLASHES, GAME_CHARACTERS) + id, null);
       databaseReference.updateChildren(childUpdates);
       booleanPublishSubject.onNext(true);
     }, throwable -> {
