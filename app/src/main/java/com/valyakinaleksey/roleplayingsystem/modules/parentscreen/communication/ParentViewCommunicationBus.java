@@ -37,8 +37,8 @@ import javax.inject.Inject;
     presenter.navigateBack();
   }
 
-  @Override public void showToolbarLoading(boolean visible) {
-    getNavigationResolver().resolveNavigation(parentView -> parentView.showToolbarLoading(visible));
+  @Override public void updateToolbar() {
+    getNavigationResolver().resolveNavigation(ParentView::updateToolbar);
   }
 
   @Override public void getNavigationFragment(Bundle args) {

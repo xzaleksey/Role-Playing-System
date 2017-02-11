@@ -8,7 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.Par
 
 public interface ParentView extends LceView<ParentModel> {
 
-    void showToolbarLoading(boolean visible);
+    void updateToolbar();
 
     void getNavigationFragment(Bundle args);
 }

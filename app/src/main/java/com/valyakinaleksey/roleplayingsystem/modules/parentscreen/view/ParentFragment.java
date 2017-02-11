@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,17 +19,10 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.OnToolbarChangedListener;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
-import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.ParentScope;
 import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
 import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
@@ -53,7 +47,6 @@ import autodagger.AutoInjector;
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.toolbar_progress_bar) ProgressBar progressBar;
 
-  @BindString(R.string.app_name) protected String toolbarTitle;
   @BindString(R.string.connecting) protected String connectionString;
 
   public static ParentFragment newInstance(Bundle arguments) {
@@ -137,11 +130,12 @@ import autodagger.AutoInjector;
     googleApiClient.disconnect();
   }
 
-  @Override public void showToolbarLoading(boolean visible) {
+  @Override public void updateToolbar() {
+    boolean visible = data.isDisconnected();
     progressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
     ActionBar supportActionBar = ((AbsActivity) getActivity()).getSupportActionBar();
     if (supportActionBar != null) {
-      supportActionBar.setTitle(visible ? connectionString : toolbarTitle);
+      supportActionBar.setTitle(visible ? connectionString : data.getToolbarTitle());
     }
   }
 
@@ -155,6 +149,7 @@ import autodagger.AutoInjector;
 
   @Override public void showContent() {
     super.showContent();
+    updateToolbar();
   }
 
   @Override protected int getContentResId() {
@@ -170,6 +165,7 @@ import autodagger.AutoInjector;
   }
 
   @Override public void onTitleChanged(String title) {
-    toolbarTitle = title;
+    data.setToolbarTitle(title);
+    updateToolbar();
   }
 }
