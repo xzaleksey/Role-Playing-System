@@ -11,6 +11,7 @@
   <color name="colorDivider">#BDBDBD</color>
   <color name="defaultGrayTintColor">#737373</color>
   <color name="backgroundColor">#fff3f3f3</color>
+  <color name="grey12Color">#0c000000</color>
 
 
 </resources>

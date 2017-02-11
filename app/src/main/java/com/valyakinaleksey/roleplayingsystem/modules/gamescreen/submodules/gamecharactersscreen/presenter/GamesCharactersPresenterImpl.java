@@ -5,13 +5,12 @@ import android.os.Bundle;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
+import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitilesLayout;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersView;
@@ -19,7 +18,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamec
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,7 +25,11 @@ import java.util.List;
 import java.util.UUID;
 import rx.Observable;
 
+import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel.FREE_TAB;
+import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel.NPC_TAB;
+import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel.OCCUPIED_TAB;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERS;
+import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringById;
 
 public class GamesCharactersPresenterImpl
     extends BasePresenter<GamesCharactersView, GamesCharactersViewModel>
@@ -48,11 +50,13 @@ public class GamesCharactersPresenterImpl
     gamesCharactersViewModel.setGameModel(gameModel);
     gamesCharactersViewModel.setMaster(
         gameModel.getMasterId().equals(FireBaseUtils.getCurrentUserId()));
+    initTitleNav(gamesCharactersViewModel);
     return gamesCharactersViewModel;
   }
 
   @SuppressWarnings("unchecked") @Override public void getData() {
     viewModel.setiFlexibles(new ArrayList<>(itemsAll));
+    view.preFillModel(viewModel);
     view.showLoading();
     compositeSubscription.add(FireBaseUtils.checkReferenceExistsAndNotEmpty(
         FireBaseUtils.getTableReference(GAME_CHARACTERS).child(viewModel.getGameModel().getId()))
@@ -71,10 +75,10 @@ public class GamesCharactersPresenterImpl
           if (itemsAll.isEmpty()) {
             SubHeaderViewModel occupied = new SubHeaderViewModel();
             free = new SubHeaderViewModel();
-            free.setTitle(StringUtils.getStringById(R.string.free));
+            free.setTitle(getStringById(R.string.free));
             itemsAll.add(occupied);
             itemsAll.add(free);
-            occupied.setTitle(StringUtils.getStringById(R.string.occupied));
+            occupied.setTitle(getStringById(R.string.occupied));
           }
           switch (gameCharacterModelRxFirebaseChildEvent.getEventType()) {
             case ADDED:
@@ -179,6 +183,12 @@ public class GamesCharactersPresenterImpl
     }, this::handleThrowable);
   }
 
+  @Override public void restoreViewModel(GamesCharactersViewModel viewModel) {
+    super.restoreViewModel(viewModel);
+    initTitleNav(viewModel);
+    view.preFillModel(viewModel);
+  }
+
   @Override
   public void play(Context context, AbstractGameCharacterListItem abstractGameCharacterListItem) {
     if (!viewModel.isEmpty() && context != null) {
@@ -187,5 +197,23 @@ public class GamesCharactersPresenterImpl
 
       }, this::handleThrowable);
     }
+  }
+
+  private void initTitleNav(GamesCharactersViewModel gamesCharactersViewModel) {
+    ArrayList<AnimatedTitilesLayout.TitleModel> titleModels = new ArrayList<>();
+
+    titleModels.add(getFilledTitleModel(OCCUPIED_TAB, getStringById(R.string.occupied)));
+    titleModels.add(getFilledTitleModel(FREE_TAB, getStringById(R.string.free)));
+    titleModels.add(getFilledTitleModel(NPC_TAB, getStringById(R.string.npc)));
+    gamesCharactersViewModel.setTitleModels(titleModels);
+  }
+
+  private AnimatedTitilesLayout.TitleModel getFilledTitleModel(int index, String title) {
+    AnimatedTitilesLayout.TitleModel titleModel = new AnimatedTitilesLayout.TitleModel();
+    titleModel.setTitle(title);
+    titleModel.setOnClickListener(v -> {
+      viewModel.setNavigationTab(index);
+    });
+    return titleModel;
   }
 }

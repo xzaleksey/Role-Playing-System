@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
+import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitilesLayout;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -15,14 +16,27 @@ import java.util.List;
 
 public class GamesCharactersViewModel extends BaseEmptyViewModel
     implements EmptyViewModel, Parcelable, Serializable {
+  public static final int OCCUPIED_TAB = 0;
+  public static final int FREE_TAB = 1;
+  public static final int NPC_TAB = 2;
 
   private GameModel gameModel;
   private transient List<IFlexible> iFlexibles;
   private boolean master;
   private boolean hasCharacter;
+  private int navigationTab;
+  private transient List<AnimatedTitilesLayout.TitleModel> titleModels;
 
   public boolean isMaster() {
     return master;
+  }
+
+  public List<AnimatedTitilesLayout.TitleModel> getTitleModels() {
+    return titleModels;
+  }
+
+  public void setTitleModels(List<AnimatedTitilesLayout.TitleModel> titleModels) {
+    this.titleModels = titleModels;
   }
 
   public void setMaster(boolean master) {
@@ -62,6 +76,7 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
     dest.writeParcelable(this.gameModel, flags);
     dest.writeInt(master ? 1 : 0);
     dest.writeInt(hasCharacter ? 1 : 0);
+    dest.writeInt(navigationTab);
   }
 
   protected GamesCharactersViewModel(Parcel in) {
@@ -69,6 +84,15 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
     this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
     this.master = in.readInt() == 1;
     this.hasCharacter = in.readInt() == 1;
+    this.navigationTab = in.readInt();
+  }
+
+  public int getNavigationTab() {
+    return navigationTab;
+  }
+
+  public void setNavigationTab(int navigationTab) {
+    this.navigationTab = navigationTab;
   }
 
   public static final Creator<GamesCharactersViewModel> CREATOR =

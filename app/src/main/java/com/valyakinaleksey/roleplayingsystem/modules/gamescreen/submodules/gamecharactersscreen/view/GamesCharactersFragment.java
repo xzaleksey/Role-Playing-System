@@ -12,6 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
+import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitilesLayout;
 import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.GamesCharactersModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.HasGameCharactersPresenter;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
   @Bind(R.id.fab) FloatingActionButton fab;
+  @Bind(R.id.title_switcher) AnimatedTitilesLayout titleLayout;
 
   FlexibleAdapter<IFlexible> flexibleAdapter;
   private HideFablListener listener;
@@ -61,6 +63,9 @@ import java.util.ArrayList;
     super.setupViews(view);
     fab.setOnClickListener(v -> getComponent().getPresenter().createCharacter());
     listener = new HideFablListener(fab);
+    if (data != null) {
+      updateNavTabs(data);
+    }
   }
 
   @Override public void loadData() {
@@ -93,10 +98,18 @@ import java.util.ArrayList;
   }
 
   @Override protected int getContentResId() {
-    return R.layout.coordinator_recycler_fab_layout;
+    return R.layout.fragment_game_characters;
   }
 
   @Override public void updateView() {
     flexibleAdapter.updateDataSet(data.getiFlexibles(), true);
+  }
+
+  @Override public void preFillModel(GamesCharactersViewModel data) {
+    updateNavTabs(data);
+  }
+
+  private void updateNavTabs(GamesCharactersViewModel data) {
+    titleLayout.updateModels(data.getTitleModels(), data.getNavigationTab());
   }
 }

@@ -1,0 +1,27 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:appContext="com.valyakinaleksey.roleplayingsystem.modules.mainscreen.view.MainActivity"
+    >
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      >
+    <com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitilesLayout
+        android:id="@+id/title_switcher"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/common_margin_between_elements"
+        android:layout_marginRight="@dimen/common_margin_between_elements"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/titles_background_rounded_rectangle"
+        android:padding="2dp"
+        />
+    <include layout="@layout/recycler_view" />
+  </LinearLayout>
+  <include layout="@layout/fab_plus" />
+</android.support.design.widget.CoordinatorLayout>
