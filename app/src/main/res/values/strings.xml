@@ -71,6 +71,10 @@
   <string name="access_error">Access error</string>
   <string name="action_progress">Progress</string>
   <string name="connecting">Connecting…</string>
-  <string name="npc">NPC</string>
+  <string name="npc" translatable="false">NPC</string>
+  <string name="make_npc">Make NPC</string>
+  <string name="finish_game">Finish game</string>
+  <string name="led">Led</string>
+  <string name="took_part">Took part in</string>
 
 </resources>

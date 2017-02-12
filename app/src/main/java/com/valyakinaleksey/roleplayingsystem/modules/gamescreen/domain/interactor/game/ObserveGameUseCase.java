@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game;
 
 import com.google.firebase.database.DataSnapshot;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
@@ -6,8 +6,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 
 import rx.Observable;
 
-import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel.FIELD_DESCRIPTION;
-import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel.FIELD_NAME;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_DESCRIPTION;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_NAME;
 
 public class ObserveGameUseCase implements ObserveGameInteractor {
 

@@ -3,8 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
-import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitilesLayout;
+import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -25,17 +24,17 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
   private boolean master;
   private boolean hasCharacter;
   private int navigationTab;
-  private transient List<AnimatedTitilesLayout.TitleModel> titleModels;
+  private transient List<AnimatedTitlesLayout.TitleModel> titleModels;
 
   public boolean isMaster() {
     return master;
   }
 
-  public List<AnimatedTitilesLayout.TitleModel> getTitleModels() {
+  public List<AnimatedTitlesLayout.TitleModel> getTitleModels() {
     return titleModels;
   }
 
-  public void setTitleModels(List<AnimatedTitilesLayout.TitleModel> titleModels) {
+  public void setTitleModels(List<AnimatedTitlesLayout.TitleModel> titleModels) {
     this.titleModels = titleModels;
   }
 
@@ -64,7 +63,7 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
   }
 
   @Override public boolean isEmpty() {
-    return iFlexibles.isEmpty();
+    return false;
   }
 
   @Override public int describeContents() {

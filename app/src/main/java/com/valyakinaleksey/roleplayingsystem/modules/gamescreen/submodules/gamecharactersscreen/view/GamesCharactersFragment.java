@@ -12,7 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
-import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitilesLayout;
+import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout;
 import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.GamesCharactersModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.HasGameCharactersPresenter;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
   @Bind(R.id.fab) FloatingActionButton fab;
-  @Bind(R.id.title_switcher) AnimatedTitilesLayout titleLayout;
+  @Bind(R.id.title_switcher) AnimatedTitlesLayout titleLayout;
 
   FlexibleAdapter<IFlexible> flexibleAdapter;
   private HideFablListener listener;
@@ -78,6 +78,9 @@ import java.util.ArrayList;
 
   @Override public void showContent() {
     super.showContent();
+    if (titleLayout.getTitleModels().isEmpty()) {
+      updateNavTabs(data);
+    }
     if (recyclerView.getAdapter() == null) {
       flexibleAdapter = new FlexibleAdapter<>(new ArrayList<>());
       recyclerView.setAdapter(flexibleAdapter);

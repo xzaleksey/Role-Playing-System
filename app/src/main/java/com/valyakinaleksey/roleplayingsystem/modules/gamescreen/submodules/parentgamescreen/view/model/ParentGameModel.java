@@ -1,17 +1,12 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
-import com.valyakinaleksey.roleplayingsystem.core.utils.SerializebleTuple;
-import com.valyakinaleksey.roleplayingsystem.core.utils.Tuple;
+import com.valyakinaleksey.roleplayingsystem.core.utils.SerializableTuple;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ParentGameModel extends BaseEmptyViewModel {
   public static final String USER_SCREEN = "user_screen";
@@ -21,7 +16,7 @@ public class ParentGameModel extends BaseEmptyViewModel {
   private boolean isMaster;
   private String navigationTag;
   private boolean firstNavigation = true;
-  private ArrayList<SerializebleTuple<Integer, String>> fragmentsInfo;
+  private ArrayList<SerializableTuple<Integer, String>> fragmentsInfo;
 
   public ParentGameModel() {
     fragmentsInfo = new ArrayList<>();
@@ -76,11 +71,11 @@ public class ParentGameModel extends BaseEmptyViewModel {
     dest.writeSerializable(this.fragmentsInfo);
   }
 
-  public ArrayList<SerializebleTuple<Integer, String>> getFragmentsInfo() {
+  public ArrayList<SerializableTuple<Integer, String>> getFragmentsInfo() {
     return fragmentsInfo;
   }
 
-  public void setFragmentsInfo(ArrayList<SerializebleTuple<Integer, String>> fragmentsInfo) {
+  public void setFragmentsInfo(ArrayList<SerializableTuple<Integer, String>> fragmentsInfo) {
     this.fragmentsInfo = fragmentsInfo;
   }
 
@@ -90,7 +85,7 @@ public class ParentGameModel extends BaseEmptyViewModel {
     this.isMaster = in.readByte() != 0;
     this.navigationTag = in.readString();
     this.firstNavigation = in.readByte() != 0;
-    this.fragmentsInfo = (ArrayList<SerializebleTuple<Integer, String>>) in.readSerializable();
+    this.fragmentsInfo = (ArrayList<SerializableTuple<Integer, String>>) in.readSerializable();
   }
 
   public static final Creator<ParentGameModel> CREATOR = new Creator<ParentGameModel>() {

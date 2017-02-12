@@ -13,22 +13,23 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.DATE_CREATE;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_NAME;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
 
 public class GameModel implements Serializable, Parcelable {
-  public static final String FIELD_DESCRIPTION = "description";
-  public static final String FIELD_NAME = "name";
+  public static final String FIELD_FINISHED = "finished";
 
   public static final String KEY = GameModel.class.getSimpleName();
   private String id;
   private String masterId;
   private String masterName;
-  @PropertyName(FIELD_NAME) private String name;
-  @PropertyName(FIELD_DESCRIPTION) private String description;
+  private String name;
+  private String description;
   private String password;
-  @PropertyName(DATE_CREATE) private Object dateCreate;
-  @PropertyName(TEMP_DATE_CREATE) private Long tempDateCreate;
+  private Object dateCreate;
+  private Long tempDateCreate;
+  private boolean finished;
 
   /**
    * Don' use default constructor, it is for firebase and parcelable
@@ -107,6 +108,14 @@ public class GameModel implements Serializable, Parcelable {
       return tempDateCreate;
     }
     return (long) dateCreate;
+  }
+
+  public boolean isFinished() {
+    return finished;
+  }
+
+  public void setFinished(boolean finished) {
+    this.finished = finished;
   }
 
   public void setTempDateCreate(long dateCreate) {

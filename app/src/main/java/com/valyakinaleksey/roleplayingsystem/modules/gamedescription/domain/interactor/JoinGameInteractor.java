@@ -5,6 +5,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import rx.Observable;
 
 public interface JoinGameInteractor {
-    Observable<Boolean> joinGame(GameModel gameModel);
+    Observable<Void> joinGame(GameModel gameModel);
 }
       

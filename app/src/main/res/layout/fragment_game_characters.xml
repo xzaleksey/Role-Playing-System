@@ -10,7 +10,7 @@
       android:layout_height="match_parent"
       android:orientation="vertical"
       >
-    <com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitilesLayout
+    <com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout
         android:id="@+id/title_switcher"
         android:layout_width="match_parent"
         android:layout_height="32dp"

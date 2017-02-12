@@ -5,9 +5,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.AccessFirebaseException;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.BaseGameTEditInteractorImpl;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameRacesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions.BaseGameTEditInteractorImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -50,6 +50,7 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
     } else {
       abstractGameCharacterListItem = new GameCharacterListItemWithUser();
     }
+    abstractGameCharacterListItem.setGameModel(gameModel);
     abstractGameCharacterListItem.setGameCharacterModel(gameCharacterModel);
     Observable<AbstractGameCharacterListItem> abstractGameCharacterListItemObservable;
     if (free) {
@@ -96,7 +97,7 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
       GameCharacterModel gameCharacterModel) {
     return getSingleChild(gameModel, gameCharacterModel.getId()).switchMap(gameCharacterModel1 -> {
       if (TextUtils.isEmpty(gameCharacterModel1.getUid())) {
-        return FireBaseUtils.setValue(FireBaseUtils.getCurrentUserId(),
+        return FireBaseUtils.setData(FireBaseUtils.getCurrentUserId(),
             getDatabaseReference(gameModel).child(gameCharacterModel.getId())
                 .child(FireBaseUtils.UID));
       } else {

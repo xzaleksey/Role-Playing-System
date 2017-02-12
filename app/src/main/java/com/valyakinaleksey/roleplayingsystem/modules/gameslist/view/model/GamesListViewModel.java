@@ -3,7 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
 
@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class GamesListViewModel extends BaseEmptyViewModel
     implements EmptyViewModel, Parcelable, Serializable {
 
-  private transient DatabaseReference reference;
+  private transient Query query;
   private CreateGameDialogViewModel createGameDialogViewModel;
   private PasswordDialogViewModel passwordDialogViewModel;
   private String toolbarTitle;
@@ -22,12 +22,12 @@ public class GamesListViewModel extends BaseEmptyViewModel
     setEmpty(true);
   }
 
-  public DatabaseReference getReference() {
-    return reference;
+  public Query getQuery() {
+    return query;
   }
 
-  public void setReference(DatabaseReference reference) {
-    this.reference = reference;
+  public void setQuery(Query query) {
+    this.query = query;
   }
 
   public int getGamesCount() {

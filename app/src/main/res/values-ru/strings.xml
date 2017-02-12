@@ -60,5 +60,9 @@
   <string name="free">Свободные</string>
   <string name="access_error">Ошибка доступа</string>
   <string name="connecting">Соединение…</string>
+  <string name="make_npc">Сделать NPC</string>
+  <string name="finish_game">Завершить игру</string>
+  <string name="led">Провел</string>
+  <string name="took_part">Участвовал в</string>
 
 </resources>

@@ -4,4 +4,13 @@
     <item quantity="one">%d game</item>
     <item quantity="other">%d games</item>
   </plurals>
+
+  <plurals name="games_count_mastered">
+    <item quantity="one">%d game</item>
+    <item quantity="other">%d games</item>
+  </plurals>
+  <plurals name="games_count_in">
+    <item quantity="one">%d game</item>
+    <item quantity="other">%d games</item>
+  </plurals>
 </resources>

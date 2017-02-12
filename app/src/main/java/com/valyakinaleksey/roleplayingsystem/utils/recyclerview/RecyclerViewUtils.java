@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 public class RecyclerViewUtils {
 
   public static void checkFabShow(RecyclerView recyclerView, FloatingActionButton fab) {
+    if (recyclerView == null) return;
     RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
     if (layoutManager instanceof LinearLayoutManager) {
       LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;

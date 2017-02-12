@@ -2,7 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,17 +33,12 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Create
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
-import com.valyakinaleksey.roleplayingsystem.utils.AndroidUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.ViewTouchMoveUpDownObservable;
-import com.valyakinaleksey.roleplayingsystem.utils.animation.CollapseAnimation;
-import com.valyakinaleksey.roleplayingsystem.utils.animation.ExpandAnimation;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener;
-import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
 public class GamesListFragment
@@ -100,7 +94,7 @@ public class GamesListFragment
     if (gameListAdapter == null) {
       gameListAdapter =
           new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class,
-              data.getReference(), getComponent().getPresenter());
+              data.getQuery(), getComponent().getPresenter());
       gameListAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
         @Override public void onItemRangeInserted(int positionStart, int itemCount) {
           super.onItemRangeInserted(positionStart, itemCount);

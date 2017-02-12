@@ -15,7 +15,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnimatedTitilesLayout extends RelativeLayout {
+public class AnimatedTitlesLayout extends RelativeLayout {
   private LinearLayout linearLayout;
   private List<TitleModel> titleModels;
   private int whiteColor;
@@ -24,17 +24,17 @@ public class AnimatedTitilesLayout extends RelativeLayout {
   private int primaryTextcolor;
   private View selector;
 
-  public AnimatedTitilesLayout(Context context) {
+  public AnimatedTitlesLayout(Context context) {
     super(context);
     init();
   }
 
-  public AnimatedTitilesLayout(Context context, AttributeSet attrs) {
+  public AnimatedTitlesLayout(Context context, AttributeSet attrs) {
     super(context, attrs);
     init();
   }
 
-  public AnimatedTitilesLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+  public AnimatedTitlesLayout(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     init();
   }
@@ -49,6 +49,10 @@ public class AnimatedTitilesLayout extends RelativeLayout {
     initSelector();
     addView(linearLayout,
         new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+  }
+
+  public List<TitleModel> getTitleModels() {
+    return titleModels;
   }
 
   private void initSelector() {

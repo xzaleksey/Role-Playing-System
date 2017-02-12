@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 public abstract class AbstractGameCharacterListItem<T extends RecyclerView.ViewHolder>
     implements Serializable, Parcelable, IFlexible<T> {
   private GameCharacterModel gameCharacterModel;
+  private GameModel gameModel;
   private GameClassModel gameClassModel;
   private GameRaceModel gameRaceModel;
   private boolean isMaster;
@@ -24,6 +26,14 @@ public abstract class AbstractGameCharacterListItem<T extends RecyclerView.ViewH
 
   public void setGamesCharactersPresenter(GamesCharactersPresenter gamesCharactersPresenter) {
     this.gamesCharactersPresenter = gamesCharactersPresenter;
+  }
+
+  public GameModel getGameModel() {
+    return gameModel;
+  }
+
+  public void setGameModel(GameModel gameModel) {
+    this.gameModel = gameModel;
   }
 
   public GameCharacterModel getGameCharacterModel() {
@@ -97,6 +107,7 @@ public abstract class AbstractGameCharacterListItem<T extends RecyclerView.ViewH
     dest.writeParcelable(this.gameClassModel, flags);
     dest.writeParcelable(this.gameRaceModel, flags);
     dest.writeByte(this.isMaster ? (byte) 1 : (byte) 0);
+    dest.writeParcelable(this.gameModel, flags);
   }
 
   protected AbstractGameCharacterListItem(Parcel in) {
@@ -104,6 +115,7 @@ public abstract class AbstractGameCharacterListItem<T extends RecyclerView.ViewH
     this.gameClassModel = in.readParcelable(GameClassModel.class.getClassLoader());
     this.gameRaceModel = in.readParcelable(GameRaceModel.class.getClassLoader());
     this.isMaster = in.readByte() != 0;
+    this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
   }
 }
       

@@ -1,18 +1,15 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions;
 
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
-
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
 
 public abstract class BaseGameTEditInteractorImpl<T extends HasId>
     implements GameTEditInteractor<T> {

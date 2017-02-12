@@ -11,8 +11,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import java.util.List;
@@ -43,8 +46,14 @@ public class GameCharacterListItemWithoutUser extends
 
     public void bind(AbstractGameCharacterListItem abstractGameCharacterListItem,
         GamesCharactersPresenter gamesCharactersPresenter) {
+
       super.bind(abstractGameCharacterListItem, gamesCharactersPresenter);
-      play.setOnClickListener(v -> gamesCharactersPresenter.play(itemView.getContext(), abstractGameCharacterListItem));
+      play.setOnClickListener(
+          v -> gamesCharactersPresenter.play(itemView.getContext(), abstractGameCharacterListItem));
+      play.setText(abstractGameCharacterListItem.getGameModel()
+          .getMasterId()
+          .equals(FireBaseUtils.getCurrentUserId()) ? StringUtils.getStringById(R.string.make_npc)
+          : StringUtils.getStringById(R.string.play));
     }
   }
 

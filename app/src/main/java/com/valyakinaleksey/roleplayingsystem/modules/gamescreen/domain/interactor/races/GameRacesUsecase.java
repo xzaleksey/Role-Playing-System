@@ -1,6 +1,7 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races;
 
 import com.google.firebase.database.DatabaseReference;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions.BaseGameTEditInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;

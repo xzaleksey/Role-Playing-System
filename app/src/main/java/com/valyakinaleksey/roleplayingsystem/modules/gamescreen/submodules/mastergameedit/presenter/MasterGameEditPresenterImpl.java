@@ -17,11 +17,11 @@ import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel.EditableSingleValueEditModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel.SimpleSingleValueEditModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.adapter.viewmodel.TwoValueEditModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.EditGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameRacesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameTEditInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.EditGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.characterisitics.GameCharacteristicsInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions.GameTEditInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacteristicModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -39,6 +39,8 @@ import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_MASTER_GAME_DESCRIPTION;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_MASTER_GAME_NAME;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_DESCRIPTION;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_NAME;
 
 public class MasterGameEditPresenterImpl
     extends BasePresenter<MasterGameEditView, MasterGameEditModel>
@@ -111,7 +113,7 @@ public class MasterGameEditPresenterImpl
           if (!gameModel.getName().equals(s)) {
             gameModel.setName(s);
             compositeSubscription.add(
-                editGameInteractor.saveField(gameModel, GameModel.FIELD_NAME, gameModel.getName())
+                editGameInteractor.saveField(gameModel, FIELD_NAME, gameModel.getName())
                     .subscribe(s1 -> {
                       Timber.d("Success save name " + s1);
                     }, Crashlytics::logException));
@@ -166,11 +168,10 @@ public class MasterGameEditPresenterImpl
           GameModel gameModel = viewModel.getGameModel();
           if (!gameModel.getDescription().equals(s)) {
             gameModel.setDescription(s);
-            compositeSubscription.add(
-                editGameInteractor.saveField(gameModel, GameModel.FIELD_DESCRIPTION,
-                    gameModel.getDescription()).subscribe(s1 -> {
-                  Timber.d("Success save name " + s1);
-                }, Crashlytics::logException));
+            compositeSubscription.add(editGameInteractor.saveField(gameModel, FIELD_DESCRIPTION,
+                gameModel.getDescription()).subscribe(s1 -> {
+              Timber.d("Success save name " + s1);
+            }, Crashlytics::logException));
           }
         });
   }
@@ -192,8 +193,8 @@ public class MasterGameEditPresenterImpl
                       twoValueEditModel.setId(s1);
                     }, Crashlytics::logException);
               } else {
-                tGameTEditInteractor.editGameTmodel(viewModel.getGameModel(), model,
-                    FireBaseUtils.FIELD_NAME, model.getName())
+                tGameTEditInteractor.editGameTmodel(viewModel.getGameModel(), model, FIELD_NAME,
+                    model.getName())
                     .compose(RxTransformers.applySchedulers())
                     .subscribe(gameCharacteristicModel -> {
 
@@ -203,8 +204,8 @@ public class MasterGameEditPresenterImpl
     twoValueEditModel.setSecondaryValue(new SimpleSingleValueEditModel(model.getDescription(),
         StringUtils.getStringById(R.string.description), s -> {
       model.setDescription(s);
-      tGameTEditInteractor.editGameTmodel(viewModel.getGameModel(), model,
-          FireBaseUtils.FIELD_DESCRIPTION, model.getDescription())
+      tGameTEditInteractor.editGameTmodel(viewModel.getGameModel(), model, FIELD_DESCRIPTION,
+          model.getDescription())
           .compose(RxTransformers.applySchedulers())
           .subscribe(gameCharacteristicModel -> {
 

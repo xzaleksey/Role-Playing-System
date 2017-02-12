@@ -8,7 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
 
-public interface GlobalComponent extends UseCaseProvider {
+public interface GlobalComponent extends InteractorProvider {
     Context context();
 
     PathManager pathManager();

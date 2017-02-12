@@ -7,10 +7,9 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.R;
-import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
-import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitilesLayout;
+import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersView;
@@ -37,7 +36,6 @@ public class GamesCharactersPresenterImpl
 
   private GameCharactersInteractor gameCharactersInteractor;
   private List<IFlexible> itemsAll = new ArrayList<>();
-  private SubHeaderViewModel free;
 
   public GamesCharactersPresenterImpl(GameCharactersInteractor gameCharactersInteractor) {
     this.gameCharactersInteractor = gameCharactersInteractor;
@@ -72,14 +70,6 @@ public class GamesCharactersPresenterImpl
     GameModel gameModel = viewModel.getGameModel();
     compositeSubscription.add(gameCharactersInteractor.observeChildren(gameModel)
         .concatMap(gameCharacterModelRxFirebaseChildEvent -> {
-          if (itemsAll.isEmpty()) {
-            SubHeaderViewModel occupied = new SubHeaderViewModel();
-            free = new SubHeaderViewModel();
-            free.setTitle(getStringById(R.string.free));
-            itemsAll.add(occupied);
-            itemsAll.add(free);
-            occupied.setTitle(getStringById(R.string.occupied));
-          }
           switch (gameCharacterModelRxFirebaseChildEvent.getEventType()) {
             case ADDED:
               return getAddObservable(gameModel, gameCharacterModelRxFirebaseChildEvent);
@@ -127,28 +117,52 @@ public class GamesCharactersPresenterImpl
         })
         .compose(RxTransformers.applySchedulers())
         .subscribe(gameCharacterModelRxFirebaseChildEvent -> {
-          List<IFlexible> iFlexibles = new ArrayList<>(itemsAll);
-          if (!viewModel.isMaster()) {
-            boolean hasChar = false;
-            for (IFlexible iFlexible : iFlexibles) {
-              if (iFlexible instanceof AbstractGameCharacterListItem) {
-                if (FireBaseUtils.getCurrentUserId()
-                    .equals(((AbstractGameCharacterListItem) iFlexible).getGameCharacterModel()
-                        .getUid())) {
-                  hasChar = true;
-                  break;
-                }
-              }
-            }
-            viewModel.setHasCharacter(hasChar);
-            if (hasChar) {
-              iFlexibles = iFlexibles.subList(0, iFlexibles.indexOf(free));
-            }
-          }
-          view.setData(viewModel);
-          viewModel.setiFlexibles(iFlexibles);
-          view.showContent();
+          updateView();
         }, this::handleThrowable));
+  }
+
+  private void updateView() {
+    List<IFlexible> iFlexibles = getFilteredList();
+    viewModel.setiFlexibles(iFlexibles);
+    view.setData(viewModel);
+    view.showContent();
+  }
+
+  @NonNull private List<IFlexible> getFilteredList() {
+    List<IFlexible> iFlexibles = new ArrayList<>(itemsAll);
+    boolean hasChar = false;
+    for (Iterator<IFlexible> iterator = iFlexibles.iterator(); iterator.hasNext(); ) {
+      IFlexible iFlexible = iterator.next();
+      if (iFlexible instanceof AbstractGameCharacterListItem) {
+        AbstractGameCharacterListItem abstractGameCharacterListItem =
+            (AbstractGameCharacterListItem) iFlexible;
+
+        String uid = abstractGameCharacterListItem.getGameCharacterModel().getUid();
+        switch (viewModel.getNavigationTab()) {
+          case OCCUPIED_TAB:
+            if (TextUtils.isEmpty(uid) || viewModel.getGameModel().getMasterId().equals(uid)) {
+              iterator.remove();
+            }
+            break;
+          case FREE_TAB:
+            if (!TextUtils.isEmpty(uid)) {
+              iterator.remove();
+            }
+            break;
+          case NPC_TAB:
+            if (!viewModel.getGameModel().getMasterId().equals(uid)) {
+              iterator.remove();
+            }
+            break;
+        }
+        if (FireBaseUtils.getCurrentUserId().equals(uid)) {
+          hasChar = true;
+        }
+      }
+    }
+    if (viewModel.isMaster()) hasChar = false;
+    viewModel.setHasCharacter(hasChar);
+    return iFlexibles;
   }
 
   @NonNull private Observable<?> getAddObservable(GameModel gameModel,
@@ -158,11 +172,7 @@ public class GamesCharactersPresenterImpl
           abstractGameCharacterListItem.setGamesCharactersPresenter(this);
           abstractGameCharacterListItem.setMaster(
               viewModel.getGameModel().getMasterId().equals(FireBaseUtils.getCurrentUserId()));
-          if (TextUtils.isEmpty(abstractGameCharacterListItem.getGameCharacterModel().getUid())) {
-            itemsAll.add(abstractGameCharacterListItem);
-          } else {
-            itemsAll.add(itemsAll.indexOf(free), abstractGameCharacterListItem);
-          }
+          itemsAll.add(abstractGameCharacterListItem);
         });
   }
 
@@ -187,6 +197,7 @@ public class GamesCharactersPresenterImpl
     super.restoreViewModel(viewModel);
     initTitleNav(viewModel);
     view.preFillModel(viewModel);
+    getData();
   }
 
   @Override
@@ -200,7 +211,7 @@ public class GamesCharactersPresenterImpl
   }
 
   private void initTitleNav(GamesCharactersViewModel gamesCharactersViewModel) {
-    ArrayList<AnimatedTitilesLayout.TitleModel> titleModels = new ArrayList<>();
+    ArrayList<AnimatedTitlesLayout.TitleModel> titleModels = new ArrayList<>();
 
     titleModels.add(getFilledTitleModel(OCCUPIED_TAB, getStringById(R.string.occupied)));
     titleModels.add(getFilledTitleModel(FREE_TAB, getStringById(R.string.free)));
@@ -208,11 +219,12 @@ public class GamesCharactersPresenterImpl
     gamesCharactersViewModel.setTitleModels(titleModels);
   }
 
-  private AnimatedTitilesLayout.TitleModel getFilledTitleModel(int index, String title) {
-    AnimatedTitilesLayout.TitleModel titleModel = new AnimatedTitilesLayout.TitleModel();
+  private AnimatedTitlesLayout.TitleModel getFilledTitleModel(int index, String title) {
+    AnimatedTitlesLayout.TitleModel titleModel = new AnimatedTitlesLayout.TitleModel();
     titleModel.setTitle(title);
     titleModel.setOnClickListener(v -> {
       viewModel.setNavigationTab(index);
+      updateView();
     });
     return titleModel;
   }

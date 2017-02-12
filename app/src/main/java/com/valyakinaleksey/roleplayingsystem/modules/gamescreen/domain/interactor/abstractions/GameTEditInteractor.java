@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions;
 
 import com.google.firebase.database.DatabaseReference;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;

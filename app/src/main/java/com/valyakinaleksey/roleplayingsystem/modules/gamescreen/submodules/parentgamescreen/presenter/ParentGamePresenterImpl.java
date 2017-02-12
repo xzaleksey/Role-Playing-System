@@ -1,23 +1,18 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter;
 
 import android.os.Bundle;
-
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
-import com.valyakinaleksey.roleplayingsystem.core.utils.SerializebleTuple;
-import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
+import com.valyakinaleksey.roleplayingsystem.core.utils.SerializableTuple;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.DeleteGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 import java.util.ArrayList;
 
@@ -29,18 +24,12 @@ import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_M
 public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGameModel>
     implements ParentGamePresenter {
 
-  private CheckUserJoinedGameInteractor checkUserJoinedGameInteractor;
-  private ObserveGameInteractor observeGameInteractor;
   private ParentPresenter parentPresenter;
-  private DeleteGameInteractor deleteGameInteractor;
+  private GameInteractor gameInteractor;
 
-  public ParentGamePresenterImpl(CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
-      ObserveGameInteractor observeGameInteractor, ParentPresenter parentPresenter,
-      DeleteGameInteractor deleteGameInteractor) {
-    this.checkUserJoinedGameInteractor = checkUserJoinedGameInteractor;
-    this.observeGameInteractor = observeGameInteractor;
+  public ParentGamePresenterImpl(ParentPresenter parentPresenter, GameInteractor gameInteractor) {
     this.parentPresenter = parentPresenter;
-    this.deleteGameInteractor = deleteGameInteractor;
+    this.gameInteractor = gameInteractor;
   }
 
   @SuppressWarnings("unchecked") @Override
@@ -64,61 +53,69 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
     view.showLoading();
     String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     GameModel gameModel = viewModel.getGameModel();
-    compositeSubscription.add(
-        checkUserJoinedGameInteractor.checkUserInGame(currentUserId, gameModel)
-            .compose(RxTransformers.applySchedulers())
-            .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-            .subscribe(aBoolean -> {
-              ArrayList<SerializebleTuple<Integer, String>> fragmentsInfo =
-                  viewModel.getFragmentsInfo();
+    compositeSubscription.add(gameInteractor.checkUserInGame(currentUserId, gameModel)
+        .compose(RxTransformers.applySchedulers())
+        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+        .subscribe(aBoolean -> {
+          ArrayList<SerializableTuple<Integer, String>> fragmentsInfo =
+              viewModel.getFragmentsInfo();
 
-              if (aBoolean) {
-                if (viewModel.isMaster()) {
-                  viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
-                  fragmentsInfo.add(new SerializebleTuple<>(GAME_MASTER_EDIT_FRAGMENT,
-                      RpsApp.app().getString(R.string.info)));
-                  fragmentsInfo.add(new SerializebleTuple<>(GAME_MASTER_LOG_FRAGMENT,
-                      RpsApp.app().getString(R.string.log)));
-                } else { // user
+          if (aBoolean) {
+            if (viewModel.isMaster()) {
+              viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
+              fragmentsInfo.add(new SerializableTuple<>(GAME_MASTER_EDIT_FRAGMENT,
+                  RpsApp.app().getString(R.string.info)));
+              fragmentsInfo.add(new SerializableTuple<>(GAME_MASTER_LOG_FRAGMENT,
+                  RpsApp.app().getString(R.string.log)));
+            } else { // user
 
-                }
-                fragmentsInfo.add(new SerializebleTuple<>(GAME_CHARACTERS_FRAGMENT,
-                    RpsApp.app().getString(R.string.characters)));
-                fragmentsInfo.add(new SerializebleTuple<>(GAME_MAPS_FRAGMENT,
-                    RpsApp.app().getString(R.string.maps)));
-              } else {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
-                parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT,
-                    bundle);
-              }
-              view.setData(viewModel);
-              view.showContent();
-              viewModel.setFirstNavigation(false);
-            }));
+            }
+            fragmentsInfo.add(new SerializableTuple<>(GAME_CHARACTERS_FRAGMENT,
+                RpsApp.app().getString(R.string.characters)));
+            fragmentsInfo.add(
+                new SerializableTuple<>(GAME_MAPS_FRAGMENT, RpsApp.app().getString(R.string.maps)));
+          } else {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
+            parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
+          }
+          view.setData(viewModel);
+          view.showContent();
+          viewModel.setFirstNavigation(false);
+        }));
 
     initSubscriptions(gameModel);
   }
 
   private void initSubscriptions(GameModel gameModel) {
     compositeSubscription.add(
-        observeGameInteractor.observeGameModelChanged(gameModel).subscribe(gameModel1 -> {
+        gameInteractor.observeGameModelChanged(gameModel).subscribe(gameModel1 -> {
           viewModel.setGameModel(gameModel1);
           view.preFillModel(viewModel);
         }, Crashlytics::logException));
     compositeSubscription.add(
-        observeGameInteractor.observeGameModelRemoved(gameModel).subscribe(gameModel1 -> {
+        gameInteractor.observeGameModelRemoved(gameModel).subscribe(gameModel1 -> {
           parentPresenter.navigateBack();
         }, Crashlytics::logException));
   }
 
   @Override public void deleteGame() {
-    compositeSubscription.add(deleteGameInteractor.
+    compositeSubscription.add(gameInteractor.
         deleteGame(viewModel.getGameModel())
         .compose(RxTransformers.applySchedulers())
         .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
         .subscribe(aBoolean -> {
 
+        }, Crashlytics::logException));
+  }
+
+  @Override public void finishGame() {
+    compositeSubscription.add(gameInteractor.
+        finishGame(viewModel.getGameModel())
+        .compose(RxTransformers.applySchedulers())
+        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+        .subscribe(aBoolean -> {
+          parentPresenter.navigateBack();
         }, Crashlytics::logException));
   }
 }

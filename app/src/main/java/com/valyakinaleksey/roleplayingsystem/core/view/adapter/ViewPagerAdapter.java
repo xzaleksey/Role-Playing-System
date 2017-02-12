@@ -3,12 +3,10 @@ package com.valyakinaleksey.roleplayingsystem.core.view.adapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
-import com.valyakinaleksey.roleplayingsystem.core.utils.SerializebleTuple;
-import com.valyakinaleksey.roleplayingsystem.core.utils.Tuple;
+import com.valyakinaleksey.roleplayingsystem.core.utils.SerializableTuple;
 
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsFragment;
@@ -20,11 +18,11 @@ import timber.log.Timber;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-  private List<SerializebleTuple<Integer, String>> fragmentTitlePairs;
+  private List<SerializableTuple<Integer, String>> fragmentTitlePairs;
   private Bundle bundle;
 
   public ViewPagerAdapter(FragmentManager fm,
-      List<SerializebleTuple<Integer, String>> fragmentTitlePairs, Bundle bundle) {
+      List<SerializableTuple<Integer, String>> fragmentTitlePairs, Bundle bundle) {
     super(fm);
     this.fragmentTitlePairs = fragmentTitlePairs;
     this.bundle = bundle;
@@ -49,10 +47,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
   }
 
   public void addFragment(Integer type, String title) {
-    fragmentTitlePairs.add(new SerializebleTuple<>(type, title));
+    fragmentTitlePairs.add(new SerializableTuple<>(type, title));
   }
 
-  public void addFragment(SerializebleTuple<Integer, String> integerStringTuple) {
+  public void addFragment(SerializableTuple<Integer, String> integerStringTuple) {
     fragmentTitlePairs.add(integerStringTuple);
   }
 

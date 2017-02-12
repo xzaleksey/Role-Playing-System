@@ -22,11 +22,11 @@ import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameCharacteristicsInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameClassesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.GameRacesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.ObserveUsersInGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.characterisitics.GameCharacteristicsInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.model.GamesDescriptionModel;
@@ -38,7 +38,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.Pare
 import com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 
-import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -50,6 +49,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TITLE;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TWO_LINE_WITH_AVATAR;
 import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.formatWithCount;
+import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getPluralById;
 import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringById;
 
 @PerFragmentScope public class GamesDescriptionPresenterImpl
@@ -201,7 +201,9 @@ import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringB
     data.add(new StaticItem(TYPE_DESCRIPTION, gameModel.getDescription()));
     data.add(new StaticItem(TYPE_TITLE, RpsApp.app().getString(R.string.master_of_the_game)));
     data.add(new StaticItem(TYPE_TWO_LINE_WITH_AVATAR,
-        new AvatarWithTwoLineTextModel(gameModel.getMasterName(), "Провел много игр",
+        new AvatarWithTwoLineTextModel(gameModel.getMasterName(),
+            getStringById(R.string.led).concat(" ") + getPluralById(R.plurals.games_count_mastered,
+                user.getCountOfGamesMastered()),
             new MaterialDrawableProviderImpl(gameModel.getMasterName(), gameModel.getMasterId()),
             user.getPhotoUrl(), gameModel.getMasterId())));
     infoSections.add(new StaticFieldsSection(data));
@@ -237,9 +239,10 @@ import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringB
 
   private void addUser(ArrayList<AvatarWithTwoLineTextModel> avatarWithTwoLineTextModels,
       User userModel) {
-    avatarWithTwoLineTextModels.add(
-        new AvatarWithTwoLineTextModel(userModel.getName(), "Провел много игр",
-            new MaterialDrawableProviderImpl(userModel.getName(), userModel.getUid()),
-            userModel.getPhotoUrl(), userModel));
+    avatarWithTwoLineTextModels.add(new AvatarWithTwoLineTextModel(userModel.getName(),
+        getStringById(R.string.took_part).concat(" ") + getPluralById(R.plurals.games_count_in,
+            userModel.getCountOfGamesPlayed()),
+        new MaterialDrawableProviderImpl(userModel.getName(), userModel.getUid()),
+        userModel.getPhotoUrl(), userModel));
   }
 }

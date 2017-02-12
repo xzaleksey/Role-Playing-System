@@ -17,7 +17,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -60,14 +60,14 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
   @Override protected GamesListViewModel initNewViewModel(Bundle arguments) {
     GamesListViewModel gamesListViewModel = new GamesListViewModel();
     gamesListViewModel.setToolbarTitle(RpsApp.app().getString(R.string.list_of_games));
-    setDatabaseReference(gamesListViewModel);
+    setDatabaseQuery(gamesListViewModel);
     return gamesListViewModel;
   }
 
   @Override public void restoreViewModel(GamesListViewModel viewModel) {
     super.restoreViewModel(viewModel);
     viewModel.setEmpty(true);
-    setDatabaseReference(viewModel);
+    setDatabaseQuery(viewModel);
   }
 
   @Override public void createGame(GameModel gameModel) {
@@ -173,8 +173,12 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
         }, Crashlytics::logException));
   }
 
-  private void setDatabaseReference(GamesListViewModel gamesListViewModel) {
-    gamesListViewModel.setReference(FirebaseDatabase.getInstance().getReference().child(GAMES));
+  private void setDatabaseQuery(GamesListViewModel gamesListViewModel) {
+    gamesListViewModel.setQuery(FirebaseDatabase.getInstance()
+        .getReference()
+        .child(GAMES)
+        .orderByChild(GameModel.FIELD_FINISHED)
+        .equalTo(false));
   }
 
   @Override public UserGetInteractor getValue() {

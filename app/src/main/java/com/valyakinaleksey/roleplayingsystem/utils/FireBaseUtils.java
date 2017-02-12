@@ -7,8 +7,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.kelvinapps.rxfirebase.RxHandler;
+import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
+import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Executor;
 import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Subscriber;
@@ -102,11 +106,34 @@ public class FireBaseUtils {
     });
   }
 
-  public static Observable<Void> setValue(Object o, DatabaseReference databaseReference) {
+  public static Observable<Void> setData(Object o, DatabaseReference databaseReference) {
     return Observable.create(new Observable.OnSubscribe<Void>() {
       @Override public void call(Subscriber<? super Void> subscriber) {
         RxHandler.assignOnTask(subscriber, databaseReference.setValue(o));
       }
+    });
+  }
+
+  public static Observable<Void> startTransaction(DatabaseReference databaseReference,
+      Executor<Transaction.Result, MutableData> transactionExecutor) {
+    return Observable.create(subscriber -> {
+      databaseReference.runTransaction(new Transaction.Handler() {
+        @Override public Transaction.Result doTransaction(MutableData mutableData) {
+          return transactionExecutor.execute(mutableData);
+        }
+
+        @Override
+        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+          if (!subscriber.isUnsubscribed()) {
+            if (databaseError == null) {
+              subscriber.onNext(null);
+              subscriber.onCompleted();
+            } else {
+              subscriber.onError(databaseError.toException());
+            }
+          }
+        }
+      });
     });
   }
 }
