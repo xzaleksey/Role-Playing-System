@@ -66,9 +66,9 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
 
     return abstractGameCharacterListItemObservable.switchMap(abstractGameCharacterListItem1 -> {
       String classId = gameCharacterModel.getClassId();
-      if (TextUtils.isEmpty(classId)) { //TODO remove in future
+      if (TextUtils.isEmpty(classId)) {
         GameClassModel gameClassModel = new GameClassModel();
-        gameClassModel.setName(StringUtils.getStringById(R.string.warrior));
+        gameClassModel.setName("");
         abstractGameCharacterListItem.setGameClassModel(gameClassModel);
         return Observable.just(abstractGameCharacterListItem1);
       } else {

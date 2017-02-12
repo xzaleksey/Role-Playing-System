@@ -39,6 +39,7 @@ public class GameCharacterListItemWithoutUser extends
       extends AbstractGameCharacterItemViewHolder {
 
     @Bind(R.id.btn_play) Button play;
+    @Bind(R.id.character_description) TextView tvCharacterDescription;
 
     public GameCharacterListItemWithoutUserViewHolder(View view, FlexibleAdapter adapter) {
       super(view, adapter);
@@ -54,6 +55,8 @@ public class GameCharacterListItemWithoutUser extends
           .getMasterId()
           .equals(FireBaseUtils.getCurrentUserId()) ? StringUtils.getStringById(R.string.make_npc)
           : StringUtils.getStringById(R.string.play));
+      tvCharacterDescription.setText(
+          abstractGameCharacterListItem.getGameCharacterModel().getDescription());
     }
   }
 

@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model;
 
 import android.support.v7.widget.AppCompatImageView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -27,10 +28,13 @@ public class AbstractGameCharacterItemViewHolder extends FlexibleViewHolder {
     avatar.setImageResource(R.drawable.ic_done_black_24dp);
     characterName.setText(abstractGameCharacterListItem.getGameCharacterModel().getName());
     GameRaceModel gameRaceModel = abstractGameCharacterListItem.getGameRaceModel();
-    GameClassModel gameClassModelModel = abstractGameCharacterListItem.getGameClassModel();
-    characterClassRace.setText(
-        gameRaceModel.getName().concat(", ").concat(gameClassModelModel.getName()));
+    GameClassModel gameClassModel = abstractGameCharacterListItem.getGameClassModel();
 
-}
+    String name = gameRaceModel.getName();
+    if (!TextUtils.isEmpty(gameClassModel.getName())) {
+      name = name.concat(", ").concat(gameClassModel.getName());
+    }
+    characterClassRace.setText(name);
+  }
 }
       
