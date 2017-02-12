@@ -31,6 +31,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.AuthViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.LoginInteractor;
@@ -45,254 +46,246 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-@PerFragmentScope
-public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel> implements AuthPresenter, RestorablePresenter<AuthViewModel>, GoogleApiClient.OnConnectionFailedListener {
-    private static final int RC_SIGN_IN = 9001;
+@PerFragmentScope public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
+    implements AuthPresenter, RestorablePresenter<AuthViewModel>,
+    GoogleApiClient.OnConnectionFailedListener {
+  private static final int RC_SIGN_IN = 9001;
 
-    private LoginInteractor loginInteractor;
-    private RegisterInteractor registerInteractor;
-    private ResetPasswordInteractor resetPasswordInteractor;
-    private SharedPreferencesHelper sharedPreferencesHelper;
-    private Context appContext;
-    private GoogleApiClient googleApiClient;
+  private LoginInteractor loginInteractor;
+  private RegisterInteractor registerInteractor;
+  private ResetPasswordInteractor resetPasswordInteractor;
+  private SharedPreferencesHelper sharedPreferencesHelper;
+  private Context appContext;
+  private UserGetInteractor userGetInteractor;
+  private GoogleApiClient googleApiClient;
 
-    @Inject
-    public AuthPresenterImpl(LoginInteractor loginInteractor, RegisterInteractor registerInteractor, ResetPasswordInteractor resetPasswordInteractor, SharedPreferencesHelper sharedPreferencesHelper, Context appContext) {
-        this.loginInteractor = loginInteractor;
-        this.registerInteractor = registerInteractor;
-        this.resetPasswordInteractor = resetPasswordInteractor;
-        this.sharedPreferencesHelper = sharedPreferencesHelper;
-        this.appContext = appContext;
+  @Inject
+  public AuthPresenterImpl(LoginInteractor loginInteractor, RegisterInteractor registerInteractor,
+      ResetPasswordInteractor resetPasswordInteractor,
+      SharedPreferencesHelper sharedPreferencesHelper, Context appContext,
+      UserGetInteractor userGetInteractor) {
+    this.loginInteractor = loginInteractor;
+    this.registerInteractor = registerInteractor;
+    this.resetPasswordInteractor = resetPasswordInteractor;
+    this.sharedPreferencesHelper = sharedPreferencesHelper;
+    this.appContext = appContext;
+    this.userGetInteractor = userGetInteractor;
+  }
+
+  @Override protected AuthViewModel initNewViewModel(Bundle arguments) {
+    if (viewModel == null) {
+      viewModel = new AuthViewModel();
+      viewModel.setEmail(sharedPreferencesHelper.getLogin());
+      viewModel.setPassword(sharedPreferencesHelper.getPassword());
     }
+    return viewModel;
+  }
 
-    @Override
-    protected AuthViewModel initNewViewModel(Bundle arguments) {
-        if (viewModel == null) {
-            viewModel = new AuthViewModel();
-            viewModel.setEmail(sharedPreferencesHelper.getLogin());
-            viewModel.setPassword(sharedPreferencesHelper.getPassword());
+  @Override public void onCreate(@Nullable Bundle arguments, @Nullable Bundle savedInstanceState) {
+    super.onCreate(arguments, savedInstanceState);
+    updateUi(viewModel);
+  }
+
+  @Override public void getData() {
+    updateUi(viewModel);
+  }
+
+  @Override public void onSaveInstanceState(Bundle bundle) {
+    String login = bundle.getString(SharedPreferencesHelper.LOGIN, "");
+    String password = bundle.getString(SharedPreferencesHelper.PASSWORD, "");
+    saveModel(login, password);
+  }
+
+  private void saveModel(String login, String password) {
+    sharedPreferencesHelper.saveLogin(login);
+    sharedPreferencesHelper.savePassword(password);
+  }
+
+  @Override public void onDestroy() {
+    super.onDestroy();
+    saveModel(viewModel.getEmail(), viewModel.getPassword());
+  }
+
+  private void updateUi(AuthViewModel model) {
+    view.setData(model);
+    view.showContent();
+  }
+
+  @Override public void login(String email, String password) {
+    OnCompleteListener<AuthResult> authResultOnCompleteListener = getAuthResultOnCompleteListener();
+    compositeSubscription.add(
+        loginInteractor.loginWithPassword(email, password, authResultOnCompleteListener)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+            .subscribe(aVoid -> {
+              Timber.d("Got login result");
+            }, this::showError));
+  }
+
+  @Override public void register(String email, String password) {
+    compositeSubscription.add(
+        registerInteractor.register(email, password, getAuthResultOnCompleteListener())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+            .subscribe(aVoid -> {
+
+            }, this::showError));
+  }
+
+  @Override public void resetPassword(String email) {
+    resetPasswordInteractor.resetPassword(email, task -> {
+      if (task.isSuccessful()) {
+        view.showMessage(appContext.getString(R.string.email_has_been_sent), LceView.SNACK);
+      } else {
+        showError(task.getException());
+      }
+    })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+        .subscribe(aVoid -> {
+
+        }, this::showError);
+  }
+
+  @Override public void restoreData() {
+    if (viewModel == null) {
+      viewModel = new AuthViewModel();
+      viewModel.setEmail(sharedPreferencesHelper.getLogin());
+      viewModel.setPassword(sharedPreferencesHelper.getPassword());
+    }
+    updateUi(viewModel);
+  }
+
+  @Override public void init(FragmentActivity activity) {
+    if (FirebaseAuth.getInstance().getCurrentUser()
+        != null) { // getNavigationFragment to main Activity if logged in
+      navigateToMainActivity(activity);
+      return;
+    }
+    GoogleSignInOptions gso =
+        new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(
+            appContext.getString(R.string.default_web_client_id)).requestEmail().build();
+    googleApiClient = new GoogleApiClient.Builder(activity).enableAutoManage(activity, this)
+        .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+        .build();
+  }
+
+  @Override public void googleAuth(FragmentActivity activity) {
+    Intent authorizeIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+    activity.startActivityForResult(authorizeIntent, RC_SIGN_IN);
+    view.showLoading();
+  }
+
+  /**
+   * Check google accont was chosen and login to firebase with google account
+   *
+   * @param activity AuthActivity
+   */
+  @Override public void onActivityResult(FragmentActivity activity, int requestCode, int resultCode,
+      Intent data) {
+    view.hideLoading();
+    if (requestCode == RC_SIGN_IN) {
+      GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+      if (result.isSuccess()) {
+        GoogleSignInAccount account = result.getSignInAccount();
+        loginInteractor.loginWithGoogle(account, getAuthResultOnCompleteListener())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+            .subscribe(aVoid -> {
+
+            }, this::showError);
+      } else {
+        String statusMessage = result.getStatus().getStatusMessage();
+        if (!TextUtils.isEmpty(statusMessage)) {
+          view.showMessage(statusMessage, LceView.SNACK);
         }
-        return viewModel;
+      }
     }
+  }
 
-    @Override
-    public void onCreate(@Nullable Bundle arguments, @Nullable Bundle savedInstanceState) {
-        super.onCreate(arguments, savedInstanceState);
-        updateUi(viewModel);
+  /**
+   * Google connection failed
+   */
+  @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    if (view != null) {
+      view.showMessage(connectionResult.getErrorMessage(), LceView.SNACK);
     }
+  }
 
-    @Override
-    public void getData() {
-        updateUi(viewModel);
+  private void showError(Throwable throwable) {
+    BaseError general = BaseError.SNACK;
+    general.setValue(throwable.getMessage());
+    showError(general);
+  }
+
+  private void showError(BaseError error) {
+    view.showError(error);
+  }
+
+  /**
+   * Handle AuthResult from firebase
+   *
+   * @return firebaseListener
+   */
+  @NonNull private OnCompleteListener<AuthResult> getAuthResultOnCompleteListener() {
+    return this::handleTaskResult;
+  }
+
+  private void handleTaskResult(Task<AuthResult> task) {
+    view.hideLoading();
+    if (task.isSuccessful()) {
+      FirebaseUser user = task.getResult().getUser();
+      Timber.d(user.toString());
+      onAuthSuccess(user).subscribe(user1 -> {
+        view.showMessage(appContext.getString(R.string.success), LceView.TOAST);
+        view.performAction(context -> navigateToMainActivity((FragmentActivity) context));
+      }, Timber::d);
+    } else {
+      showError(task.getException());
     }
+  }
 
-    @Override
-    public void onSaveInstanceState(Bundle bundle) {
-        String login = bundle.getString(SharedPreferencesHelper.LOGIN, "");
-        String password = bundle.getString(SharedPreferencesHelper.PASSWORD, "");
-        saveModel(login, password);
-    }
+  /**
+   * Should be in User Repository, TODO create it, when i will work with users table
+   */
+  private Observable<User> onAuthSuccess(FirebaseUser user) {
+    String username = FireBaseUtils.usernameFromEmail(user.getEmail());
+    RpsApp.logUser();
+    return writeNewUser(user.getUid(), username, user.getEmail());
+  }
 
-    private void saveModel(String login, String password) {
-        sharedPreferencesHelper.saveLogin(login);
-        sharedPreferencesHelper.savePassword(password);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        saveModel(viewModel.getEmail(), viewModel.getPassword());
-    }
-
-    private void updateUi(AuthViewModel model) {
-        view.setData(model);
-        view.showContent();
-    }
-
-    @Override
-    public void login(String email, String password) {
-        OnCompleteListener<AuthResult> authResultOnCompleteListener = getAuthResultOnCompleteListener();
-        compositeSubscription.add(loginInteractor
-                .loginWithPassword(email, password, authResultOnCompleteListener)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-                .subscribe(aVoid -> {
-                    Timber.d("Got login result");
-                }, this::showError));
-    }
-
-    @Override
-    public void register(String email, String password) {
-        compositeSubscription.add(registerInteractor.register(email, password,
-                getAuthResultOnCompleteListener())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-                .subscribe(aVoid -> {
-
-                }, this::showError));
-    }
-
-    @Override
-    public void resetPassword(String email) {
-        resetPasswordInteractor.resetPassword(email, task -> {
-            if (task.isSuccessful()) {
-                view.showMessage(appContext.getString(R.string.email_has_been_sent), LceView.SNACK);
-            } else {
-                showError(task.getException());
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-                .subscribe(aVoid -> {
-
-                }, this::showError);
-    }
-
-    @Override
-    public void restoreData() {
-        if (viewModel == null) {
-            viewModel = new AuthViewModel();
-            viewModel.setEmail(sharedPreferencesHelper.getLogin());
-            viewModel.setPassword(sharedPreferencesHelper.getPassword());
-        }
-        updateUi(viewModel);
-    }
-
-    @Override
-    public void init(FragmentActivity activity) {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) { // getNavigationFragment to main Activity if logged in
-            navigateToMainActivity(activity);
-            return;
-        }
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(appContext.getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(activity)
-                .enableAutoManage(activity, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-    }
-
-    @Override
-    public void googleAuth(FragmentActivity activity) {
-        Intent authorizeIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        activity.startActivityForResult(authorizeIntent, RC_SIGN_IN);
-        view.showLoading();
-    }
-
-
-    /**
-     * Check google accont was chosen and login to firebase with google account
-     *
-     * @param activity    AuthActivity
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void onActivityResult(FragmentActivity activity, int requestCode, int resultCode, Intent data) {
-        view.hideLoading();
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                GoogleSignInAccount account = result.getSignInAccount();
-                loginInteractor.loginWithGoogle(account, getAuthResultOnCompleteListener())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-                        .subscribe(aVoid -> {
-
-                        }, this::showError);
-            } else {
-                String statusMessage = result.getStatus().getStatusMessage();
-                if (!TextUtils.isEmpty(statusMessage)) {
-                    view.showMessage(statusMessage, LceView.SNACK);
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Google connection failed
-     *
-     * @param connectionResult
-     */
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if (view != null) {
-            view.showMessage(connectionResult.getErrorMessage(), LceView.SNACK);
-        }
-    }
-
-    private void showError(Throwable throwable) {
-        BaseError general = BaseError.SNACK;
-        general.setValue(throwable.getMessage());
-        showError(general);
-    }
-
-    private void showError(BaseError error) {
-        view.showError(error);
-    }
-
-
-    /**
-     * Handle AuthResult from firebase
-     *
-     * @return firebaseListener
-     */
-    @NonNull
-    private OnCompleteListener<AuthResult> getAuthResultOnCompleteListener() {
-        return this::handleTaskResult;
-    }
-
-    private void handleTaskResult(Task<AuthResult> task) {
-        view.hideLoading();
-        if (task.isSuccessful()) {
-            FirebaseUser user = task.getResult().getUser();
-            Timber.d(user.toString());
-            onAuthSuccess(user);
-            view.showMessage(appContext.getString(R.string.success), LceView.TOAST);
-            view.performAction(context -> navigateToMainActivity((FragmentActivity) context));
-        } else {
-            showError(task.getException());
-        }
-    }
-
-    /**
-     * Should be in User Repository, TODO create it, when i will work with users table
-     *
-     * @param user
-     */
-    private void onAuthSuccess(FirebaseUser user) {
-        String username = FireBaseUtils.usernameFromEmail(user.getEmail());
-        writeNewUser(user.getUid(), username, user.getEmail());
-        RpsApp.logUser();
-    }
-
-    private void writeNewUser(String userId, String name, String email) {
-        User user = new User(userId, name, email);
-        List<? extends UserInfo> providerData = FirebaseAuth.getInstance().getCurrentUser().getProviderData();
+  private Observable<User> writeNewUser(String userId, String name, String email) {
+    return userGetInteractor.getUserByUidFromServer(userId).map(oldUser -> {
+      if (oldUser == null) {
+        User newUser = new User(userId, name, email);
+        List<? extends UserInfo> providerData =
+            FirebaseAuth.getInstance().getCurrentUser().getProviderData();
         for (UserInfo userInfo : providerData) {
-            Uri photoUrl = userInfo.getPhotoUrl();
-            if (photoUrl != null && !TextUtils.isEmpty(photoUrl.toString())) {
-                user.setPhotoUrl(photoUrl.toString());
-                break;
-            }
+          Uri photoUrl = userInfo.getPhotoUrl();
+          if (photoUrl != null && !TextUtils.isEmpty(photoUrl.toString())) {
+            newUser.setPhotoUrl(photoUrl.toString());
+            break;
+          }
         }
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child(FireBaseUtils.USERS).child(userId).setValue(user);
-    }
+        reference.child(FireBaseUtils.USERS).child(userId).setValue(newUser);
+        return newUser;
+      }
+      return oldUser;
+    });
+  }
 
-    private void navigateToMainActivity(FragmentActivity activity) {
-        activity.startActivity(new Intent(activity, ParentActivity.class));
-        activity.finish();
-    }
+  private void navigateToMainActivity(FragmentActivity activity) {
+    activity.startActivity(new Intent(activity, ParentActivity.class));
+    activity.finish();
+  }
 }

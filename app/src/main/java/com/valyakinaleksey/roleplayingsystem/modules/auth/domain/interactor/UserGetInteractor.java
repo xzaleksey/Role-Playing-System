@@ -8,11 +8,12 @@ import java.util.Map;
 import rx.Observable;
 
 public interface UserGetInteractor {
-    Observable<Map<String, User>> getUsersList();
+  Observable<Map<String, User>> getUsersList();
 
+  Observable<User> getUserByUid(String uid);
 
-    Observable<User> getUserByUid(String uid);
+  Observable<User> getUserByUidFromServer(String uid);
 
-    Observable<List<User>> getUsersByGameId(String id);
+  Observable<List<User>> getUsersByGameId(String id);
 }
       

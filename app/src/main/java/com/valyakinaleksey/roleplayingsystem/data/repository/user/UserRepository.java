@@ -13,7 +13,7 @@ public interface UserRepository {
 
     Observable<User> getUserByUid(String uid);
 
-    Observable<List<User>> geUserByGameId(String id);
+    Observable<List<User>> getUserByGameId(String id);
 
 
     Observable<FirebaseChildEvent> observeUsersInGame(String id);
