@@ -12,6 +12,7 @@ import rx.Observable;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES_IN_USERS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERISTICS;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.USERS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.USERS_IN_GAME;
 
@@ -19,7 +20,7 @@ public class LeaveGameUseCase implements LeaveGameInteractor {
   @Override public Observable<Void> leaveGame(GameModel gameModel) {
     String currentUserId = FireBaseUtils.getCurrentUserId();
     DatabaseReference gameCharactersReference =
-        FireBaseUtils.getTableReference(GAME_CHARACTERISTICS).child(gameModel.getId());
+        FireBaseUtils.getTableReference(GAME_CHARACTERS).child(gameModel.getId());
     return RxFirebaseDatabase.observeSingleValueEvent(gameCharactersReference)
         .doOnNext(dataSnapshot -> {
           for (DataSnapshot snapshot : dataSnapshot.getChildren()) {

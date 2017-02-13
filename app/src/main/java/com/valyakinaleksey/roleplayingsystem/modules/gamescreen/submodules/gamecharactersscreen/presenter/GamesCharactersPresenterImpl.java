@@ -162,6 +162,7 @@ public class GamesCharactersPresenterImpl
         }
       }
     }
+    if (viewModel.isMaster()) hasChar = false;
     if (viewModel.getNavigationTab() == FREE_TAB) {
       for (IFlexible iFlexible : iFlexibles) {
         if (iFlexible instanceof GameCharacterListItemWithoutUser) {
@@ -169,7 +170,6 @@ public class GamesCharactersPresenterImpl
         }
       }
     }
-    if (viewModel.isMaster()) hasChar = false;
     viewModel.setHasCharacter(hasChar);
     return iFlexibles;
   }
