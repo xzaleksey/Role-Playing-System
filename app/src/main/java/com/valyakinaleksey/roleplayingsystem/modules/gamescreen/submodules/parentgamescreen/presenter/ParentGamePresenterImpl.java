@@ -114,7 +114,17 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         finishGame(viewModel.getGameModel())
         .compose(RxTransformers.applySchedulers())
         .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-        .subscribe(aBoolean -> {
+        .subscribe(aVoid -> {
+          parentPresenter.navigateBack();
+        }, Crashlytics::logException));
+  }
+
+  @Override public void leaveGame() {
+    compositeSubscription.add(gameInteractor.
+        leaveGame(viewModel.getGameModel())
+        .compose(RxTransformers.applySchedulers())
+        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+        .subscribe(aVoid -> {
           parentPresenter.navigateBack();
         }, Crashlytics::logException));
   }

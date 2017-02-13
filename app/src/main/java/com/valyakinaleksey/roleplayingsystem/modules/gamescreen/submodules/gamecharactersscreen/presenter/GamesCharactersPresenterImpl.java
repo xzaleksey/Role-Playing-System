@@ -14,6 +14,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithoutUser;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
@@ -155,8 +156,16 @@ public class GamesCharactersPresenterImpl
             }
             break;
         }
+
         if (FireBaseUtils.getCurrentUserId().equals(uid)) {
           hasChar = true;
+        }
+      }
+    }
+    if (viewModel.getNavigationTab() == FREE_TAB) {
+      for (IFlexible iFlexible : iFlexibles) {
+        if (iFlexible instanceof GameCharacterListItemWithoutUser) {
+          ((GameCharacterListItemWithoutUser) iFlexible).setShowPlayButton(!hasChar);
         }
       }
     }

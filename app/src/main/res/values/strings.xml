@@ -69,12 +69,13 @@
   <string name="human">Human</string>
   <string name="free">Free</string>
   <string name="access_error">Access error</string>
-  <string name="action_progress">Progress</string>
+  <string name="action_progress" translatable="false">Progress</string>
   <string name="connecting">Connecting…</string>
   <string name="npc" translatable="false">NPC</string>
   <string name="make_npc">Make NPC</string>
   <string name="finish_game">Finish game</string>
   <string name="led">Led</string>
   <string name="took_part">Took part in</string>
+  <string name="leave_game">Leave game</string>
 
 </resources>

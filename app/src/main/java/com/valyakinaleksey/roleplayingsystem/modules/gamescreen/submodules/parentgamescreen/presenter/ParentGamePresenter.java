@@ -7,4 +7,6 @@ public interface ParentGamePresenter extends Presenter<ParentView> {
   void deleteGame();
 
   void finishGame();
+
+  void leaveGame();
 }

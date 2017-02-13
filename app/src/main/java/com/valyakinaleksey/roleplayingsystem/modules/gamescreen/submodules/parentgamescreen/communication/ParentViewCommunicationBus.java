@@ -33,4 +33,8 @@ import javax.inject.Inject;
   @Override public void finishGame() {
     presenter.finishGame();
   }
+
+  @Override public void leaveGame() {
+    presenter.leaveGame();
+  }
 }

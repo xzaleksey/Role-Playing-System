@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
@@ -20,6 +21,7 @@ import org.joda.time.DateTime;
 
 import rx.Observable;
 
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES_IN_USERS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
@@ -27,53 +29,42 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DAT
 public class CreateNewGameUseCase implements CreateNewGameInteractor {
 
   private SimpleCrypto simpleCrypto;
+  private UserRepository userRepository;
 
-  public CreateNewGameUseCase(SimpleCrypto simpleCrypto) {
+  public CreateNewGameUseCase(SimpleCrypto simpleCrypto, UserRepository userRepository) {
     this.simpleCrypto = simpleCrypto;
+    this.userRepository = userRepository;
   }
 
   @Override public Observable<String> createNewGame(GameModel gameModel) {
-    return Observable.just(gameModel).switchMap(gameModel1 -> {
-      DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-      DatabaseReference games = reference.child(FireBaseUtils.GAMES);
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference tableReference = FireBaseUtils.getTableReference(GAMES);
+    DatabaseReference push = tableReference.push();
+    gameModel.setId(push.getKey());
+    String currentUserId = FireBaseUtils.getCurrentUserId();
+    return userRepository.getUserByUid(currentUserId).switchMap(user -> {
       gameModel.setTempDateCreate(DateTime.now().getMillis());
-      FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-      if (currentUser != null) { //should always be true, check auth
-        gameModel.setMasterId(currentUser.getUid());
-        if (!TextUtils.isEmpty(gameModel.getPassword())) { //user set password, try to encrypt it
-          try {
-            String password = simpleCrypto.encrypt(gameModel.getPassword());
-            gameModel.setPassword(password);
-          } catch (Exception e) {
-            Crashlytics.logException(e);
-          }
+      gameModel.setMasterId(currentUserId);
+      gameModel.setMasterName(user.getName());
+      if (!TextUtils.isEmpty(gameModel.getPassword())) { //user set password, try to encrypt it
+        try {
+          String password = simpleCrypto.encrypt(gameModel.getPassword());
+          gameModel.setPassword(password);
+        } catch (Exception e) {
+          Crashlytics.logException(e);
         }
-        return RxFirebaseDatabase.getInstance()
-            .observeSingleValue(reference.child(FireBaseUtils.USERS).child(gameModel.getMasterId()))
-            .doOnNext(dataSnapshot -> {
-              Map<String, Object> childUpdates = new HashMap<>();
-              childUpdates.put(
-                  String.format(FireBaseUtils.FORMAT_SLASHES, FireBaseUtils.GAMES_IN_USERS)
-                      + currentUser.getUid()
-                      + "/"
-                      + gameModel.getId(), gameModel.toMap());
-              reference.updateChildren(childUpdates);
-              User user = dataSnapshot.getValue(User.class);
-              gameModel.setMasterName(user.getName());
-            })
-            .switchMap(dataSnapshot -> RxFirebaseDatabase.getInstance()
-                .observeSetValuePush(games, gameModel)
-                .doOnNext(s -> {
-                  DatabaseReference child = games.child(s);
-                  HashMap<String, Object> map = new HashMap<>();
-                  map.put(TEMP_DATE_CREATE, null);
-                  map.put(ID, s);
-                  child.updateChildren(map);
-                  gameModel.setId(s);
-                }));
-      } else {
-        throw new IllegalStateException("current user can't be null");
       }
+      return FireBaseUtils.setData(gameModel, push).doOnNext(dataSnapshot -> {
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(String.format(FireBaseUtils.FORMAT_SLASHES, FireBaseUtils.GAMES_IN_USERS)
+            + currentUserId
+            + "/"
+            + push.getKey(), gameModel.toMap());
+        databaseReference.updateChildren(childUpdates);
+      }).map(dataSnapshot -> {
+        push.child(FireBaseUtils.TEMP_DATE_CREATE).setValue(null);
+        return push.getKey();
+      });
     });
   }
 }

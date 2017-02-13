@@ -19,6 +19,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.FinishGameUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameUsecase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.LeaveGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.LeaveGameUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveGameInteractor;
@@ -73,8 +75,8 @@ import dagger.Provides;
   }
 
   @Provides @Singleton CreateNewGameInteractor provideCreateNewGameInteractor(
-      SimpleCrypto simpleCrypto) {
-    return new CreateNewGameUseCase(simpleCrypto);
+      SimpleCrypto simpleCrypto, UserRepository userRepo) {
+    return new CreateNewGameUseCase(simpleCrypto, userRepo);
   }
 
   @Provides @Singleton EditGameInteractor provideEditGameInteractor(SimpleCrypto simpleCrypto) {
@@ -120,9 +122,14 @@ import dagger.Provides;
       FinishGameInteractor finishGameInteractor, DeleteGameInteractor deleteGameInteractor,
       ObserveGameInteractor observeGameInteractor,
       ObserveUsersInGameInteractor observeUsersInGameInteractor,
-      CheckUserJoinedGameInteractor checkUserJoinedGameInteractor) {
+      CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
+      LeaveGameInteractor leaveGameInteractor) {
     return new GameUsecase(finishGameInteractor, deleteGameInteractor, observeGameInteractor,
-        observeUsersInGameInteractor, checkUserJoinedGameInteractor);
+        observeUsersInGameInteractor, checkUserJoinedGameInteractor, leaveGameInteractor);
+  }
+
+  @Provides @Singleton LeaveGameInteractor provideLeaveGameInteractor() {
+    return new LeaveGameUseCase();
   }
 }
       

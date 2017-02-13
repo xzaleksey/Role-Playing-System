@@ -43,7 +43,7 @@ public class JoinGameUseCase implements JoinGameInteractor {
               if (user == null) {
                 return Transaction.success(data);
               }
-              user.setCountOfGamesMastered(user.getCountOfGamesPlayed() + 1);
+              user.setCountOfGamesPlayed(user.getCountOfGamesPlayed() + 1);
               data.setValue(user);
               return Transaction.success(data);
             }));

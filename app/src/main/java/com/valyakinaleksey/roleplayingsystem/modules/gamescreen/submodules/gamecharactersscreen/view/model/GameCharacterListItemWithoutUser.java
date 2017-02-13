@@ -22,6 +22,25 @@ import java.util.List;
 
 public class GameCharacterListItemWithoutUser extends
     AbstractGameCharacterListItem<GameCharacterListItemWithoutUser.GameCharacterListItemWithoutUserViewHolder> {
+  private boolean showPlayButton;
+
+  public boolean isShowPlayButton() {
+    return showPlayButton;
+  }
+
+  public void setShowPlayButton(boolean showPlayButton) {
+    this.showPlayButton = showPlayButton;
+  }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof GameCharacterListItemWithoutUser)) return false;
+    if (!super.equals(o)) return false;
+
+    GameCharacterListItemWithoutUser that = (GameCharacterListItemWithoutUser) o;
+
+    return isShowPlayButton() == that.isShowPlayButton();
+  }
 
   @Override
   public GameCharacterListItemWithoutUserViewHolder createViewHolder(FlexibleAdapter adapter,
@@ -45,46 +64,30 @@ public class GameCharacterListItemWithoutUser extends
       super(view, adapter);
     }
 
-    public void bind(AbstractGameCharacterListItem abstractGameCharacterListItem,
+    public void bind(GameCharacterListItemWithoutUser gameCharacterListItemWithoutUser,
         GamesCharactersPresenter gamesCharactersPresenter) {
 
-      super.bind(abstractGameCharacterListItem, gamesCharactersPresenter);
-      play.setOnClickListener(
-          v -> gamesCharactersPresenter.play(itemView.getContext(), abstractGameCharacterListItem));
-      play.setText(abstractGameCharacterListItem.getGameModel()
-          .getMasterId()
-          .equals(FireBaseUtils.getCurrentUserId()) ? StringUtils.getStringById(R.string.make_npc)
-          : StringUtils.getStringById(R.string.play));
-      tvCharacterDescription.setText(
-          abstractGameCharacterListItem.getGameCharacterModel().getDescription());
+      super.bind(gameCharacterListItemWithoutUser, gamesCharactersPresenter);
+      if (gameCharacterListItemWithoutUser.isShowPlayButton()) {
+        tvCharacterDescription.setMaxLines(2);
+        play.setVisibility(View.VISIBLE);
+        play.setOnClickListener(v -> gamesCharactersPresenter.play(itemView.getContext(),
+            gameCharacterListItemWithoutUser));
+        play.setText(gameCharacterListItemWithoutUser.getGameModel()
+            .getMasterId()
+            .equals(FireBaseUtils.getCurrentUserId()) ? StringUtils.getStringById(R.string.make_npc)
+            : StringUtils.getStringById(R.string.play));
+        tvCharacterDescription.setText(
+            gameCharacterListItemWithoutUser.getGameCharacterModel().getDescription());
+      } else {
+        play.setVisibility(View.GONE);
+        tvCharacterDescription.setMaxLines(3);
+      }
     }
-  }
-
-  @Override public int describeContents() {
-    return 0;
-  }
-
-  @Override public void writeToParcel(Parcel dest, int flags) {
-    super.writeToParcel(dest, flags);
   }
 
   public GameCharacterListItemWithoutUser() {
   }
-
-  protected GameCharacterListItemWithoutUser(Parcel in) {
-    super(in);
-  }
-
-  public static final Creator<GameCharacterListItemWithoutUser> CREATOR =
-      new Creator<GameCharacterListItemWithoutUser>() {
-        @Override public GameCharacterListItemWithoutUser createFromParcel(Parcel source) {
-          return new GameCharacterListItemWithoutUser(source);
-        }
-
-        @Override public GameCharacterListItemWithoutUser[] newArray(int size) {
-          return new GameCharacterListItemWithoutUser[size];
-        }
-      };
 
   @Override public boolean isEnabled() {
     return true;
@@ -129,5 +132,30 @@ public class GameCharacterListItemWithoutUser extends
   @Override public int getLayoutRes() {
     return R.layout.game_character_item_free;
   }
+
+  @Override public int describeContents() {
+    return 0;
+  }
+
+  @Override public void writeToParcel(Parcel dest, int flags) {
+    super.writeToParcel(dest, flags);
+    dest.writeByte(this.showPlayButton ? (byte) 1 : (byte) 0);
+  }
+
+  protected GameCharacterListItemWithoutUser(Parcel in) {
+    super(in);
+    this.showPlayButton = in.readByte() != 0;
+  }
+
+  public static final Creator<GameCharacterListItemWithoutUser> CREATOR =
+      new Creator<GameCharacterListItemWithoutUser>() {
+        @Override public GameCharacterListItemWithoutUser createFromParcel(Parcel source) {
+          return new GameCharacterListItemWithoutUser(source);
+        }
+
+        @Override public GameCharacterListItemWithoutUser[] newArray(int size) {
+          return new GameCharacterListItemWithoutUser[size];
+        }
+      };
 }
       

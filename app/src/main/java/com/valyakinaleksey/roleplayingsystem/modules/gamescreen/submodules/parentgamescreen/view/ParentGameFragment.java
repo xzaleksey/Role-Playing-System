@@ -38,6 +38,7 @@ public class ParentGameFragment
   public static final String TAG = ParentGameFragment.class.getSimpleName();
   public static final String DELETE_GAME = "delete_game";
   public static final String FINISH_GAME = "finish_game";
+  public static final String LEAVE_GAME = "leave_game";
 
   @Bind(R.id.viewpager) ViewPager viewPager;
 
@@ -137,6 +138,9 @@ public class ParentGameFragment
       case R.id.action_finish_game:
         BaseDialogFragment.newInstance(this).show(getFragmentManager(), FINISH_GAME);
         return true;
+      case R.id.action_leave_game:
+        BaseDialogFragment.newInstance(this).show(getFragmentManager(), LEAVE_GAME);
+        return true;
       default:
         return super.onOptionsItemSelected(item);
     }
@@ -178,6 +182,12 @@ public class ParentGameFragment
             .positiveText(android.R.string.ok)
             .negativeText(android.R.string.cancel)
             .onPositive((dialog, which) -> getComponent().getPresenter().finishGame())
+            .build();
+      case LEAVE_GAME:
+        return new MaterialDialog.Builder(getContext()).title(R.string.leave_game)
+            .positiveText(android.R.string.ok)
+            .negativeText(android.R.string.cancel)
+            .onPositive((dialog, which) -> getComponent().getPresenter().leaveGame())
             .build();
     }
     return null;

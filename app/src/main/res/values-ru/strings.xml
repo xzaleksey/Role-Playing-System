@@ -64,5 +64,6 @@
   <string name="finish_game">Завершить игру</string>
   <string name="led">Провел</string>
   <string name="took_part">Участвовал в</string>
+  <string name="leave_game">Покинуть игру</string>
 
 </resources>
