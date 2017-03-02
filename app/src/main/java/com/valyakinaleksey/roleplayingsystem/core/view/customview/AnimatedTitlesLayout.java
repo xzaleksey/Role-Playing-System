@@ -88,13 +88,13 @@ public class AnimatedTitlesLayout extends RelativeLayout {
         }
       });
     }
-    selector.post(() -> {
-      selector.setX(selectedPosition * selector.getMeasuredWidth());
-    });
+    animateSelector(selectedPosition);
   }
 
   private void animateSelector(int selectedPosition) {
-    selector.animate().translationX(selector.getMeasuredWidth() * selectedPosition);
+    if (selector.getMeasuredWidth() != 0) {
+      selector.animate().translationX(selector.getMeasuredWidth() * selectedPosition);
+    }
   }
 
   private void selectTitleModel(int finalI) {
@@ -110,7 +110,11 @@ public class AnimatedTitlesLayout extends RelativeLayout {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     View childAt = linearLayout.getChildAt(0);
     if (childAt != null) {
-      selector.getLayoutParams().width = childAt.getMeasuredWidth();
+      int measuredWidth = childAt.getMeasuredWidth();
+      if (selector.getMeasuredWidth() != measuredWidth) {
+        selector.getLayoutParams().width = measuredWidth;
+        selector.setX(measuredWidth * selectedPosition);
+      }
     }
   }
 
