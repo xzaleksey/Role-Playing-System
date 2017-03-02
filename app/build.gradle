@@ -132,6 +132,8 @@ dependencies {
     exclude module: 'hamcrest-core'
     exclude module: 'objenesis'
   }
+  testCompile 'org.awaitility:awaitility:2.0.0'
+  testCompile "org.robolectric:robolectric:3.0"
   testCompile('org.powermock:powermock-module-junit4:1.6.3') {
     exclude module: 'hamcrest-core'
     exclude module: 'objenesis'
