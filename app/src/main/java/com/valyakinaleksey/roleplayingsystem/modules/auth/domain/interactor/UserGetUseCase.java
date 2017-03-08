@@ -1,14 +1,9 @@
 package com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor;
 
-import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
-import com.google.firebase.database.DatabaseReference;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
-
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.util.List;
 import java.util.Map;
-
 import rx.Observable;
 
 public class UserGetUseCase implements UserGetInteractor {
@@ -20,26 +15,15 @@ public class UserGetUseCase implements UserGetInteractor {
   }
 
   @Override public Observable<Map<String, User>> getUsersList() {
-    return userRepository.getUsersList();
+    return userRepository.getUsersMap();
   }
 
   @Override public Observable<User> getUserByUid(String uid) {
-    return userRepository.getUserByUid(uid).concatMap(user -> {
-      if (user == null) return getUserByUidFromServer(uid);
-      return Observable.just(user);
-    });
+    return userRepository.getUserByUid(uid);
   }
 
   @Override public Observable<User> getUserByUidFromServer(String uid) {
-    DatabaseReference child = FireBaseUtils.getTableReference(FireBaseUtils.USERS).child(uid);
-    return FireBaseUtils.checkReferenceExistsAndNotEmpty(child).switchMap(aBoolean -> {
-      if (aBoolean) {
-        return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(child,
-            User.class);
-      } else {
-        return Observable.just(null);
-      }
-    });
+    return userRepository.getUserByUidFromServer(uid);
   }
 
   @Override public Observable<List<User>> getUsersByGameId(String id) {

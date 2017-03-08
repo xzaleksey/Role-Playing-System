@@ -71,6 +71,7 @@ public abstract class BasePresenter<V extends LceView<DATA>, DATA extends Should
     } else {
       Crashlytics.logException(throwable);
     }
+    Timber.d(this.getClass().getSimpleName());
     Timber.d(throwable);
     return false;
   }

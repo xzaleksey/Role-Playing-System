@@ -14,7 +14,8 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestU
  * Base class for all communication buses for {@link LceView} with ability to save / restore
  * ViewState automatically
  */
-public abstract class SelfRestorableLceCommunicationBus<D extends ShouldRequestUpdateViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V> & SelfRestorableViewState>
+public abstract class
+SelfRestorableLceCommunicationBus<D extends ShouldRequestUpdateViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V> & SelfRestorableViewState>
     extends LceCommunicationBus<D, V, P, VS> {
 
   public SelfRestorableLceCommunicationBus(P presenter, VS viewState) {

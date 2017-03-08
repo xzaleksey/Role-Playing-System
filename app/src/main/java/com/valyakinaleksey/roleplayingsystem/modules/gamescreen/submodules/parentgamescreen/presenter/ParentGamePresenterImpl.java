@@ -50,39 +50,43 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
   @SuppressWarnings("unchecked") @Override public void getData() {
     view.setData(viewModel);
     view.preFillModel(viewModel);
-    view.showLoading();
     String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     GameModel gameModel = viewModel.getGameModel();
-    compositeSubscription.add(gameInteractor.checkUserInGame(currentUserId, gameModel)
-        .compose(RxTransformers.applySchedulers())
-        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-        .subscribe(aBoolean -> {
-          ArrayList<SerializableTuple<Integer, String>> fragmentsInfo =
-              viewModel.getFragmentsInfo();
+    if (viewModel.isUpdatedRequired()) {
+      view.showLoading();
+      compositeSubscription.add(gameInteractor.checkUserInGame(currentUserId, gameModel)
+          .compose(RxTransformers.applySchedulers())
+          .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+          .subscribe(aBoolean -> {
+            ArrayList<SerializableTuple<Integer, String>> fragmentsInfo =
+                viewModel.getFragmentsInfo();
+            fragmentsInfo.clear();
+            if (aBoolean) {
+              if (viewModel.isMaster()) {
+                viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
+                fragmentsInfo.add(new SerializableTuple<>(GAME_MASTER_EDIT_FRAGMENT,
+                    RpsApp.app().getString(R.string.info)));
+                fragmentsInfo.add(new SerializableTuple<>(GAME_MASTER_LOG_FRAGMENT,
+                    RpsApp.app().getString(R.string.log)));
+              } else { // user
 
-          if (aBoolean) {
-            if (viewModel.isMaster()) {
-              viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
-              fragmentsInfo.add(new SerializableTuple<>(GAME_MASTER_EDIT_FRAGMENT,
-                  RpsApp.app().getString(R.string.info)));
-              fragmentsInfo.add(new SerializableTuple<>(GAME_MASTER_LOG_FRAGMENT,
-                  RpsApp.app().getString(R.string.log)));
-            } else { // user
-
+              }
+              fragmentsInfo.add(new SerializableTuple<>(GAME_CHARACTERS_FRAGMENT,
+                  RpsApp.app().getString(R.string.characters)));
+              fragmentsInfo.add(new SerializableTuple<>(GAME_MAPS_FRAGMENT,
+                  RpsApp.app().getString(R.string.maps)));
+            } else {
+              Bundle bundle = new Bundle();
+              bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
+              parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
             }
-            fragmentsInfo.add(new SerializableTuple<>(GAME_CHARACTERS_FRAGMENT,
-                RpsApp.app().getString(R.string.characters)));
-            fragmentsInfo.add(
-                new SerializableTuple<>(GAME_MAPS_FRAGMENT, RpsApp.app().getString(R.string.maps)));
-          } else {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
-            parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
-          }
-          view.setData(viewModel);
-          view.showContent();
-          viewModel.setFirstNavigation(false);
-        }));
+            view.setData(viewModel);
+            viewModel.setFirstNavigation(true);
+            view.showContent();
+            viewModel.setFirstNavigation(false);
+            view.setData(viewModel); // to save first nav state
+          }, this::handleThrowable));
+    }
 
     initSubscriptions(gameModel);
   }

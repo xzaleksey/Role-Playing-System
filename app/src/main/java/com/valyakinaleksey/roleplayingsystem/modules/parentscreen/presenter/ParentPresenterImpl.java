@@ -37,10 +37,12 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel>
   }
 
   @SuppressWarnings("unchecked") @Override public void getData() {
-    viewModel.setFirstNavigation(false);
-    view.getNavigationFragment(null);
-    view.setData(viewModel);
-    view.showContent();
+    if (viewModel.isUpdatedRequired()) {
+      viewModel.setFirstNavigation(false);
+      view.getNavigationFragment(null);
+      view.setData(viewModel);
+      view.showContent();
+    }
     compositeSubscription.add(FireBaseUtils.getConnectionObservableWithTimeInterval()
         .compose(RxTransformers.applySchedulers())
         .subscribe(connected -> {

@@ -93,7 +93,7 @@ public abstract class AbsLceViewStateImpl<D extends ShouldRequestUpdateViewModel
       } else {
         shouldMakeRequest = true;
       }
-      if (data.isRestored()) {
+       if (data.isRestored()) {
         data.setRestored(false);
         shouldMakeRequest = false;
         view.loadData();

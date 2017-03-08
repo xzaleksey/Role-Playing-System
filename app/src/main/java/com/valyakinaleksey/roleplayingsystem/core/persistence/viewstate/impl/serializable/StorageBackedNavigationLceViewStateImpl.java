@@ -72,7 +72,7 @@ public class StorageBackedNavigationLceViewStateImpl<D extends Serializable & Sh
         try {
           save(objectOutputStream);
         } catch (IOException e) {
-          e.printStackTrace();
+          Timber.d(e);
         }
       });
       return null;

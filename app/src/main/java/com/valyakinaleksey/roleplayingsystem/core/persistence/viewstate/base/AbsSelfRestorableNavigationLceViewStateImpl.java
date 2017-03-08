@@ -11,5 +11,8 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestU
 public abstract class AbsSelfRestorableNavigationLceViewStateImpl<D extends ShouldRequestUpdateViewModel,  V extends LceView<D>, T>
                         extends AbsNavigationLceViewStateImpl<D, V, T>
                         implements SelfRestorableViewState {
-
+  @Override public void setData(D data) {
+    super.setData(data);
+    save();
+  }
 }

@@ -12,7 +12,9 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,12 +64,49 @@ public class UserRepositoryImpl implements UserRepository {
         });
   }
 
-  @Override public Observable<Map<String, User>> getUsersList() {
-    return Observable.defer(() -> Observable.just(stringUserConcurrentHashMap));
+  @Override public Observable<Map<String, User>> getUsersMap() {
+    return Observable.defer(() -> Observable.just(stringUserConcurrentHashMap)
+        .concatMap(stringUserConcurrentHashMap1 -> {
+          if (stringUserConcurrentHashMap1.isEmpty()) {
+            return getUsersMapFromServer();
+          } else {
+            return Observable.just(stringUserConcurrentHashMap1);
+          }
+        }));
+  }
+
+  public Observable<Map<String, User>> getUsersMapFromServer() {
+    DatabaseReference child = FireBaseUtils.getTableReference(FireBaseUtils.USERS);
+    return FireBaseUtils.checkReferenceExistsAndNotEmpty(child).switchMap(aBoolean -> {
+      if (aBoolean) {
+        return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(child);
+      } else {
+        return Observable.just(null);
+      }
+    }).map(dataSnapshot -> {
+      HashMap<String, User> stringUserHashMap = new HashMap<String, User>();
+      if (dataSnapshot == null) {
+        return stringUserHashMap;
+      }
+      Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+      for (DataSnapshot snapshot : children) {
+        User value = snapshot.getValue(User.class);
+        stringUserHashMap.put(value.getUid(), value);
+      }
+      return stringUserHashMap;
+    });
   }
 
   @Override public Observable<User> getUserByUid(String uid) {
-    return Observable.defer(() -> Observable.just(stringUserConcurrentHashMap.get(uid)));
+    return Observable.defer(() -> Observable.just(stringUserConcurrentHashMap.get(uid)))
+        .concatMap(user -> {
+          if (user == null) {
+            return getUserByUidFromServer(uid);
+          } else {
+            return Observable.just(user
+            );
+          }
+        });
   }
 
   @Override public Observable<List<User>> getUserByGameId(String id) {
@@ -89,6 +128,18 @@ public class UserRepositoryImpl implements UserRepository {
     DatabaseReference databaseReference =
         FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME).child(id);
     return RxFirebaseDatabase.getInstance().observeChildEvent(databaseReference);
+  }
+
+  @Override public Observable<User> getUserByUidFromServer(String uid) {
+    DatabaseReference child = FireBaseUtils.getTableReference(FireBaseUtils.USERS).child(uid);
+    return FireBaseUtils.checkReferenceExistsAndNotEmpty(child).switchMap(aBoolean -> {
+      if (aBoolean) {
+        return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(child,
+            User.class);
+      } else {
+        return Observable.just(null);
+      }
+    });
   }
 }
       

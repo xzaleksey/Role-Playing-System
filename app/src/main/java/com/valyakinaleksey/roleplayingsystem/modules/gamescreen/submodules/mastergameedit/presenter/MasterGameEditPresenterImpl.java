@@ -83,7 +83,7 @@ public class MasterGameEditPresenterImpl
               viewModel.setNeedUpdate(false);
               view.setData(viewModel);
               view.showContent();
-            }, Crashlytics::logException));
+            }, this::handleThrowable));
   }
 
   @NonNull @SuppressWarnings("unchecked") private ArrayList<InfoSection> getInfoSections(

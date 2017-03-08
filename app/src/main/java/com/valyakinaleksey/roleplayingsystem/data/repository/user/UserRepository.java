@@ -9,7 +9,7 @@ import java.util.Map;
 import rx.Observable;
 
 public interface UserRepository {
-    Observable<Map<String, User>> getUsersList();
+    Observable<Map<String, User>> getUsersMap();
 
     Observable<User> getUserByUid(String uid);
 
@@ -17,5 +17,7 @@ public interface UserRepository {
 
 
     Observable<FirebaseChildEvent> observeUsersInGame(String id);
+
+    Observable<User> getUserByUidFromServer(String uid);
 }
       

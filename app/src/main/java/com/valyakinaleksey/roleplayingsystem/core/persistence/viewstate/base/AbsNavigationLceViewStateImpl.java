@@ -34,6 +34,8 @@ public abstract class AbsNavigationLceViewStateImpl<D extends ShouldRequestUpdat
         pendingStateChangesList = new ArrayList<>(list);
     }
 
+
+
     @Override
     public void apply(V view) {
         super.apply(view);

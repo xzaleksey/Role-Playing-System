@@ -71,6 +71,7 @@ public class GamesCharactersPresenterImpl
   private void initSubscriptions() {
     GameModel gameModel = viewModel.getGameModel();
     compositeSubscription.add(gameCharactersInteractor.observeChildren(gameModel)
+        .onBackpressureBuffer()
         .concatMap(gameCharacterModelRxFirebaseChildEvent -> {
           switch (gameCharacterModelRxFirebaseChildEvent.getEventType()) {
             case ADDED:

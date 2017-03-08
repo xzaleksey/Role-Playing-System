@@ -116,7 +116,8 @@ public class ParentGameFragment
     preFillModel(data);
     getActivity().invalidateOptionsMenu();
     if (viewPager.getAdapter() == null) {
-      if (data.isFirstNavigation()) {
+      if (data.isFirstNavigation() || adapter.getCount() == 0) {
+        adapter.clear();
         for (SerializableTuple<Integer, String> integerStringSerializableTuple : data.getFragmentsInfo()) {
           adapter.addFragment(integerStringSerializableTuple);
         }
