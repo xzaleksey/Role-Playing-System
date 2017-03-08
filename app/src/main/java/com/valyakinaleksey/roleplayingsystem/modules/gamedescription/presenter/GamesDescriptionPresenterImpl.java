@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamedescription.presenter;
 
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -92,12 +93,13 @@ import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringB
 
   @Override public void restoreViewModel(GamesDescriptionModel viewModel) {
     super.restoreViewModel(viewModel);
-    viewModel.setEmpty(true);
+    Timber.d("restoreModel");
   }
 
   @SuppressWarnings("unchecked") @Override public void getData() {
     GameModel gameModel = viewModel.getGameModel();
-
+    Timber.d("Game description getData");
+    view.preFillModel(viewModel);
     compositeSubscription.add(
         Observable.zip(userGetInteractor.getUserByUid(gameModel.getMasterId()),
             gameCharacteristicsInteractor.getValuesByGameModel(gameModel),
@@ -112,10 +114,11 @@ import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringB
             .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
             .subscribe(user -> {
               view.setData(viewModel);
+              viewModel.setNeedUpdate(false);
               view.showContent();
               observeGameInfo(gameModel);
               observeUsers();
-            }, Crashlytics::logException));
+            }, this::handleThrowable));
   }
 
   private void observeGameInfo(GameModel gameModel) {

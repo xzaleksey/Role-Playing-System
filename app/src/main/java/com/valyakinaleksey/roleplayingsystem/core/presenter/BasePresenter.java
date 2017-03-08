@@ -9,14 +9,14 @@ import com.valyakinaleksey.roleplayingsystem.core.firebase.AccessFirebaseExcepti
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
 
 import java.util.concurrent.TimeoutException;
 
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public abstract class BasePresenter<V extends LceView<DATA>, DATA extends EmptyViewModel>
+public abstract class BasePresenter<V extends LceView<DATA>, DATA extends ShouldRequestUpdateViewModel>
     implements Presenter<V>, RestorablePresenter<DATA> {
 
   protected V view;

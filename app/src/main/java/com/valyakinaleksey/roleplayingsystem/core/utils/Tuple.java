@@ -1,6 +1,8 @@
 package com.valyakinaleksey.roleplayingsystem.core.utils;
 
-public class Tuple<F, S> {
+import java.io.Serializable;
+
+public class Tuple<F, S> implements Serializable {
 
   public final F first;
   public final S second;

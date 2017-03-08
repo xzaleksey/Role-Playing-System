@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -13,8 +13,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GamesCharactersViewModel extends BaseEmptyViewModel
-    implements EmptyViewModel, Parcelable, Serializable {
+public class GamesCharactersViewModel extends BaseShouldRequestUpdateViewModel
+    implements ShouldRequestUpdateViewModel, Parcelable, Serializable {
   public static final int OCCUPIED_TAB = 0;
   public static final int FREE_TAB = 1;
   public static final int NPC_TAB = 2;
@@ -62,7 +62,7 @@ public class GamesCharactersViewModel extends BaseEmptyViewModel
     this.iFlexibles = iFlexibles;
   }
 
-  @Override public boolean isEmpty() {
+  @Override public boolean isUpdatedRequired() {
     return false;
   }
 

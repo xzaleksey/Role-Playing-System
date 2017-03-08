@@ -56,6 +56,7 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
         FireBaseUtils.checkReferenceExistsAndNotEmpty(getDatabaseQuery(viewModel))
             .compose(RxTransformers.applySchedulers())
             .subscribe(exists -> {
+              viewModel.setNeedUpdate(false);
               if (!exists) {
                 view.hideLoading();
               }

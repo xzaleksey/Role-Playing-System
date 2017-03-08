@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -13,8 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SnackbarHelper;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
-import com.valyakinaleksey.roleplayingsystem.utils.ErrorUtils;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +20,13 @@ import java.util.List;
 import butterknife.Bind;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.valyakinaleksey.roleplayingsystem.core.view.BaseError.NO_CONNECTION;
-
 /**
  * Base load - content - error view
  * Handles CONNECTION, NO_DATA, GENERAL errors
  * To work properly, your view should be able to work with enum <code>XXXError</code> with
  * corresponding fields
  */
-public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyViewModel, V extends LceView<M>>
+public abstract class AbsLceFragment<C extends HasPresenter, M extends ShouldRequestUpdateViewModel, V extends LceView<M>>
     extends ComponentManagerFragment<C, V> implements LceView<M> {
 
   @Bind(R.id.progress) ProgressBar progress;
@@ -193,7 +189,7 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends EmptyView
   }
 
   protected final boolean hasData() {
-    return data != null && !data.isEmpty();
+    return data != null && !data.isUpdatedRequired();
   }
 
   @Override public void hideLoading() {

@@ -1,13 +1,10 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter;
+package com.valyakinaleksey.roleplayingsystem.modules.mygames.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import com.crashlytics.android.Crashlytics;
-import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -19,33 +16,30 @@ import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePrese
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView;
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
-
 import rx.Observable;
 import rx.Subscription;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
 
-@PerFragmentScope public class GamesListPresenterImpl
-    extends BasePresenter<GamesListView, GamesListViewModel>
-    implements GamesListPresenter, RestorablePresenter<GamesListViewModel> {
+@PerFragmentScope public class MyGamesListPresenterImpl
+    extends BasePresenter<MyGamesListView, GamesListViewModel>
+    implements MyGamesListPresenter, RestorablePresenter<GamesListViewModel> {
 
-  private CreateNewGameInteractor createNewGameInteractor;
-  private UserGetInteractor userGetInteractor;
-  private ValidatePasswordInteractor validatePasswordInteractor;
-  private CheckUserJoinedGameInteractor checkUserJoinedGameInteractor;
-  private ParentPresenter parentPresenter;
+  private final CreateNewGameInteractor createNewGameInteractor;
+  private final ValidatePasswordInteractor validatePasswordInteractor;
+  private final UserGetInteractor userGetInteractor;
+  private final CheckUserJoinedGameInteractor checkUserJoinedGameInteractor;
+  private final ParentPresenter parentPresenter;
 
-  public GamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor,
+  public MyGamesListPresenterImpl(CreateNewGameInteractor createNewGameInteractor,
       UserGetInteractor userGetInteractor, ValidatePasswordInteractor validatePasswordInteractor,
       CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
       ParentPresenter parentPresenter) {
@@ -94,10 +88,6 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
   }
 
   @Override public void onFabPressed() {
-    CreateGameDialogViewModel createGameDialogViewModel = new CreateGameDialogViewModel();
-    createGameDialogViewModel.setTitle(RpsApp.app().getString(R.string.create_game));
-    createGameDialogViewModel.setGameModel(new GameModel("", ""));
-    viewModel.setCreateGameDialogData(createGameDialogViewModel);
     view.showCreateGameDialog();
   }
 
@@ -128,10 +118,6 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
           if (userInGame) {
             navigateToGameScreen(context, model);
           } else {
-            PasswordDialogViewModel passwordDialogViewModel = new PasswordDialogViewModel();
-            passwordDialogViewModel.setTitle(RpsApp.app().getString(R.string.create_game));
-            passwordDialogViewModel.setGameModel(model);
-            viewModel.setPasswordDialogViewModel(passwordDialogViewModel);
             view.showPasswordDialog();
           }
         }, this::handleThrowable));
@@ -162,14 +148,6 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
                 view.hideLoading();
               }
             }, Crashlytics::logException));
-
-    compositeSubscription.add(RxFirebaseDatabase.getInstance()
-        .observeValueEvent(getFinishedGamesQuery())
-        .map(DataSnapshot::getChildrenCount)
-        .subscribe(aLong -> {
-          viewModel.setGamesCount(aLong.intValue());
-          view.updateGamesCount();
-        }, Crashlytics::logException));
   }
 
   private void setDatabaseQuery(GamesListViewModel gamesListViewModel) {

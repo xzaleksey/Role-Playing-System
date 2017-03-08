@@ -2,7 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base;
 
 import com.annimon.stream.Stream;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Base ViewState implementation for {@link LceView} with view-based navigation
  */
-public abstract class AbsNavigationLceViewStateImpl<D extends EmptyViewModel, V extends LceView<D>, T>
+public abstract class AbsNavigationLceViewStateImpl<D extends ShouldRequestUpdateViewModel, V extends LceView<D>, T>
                         extends AbsLceViewStateImpl<D, V>
                         implements NavigationViewState<V, T> {
 

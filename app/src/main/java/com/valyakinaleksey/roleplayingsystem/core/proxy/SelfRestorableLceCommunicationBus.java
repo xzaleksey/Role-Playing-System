@@ -8,40 +8,41 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.Sel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
 
 /**
- * Base class for all communication buses for {@link LceView} with ability to save / restore ViewState automatically
+ * Base class for all communication buses for {@link LceView} with ability to save / restore
+ * ViewState automatically
  */
-public abstract class SelfRestorableLceCommunicationBus<D extends EmptyViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V> & SelfRestorableViewState>
-        extends LceCommunicationBus<D, V, P ,VS> {
+public abstract class SelfRestorableLceCommunicationBus<D extends ShouldRequestUpdateViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V> & SelfRestorableViewState>
+    extends LceCommunicationBus<D, V, P, VS> {
 
-    public SelfRestorableLceCommunicationBus(P presenter, VS viewState) {
-        super(presenter, viewState);
+  public SelfRestorableLceCommunicationBus(P presenter, VS viewState) {
+    super(presenter, viewState);
+  }
+
+  @Override public void onCreate(@Nullable Bundle arguments, @Nullable Bundle savedInstanceState) {
+    if (savedInstanceState != null) {
+      viewState.restore();
+      D data = viewState.getData();
+      if (data != null) {
+        data.setRestored(true);
+      }
+      restorePresenterViewModelIfNeeded();
+    } else {
+      viewState.clean();
     }
+    super.onCreate(arguments, savedInstanceState);
+  }
 
-    @Override
-    public void onCreate(@Nullable Bundle arguments, @Nullable Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            viewState.restore();
-            restorePresenterViewModelIfNeeded();
-        } else {
-            viewState.clean();
-        }
-        super.onCreate(arguments, savedInstanceState);
+  @SuppressWarnings("unchecked") private void restorePresenterViewModelIfNeeded() {
+    if (presenter instanceof RestorablePresenter) {
+      ((RestorablePresenter<D>) presenter).restoreViewModel(viewState.getData());
     }
+  }
 
-    @SuppressWarnings("unchecked")
-    private void restorePresenterViewModelIfNeeded() {
-        if (presenter instanceof RestorablePresenter) {
-            ((RestorablePresenter<D>) presenter).restoreViewModel(viewState.getData());
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        viewState.clean();
-    }
-
+  @Override public void onDestroy() {
+    super.onDestroy();
+    viewState.clean();
+  }
 }

@@ -54,6 +54,7 @@ public class GamesCharactersPresenterImpl
   }
 
   @SuppressWarnings("unchecked") @Override public void getData() {
+    viewModel.setNeedUpdate(false);
     viewModel.setiFlexibles(new ArrayList<>(itemsAll));
     view.preFillModel(viewModel);
     view.showLoading();
@@ -205,13 +206,11 @@ public class GamesCharactersPresenterImpl
   @Override public void restoreViewModel(GamesCharactersViewModel viewModel) {
     super.restoreViewModel(viewModel);
     initTitleNav(viewModel);
-    view.preFillModel(viewModel);
-    getData();
   }
 
   @Override
   public void play(Context context, AbstractGameCharacterListItem abstractGameCharacterListItem) {
-    if (!viewModel.isEmpty() && context != null) {
+    if (!viewModel.isUpdatedRequired() && context != null) {
       gameCharactersInteractor.chooseCharacter(viewModel.getGameModel(),
           abstractGameCharacterListItem.getGameCharacterModel()).subscribe(aVoid -> {
 

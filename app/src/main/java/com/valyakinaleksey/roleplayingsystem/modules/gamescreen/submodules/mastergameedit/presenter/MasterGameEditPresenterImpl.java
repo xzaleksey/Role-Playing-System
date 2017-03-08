@@ -29,7 +29,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.adapter.MasterGameSection;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.MasterGameEditView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.model.MasterGameEditModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ModelMapper;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.ArrayList;
@@ -81,14 +80,10 @@ public class MasterGameEditPresenterImpl
             .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
             .subscribe(infoSections -> {
               viewModel.setInfoSections(infoSections);
+              viewModel.setNeedUpdate(false);
               view.setData(viewModel);
               view.showContent();
             }, Crashlytics::logException));
-  }
-
-  @Override public void restoreViewModel(MasterGameEditModel viewModel) {
-    super.restoreViewModel(viewModel);
-    viewModel.setEmpty(true);
   }
 
   @NonNull @SuppressWarnings("unchecked") private ArrayList<InfoSection> getInfoSections(

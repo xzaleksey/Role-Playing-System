@@ -4,13 +4,13 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.Lce
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
 
 /**
  * Base classes for all communication buses for {@link LceView}
  * Handles ViewState restore, tracking ViewState for loading - content - error related operations
  */
-public abstract class LceCommunicationBus<D extends EmptyViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V>>
+public abstract class LceCommunicationBus<D extends ShouldRequestUpdateViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V>>
         extends CommunicationBus<V, P>
         implements LceView<D> {
 

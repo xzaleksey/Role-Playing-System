@@ -22,6 +22,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFra
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import timber.log.Timber;
 
 public class GamesDescriptionFragment extends
     AbsButterLceFragment<GamesDescriptionComponent, GamesDescriptionModel, GamesDescriptionView>
@@ -69,7 +70,7 @@ public class GamesDescriptionFragment extends
 
   @Override public void showContent() {
     super.showContent();
-    ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
+    Timber.d(data.toString());
     sectionsAdapter.update(data.getInfoSections());
     recyclerView.setAdapter(sectionsAdapter);
   }
@@ -85,6 +86,10 @@ public class GamesDescriptionFragment extends
   @Override public void updateView() {
     ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
     sectionsAdapter.notifyDataSetChanged();
+  }
+
+  @Override public void preFillModel(GamesDescriptionModel data) {
+    ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
   }
 
   @Override public void updateView(InfoSection userInfosection, DataEvent dataEvent) {

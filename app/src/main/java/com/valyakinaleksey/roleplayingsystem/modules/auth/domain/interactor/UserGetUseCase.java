@@ -24,7 +24,10 @@ public class UserGetUseCase implements UserGetInteractor {
   }
 
   @Override public Observable<User> getUserByUid(String uid) {
-    return userRepository.getUserByUid(uid);
+    return userRepository.getUserByUid(uid).concatMap(user -> {
+      if (user == null) return getUserByUidFromServer(uid);
+      return Observable.just(user);
+    });
   }
 
   @Override public Observable<User> getUserByUidFromServer(String uid) {

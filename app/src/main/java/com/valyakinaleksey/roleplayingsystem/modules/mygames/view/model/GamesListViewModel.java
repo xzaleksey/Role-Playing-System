@@ -1,20 +1,16 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model;
+package com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.firebase.database.Query;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseShouldRequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
-
 import java.io.Serializable;
 
 public class GamesListViewModel extends BaseShouldRequestUpdateViewModel
     implements ShouldRequestUpdateViewModel, Parcelable, Serializable {
 
   private transient Query query;
-  private CreateGameDialogViewModel createGameDialogViewModel;
-  private PasswordDialogViewModel passwordDialogViewModel;
   private String toolbarTitle;
   private int gamesCount;
 
@@ -38,22 +34,6 @@ public class GamesListViewModel extends BaseShouldRequestUpdateViewModel
     this.gamesCount = gamesCount;
   }
 
-  public void setCreateGameDialogData(CreateGameDialogViewModel dialogData) {
-    this.createGameDialogViewModel = dialogData;
-  }
-
-  public PasswordDialogViewModel getPasswordDialogViewModel() {
-    return passwordDialogViewModel;
-  }
-
-  public void setPasswordDialogViewModel(PasswordDialogViewModel passwordDialogViewModel) {
-    this.passwordDialogViewModel = passwordDialogViewModel;
-  }
-
-  public CreateGameDialogViewModel getCreateGameDialogData() {
-    return createGameDialogViewModel;
-  }
-
   public String getToolbarTitle() {
     return toolbarTitle;
   }
@@ -68,18 +48,13 @@ public class GamesListViewModel extends BaseShouldRequestUpdateViewModel
 
   @Override public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
-    dest.writeParcelable(this.createGameDialogViewModel, flags);
-    dest.writeParcelable(this.passwordDialogViewModel, flags);
+
     dest.writeString(this.toolbarTitle);
     dest.writeInt(this.gamesCount);
   }
 
   protected GamesListViewModel(Parcel in) {
     super(in);
-    this.createGameDialogViewModel =
-        in.readParcelable(CreateGameDialogViewModel.class.getClassLoader());
-    this.passwordDialogViewModel =
-        in.readParcelable(PasswordDialogViewModel.class.getClassLoader());
     this.toolbarTitle = in.readString();
     this.gamesCount = in.readInt();
   }

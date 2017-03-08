@@ -41,6 +41,7 @@ public class MasterLogPresenterImpl extends BasePresenter<MasterLogView, MasterL
         FireBaseUtils.getTableReference(GAME_LOG).child(viewModel.getGameModel().getId()))
         .compose(RxTransformers.applySchedulers())
         .subscribe(exists -> {
+          viewModel.setNeedUpdate(false);
           if (!exists) {
             view.hideLoading();
           }

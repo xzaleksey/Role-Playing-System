@@ -4,14 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.database.DatabaseReference;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseEmptyViewModel;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.EmptyViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import java.io.Serializable;
 
-public class MasterLogModel extends BaseEmptyViewModel
-    implements EmptyViewModel, Parcelable, Serializable {
+public class MasterLogModel extends BaseShouldRequestUpdateViewModel
+    implements ShouldRequestUpdateViewModel, Parcelable, Serializable {
 
   private GameModel gameModel;
   private transient DatabaseReference databaseReference;
@@ -35,7 +35,7 @@ public class MasterLogModel extends BaseEmptyViewModel
     this.gameModel = gameModel;
   }
 
-  @Override public boolean isEmpty() {
+  @Override public boolean isUpdatedRequired() {
     return databaseReference == null;
   }
 
