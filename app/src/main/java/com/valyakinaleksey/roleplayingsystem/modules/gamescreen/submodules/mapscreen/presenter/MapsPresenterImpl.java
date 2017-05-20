@@ -18,6 +18,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.ArrayList;
@@ -26,15 +28,18 @@ import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_MAPS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.VISIBLE;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.IMAGE_FRAGMENT;
 
 public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
     implements MapsPresenter {
 
   private MapsInteractor mapsInteractor;
+  private ParentPresenter parentPresenter;
   private MyFireBaseAdapter.FirebaseArray firebaseArray;
 
-  public MapsPresenterImpl(MapsInteractor mapsInteractor) {
+  public MapsPresenterImpl(MapsInteractor mapsInteractor, ParentPresenter parentPresenter) {
     this.mapsInteractor = mapsInteractor;
+    this.parentPresenter = parentPresenter;
   }
 
   @SuppressWarnings("unchecked") @Override
@@ -93,6 +98,13 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
         .subscribe(aVoid -> {
 
         }, this::handleThrowable);
+  }
+
+  @Override public void openImage(String path, String fileName) {
+    Bundle args = new Bundle();
+    args.putString(ImageFragment.IMAGE_URL, path);
+    args.putString(ImageFragment.NAME, fileName);
+    parentPresenter.navigateToFragment(IMAGE_FRAGMENT, args);
   }
 
   private Query getDatabaseQuery(MapsViewModel mapsViewModel) {

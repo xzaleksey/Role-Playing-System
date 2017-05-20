@@ -11,5 +11,6 @@ public class NavigationUtils {
   public static final int GAME_MASTER_LOG_FRAGMENT = 5;
   public static final int GAME_MAPS_FRAGMENT = 6;
   public static final int GAME_CHARACTERS_FRAGMENT = 7;
+  public static final int IMAGE_FRAGMENT = 8;
 }
       

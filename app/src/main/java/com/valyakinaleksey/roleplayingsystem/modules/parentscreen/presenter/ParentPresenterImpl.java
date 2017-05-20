@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.paren
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
+import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
@@ -20,6 +22,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.BACK;
 import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAMES_LIST;
 import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_DESCRIPTION_FRAGMENT;
 import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_FRAGMENT;
+import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.IMAGE_FRAGMENT;
 import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.POP_BACKSTACK;
 
 public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel>
@@ -52,8 +55,7 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel>
   }
 
   @Override public void navigateTo(Fragment fragment, Bundle args) {
-    Fragment navFragment = null;
-
+    Fragment navFragment;
     if (args != null && args.getBoolean(POP_BACKSTACK, false)) {
       fragment.getChildFragmentManager().popBackStackImmediate();
     }
@@ -68,6 +70,10 @@ public class ParentPresenterImpl extends BasePresenter<ParentView, ParentModel>
         break;
       case GAME_DESCRIPTION_FRAGMENT:
         navFragment = GamesDescriptionFragment.newInstance(args);
+        navigate(fragment, navFragment, true);
+        break;
+      case IMAGE_FRAGMENT:
+        navFragment = ImageFragment.newInstance(args);
         navigate(fragment, navFragment, true);
         break;
       case BACK:

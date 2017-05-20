@@ -77,6 +77,7 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Bind(R.id.divider) View divider;
     @Bind(R.id.bottom_container) View bottomContainer;
     private Uri uri;
+    private MapsPresenter mapsPresenter;
 
     public MapViewHolder(View itemView) {
       super(itemView);
@@ -96,11 +97,12 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void bind(MapModel mapModel, boolean isMaster, MapsPresenter mapsPresenter) {
       clearSubscription();
+      this.mapsPresenter = mapsPresenter;
       initView(mapModel, isMaster, mapsPresenter);
       File localFile = mapModel.getLocalFile();
       boolean fileExists = localFile.exists();
       if (fileExists) {
-        initClickListener(localFile.getAbsolutePath());
+        initClickListener(localFile.getAbsolutePath(), localFile.getName());
       }
       if (!fileExists || !Uri.fromFile(localFile).equals(this.uri)) {
         ivMap.setImageDrawable(null);
@@ -116,11 +118,9 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       }).subscribe();
     }
 
-    private void initClickListener(String url) {
+    private void initClickListener(String path, String fileName) {
       itemView.setOnClickListener(v -> {
-        ImageFragment.newInstance(url)
-            .show(((FragmentActivity) itemView.getContext()).getSupportFragmentManager(),
-                ImageFragment.TAG);
+        mapsPresenter.openImage(path, fileName);
       });
     }
 
@@ -167,7 +167,7 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @NonNull private Observable<?> loadLocalFile(File localFile) {
       Uri uri = Uri.fromFile(localFile);
-      initClickListener(localFile.getAbsolutePath());
+      initClickListener(localFile.getAbsolutePath(), localFile.getName());
       if (uri.equals(this.uri)) {
         return Observable.just(true);
       }
@@ -179,7 +179,7 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull private Observable<?> loadFileFromInternet(MapModel mapModel) {
       if (mapModel.getStatus() == FireBaseUtils.SUCCESS) { // map was uploaded by master
         return mapModel.getDownloadUrlObservable()
-            .doOnNext(uri1 -> initClickListener(uri1.toString()))
+            .doOnNext(uri1 -> initClickListener(uri1.toString(), mapModel.getFileName()))
             .retry(2)
             .onErrorReturn(
                 throwable -> StorageUtils.resourceToUri(R.drawable.common_full_open_on_phone))

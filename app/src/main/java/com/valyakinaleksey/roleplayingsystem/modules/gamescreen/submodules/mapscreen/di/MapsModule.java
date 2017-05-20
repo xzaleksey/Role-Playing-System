@@ -10,6 +10,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter.MapsPresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.state.MapsViewState;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import dagger.Module;
 import dagger.Provides;
@@ -17,33 +18,26 @@ import javax.inject.Named;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
-@Module
-public class MapsModule {
+@Module public class MapsModule {
 
-    private final static String VIEW_STATE_FILE_NAME = MapsModule.class.getSimpleName();
+  private final static String VIEW_STATE_FILE_NAME = MapsModule.class.getSimpleName();
 
+  @Provides MapsViewState provideViewState(ViewStateStorage storage) {
+    return new MapsViewState(storage);
+  }
 
-    @Provides MapsViewState provideViewState(ViewStateStorage storage) {
-        return new MapsViewState(storage);
-    }
+  @Provides @GameScope @AutoExpose(MapsFragment.class) MapsPresenter provideCommunicationBus(
+      @Named(PRESENTER) MapsPresenter presenter, MapsViewState viewState) {
+    return new MapsViewCommunicationBus(presenter, viewState);
+  }
 
-    @Provides
-    @GameScope
-    @AutoExpose(MapsFragment.class) MapsPresenter provideCommunicationBus(@Named(PRESENTER)
-        MapsPresenter presenter, MapsViewState viewState) {
-        return new MapsViewCommunicationBus(presenter, viewState);
-    }
+  @Provides @Named(PRESENTER) @GameScope MapsPresenter providePresenter(
+      MapsInteractor mapsInteractor, ParentPresenter parentPresenter) {
+    return new MapsPresenterImpl(mapsInteractor, parentPresenter);
+  }
 
-    @Provides
-    @Named(PRESENTER)
-    @GameScope MapsPresenter providePresenter(MapsInteractor mapsInteractor) {
-        return new MapsPresenterImpl(mapsInteractor);
-    }
-
-
-    @Provides
-    ViewStateStorage provideViewStateStorage(PathManager manager) {
-        String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
-        return new FileViewStateStorage(fullPath);
-    }
+  @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {
+    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
+    return new FileViewStateStorage(fullPath);
+  }
 }

@@ -2,7 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maps
 
 import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.core.proxy.AdapterNotifierCommunicationBus;
-import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter.MapsPresenter;
@@ -41,5 +40,9 @@ import javax.inject.Inject;
 
   @Override public void deleteMap(MapModel mapModel) {
     presenter.deleteMap(mapModel);
+  }
+
+  @Override public void openImage(String path, String fileName) {
+    presenter.openImage(path, fileName);
   }
 }

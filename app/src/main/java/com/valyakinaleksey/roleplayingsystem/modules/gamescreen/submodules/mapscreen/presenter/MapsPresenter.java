@@ -14,4 +14,6 @@ public interface MapsPresenter extends Presenter<MapsView> {
     void changeMapVisibility(MapModel mapModel, boolean isChecked);
 
     void deleteMap(MapModel mapModel);
+
+    void openImage(String path, String fileName);
 }

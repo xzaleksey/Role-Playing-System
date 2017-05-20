@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.photo.view
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +13,16 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
 import com.valyakinaleksey.roleplayingsystem.R
+import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity
 import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import kotlinx.android.synthetic.main.fragment_photo_view.*
 import uk.co.senab.photoview.PhotoViewAttacher
 
-class ImageFragment : DialogFragment() {
+class ImageFragment : Fragment() {
 
   private var url: String? = null
+  private var name: String? = null
   private var preview: String? = null
   private var success = false
   lateinit private var photoViewAttacher: PhotoViewAttacher
@@ -31,13 +34,13 @@ class ImageFragment : DialogFragment() {
     if (savedInstanceState == null) {
       url = arguments.getString(IMAGE_URL)
       preview = arguments.getString(PREVIEW)
+      name = arguments.getString(NAME)
     } else {
       url = savedInstanceState.getString(IMAGE_URL)
       preview = savedInstanceState.getString(PREVIEW)
+      name = savedInstanceState.getString(NAME)
     }
-    setStyle(STYLE_NO_TITLE, R.style.FullScreenDialog)
   }
-
 
 
   override fun onCreateView(
@@ -52,6 +55,7 @@ class ImageFragment : DialogFragment() {
       loadPreviewAndMainImage()
     }
     photoViewAttacher = PhotoViewAttacher(photo_container)
+    (activity as AbsActivity).supportActionBar?.hide()
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -115,14 +119,23 @@ class ImageFragment : DialogFragment() {
         })
   }
 
+  override fun onDestroyView() {
+    super.onDestroyView()
+    (activity as AbsActivity).supportActionBar?.show()
+  }
+
   override fun onSaveInstanceState(outState: Bundle?) {
     super.onSaveInstanceState(outState)
     outState!!.putString(IMAGE_URL, url)
     outState.putString(PREVIEW, preview)
+    outState.putString(NAME, name)
   }
 
   companion object {
+    @JvmField
     val IMAGE_URL = "IMAGE_URL"
+    @JvmField
+    val NAME = "NAME"
     val PREVIEW = "PREVIEW"
     @JvmField
     var TAG = "ImageFragment"
@@ -138,9 +151,7 @@ class ImageFragment : DialogFragment() {
     }
 
     @JvmStatic
-    fun newInstance(url: String): ImageFragment {
-      val args = Bundle()
-      args.putString(IMAGE_URL, url)
+    fun newInstance(args: Bundle?): ImageFragment {
       val fragment = ImageFragment()
       fragment.arguments = args
       return fragment
