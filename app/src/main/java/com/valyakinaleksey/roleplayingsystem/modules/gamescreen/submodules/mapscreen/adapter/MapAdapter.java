@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter.MapsPresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils;
@@ -32,7 +34,7 @@ import rx.Subscription;
 import timber.log.Timber;
 
 public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-  public static final int COLUMSN_COUNT = 2;
+  public static final int COLUMNS_COUNT = 2;
   public static final int COLUMSN_COUNT_LANDSCAPE = 3;
   private List<MapModel> mapModels;
   private boolean isMaster = false;
@@ -79,8 +81,8 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public MapViewHolder(View itemView) {
       super(itemView);
       Context context = itemView.getContext();
-      int countOfPaddings = 2 + 2 * COLUMSN_COUNT;
-      int countOfColumns = COLUMSN_COUNT;
+      int countOfPaddings = 2 + 2 * COLUMNS_COUNT;
+      int countOfColumns = COLUMNS_COUNT;
       if (ScreenUtils.getScreenOrientation(context) == Configuration.ORIENTATION_LANDSCAPE) {
         countOfPaddings = 2 + 2 * COLUMSN_COUNT_LANDSCAPE;
         countOfColumns = COLUMSN_COUNT_LANDSCAPE;
@@ -93,40 +95,19 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void bind(MapModel mapModel, boolean isMaster, MapsPresenter mapsPresenter) {
-      if (isMaster) {
-        switchCompat.setEnabled(true);
-        boolean visible = mapModel.isVisible();
-        ivDelete.setVisibility(View.VISIBLE);
-        ivDelete.setOnClickListener(v -> {
-          new MaterialDialog.Builder(v.getContext()).negativeText(android.R.string.cancel)
-              .title(R.string.delete_map)
-              .positiveText(android.R.string.ok)
-              .onPositive((dialog, which) -> {
-                mapsPresenter.deleteMap(mapModel);
-              })
-              .show();
-        });
-        switchCompat.setOnCheckedChangeListener(null);
-        switchCompat.setChecked(visible);
-        switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
-          mapsPresenter.changeMapVisibility(mapModel, isChecked);
-        });
-      } else {
-        ivDelete.setVisibility(View.GONE);
-        bottomContainer.setVisibility(View.GONE);
-        divider.setVisibility(View.GONE);
-      }
-      tvName.setText(mapModel.getFileName());
-      if (subscription != null) {
-        subscription.unsubscribe();
-      }
+      clearSubscription();
+      initView(mapModel, isMaster, mapsPresenter);
       File localFile = mapModel.getLocalFile();
-      if (localFile.exists() && Uri.fromFile(localFile).equals(this.uri)) {
-        return;
-      } else {
-        ivMap.setImageDrawable(null);
+      boolean fileExists = localFile.exists();
+      if (fileExists) {
+        initClickListener(localFile.getAbsolutePath());
       }
-      subscription = Observable.just(localFile.exists()).switchMap(exists -> {
+      if (!fileExists || !Uri.fromFile(localFile).equals(this.uri)) {
+        ivMap.setImageDrawable(null);
+      } else {
+        return;
+      }
+      subscription = Observable.just(fileExists).switchMap(exists -> {
         if (exists) { // load from local storage
           return loadLocalFile(localFile);
         } else { // try to load from internet
@@ -135,8 +116,58 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       }).subscribe();
     }
 
+    private void initClickListener(String url) {
+      itemView.setOnClickListener(v -> {
+        ImageFragment.newInstance(url)
+            .show(((FragmentActivity) itemView.getContext()).getSupportFragmentManager(),
+                ImageFragment.TAG);
+      });
+    }
+
+    private void initView(MapModel mapModel, boolean isMaster, MapsPresenter mapsPresenter) {
+      if (isMaster) {
+        initMasterView(mapModel, mapsPresenter);
+      } else {
+        initUserView();
+      }
+      tvName.setText(mapModel.getFileName());
+    }
+
+    private void clearSubscription() {
+      if (subscription != null) {
+        subscription.unsubscribe();
+      }
+    }
+
+    private void initUserView() {
+      ivDelete.setVisibility(View.GONE);
+      bottomContainer.setVisibility(View.GONE);
+      divider.setVisibility(View.GONE);
+    }
+
+    private void initMasterView(MapModel mapModel, MapsPresenter mapsPresenter) {
+      switchCompat.setEnabled(true);
+      boolean visible = mapModel.isVisible();
+      ivDelete.setVisibility(View.VISIBLE);
+      ivDelete.setOnClickListener(v -> {
+        new MaterialDialog.Builder(v.getContext()).negativeText(android.R.string.cancel)
+            .title(R.string.delete_map)
+            .positiveText(android.R.string.ok)
+            .onPositive((dialog, which) -> {
+              mapsPresenter.deleteMap(mapModel);
+            })
+            .show();
+      });
+      switchCompat.setOnCheckedChangeListener(null);
+      switchCompat.setChecked(visible);
+      switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        mapsPresenter.changeMapVisibility(mapModel, isChecked);
+      });
+    }
+
     @NonNull private Observable<?> loadLocalFile(File localFile) {
       Uri uri = Uri.fromFile(localFile);
+      initClickListener(localFile.getAbsolutePath());
       if (uri.equals(this.uri)) {
         return Observable.just(true);
       }
@@ -148,6 +179,8 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull private Observable<?> loadFileFromInternet(MapModel mapModel) {
       if (mapModel.getStatus() == FireBaseUtils.SUCCESS) { // map was uploaded by master
         return mapModel.getDownloadUrlObservable()
+            .doOnNext(uri1 -> initClickListener(uri1.toString()))
+            .retry(2)
             .onErrorReturn(
                 throwable -> StorageUtils.resourceToUri(R.drawable.common_full_open_on_phone))
             .map(uri -> {

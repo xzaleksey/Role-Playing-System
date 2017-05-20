@@ -12,7 +12,6 @@ import android.widget.EditText;
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
 import butterknife.Bind;
-import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;

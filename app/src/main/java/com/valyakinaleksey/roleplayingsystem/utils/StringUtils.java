@@ -28,5 +28,9 @@ public class StringUtils {
   public static String formatRightSlash(String s) {
     return s.concat("/");
   }
+
+  public static boolean isEmpty(CharSequence text) {
+    return text == null || text.length() == 0;
+  }
 }
       

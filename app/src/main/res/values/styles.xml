@@ -24,5 +24,13 @@
     <item name="android:textSize">@dimen/expanded_title_size</item>
   </style>
 
+  <style name="BrandButtonStyle" parent="Widget.AppCompat.Button.Colored">
+    <item name="colorButtonNormal">@color/md_white_1000</item>
+    <item name="android:textColor">@color/material_blue_500</item>
+  </style>
 
+  <style name="FullScreenDialog" parent="AppTheme">
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:background">@android:color/transparent</item>
+  </style>
 </resources>
