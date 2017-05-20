@@ -151,9 +151,6 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             .onErrorReturn(
                 throwable -> StorageUtils.resourceToUri(R.drawable.common_full_open_on_phone))
             .map(uri -> {
-              if (uri.equals(this.uri)) {
-                return Observable.just(true);
-              }
               this.uri = uri;
               loadImage(uri);
               return Observable.just(true);

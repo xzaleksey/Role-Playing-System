@@ -33,6 +33,12 @@ public class MapModel implements Serializable, Parcelable {
   private Object dateCreate;
   private Long tempDateCreate;
 
+  /**
+   * Default constructor for mapping
+   */
+  public MapModel() {
+  }
+
   @Exclude public long getDateCreateLong() {
     if (dateCreate == null || dateCreate == ServerValue.TIMESTAMP) {
       return tempDateCreate;
@@ -120,10 +126,8 @@ public class MapModel implements Serializable, Parcelable {
         .concat(fileName));
   }
 
-  /**
-   * Default constructor for mapping
-   */
-  public MapModel() {
+  @Exclude public boolean localFileExists() {
+    return getLocalFile().exists();
   }
 
   @Override public int describeContents() {
