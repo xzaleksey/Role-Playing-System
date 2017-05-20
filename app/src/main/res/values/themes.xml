@@ -19,10 +19,7 @@
   </style>
 
 
-  <style name="AppTheme" parent="AppThemeBase">
-
-
-  </style>
+  <style name="AppTheme" parent="AppThemeBase"></style>
 
   <style name="AppThemeBase.TextWhite">
     <item name="colorAccent">@android:color/white</item>

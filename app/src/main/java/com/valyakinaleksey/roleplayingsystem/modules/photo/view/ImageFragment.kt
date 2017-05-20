@@ -1,6 +1,8 @@
 package com.valyakinaleksey.roleplayingsystem.modules.photo.view
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
@@ -8,6 +10,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
@@ -27,6 +30,7 @@ class ImageFragment : Fragment() {
   private var success = false
   lateinit private var photoViewAttacher: PhotoViewAttacher
   private val layoutId: Int = R.layout.fragment_photo_view
+  private var statusBarColor: Int? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -55,7 +59,16 @@ class ImageFragment : Fragment() {
       loadPreviewAndMainImage()
     }
     photoViewAttacher = PhotoViewAttacher(photo_container)
-    (activity as AbsActivity).supportActionBar?.hide()
+    val activity = activity as AbsActivity
+    activity.supportActionBar?.hide()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      statusBarColor = activity.window?.statusBarColor
+      activity.window?.let {
+        // Set Fullscreen
+        it.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        it.statusBarColor = Color.parseColor("#20111111")
+      }
+    }
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -121,6 +134,11 @@ class ImageFragment : Fragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      statusBarColor?.let {
+        activity.window?.statusBarColor = it
+      }
+    }
     (activity as AbsActivity).supportActionBar?.show()
   }
 

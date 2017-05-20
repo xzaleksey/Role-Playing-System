@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view;
 
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -34,10 +36,11 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.Par
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
 
-@AutoComponent(dependencies = { AppComponent.class },
-    modules = ParentModule.class,
-    superinterfaces = { HasParentPresenter.class, GlobalComponent.class }) @ParentScope
-@AutoInjector public class ParentFragment
+@AutoComponent(dependencies = {
+    AppComponent.class
+}, modules = ParentModule.class, superinterfaces = {
+    HasParentPresenter.class, GlobalComponent.class
+}) @ParentScope @AutoInjector public class ParentFragment
     extends AbsButterLceFragment<ParentFragmentComponent, ParentModel, ParentView>
     implements ParentView, OnToolbarChangedListener {
 
