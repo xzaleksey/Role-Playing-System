@@ -19,7 +19,12 @@
   </style>
 
 
-  <style name="AppTheme" parent="AppThemeBase"></style>
+  <style name="AppTheme" parent="AppThemeBase" />
+
+  <style name="ImageAppTheme" parent="AppTheme">
+    <item name="colorPrimaryDark">@color/md_dark_appbar</item>
+    <item name="colorAccent">@color/md_white_1000</item>
+  </style>
 
   <style name="AppThemeBase.TextWhite">
     <item name="colorAccent">@android:color/white</item>

@@ -96,19 +96,12 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void bind(MapModel mapModel, boolean isMaster, MapsPresenter mapsPresenter) {
-      clearSubscription();
       this.mapsPresenter = mapsPresenter;
+      clearSubscription();
+      ivMap.setImageDrawable(null);
       initView(mapModel, isMaster, mapsPresenter);
       File localFile = mapModel.getLocalFile();
       boolean fileExists = localFile.exists();
-      if (fileExists) {
-        initClickListener(localFile.getAbsolutePath(), localFile.getName());
-      }
-      if (!fileExists || !Uri.fromFile(localFile).equals(this.uri)) {
-        ivMap.setImageDrawable(null);
-      } else {
-        return;
-      }
       subscription = Observable.just(fileExists).switchMap(exists -> {
         if (exists) { // load from local storage
           return loadLocalFile(localFile);

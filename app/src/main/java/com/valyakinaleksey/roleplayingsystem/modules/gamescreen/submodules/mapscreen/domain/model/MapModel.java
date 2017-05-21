@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maps
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.PropertyName;
@@ -32,6 +33,7 @@ public class MapModel implements Serializable, Parcelable {
   private int status = IN_PROGRESS;
   private Object dateCreate;
   private Long tempDateCreate;
+  @Exclude public Observable<Uri> downloadObservable;
 
   /**
    * Default constructor for mapping
@@ -108,6 +110,18 @@ public class MapModel implements Serializable, Parcelable {
   }
 
   @Exclude public Observable<Uri> getDownloadUrlObservable() {
+    if (downloadObservable == null) {
+      Observable<Uri> downloadUrl = getDownloadObservable();
+      if (status == FireBaseUtils.SUCCESS) {
+        downloadObservable = downloadUrl.cache();
+      } else {
+        return downloadUrl;
+      }
+    }
+    return downloadObservable;
+  }
+
+  @NonNull private Observable<Uri> getDownloadObservable() {
     return RxFirebaseStorage.getDownloadUrl(FirebaseStorage.getInstance()
         .getReference()
         .child(GAME_MAPS)
