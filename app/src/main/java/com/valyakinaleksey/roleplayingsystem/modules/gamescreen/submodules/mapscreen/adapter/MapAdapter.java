@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter.MapsPresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils;
@@ -97,12 +95,10 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void bind(MapModel mapModel, boolean isMaster, MapsPresenter mapsPresenter) {
       this.mapsPresenter = mapsPresenter;
-      clearSubscription();
-      ivMap.setImageDrawable(null);
+      reset();
       initView(mapModel, isMaster, mapsPresenter);
       File localFile = mapModel.getLocalFile();
-      boolean fileExists = localFile.exists();
-      subscription = Observable.just(fileExists).switchMap(exists -> {
+      subscription = Observable.just(localFile.exists()).switchMap(exists -> {
         if (exists) { // load from local storage
           return loadLocalFile(localFile);
         } else { // try to load from internet
@@ -126,10 +122,12 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       tvName.setText(mapModel.getFileName());
     }
 
-    private void clearSubscription() {
+    private void reset() {
       if (subscription != null) {
         subscription.unsubscribe();
       }
+      itemView.setOnClickListener(null);
+      ivMap.setImageDrawable(null);
     }
 
     private void initUserView() {
