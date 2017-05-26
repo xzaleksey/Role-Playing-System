@@ -6,8 +6,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import butterknife.Bind;
 import butterknife.BindColor;
+import butterknife.BindView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.EditExpandableSection;
@@ -21,13 +21,13 @@ import com.valyakinaleksey.roleplayingsystem.utils.ViewUtils;
 import rx.subscriptions.CompositeSubscription;
 
 public class TwoValueEditViewHolder extends ButterKnifeViewHolder {
-  @Bind(R.id.value) EditText etValue;
-  @Bind(R.id.value2) EditText etValue2;
+  @BindView(R.id.value) EditText etValue;
+  @BindView(R.id.value2) EditText etValue2;
 
-  @Bind(R.id.edit_icon) ImageView editIcon;
-  @Bind(R.id.edit_icon2) ImageView editIcon2;
+  @BindView(R.id.edit_icon) ImageView editIcon;
+  @BindView(R.id.edit_icon2) ImageView editIcon2;
 
-  @Bind(R.id.divider) View divider;
+  @BindView(R.id.divider) View divider;
 
   @BindColor(R.color.colorAccent) int accentColor;
   private CompositeSubscription etSubscription;

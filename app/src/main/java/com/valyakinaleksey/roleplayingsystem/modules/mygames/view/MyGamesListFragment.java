@@ -7,8 +7,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -26,9 +26,9 @@ public class MyGamesListFragment
 
   public static final String TAG = MyGamesListFragment.class.getSimpleName();
 
-  @Bind(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.error_empty_field) String errorEmptyField;
-  @Bind(R.id.fab) FloatingActionButton fab;
+  @BindView(R.id.fab) FloatingActionButton fab;
 
   public static MyGamesListFragment newInstance() {
     return new MyGamesListFragment();

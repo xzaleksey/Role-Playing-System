@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
-import butterknife.Bind;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -24,18 +24,19 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.ArrayList;
 
-@AutoComponent(dependencies = { ParentGameComponent.class },
-    modules = GamesCharactersModule.class,
-    superinterfaces = { GlobalComponent.class, HasGameCharactersPresenter.class }) @GameScope
-@AutoInjector public class GamesCharactersFragment extends
+@AutoComponent(dependencies = {
+    ParentGameComponent.class
+}, modules = GamesCharactersModule.class, superinterfaces = {
+    GlobalComponent.class, HasGameCharactersPresenter.class
+}) @GameScope @AutoInjector public class GamesCharactersFragment extends
     AbsButterLceFragment<GamesCharactersFragmentComponent, GamesCharactersViewModel, GamesCharactersView>
     implements GamesCharactersView {
 
   public static final String TAG = GamesCharactersFragment.class.getSimpleName();
 
-  @Bind(R.id.recycler_view) RecyclerView recyclerView;
-  @Bind(R.id.fab) FloatingActionButton fab;
-  @Bind(R.id.title_switcher) AnimatedTitlesLayout titleLayout;
+  @BindView(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.fab) FloatingActionButton fab;
+  @BindView(R.id.title_switcher) AnimatedTitlesLayout titleLayout;
 
   FlexibleAdapter<IFlexible> flexibleAdapter;
   private HideFablListener listener;

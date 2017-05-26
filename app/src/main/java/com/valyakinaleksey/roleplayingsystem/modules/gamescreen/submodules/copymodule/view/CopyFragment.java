@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
-import butterknife.Bind;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -16,8 +16,6 @@ import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.HasCopyPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.view.model.CopyViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.DaggerGamesCharactersFragmentComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import javax.inject.Inject;
 
@@ -30,7 +28,7 @@ public class CopyFragment
 
   public static final String TAG = CopyFragment.class.getSimpleName();
 
-  @Bind(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
   @Inject SectionsAdapter sectionsAdapter;
 

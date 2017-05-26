@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.core.ui;
 
 import android.view.View;
 
+import butterknife.Unbinder;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsFragment;
 
 import butterknife.ButterKnife;
@@ -12,15 +13,15 @@ import butterknife.ButterKnife;
  */
 public abstract class AbsButterFragment extends AbsFragment {
 
-    @Override
-    protected void preSetupViews(final View view) {
-        super.preSetupViews(view);
-        ButterKnife.bind(this, view);
-    }
+  private Unbinder unbinder;
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
+  @Override protected void preSetupViews(final View view) {
+    super.preSetupViews(view);
+    unbinder = ButterKnife.bind(this, view);
+  }
+
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
+  }
 }

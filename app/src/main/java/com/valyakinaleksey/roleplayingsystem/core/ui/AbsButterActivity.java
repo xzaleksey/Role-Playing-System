@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.core.ui;
 
 import android.os.Bundle;
 
+import butterknife.Unbinder;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 
 import butterknife.ButterKnife;
@@ -12,15 +13,15 @@ import butterknife.ButterKnife;
  */
 public abstract class AbsButterActivity extends AbsActivity {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
-    }
+  private Unbinder unbinder;
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
-    }
+  @Override public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    unbinder = ButterKnife.bind(this);
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    unbinder.unbind();
+  }
 }

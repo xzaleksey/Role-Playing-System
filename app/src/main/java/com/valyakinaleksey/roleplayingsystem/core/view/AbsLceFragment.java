@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
@@ -17,7 +18,6 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestU
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -29,17 +29,17 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class AbsLceFragment<C extends HasPresenter, M extends ShouldRequestUpdateViewModel, V extends LceView<M>>
     extends ComponentManagerFragment<C, V> implements LceView<M> {
 
-  @Bind(R.id.progress) ProgressBar progress;
+  @BindView(R.id.progress) ProgressBar progress;
 
-  @Bind(R.id.no_connection_error_layout) View noConnection;
+  @BindView(R.id.no_connection_error_layout) View noConnection;
 
-  @Bind(R.id.retry_no_connection_button) Button noConnectionButton;
+  @BindView(R.id.retry_no_connection_button) Button noConnectionButton;
 
-  @Bind(R.id.no_loaded_error_layout) View noData;
+  @BindView(R.id.no_loaded_error_layout) View noData;
 
-  @Bind(R.id.retry_no_loaded_button) Button noDataButton;
+  @BindView(R.id.retry_no_loaded_button) Button noDataButton;
 
-  @Bind(R.id.lce_container_le) View containerLe;
+  @BindView(R.id.lce_container_le) View containerLe;
 
   protected M data;
   private View contentRoot;

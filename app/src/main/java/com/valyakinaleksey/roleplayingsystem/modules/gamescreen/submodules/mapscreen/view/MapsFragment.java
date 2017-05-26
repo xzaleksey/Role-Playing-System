@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
-import butterknife.Bind;
+import butterknife.BindView;
 import com.kbeanie.multipicker.api.ImagePicker;
 import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback;
 import com.kbeanie.multipicker.api.entity.ChosenImage;
@@ -41,8 +41,8 @@ public class MapsFragment
 
   public static final String TAG = MapsFragment.class.getSimpleName();
 
-  @Bind(R.id.recycler_view) RecyclerView recyclerView;
-  @Bind(R.id.fab) FloatingActionButton fab;
+  @BindView(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.fab) FloatingActionButton fab;
   private ImagePicker imagePicker;
   private MapAdapter mapAdapter;
 

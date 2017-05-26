@@ -3,15 +3,14 @@ package com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder;
 import android.view.View;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 
-import butterknife.Bind;
-
 public class TitleViewHolder extends ButterKnifeViewHolder {
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     protected TextView tvTitle;
 
-    @Bind(R.id.divider)
+    @BindView(R.id.divider)
     protected View divider;
 
     public TitleViewHolder(View itemView) {

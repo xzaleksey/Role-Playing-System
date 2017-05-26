@@ -13,7 +13,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
+import butterknife.BindString;
+import butterknife.BindView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.MDButton;
@@ -23,20 +24,17 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameListAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListModule;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
-
-import butterknife.Bind;
-import butterknife.BindString;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener;
 import rx.subscriptions.CompositeSubscription;
@@ -47,10 +45,10 @@ public class GamesListFragment
 
   public static final String TAG = GamesListFragment.class.getSimpleName();
 
-  @Bind(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.error_empty_field) String errorEmptyField;
-  @Bind(R.id.fab) FloatingActionButton fab;
-  @Bind(R.id.tv_games_count) TextView tvGamesGount;
+  @BindView(R.id.fab) FloatingActionButton fab;
+  @BindView(R.id.tv_games_count) TextView tvGamesGount;
 
   private GameListAdapter gameListAdapter;
   private MaterialDialog dialog;

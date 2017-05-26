@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
@@ -33,9 +33,9 @@ public class GameCharacterListItemWithUser extends
   public static class GameCharacterListItemWithUserViewHolder
       extends AbstractGameCharacterItemViewHolder {
 
-    @Bind(R.id.user_avatar) AppCompatImageView userAvatar;
-    @Bind(R.id.user_name) TextView userName;
-    @Bind(R.id.user_description) TextView userDescription;
+    @BindView(R.id.user_avatar) AppCompatImageView userAvatar;
+    @BindView(R.id.user_name) TextView userName;
+    @BindView(R.id.user_description) TextView userDescription;
 
     public GameCharacterListItemWithUserViewHolder(View view, FlexibleAdapter adapter) {
       super(view, adapter);

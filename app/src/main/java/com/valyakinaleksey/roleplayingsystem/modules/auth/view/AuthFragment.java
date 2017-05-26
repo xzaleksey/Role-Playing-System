@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.OnClick;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -24,27 +26,23 @@ import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ValidationUtils;
 
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.OnClick;
-
 public class AuthFragment extends AbsButterLceFragment<AuthComponent, AuthViewModel, AuthView> implements AuthView {
 
     public static final String TAG = AuthFragment.class.getSimpleName();
 
-    @Bind(R.id.email)
+    @BindView(R.id.email)
     EditText etEmail;
-    @Bind(R.id.email_input_layout)
+    @BindView(R.id.email_input_layout)
     TextInputLayout emailInputLayout;
-    @Bind(R.id.password)
+    @BindView(R.id.password)
     EditText etPassword;
-    @Bind(R.id.password_input_layout)
+    @BindView(R.id.password_input_layout)
     TextInputLayout passwordInputLayout;
-    @Bind(R.id.sign_in_button)
+    @BindView(R.id.sign_in_button)
     Button signInBtn;
-    @Bind(R.id.sign_up_button)
+    @BindView(R.id.sign_up_button)
     Button signUpBtn;
-    @Bind(R.id.main_container)
+    @BindView(R.id.main_container)
     View mainContainer;
     @BindString(R.string.error_invalid_email)
     String errorInvalidEmail;

@@ -1,22 +1,11 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class ParentActivity extends AbsSingleFragmentActivity {
 

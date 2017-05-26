@@ -1,22 +1,20 @@
 package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view;
 
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
-import android.view.WindowManager;
 import android.widget.ProgressBar;
-import butterknife.Bind;
+import autodagger.AutoComponent;
+import autodagger.AutoInjector;
 import butterknife.BindString;
+import butterknife.BindView;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,9 +31,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.HasParentPr
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentModule;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
 
-import autodagger.AutoComponent;
-import autodagger.AutoInjector;
-
 @AutoComponent(dependencies = {
     AppComponent.class
 }, modules = ParentModule.class, superinterfaces = {
@@ -47,8 +42,8 @@ import autodagger.AutoInjector;
   public static final String TAG = ParentFragment.class.getSimpleName();
 
   private GoogleApiClient googleApiClient;
-  @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.toolbar_progress_bar) ProgressBar progressBar;
+  @BindView(R.id.toolbar) Toolbar toolbar;
+  @BindView(R.id.toolbar_progress_bar) ProgressBar progressBar;
 
   @BindString(R.string.connecting) protected String connectionString;
 

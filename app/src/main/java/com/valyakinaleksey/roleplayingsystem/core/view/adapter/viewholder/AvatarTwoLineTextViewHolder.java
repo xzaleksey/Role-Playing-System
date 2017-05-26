@@ -8,20 +8,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.AvatarWithTwoLineTextModel;
 
-import butterknife.Bind;
 import rx.Subscription;
 
 public class AvatarTwoLineTextViewHolder extends ButterKnifeViewHolder  {
-    @Bind(R.id.avatar)
+    @BindView(R.id.avatar)
     protected ImageView ivAvatar;
-    @Bind(R.id.primary_line)
+    @BindView(R.id.primary_line)
     protected TextView tvPrimaryLine;
-    @Bind(R.id.secondary_line)
+    @BindView(R.id.secondary_line)
     protected TextView tvSecondaryLine;
 
     protected Subscription subscription;

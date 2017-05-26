@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -71,7 +71,7 @@ public class MasterLogAdapter extends MyFireBaseAdapter<MasterLogMessage> {
   }
 
   static class HeaderHolder extends ButterKnifeViewHolder {
-    @Bind(R.id.tv_date) public TextView header;
+    @BindView(R.id.tv_date) public TextView header;
 
     public HeaderHolder(View itemView) {
       super(itemView);

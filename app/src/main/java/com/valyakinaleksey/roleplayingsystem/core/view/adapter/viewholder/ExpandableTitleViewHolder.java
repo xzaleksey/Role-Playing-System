@@ -4,19 +4,17 @@ import android.app.Activity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import butterknife.BindColor;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ExpandableSection;
-
-import butterknife.Bind;
 import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
 public class ExpandableTitleViewHolder extends TitleViewHolder {
-  @Bind(R.id.iv_icon) AppCompatImageView appCompatImageView;
-  @Bind(R.id.divider) View divider;
-  @Bind(R.id.container) View container;
+  @BindView(R.id.iv_icon) AppCompatImageView appCompatImageView;
+  @BindView(R.id.divider) View divider;
+  @BindView(R.id.container) View container;
 
   @BindColor(R.color.defaultGrayTintColor) int grayColor;
 

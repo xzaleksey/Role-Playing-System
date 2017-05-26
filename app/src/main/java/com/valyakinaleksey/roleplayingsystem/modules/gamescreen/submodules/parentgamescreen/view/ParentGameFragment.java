@@ -1,7 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view;
 
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -12,8 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.view.WindowManager;
+import butterknife.BindView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.DialogProvider;
@@ -28,10 +26,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.paren
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
-
 import java.util.ArrayList;
-
-import butterknife.Bind;
 
 public class ParentGameFragment
     extends AbsButterLceFragment<ParentGameComponent, ParentGameModel, ParentView>
@@ -42,7 +37,7 @@ public class ParentGameFragment
   public static final String FINISH_GAME = "finish_game";
   public static final String LEAVE_GAME = "leave_game";
 
-  @Bind(R.id.viewpager) ViewPager viewPager;
+  @BindView(R.id.viewpager) ViewPager viewPager;
 
   private TabLayout tabLayout;
   private ViewPagerAdapter adapter;

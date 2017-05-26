@@ -2,15 +2,13 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamedescription.adapter;
 
 import android.view.View;
 import android.widget.TextView;
-
+import butterknife.BindInt;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
 
-import butterknife.Bind;
-import butterknife.BindInt;
-
 public class DescriptionViewHolder extends ButterKnifeViewHolder {
-    @Bind(R.id.description)
+    @BindView(R.id.description)
     protected TextView tvDescription;
 
     @BindInt(R.integer.description_max_lines)

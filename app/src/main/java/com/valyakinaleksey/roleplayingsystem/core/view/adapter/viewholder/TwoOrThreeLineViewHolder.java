@@ -2,16 +2,14 @@ package com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder;
 
 import android.view.View;
 import android.widget.TextView;
-
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.TwoOrThreeLineTextModel;
 
-import butterknife.Bind;
-
 public class TwoOrThreeLineViewHolder extends ButterKnifeViewHolder {
-    @Bind(R.id.primary_line)
+    @BindView(R.id.primary_line)
     protected TextView tvPrimaryLine;
-    @Bind(R.id.secondary_line)
+    @BindView(R.id.secondary_line)
     protected TextView tvSecondaryLine;
 
     public TwoOrThreeLineViewHolder(View itemView) {

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -68,12 +68,12 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   public static class MapViewHolder extends ButterKnifeViewHolder {
     protected Subscription subscription;
-    @Bind(R.id.icon) ImageView ivMap;
-    @Bind(R.id.switcher) SwitchCompat switchCompat;
-    @Bind(R.id.tv_name) TextView tvName;
-    @Bind(R.id.iv_delete) ImageView ivDelete;
-    @Bind(R.id.divider) View divider;
-    @Bind(R.id.bottom_container) View bottomContainer;
+    @BindView(R.id.icon) ImageView ivMap;
+    @BindView(R.id.switcher) SwitchCompat switchCompat;
+    @BindView(R.id.tv_name) TextView tvName;
+    @BindView(R.id.iv_delete) ImageView ivDelete;
+    @BindView(R.id.divider) View divider;
+    @BindView(R.id.bottom_container) View bottomContainer;
     private Uri uri;
     private MapsPresenter mapsPresenter;
 

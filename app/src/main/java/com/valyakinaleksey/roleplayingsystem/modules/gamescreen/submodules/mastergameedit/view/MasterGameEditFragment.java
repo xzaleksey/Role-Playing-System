@@ -6,8 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
-import butterknife.Bind;
-import com.afollestad.materialdialogs.MaterialDialog;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -29,7 +28,7 @@ import javax.inject.Inject;
 
   public static final String TAG = MasterGameEditFragment.class.getSimpleName();
 
-  @Bind(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
   @Inject SectionsAdapter sectionsAdapter;
 

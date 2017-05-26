@@ -4,7 +4,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
@@ -14,9 +14,9 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.viewholders.FlexibleViewHolder;
 
 public class AbstractGameCharacterItemViewHolder extends FlexibleViewHolder {
-  @Bind(R.id.avatar) AppCompatImageView avatar;
-  @Bind(R.id.character_name) TextView characterName;
-  @Bind(R.id.character_class_race) TextView characterClassRace;
+  @BindView(R.id.avatar) AppCompatImageView avatar;
+  @BindView(R.id.character_name) TextView characterName;
+  @BindView(R.id.character_class_race) TextView characterClassRace;
 
   public AbstractGameCharacterItemViewHolder(View view, FlexibleAdapter adapter) {
     super(view, adapter);

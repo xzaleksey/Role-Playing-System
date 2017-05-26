@@ -1,23 +1,17 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model;
 
 import android.os.Parcel;
-import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.viewholders.FlexibleViewHolder;
 import java.util.List;
 
 public class GameCharacterListItemWithoutUser extends
@@ -57,8 +51,8 @@ public class GameCharacterListItemWithoutUser extends
   public static class GameCharacterListItemWithoutUserViewHolder
       extends AbstractGameCharacterItemViewHolder {
 
-    @Bind(R.id.btn_play) Button play;
-    @Bind(R.id.character_description) TextView tvCharacterDescription;
+    @BindView(R.id.btn_play) Button play;
+    @BindView(R.id.character_description) TextView tvCharacterDescription;
 
     public GameCharacterListItemWithoutUserViewHolder(View view, FlexibleAdapter adapter) {
       super(view, adapter);

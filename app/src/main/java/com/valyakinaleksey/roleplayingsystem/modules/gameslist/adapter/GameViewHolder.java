@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.BindView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
@@ -19,25 +19,21 @@ import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
-
+import java.util.Locale;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-
-import java.util.Locale;
-
-import butterknife.Bind;
 import rx.Subscription;
 
 public class GameViewHolder extends ButterKnifeViewHolder {
-    @Bind(R.id.avatar)
+    @BindView(R.id.avatar)
     protected ImageView ivAvatar;
-    @Bind(R.id.master_name)
+    @BindView(R.id.master_name)
     protected TextView tvMasterName;
-    @Bind(R.id.name)
+    @BindView(R.id.name)
     protected TextView tvName;
-    @Bind(R.id.date)
+    @BindView(R.id.date)
     protected TextView tvDate;
-    @Bind(R.id.iv_password)
+    @BindView(R.id.iv_password)
     protected ImageView ivPassword;
 
     protected Subscription subscription;

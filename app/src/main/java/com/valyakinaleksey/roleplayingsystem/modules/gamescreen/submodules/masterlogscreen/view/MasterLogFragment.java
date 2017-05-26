@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import autodagger.AutoComponent;
 import autodagger.AutoInjector;
-import butterknife.Bind;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -33,12 +33,12 @@ import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
   public static final String TAG = MasterLogFragment.class.getSimpleName();
 
-  @Bind(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
-  @Bind(R.id.icon_send) View sendIcon;
+  @BindView(R.id.icon_send) View sendIcon;
 
-  @Bind(R.id.input) EditText etInput;
-  @Bind(R.id.send_form) ViewGroup sendForm;
+  @BindView(R.id.input) EditText etInput;
+  @BindView(R.id.send_form) ViewGroup sendForm;
 
   private MasterLogAdapter masterLogAdapter;
 

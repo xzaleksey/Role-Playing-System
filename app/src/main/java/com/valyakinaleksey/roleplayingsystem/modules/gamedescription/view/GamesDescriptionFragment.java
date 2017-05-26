@@ -5,8 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-
-import com.afollestad.materialdialogs.MaterialDialog;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.model.DataEvent;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
@@ -18,10 +17,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.DaggerGa
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.GamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.model.GamesDescriptionModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
 import timber.log.Timber;
 
 public class GamesDescriptionFragment extends
@@ -30,8 +26,8 @@ public class GamesDescriptionFragment extends
 
   public static final String TAG = GamesDescriptionFragment.class.getSimpleName();
 
-  @Bind(R.id.recycler_view) RecyclerView recyclerView;
-  @Bind(R.id.join_game_btn) Button btnJoinGame;
+  @BindView(R.id.recycler_view) RecyclerView recyclerView;
+  @BindView(R.id.join_game_btn) Button btnJoinGame;
 
   @Inject SectionsAdapter sectionsAdapter;
 
