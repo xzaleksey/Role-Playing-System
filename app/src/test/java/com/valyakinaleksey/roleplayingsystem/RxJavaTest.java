@@ -1,6 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem;
 
-import com.rules.ImmediateSchedulersRule;
+import com.rules.SchedulersRule;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Rule;
@@ -8,6 +8,7 @@ import org.junit.Test;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 import rx.schedulers.Schedulers;
+import rx.schedulers.TestScheduler;
 import timber.log.Timber;
 
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
@@ -16,7 +17,8 @@ import static org.junit.Assert.assertThat;
 public class RxJavaTest {
   private static final List<String> WORDS =
       Arrays.asList("the", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog");
-  @Rule public final ImmediateSchedulersRule schedulers = new ImmediateSchedulersRule();
+  private final TestScheduler scheduler = new TestScheduler();
+  @Rule public final SchedulersRule schedulers = new SchedulersRule(scheduler);
 
   @Test
   public void testUsingImmediateSchedulersRule() {
@@ -31,6 +33,7 @@ public class RxJavaTest {
         .subscribe(subscriber);
 
     // then:
+    scheduler.triggerActions();
     subscriber.assertNoErrors();
     subscriber.assertCompleted();
     subscriber.assertValueCount(9);
