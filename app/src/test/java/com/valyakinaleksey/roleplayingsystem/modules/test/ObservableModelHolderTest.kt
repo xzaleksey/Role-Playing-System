@@ -54,12 +54,12 @@ class ObservableModelHolderTest {
   fun testSerialize() {
     val observableModelHolder = ObservableModelHolder()
     observableModelHolder.addModel("model", 5)
-    observableModelHolder.addModel("model2", "text")
+    observableModelHolder.addNullableModel("model2", null, String::class.java)
     val bytes = SerializableUtils.serialize(observableModelHolder)
     val modelHolderRestored = SerializableUtils.deserialize<ObservableModelHolder>(bytes)
     val model = modelHolderRestored.getModel<Int>("model")
     Assert.assertEquals(5, model.getValue())
-    val model2 = modelHolderRestored.getModel<String>("model2")
-    Assert.assertEquals("text", model2.getValue())
+    val model2 = modelHolderRestored.getModel<String?>("model2")
+    Assert.assertNull(model2.getValue())
   }
 }

@@ -47,9 +47,9 @@ class ObservableModel<T> private constructor(var modelName: String,
     }
 
     @JvmStatic
-    fun <T : Any?> createNullable(modelName: String, value: T,
+    fun <T : R?, R>  createNullable(modelName: String, value: R,
         subject: Subject<Pair<String, Any?>, Pair<String, Any?>>,
-        clazz: Class<*>): ObservableModel<T> {
+        clazz: Class<*>): ObservableModel<R> {
       return ObservableModel(modelName, value,
           subject, clazz, true)
     }

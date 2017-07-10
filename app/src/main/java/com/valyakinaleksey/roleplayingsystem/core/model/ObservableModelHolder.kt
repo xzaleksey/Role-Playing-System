@@ -21,7 +21,7 @@ class ObservableModelHolder() : Externalizable {
 
   @Suppress("UNCHECKED_CAST")
   fun <T : Any?> getModel(modelName: String): ObservableModel<T> {
-    val observableModel = `access$observableModels`[modelName] ?: throw NoSuchElementException(
+    val observableModel = observableModels[modelName] ?: throw NoSuchElementException(
         "no property exists for this modelName")
     return observableModel as ObservableModel<T>
   }
@@ -33,7 +33,7 @@ class ObservableModelHolder() : Externalizable {
             value, subject))
   }
 
-  fun <T : Any?> addNullableModel(modelName: String, value: T, clazz: Class<T>) {
+  fun <T : Any?> addNullableModel(modelName: String, value: T?, clazz: Class<T>) {
     checkPropertyExists(modelName)
     observableModels.put(modelName,
         ObservableModel.createNullable(
@@ -59,10 +59,6 @@ class ObservableModelHolder() : Externalizable {
       value.dispose()
     }
   }
-
-  @PublishedApi
-  internal val `access$observableModels`: MutableMap<String, ObservableModel<*>>
-    get() = observableModels
 
   override fun readExternal(input: ObjectInput) {
     var key: String? = input.readUTF()
