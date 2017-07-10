@@ -5,23 +5,13 @@ import rx.Subscription
 import rx.subjects.Subject
 import rx.subscriptions.CompositeSubscription
 
-class ObservableModel<T> {
-  var modelName: String
-  private var value: T
+class ObservableModel<T> private constructor(var modelName: String,
+    private var value: T,
+    private var subject: Subject<Pair<String, Any?>, Pair<String, Any?>>,
+    val clazz: Class<*>,
+    val nullable: Boolean) {
 
-  private val subject: Subject<Pair<String, Any?>, Pair<String, Any?>>
   private val compositeSubscription: CompositeSubscription = CompositeSubscription()
-
-  private constructor(modelName: String, value: T,
-      subject: Subject<Pair<String, Any?>, Pair<String, Any?>>) {
-    this.modelName = modelName
-    this.value = value
-    this.subject = subject
-  }
-
-  private constructor(modelName: String, value: T,
-      subject: Subject<Pair<String, Any?>, Pair<String, Any?>>, clazz: Class<T>) : this(modelName,
-      value, subject)
 
   fun getValue(): T {
     return value
@@ -49,18 +39,19 @@ class ObservableModel<T> {
 
   companion object {
     @JvmStatic
+    @Suppress("UNCHECKED_CAST")
     fun <T : Any> create(modelName: String, value: T,
         subject: Subject<Pair<String, Any?>, Pair<String, Any?>>): ObservableModel<T> {
       return ObservableModel(modelName, value,
-          subject)
+          subject, value::class.java as Class<T>, false)
     }
 
     @JvmStatic
     fun <T : Any?> createNullable(modelName: String, value: T,
         subject: Subject<Pair<String, Any?>, Pair<String, Any?>>,
-        clazz: Class<T>): ObservableModel<T> {
+        clazz: Class<*>): ObservableModel<T> {
       return ObservableModel(modelName, value,
-          subject, clazz)
+          subject, clazz, true)
     }
   }
 }

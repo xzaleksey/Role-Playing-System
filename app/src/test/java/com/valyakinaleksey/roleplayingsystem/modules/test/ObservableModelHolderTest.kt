@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.test
 
 import com.rules.SchedulersRule
 import com.valyakinaleksey.roleplayingsystem.core.model.ObservableModelHolder
+import com.valyakinaleksey.roleplayingsystem.utils.SerializableUtils
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -47,5 +48,18 @@ class ObservableModelHolderTest {
     model.updateValue(3)
     testScheduler.triggerActions()
     testSubscriber.assertValues(5, 3)
+  }
+
+  @Test
+  fun testSerialize() {
+    val observableModelHolder = ObservableModelHolder()
+    observableModelHolder.addModel("model", 5)
+    observableModelHolder.addModel("model2", "text")
+    val bytes = SerializableUtils.serialize(observableModelHolder)
+    val modelHolderRestored = SerializableUtils.deserialize<ObservableModelHolder>(bytes)
+    val model = modelHolderRestored.getModel<Int>("model")
+    Assert.assertEquals(5, model.getValue())
+    val model2 = modelHolderRestored.getModel<String>("model2")
+    Assert.assertEquals("text", model2.getValue())
   }
 }

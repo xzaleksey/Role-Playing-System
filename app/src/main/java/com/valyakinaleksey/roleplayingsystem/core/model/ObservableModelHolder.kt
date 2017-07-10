@@ -1,11 +1,17 @@
 package com.valyakinaleksey.roleplayingsystem.core.model
 
 import rx.subjects.PublishSubject
-import java.lang.IllegalStateException
+import java.io.Externalizable
+import java.io.ObjectInput
+import java.io.ObjectOutput
+import java.io.Serializable
+import java.util.LinkedHashMap
+import kotlin.NoSuchElementException
 
-class ObservableModelHolder() {
+class ObservableModelHolder() : Externalizable {
+
   private val subject = PublishSubject.create <Pair<String, Any?>>().toSerialized()
-  private val observableModels: MutableMap<String, ObservableModel<*>> = HashMap()
+  private val observableModels: MutableMap<String, ObservableModel<*>> = LinkedHashMap()
 
   constructor(values: Map<String, *>) : this() {
     for ((name, value) in observableModels) {
@@ -14,12 +20,9 @@ class ObservableModelHolder() {
   }
 
   @Suppress("UNCHECKED_CAST")
-  inline fun <reified T : Any?> getModel(modelName: String): ObservableModel<T> {
+  fun <T : Any?> getModel(modelName: String): ObservableModel<T> {
     val observableModel = `access$observableModels`[modelName] ?: throw NoSuchElementException(
         "no property exists for this modelName")
-    if (observableModel.getValue() !is T) {
-      throw IllegalStateException("property has different type ${observableModel.getValue()}")
-    }
     return observableModel as ObservableModel<T>
   }
 
@@ -60,4 +63,58 @@ class ObservableModelHolder() {
   @PublishedApi
   internal val `access$observableModels`: MutableMap<String, ObservableModel<*>>
     get() = observableModels
+
+  override fun readExternal(input: ObjectInput) {
+    var key: String? = input.readUTF()
+    while (key != null) {
+      val clazz = input.readObject() as Class<*>
+      val value = input.readObject() as Any?
+      val nullable = input.readBoolean()
+      val observableModel: ObservableModel<*>
+      if (nullable) {
+        observableModel = ObservableModel.createNullable(key, value, subject, clazz)
+      } else {
+        observableModel = ObservableModel.create(key, value!!, subject)
+      }
+      observableModels.put(key, observableModel)
+      if (input.available() > 0) {
+        key = input.readUTF()
+      } else {
+        key = null
+      }
+    }
+  }
+
+  override fun writeExternal(output: ObjectOutput) {
+    for ((key, observableModel) in observableModels) {
+      if (isSerializable(observableModel.clazz)) {
+        output.writeUTF(key)
+        output.writeObject(observableModel.clazz)
+        output.writeObject(observableModel.getValue())
+        output.writeBoolean(observableModel.nullable)
+      }
+    }
+  }
+
+  fun isSerializable(clazz: Class<*>): Boolean {
+    clazz.interfaces?.let { interfaces ->
+      if (interfaces.contains(Serializable::class.java)) {
+        return true
+      }
+      for (classInterface in interfaces) {
+        if (isSerializable(classInterface))
+          return true
+      }
+    }
+    if (clazz.superclass != null && isSerializable(clazz.superclass)) {
+      return true
+    }
+
+    return false
+  }
+
+  companion object {
+    @JvmStatic
+    private val serialVersionUID = 1L
+  }
 }
