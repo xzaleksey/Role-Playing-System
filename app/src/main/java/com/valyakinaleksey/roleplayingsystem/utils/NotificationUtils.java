@@ -50,7 +50,7 @@ public class NotificationUtils {
         PendingIntent.getActivity(RpsApp.app(), 0 /* requestCode */, intent,
             PendingIntent.FLAG_UPDATE_CURRENT);
 
-    int icon = success ? R.drawable.ic_done_black_24dp : R.drawable.ic_cast_disabled_light;
+    int icon = success ? R.drawable.ic_done_black_24dp : R.drawable.ic_add_black_24dp;
 
     android.support.v4.app.NotificationCompat.Builder builder =
         new android.support.v4.app.NotificationCompat.Builder(RpsApp.app()).setSmallIcon(icon)
