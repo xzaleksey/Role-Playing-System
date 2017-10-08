@@ -31,15 +31,13 @@ class ParentPresenterImpl : BasePresenter<ParentView, ParentModel>(), ParentPres
 
   private inline fun <reified T : Fragment> navigateToFragment(): (Fragment, Bundle?) -> Unit {
     return { parentFragment, bundle ->
-      navigate<T>(parentFragment, bundle)
+      navigateToFragment(parentFragment, createFragment<T>(bundle),
+          bundle?.getBoolean(ADD_BACK_STACK) ?: false)
     }
   }
 
-  private inline fun <reified T : Fragment> navigate(parentFragment: Fragment, bundle: Bundle?) {
-    navigate(parentFragment, createFragment<T>(bundle), bundle?.getBoolean(ADD_BACK_STACK) ?: false)
-  }
-
-  private fun navigate(fragment: Fragment, navFragment: Fragment, addToBackStack: Boolean) {
+  private fun navigateToFragment(fragment: Fragment, navFragment: Fragment,
+      addToBackStack: Boolean) {
     val transaction = fragment.childFragmentManager
         .beginTransaction()
         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
