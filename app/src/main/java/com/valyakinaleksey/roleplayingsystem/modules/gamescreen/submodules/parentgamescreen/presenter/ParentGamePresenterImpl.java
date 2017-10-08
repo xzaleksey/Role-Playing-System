@@ -78,6 +78,7 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
             } else {
               Bundle bundle = new Bundle();
               bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
+              bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
               parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
             }
             view.setData(viewModel);
@@ -97,10 +98,8 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
           viewModel.setGameModel(gameModel1);
           view.preFillModel(viewModel);
         }, Crashlytics::logException));
-    compositeSubscription.add(
-        gameInteractor.observeGameModelRemoved(gameModel).subscribe(gameModel1 -> {
-          parentPresenter.navigateBack();
-        }, Crashlytics::logException));
+    compositeSubscription.add(gameInteractor.observeGameModelRemoved(gameModel)
+        .subscribe(gameModel1 -> parentPresenter.navigateBack(), Crashlytics::logException));
   }
 
   @Override public void deleteGame() {
@@ -109,7 +108,6 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         .compose(RxTransformers.applySchedulers())
         .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
         .subscribe(aBoolean -> {
-
         }, Crashlytics::logException));
   }
 
@@ -128,8 +126,6 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         leaveGame(viewModel.getGameModel())
         .compose(RxTransformers.applySchedulers())
         .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-        .subscribe(aVoid -> {
-          parentPresenter.navigateBack();
-        }, Crashlytics::logException));
+        .subscribe(aVoid -> parentPresenter.navigateBack(), Crashlytics::logException));
   }
 }

@@ -53,7 +53,7 @@ public class GamesListFragment
   private GameListAdapter gameListAdapter;
   private MaterialDialog dialog;
 
-  public static GamesListFragment newInstance() {
+  public static GamesListFragment newInstance(Bundle args) {
     return new GamesListFragment();
   }
 

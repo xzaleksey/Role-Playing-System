@@ -21,6 +21,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,7 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
     Bundle args = new Bundle();
     args.putString(ImageFragment.IMAGE_URL, path);
     args.putString(ImageFragment.NAME, fileName);
+    args.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
     parentPresenter.navigateToFragment(IMAGE_FRAGMENT, args);
   }
 

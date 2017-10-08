@@ -15,8 +15,8 @@ public class ParentModel extends BaseShouldRequestUpdateViewModel {
     return navigationTag;
   }
 
-  public void setNavigationTag(int navigationTag) {
-    this.navigationTag = navigationTag;
+  public void setNavigationId(int navigationId) {
+    this.navigationTag = navigationId;
   }
 
   public boolean isFirstNavigation() {

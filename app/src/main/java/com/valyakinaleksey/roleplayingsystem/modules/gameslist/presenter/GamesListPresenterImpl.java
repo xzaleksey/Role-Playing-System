@@ -104,12 +104,14 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
   public void navigateToGameDescriptionScreen(GameModel model) {
     Bundle bundle = new Bundle();
     bundle.putParcelable(GameModel.KEY, model);
+    bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
     parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
   }
 
   @Override public void navigateToGameScreen(Context context, GameModel model) {
     Bundle bundle = new Bundle();
     bundle.putParcelable(GameModel.KEY, model);
+    bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
     String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     compositeSubscription.add(
         getCheckUserInGameObservable(model, currentUserId).subscribe(userInGame -> {

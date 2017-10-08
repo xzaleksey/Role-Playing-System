@@ -2,7 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamedescription.presenter;
 
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -188,7 +187,8 @@ import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringB
           GameModel gameModel = viewModel.getGameModel();
           Bundle bundle = new Bundle();
           bundle.putParcelable(GameModel.KEY, gameModel);
-          bundle.putBoolean(NavigationUtils.POP_BACKSTACK, true);
+          bundle.putBoolean(NavigationUtils.POP_BACK_STACK, true);
+          bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
           parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle);
         }, throwable -> {
           Timber.d(throwable);
