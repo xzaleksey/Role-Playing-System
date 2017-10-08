@@ -26,6 +26,8 @@ class ParentPresenterImpl : BasePresenter<ParentView, ParentModel>(), ParentPres
     navigationHandler.put(GAME_FRAGMENT, navigateToFragment<ParentGameFragment>())
     navigationHandler.put(GAME_DESCRIPTION_FRAGMENT, navigateToFragment<GamesDescriptionFragment>())
     navigationHandler.put(IMAGE_FRAGMENT, navigateToFragment<ImageFragment>())
+    navigationHandler.put(SETTINGS, { _, _ -> })
+    navigationHandler.put(MY_GAMES, { _, _ -> })
     navigationHandler.put(BACK, { _, _ -> })
   }
 
@@ -76,10 +78,15 @@ class ParentPresenterImpl : BasePresenter<ParentView, ParentModel>(), ParentPres
     navigationHandler[viewModel.navigationId]!!.invoke(parentFragment, args)
   }
 
-  override fun navigateToFragment(navId: Int, args: Bundle) {
+  override fun navigateToFragment(navId: Int, args: Bundle?) {
     viewModel.navigationId = navId
     view.getNavigationFragment(args)
   }
+
+  override fun navigateToFragment(navId: Int) {
+    navigateToFragment(navId, null)
+  }
+
 
   private fun handlePopBackStack(args: Bundle?, parentFragment: Fragment) {
     if (args != null && args.getBoolean(POP_BACK_STACK, false)) {

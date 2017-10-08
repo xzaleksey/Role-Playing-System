@@ -65,5 +65,6 @@
   <string name="led">Провел</string>
   <string name="took_part">Участвовал в</string>
   <string name="leave_game">Покинуть игру</string>
+  <string name="my_games">Мои игры</string>
 
 </resources>

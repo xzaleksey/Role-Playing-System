@@ -19,6 +19,11 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.OnToolbarChangedListener;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -29,7 +34,11 @@ import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.HasParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentModule;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.DrawerInfoModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 @AutoComponent(dependencies = {
     AppComponent.class
@@ -40,11 +49,11 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.Par
     implements ParentView, OnToolbarChangedListener {
 
   public static final String TAG = ParentFragment.class.getSimpleName();
-
+  private List<DrawerInfoModel> drawerItems;
+  private Drawer drawer;
   private GoogleApiClient googleApiClient;
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.toolbar_progress_bar) ProgressBar progressBar;
-
   @BindString(R.string.connecting) protected String connectionString;
 
   public static ParentFragment newInstance(Bundle arguments) {
@@ -82,24 +91,44 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.Par
     AbsActivity activity = (AbsActivity) getActivity();
     activity.setupToolbar();
     activity.addOnToolBarChangedListener(this);
+    initProgressBar();
+    initDrawerItems();
+    initDrawer();
+  }
+
+  private void initProgressBar() {
     progressBar.getIndeterminateDrawable()
         .setColorFilter(ContextCompat.getColor(getActivity(), R.color.md_white_1000),
             PorterDuff.Mode.MULTIPLY);
-    //Drawer result = new DrawerBuilder()
-    //    .withActivity(getActivity())
-    //    .withToolbar(((AbsActivity) getActivity()).getToolbar())
-    //    .addDrawerItems(
-    //        new PrimaryDrawerItem().withName(R.string.list_of_games),
-    //        new SecondaryDrawerItem().withName(R.string.settings)
-    //    )
-    //    .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-    //      @Override
-    //      public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-    //        // do something with the clicked item :D
-    //        return true;
-    //      }
-    //    })
-    //    .build();
+  }
+
+  private void initDrawerItems() {
+    List<DrawerInfoModel> result = new ArrayList<>();
+    result.add(new DrawerInfoModel(getString(R.string.list_of_games), NavigationUtils.GAMES_LIST));
+    result.add(new DrawerInfoModel(getString(R.string.my_games), NavigationUtils.MY_GAMES));
+    result.add(new DrawerInfoModel(getString(R.string.settings), NavigationUtils.SETTINGS));
+    drawerItems = result;
+  }
+
+  private void initDrawer() {
+    DrawerBuilder drawerBuilder = new DrawerBuilder().withActivity(getActivity())
+        .withToolbar(((AbsActivity) getActivity()).getToolbar())
+        .withOnDrawerItemClickListener((view1, position, drawerItem) -> {
+          if (drawer.getPosition(drawerItem) == position) {
+            return false;
+          }
+          getComponent().getPresenter().navigateToFragment(drawerItems.get(position).getNavId());
+          return true;
+        });
+
+    for (DrawerInfoModel drawerInfoModel : drawerItems) {
+      drawerBuilder.addDrawerItems(getDrawerItem(drawerInfoModel));
+    }
+    drawer = drawerBuilder.build();
+  }
+
+  private IDrawerItem getDrawerItem(DrawerInfoModel drawerInfoModel) {
+    return new PrimaryDrawerItem().withName(drawerInfoModel.getName());
   }
 
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -139,10 +168,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.Par
 
   @Override public void loadData() {
     getComponent().getPresenter().getData();
-  }
-
-  @Override public void onResume() {
-    super.onResume();
   }
 
   @Override public void showContent() {

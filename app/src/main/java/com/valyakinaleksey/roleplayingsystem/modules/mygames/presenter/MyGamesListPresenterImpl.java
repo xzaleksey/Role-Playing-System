@@ -52,7 +52,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
 
   @Override protected GamesListViewModel initNewViewModel(Bundle arguments) {
     GamesListViewModel gamesListViewModel = new GamesListViewModel();
-    gamesListViewModel.setToolbarTitle(RpsApp.app().getString(R.string.list_of_games));
+    gamesListViewModel.setToolbarTitle(RpsApp.app().getString(R.string.my_games));
     setDatabaseQuery(gamesListViewModel);
     return gamesListViewModel;
   }
