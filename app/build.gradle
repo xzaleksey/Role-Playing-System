@@ -15,6 +15,7 @@ buildscript {
     maven { url 'https://maven.fabric.io/public' }
   }
   dependencies {
+    //noinspection GradleDynamicVersion
     classpath 'io.fabric.tools:gradle:1.+'
   }
 }
@@ -24,23 +25,26 @@ repositories {
   maven { url "https://jitpack.io" }
   maven { url 'https://maven.fabric.io/public' }
   maven { url 'http://dl.bintray.com/amulyakhare/maven' }
-  mavenCentral()
+  maven { url "https://maven.google.com" }
 }
 
 def globalConfiguration = rootProject.ext;
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion "25.0.2"
-
+  compileSdkVersion 26
+  buildToolsVersion "26.0.1"
+  configurations.all {
+    resolutionStrategy.force "com.android.support:support-v4:$support_version"
+  }
   dexOptions {
     javaMaxHeapSize "4g"
+    preDexLibraries = false
   }
   defaultConfig {
     applicationId "com.valyakinaleksey.roleplayingsystem"
     buildConfigField("String", "masterPassword", "\"$globalConfiguration.password\"")
     minSdkVersion 16
-    targetSdkVersion 25
+    targetSdkVersion 26
     versionCode 1
     versionName "1.0"
     multiDexEnabled true
@@ -66,24 +70,36 @@ android {
   }
 }
 
+afterEvaluate {
+  tasks.matching {
+    it.name.startsWith('dex')
+  }.each { dx ->
+    if (dx.additionalParameters == null) {
+      dx.additionalParameters = []
+    }
+    dx.additionalParameters += '--multi-dex'
+    dx.additionalParameters += "--main-dex-list=$projectDir/multidex.keep".toString()
+  }
+}
+
 dependencies {
   compile fileTree(dir: 'libs', include: '*.jar')
   //Design
-  compile 'com.android.support:appcompat-v7:25.3.1'
-  compile 'com.android.support:design:25.3.1'
-  compile 'com.android.support:support-v4:25.3.1'
-  compile 'com.android.support:support-annotations:25.3.1'
-  compile 'com.android.support:recyclerview-v7:25.3.1'
-  compile 'com.android.support:cardview-v7:25.3.1'
-  compile 'com.github.bumptech.glide:glide:3.7.0'
-  compile 'uk.co.chrisjenx:calligraphy:2.3.0'
-  compile 'com.dmitrymalkovich.android:material-design-dimens:1.2'
-  compile 'com.rengwuxian.materialedittext:library:2.1.4'
-  compile 'com.afollestad.material-dialogs:core:0.9.4.5'
-  compile 'com.afollestad.material-dialogs:commons:0.9.4.5'
-  compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-  compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
-  compile 'eu.davidea:flexible-adapter:5.0.0-rc1'
+  compile "com.android.support:appcompat-v7:$support_version"
+  compile "com.android.support:design:$support_version"
+  compile "com.android.support:support-v4:$support_version"
+  compile "com.android.support:support-annotations:$support_version"
+  compile "com.android.support:recyclerview-v7:$support_version"
+  compile "com.android.support:cardview-v7:$support_version"
+  compile "com.github.bumptech.glide:glide:3.7.0"
+  compile "uk.co.chrisjenx:calligraphy:2.3.0"
+  compile "com.dmitrymalkovich.android:material-design-dimens:1.2"
+  compile "com.rengwuxian.materialedittext:library:2.1.4"
+  compile "com.afollestad.material-dialogs:core:0.9.3.0"
+  compile "com.afollestad.material-dialogs:commons:0.9.3.0"
+  compile "com.amulyakhare:com.amulyakhare.textdrawable:1.0.1"
+  compile "com.android.support.constraint:constraint-layout:1.0.0-beta4"
+  compile "eu.davidea:flexible-adapter:5.0.0-rc1"
 
   // View
   compile group: 'com.github.chrisbanes.photoview', name: 'library', version: '1.2.4'
@@ -91,13 +107,14 @@ dependencies {
     transitive = true
   }
   //Firebase
-  compile 'com.google.firebase:firebase-core:10.0.1'
-  compile 'com.google.firebase:firebase-crash:10.0.1'
-  compile 'com.google.firebase:firebase-auth:10.0.1'
-  compile 'com.google.firebase:firebase-database:10.0.1'
-  compile 'com.google.firebase:firebase-storage:10.0.1'
-  compile 'com.google.android.gms:play-services:10.0.1'
-  compile 'com.google.android.gms:play-services-auth:10.0.1'
+  compile 'com.google.firebase:firebase-core:11.2.0'
+  compile 'com.google.firebase:firebase-crash:11.2.0'
+  compile 'com.google.firebase:firebase-auth:11.2.0'
+  compile 'com.google.firebase:firebase-database:11.2.0'
+  compile 'com.google.firebase:firebase-storage:11.2.0'
+  //noinspection UseOfBundledGooglePlayServices
+  compile 'com.google.android.gms:play-services:11.2.0'
+  compile 'com.google.android.gms:play-services-auth:11.2.0'
   compile 'com.firebaseui:firebase-ui-database:1.1.0'
 
 

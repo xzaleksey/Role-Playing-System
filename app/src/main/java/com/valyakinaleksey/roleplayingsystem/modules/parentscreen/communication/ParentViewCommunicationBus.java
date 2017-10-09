@@ -33,6 +33,10 @@ import javax.inject.Inject;
     presenter.navigateToFragment(navId, args);
   }
 
+  @Override public void navigateToFragment(int navId) {
+    presenter.navigateToFragment(navId);
+  }
+
   @Override public void navigateBack() {
     presenter.navigateBack();
   }

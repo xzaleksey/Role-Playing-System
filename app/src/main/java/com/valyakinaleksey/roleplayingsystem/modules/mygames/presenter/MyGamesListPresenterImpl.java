@@ -52,7 +52,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
 
   @Override protected GamesListViewModel initNewViewModel(Bundle arguments) {
     GamesListViewModel gamesListViewModel = new GamesListViewModel();
-    gamesListViewModel.setToolbarTitle(RpsApp.app().getString(R.string.list_of_games));
+    gamesListViewModel.setToolbarTitle(RpsApp.app().getString(R.string.my_games));
     setDatabaseQuery(gamesListViewModel);
     return gamesListViewModel;
   }
@@ -94,6 +94,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
   public void navigateToGameDescriptionScreen(GameModel model) {
     Bundle bundle = new Bundle();
     bundle.putParcelable(GameModel.KEY, model);
+    bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
     parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
   }
 
@@ -101,6 +102,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
     Bundle bundle = new Bundle();
     bundle.putParcelable(GameModel.KEY, model);
     String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
     compositeSubscription.add(
         getCheckUserInGameObservable(model, currentUserId).subscribe(userInGame -> {
           if (userInGame) {
