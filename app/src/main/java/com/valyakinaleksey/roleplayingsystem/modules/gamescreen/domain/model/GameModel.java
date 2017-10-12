@@ -19,6 +19,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DAT
 
 public class GameModel implements Serializable, Parcelable {
   public static final String FIELD_FINISHED = "finished";
+  public static final String FIELD_MASTER_ID = "masterId";
 
   public static final String KEY = GameModel.class.getSimpleName();
   private String id;

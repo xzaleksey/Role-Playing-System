@@ -13,6 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 import java.util.ArrayList;
 
@@ -37,8 +38,7 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
     final ParentGameModel parentGameModel = new ParentGameModel();
     GameModel gameModel = arguments.getParcelable(GameModel.KEY);
     parentGameModel.setGameModel(gameModel);
-    parentGameModel.setMaster(
-        gameModel.getMasterId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+    parentGameModel.setMaster(gameModel.getMasterId().equals(FireBaseUtils.getCurrentUserId()));
     return parentGameModel;
   }
 
@@ -50,7 +50,7 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
   @SuppressWarnings("unchecked") @Override public void getData() {
     view.setData(viewModel);
     view.preFillModel(viewModel);
-    String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    String currentUserId = FireBaseUtils.getCurrentUserId();
     GameModel gameModel = viewModel.getGameModel();
     if (viewModel.isUpdatedRequired()) {
       view.showLoading();

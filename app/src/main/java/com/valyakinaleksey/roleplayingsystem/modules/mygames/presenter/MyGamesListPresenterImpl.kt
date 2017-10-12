@@ -22,6 +22,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.Pare
 import com.valyakinaleksey.roleplayingsystem.utils.*
 
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES_IN_USERS
 
 class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameInteractor,
     private val userGetInteractor: UserGetInteractor,
@@ -29,12 +30,11 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
     private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
     private val parentPresenter: ParentPresenter) : BasePresenter<MyGamesListView, GamesListViewModel>(), MyGamesListPresenter, RestorablePresenter<GamesListViewModel> {
 
-  private val finishedGamesQuery: Query
+  private val getMyGamesQuery: Query
     get() = FirebaseDatabase.getInstance()
         .reference
-        .child(GAMES)
-        .orderByChild(GameModel.FIELD_FINISHED)
-        .equalTo(false)
+        .child(GAMES_IN_USERS)
+        .child(FireBaseUtils.getCurrentUserId())
 
   override fun initNewViewModel(arguments: Bundle?): GamesListViewModel {
     val gamesListViewModel = GamesListViewModel()

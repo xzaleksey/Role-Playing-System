@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.utils;
 
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -95,23 +96,21 @@ public class FireBaseUtils {
   }
 
   public static String getCurrentUserId() {
-    return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    if (currentUser == null) {
+      return StringUtils.EMPTY_STRING;
+    }
+    return currentUser.getUid();
   }
 
   public static Observable<Void> deleteValue(DatabaseReference databaseReference) {
-    return Observable.create(new Observable.OnSubscribe<Void>() {
-      @Override public void call(Subscriber<? super Void> subscriber) {
-        RxHandler.assignOnTask(subscriber, databaseReference.removeValue());
-      }
-    });
+    return Observable.create(
+        subscriber -> RxHandler.assignOnTask(subscriber, databaseReference.removeValue()));
   }
 
   public static Observable<Void> setData(Object o, DatabaseReference databaseReference) {
-    return Observable.create(new Observable.OnSubscribe<Void>() {
-      @Override public void call(Subscriber<? super Void> subscriber) {
-        RxHandler.assignOnTask(subscriber, databaseReference.setValue(o));
-      }
-    });
+    return Observable.create(
+        subscriber -> RxHandler.assignOnTask(subscriber, databaseReference.setValue(o)));
   }
 
   public static Observable<Void> startTransaction(DatabaseReference databaseReference,
