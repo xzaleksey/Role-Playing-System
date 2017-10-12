@@ -48,10 +48,6 @@ import javax.inject.Inject;
     presenter.validatePassword(context, s, gameModel);
   }
 
-  @Override public UserGetInteractor getValue() {
-    return presenter.getValue();
-  }
-
   @Override public void onGameCreated() {
     getNavigationResolver().resolveNavigation(MyGamesListView::onGameCreated);
   }

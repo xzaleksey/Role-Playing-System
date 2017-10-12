@@ -6,10 +6,10 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.Nav
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.SelfRestorableViewState;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 import java.io.Serializable;
 
-public abstract class AdapterNotifierCommunicationBus<D extends ShouldRequestUpdateViewModel, V extends LceView<D> & AdapterNotifier, P extends Presenter<V>, VS extends LceViewState<D, V> & SelfRestorableViewState & NavigationViewState<V, Serializable>>
+public abstract class AdapterNotifierCommunicationBus<D extends RequestUpdateViewModel, V extends LceView<D> & AdapterNotifier, P extends Presenter<V>, VS extends LceViewState<D, V> & SelfRestorableViewState & NavigationViewState<V, Serializable>>
     extends SelfRestorableNavigationLceCommunicationBus<D, V, P, VS> implements AdapterNotifier {
   public AdapterNotifierCommunicationBus(P presenter, VS viewState) {
     super(presenter, viewState);

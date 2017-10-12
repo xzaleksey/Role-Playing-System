@@ -7,7 +7,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView;
 
-public interface MyGamesListPresenter extends Presenter<MyGamesListView>, Provider<UserGetInteractor> {
+public interface MyGamesListPresenter extends Presenter<MyGamesListView> {
     void createGame(GameModel gameModel);
 
     void loadComplete();

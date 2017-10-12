@@ -3,12 +3,12 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.pare
 import android.os.Parcel;
 
 import com.valyakinaleksey.roleplayingsystem.core.utils.SerializableTuple;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import java.util.ArrayList;
 
-public class ParentGameModel extends BaseShouldRequestUpdateViewModel {
+public class ParentGameModel extends BaseRequestUpdateViewModel {
   public static final String USER_SCREEN = "user_screen";
   public static final String MASTER_SCREEN = "master_screen";
 

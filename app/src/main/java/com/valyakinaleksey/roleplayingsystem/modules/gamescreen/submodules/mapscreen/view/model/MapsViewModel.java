@@ -2,15 +2,15 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maps
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseShouldRequestUpdateViewModel;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import java.io.Serializable;
 import java.util.List;
 
-public class MapsViewModel extends BaseShouldRequestUpdateViewModel
-    implements ShouldRequestUpdateViewModel, Parcelable, Serializable {
+public class MapsViewModel extends BaseRequestUpdateViewModel
+    implements RequestUpdateViewModel, Parcelable, Serializable {
 
   private GameModel gameModel;
   private transient List<MapModel> mapModels;

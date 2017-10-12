@@ -7,7 +7,7 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action2;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -29,7 +29,7 @@ import timber.log.Timber;
  * When ViewState is no longer needed clean the storage with {@link StorageBackedNavigationLceViewStateImpl#clean()}:
  * - onDestroy() for example
  */
-public class StorageBackedNavigationLceViewStateImpl<D extends Serializable & ShouldRequestUpdateViewModel, V extends LceView<D>>
+public class StorageBackedNavigationLceViewStateImpl<D extends Serializable & RequestUpdateViewModel, V extends LceView<D>>
     extends AbsSelfRestorableNavigationLceViewStateImpl<D, V, Serializable> {
 
   private final ViewStateStorage storage;

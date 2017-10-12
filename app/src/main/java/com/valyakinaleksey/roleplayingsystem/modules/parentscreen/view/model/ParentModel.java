@@ -2,9 +2,9 @@ package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model;
 
 import android.os.Parcel;
 
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
 
-public class ParentModel extends BaseShouldRequestUpdateViewModel {
+public class ParentModel extends BaseRequestUpdateViewModel {
 
   private int navigationTag;
   private boolean firstNavigation = true;

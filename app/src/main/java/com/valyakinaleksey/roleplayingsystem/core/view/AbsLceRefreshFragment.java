@@ -5,14 +5,14 @@ import android.view.View;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 
 /**
  * Base class with swipe-to-refresh ability
  * To work properly layout, provided by {@link AbsLceFragment#getContentResId()}, should have {@link SwipeRefreshLayout} with id = R.id.swipe
  */
-public abstract class AbsLceRefreshFragment<C extends HasPresenter, M extends ShouldRequestUpdateViewModel, E extends Enum<E>, V extends LceView<M>> extends AbsLceFragment<C, M, V> implements SwipeRefreshLayout.OnRefreshListener {
+public abstract class AbsLceRefreshFragment<C extends HasPresenter, M extends RequestUpdateViewModel, E extends Enum<E>, V extends LceView<M>> extends AbsLceFragment<C, M, V> implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout swipe;
 

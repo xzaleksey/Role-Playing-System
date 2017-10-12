@@ -1,7 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.core.view.presenter;
 
 
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 /**
  * Add presenter ability to restore view model after low - memory
@@ -9,6 +9,6 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestU
  * Can be useful with complex screens where separation of one state-full presenter into several
  * state-less presenters seems like overkill
  */
-public interface RestorablePresenter<M extends ShouldRequestUpdateViewModel> {
+public interface RestorablePresenter<M extends RequestUpdateViewModel> {
     void restoreViewModel(M viewModel);
 }

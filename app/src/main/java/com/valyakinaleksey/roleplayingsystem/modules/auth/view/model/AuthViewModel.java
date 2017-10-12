@@ -3,13 +3,13 @@ package com.valyakinaleksey.roleplayingsystem.modules.auth.view.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseShouldRequestUpdateViewModel;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 import java.io.Serializable;
 
-public class AuthViewModel extends BaseShouldRequestUpdateViewModel
-    implements ShouldRequestUpdateViewModel, Parcelable, Serializable {
+public class AuthViewModel extends BaseRequestUpdateViewModel
+    implements RequestUpdateViewModel, Parcelable, Serializable {
 
   private String email = "";
   private String password = "";
