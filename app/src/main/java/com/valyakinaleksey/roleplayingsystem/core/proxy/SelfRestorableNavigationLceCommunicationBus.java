@@ -11,7 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ import java.io.Serializable;
  * Base class for all communication buses for {@link LceView} with view-based navigation(i.e. showing dialog, transition to another Activity etc.)
  * And also it inherits the ability to save / restore ViewState(but with pending view state navigations this time) automatically
  */
-public class SelfRestorableNavigationLceCommunicationBus<D extends ShouldRequestUpdateViewModel,
+public class SelfRestorableNavigationLceCommunicationBus<D extends RequestUpdateViewModel,
         V extends LceView<D>,
         P extends Presenter<V>,
         VS extends LceViewState<D, V> & SelfRestorableViewState & NavigationViewState<V, Serializable>>

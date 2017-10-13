@@ -8,7 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action2;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Implementation of ViewState for LceView with view-based navigation and ability to put itself
  * (the whole object) in Parcel
  */
-public class ParcelableDataNavigationLceViewStateImpl<D extends Parcelable & ShouldRequestUpdateViewModel, V extends LceView<D>>
+public class ParcelableDataNavigationLceViewStateImpl<D extends Parcelable & RequestUpdateViewModel, V extends LceView<D>>
                 extends AbsNavigationLceViewStateImpl<D, V, Parcelable>
                 implements Parcelable{
 

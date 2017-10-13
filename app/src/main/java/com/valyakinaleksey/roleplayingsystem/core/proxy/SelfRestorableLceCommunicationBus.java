@@ -8,14 +8,14 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.Sel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 /**
  * Base class for all communication buses for {@link LceView} with ability to save / restore
  * ViewState automatically
  */
 public abstract class
-SelfRestorableLceCommunicationBus<D extends ShouldRequestUpdateViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V> & SelfRestorableViewState>
+SelfRestorableLceCommunicationBus<D extends RequestUpdateViewModel, V extends LceView<D>, P extends Presenter<V>, VS extends LceViewState<D, V> & SelfRestorableViewState>
     extends LceCommunicationBus<D, V, P, VS> {
 
   public SelfRestorableLceCommunicationBus(P presenter, VS viewState) {

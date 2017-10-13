@@ -2,36 +2,21 @@ package com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.google.firebase.database.Query;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseShouldRequestUpdateViewModel;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
-public class GamesListViewModel extends BaseShouldRequestUpdateViewModel
-    implements ShouldRequestUpdateViewModel, Parcelable, Serializable {
+public class GamesListViewModel extends BaseRequestUpdateViewModel
+    implements RequestUpdateViewModel, Parcelable, Serializable {
 
-  private transient Query query;
   private String toolbarTitle;
-  private int gamesCount;
+  private transient List<IFlexible> items = Collections.emptyList();
 
   public GamesListViewModel() {
     setNeedUpdate(true);
-  }
-
-  public Query getQuery() {
-    return query;
-  }
-
-  public void setQuery(Query query) {
-    this.query = query;
-  }
-
-  public int getGamesCount() {
-    return gamesCount;
-  }
-
-  public void setGamesCount(int gamesCount) {
-    this.gamesCount = gamesCount;
   }
 
   public String getToolbarTitle() {
@@ -42,21 +27,26 @@ public class GamesListViewModel extends BaseShouldRequestUpdateViewModel
     this.toolbarTitle = toolbarTitle;
   }
 
+  public List<IFlexible> getItems() {
+    return items;
+  }
+
+  public void setItems(List<IFlexible> items) {
+    this.items = items;
+  }
+
   @Override public int describeContents() {
     return 0;
   }
 
   @Override public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
-
     dest.writeString(this.toolbarTitle);
-    dest.writeInt(this.gamesCount);
   }
 
   protected GamesListViewModel(Parcel in) {
     super(in);
     this.toolbarTitle = in.readString();
-    this.gamesCount = in.readInt();
   }
 
   public static final Creator<GamesListViewModel> CREATOR = new Creator<GamesListViewModel>() {

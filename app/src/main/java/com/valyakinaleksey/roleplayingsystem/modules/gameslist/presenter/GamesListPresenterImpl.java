@@ -112,7 +112,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
     Bundle bundle = new Bundle();
     bundle.putParcelable(GameModel.KEY, model);
     bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
-    String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    String currentUserId = FireBaseUtils.getCurrentUserId();
     compositeSubscription.add(
         getCheckUserInGameObservable(model, currentUserId).subscribe(userInGame -> {
           if (userInGame) {
@@ -124,7 +124,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
   }
 
   @Override public void checkPassword(Context context, GameModel model) {
-    String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    String currentUserId = FireBaseUtils.getCurrentUserId();
     compositeSubscription.add(
         getCheckUserInGameObservable(model, currentUserId).subscribe(userInGame -> {
           if (userInGame) {

@@ -9,19 +9,19 @@ import com.valyakinaleksey.roleplayingsystem.core.firebase.AccessFirebaseExcepti
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 import java.util.concurrent.TimeoutException;
 
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public abstract class BasePresenter<V extends LceView<DATA>, DATA extends ShouldRequestUpdateViewModel>
+public abstract class BasePresenter<V extends LceView<DATA>, DATA extends RequestUpdateViewModel>
     implements Presenter<V>, RestorablePresenter<DATA> {
 
   protected V view;
-  protected Runnable showLoading = () -> view.showLoading();
-  protected Runnable hideLoading = () -> view.hideLoading();
+  public Runnable showLoading = () -> view.showLoading();
+  public Runnable hideLoading = () -> view.hideLoading();
   protected CompositeSubscription compositeSubscription;
   protected DATA viewModel;
 

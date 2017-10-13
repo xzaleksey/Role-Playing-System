@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.io.Serializable;
 
-public abstract class BaseShouldRequestUpdateViewModel
-    implements ShouldRequestUpdateViewModel, Serializable, Parcelable {
+public abstract class BaseRequestUpdateViewModel
+    implements RequestUpdateViewModel, Serializable, Parcelable {
 
   private boolean empty = true;
   private boolean restored;
@@ -18,7 +18,7 @@ public abstract class BaseShouldRequestUpdateViewModel
     this.empty = empty;
   }
 
-  public BaseShouldRequestUpdateViewModel() {
+  public BaseRequestUpdateViewModel() {
   }
 
   @Override public void setRestored(boolean restored) {
@@ -38,7 +38,7 @@ public abstract class BaseShouldRequestUpdateViewModel
     dest.writeByte(this.restored ? (byte) 1 : (byte) 0);
   }
 
-  protected BaseShouldRequestUpdateViewModel(Parcel in) {
+  protected BaseRequestUpdateViewModel(Parcel in) {
     this.empty = in.readByte() != 0;
     this.restored = in.readByte() != 0;
   }

@@ -13,7 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SnackbarHelper;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import rx.subscriptions.CompositeSubscription;
  * To work properly, your view should be able to work with enum <code>XXXError</code> with
  * corresponding fields
  */
-public abstract class AbsLceFragment<C extends HasPresenter, M extends ShouldRequestUpdateViewModel, V extends LceView<M>>
+public abstract class AbsLceFragment<C extends HasPresenter, M extends RequestUpdateViewModel, V extends LceView<M>>
     extends ComponentManagerFragment<C, V> implements LceView<M> {
 
   @BindView(R.id.progress) ProgressBar progress;

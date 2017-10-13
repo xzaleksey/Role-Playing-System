@@ -4,14 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.database.DatabaseReference;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseShouldRequestUpdateViewModel;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import java.io.Serializable;
 
-public class MasterLogModel extends BaseShouldRequestUpdateViewModel
-    implements ShouldRequestUpdateViewModel, Parcelable, Serializable {
+public class MasterLogModel extends BaseRequestUpdateViewModel
+    implements RequestUpdateViewModel, Parcelable, Serializable {
 
   private GameModel gameModel;
   private transient DatabaseReference databaseReference;

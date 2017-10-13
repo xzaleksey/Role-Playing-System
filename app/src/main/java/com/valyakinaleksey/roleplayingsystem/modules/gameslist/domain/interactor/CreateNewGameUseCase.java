@@ -1,30 +1,19 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor;
 
 import android.text.TextUtils;
-
 import com.crashlytics.android.Crashlytics;
-import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
-
-import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 import org.joda.time.DateTime;
-
 import rx.Observable;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES_IN_USERS;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
 
 public class CreateNewGameUseCase implements CreateNewGameInteractor {
 

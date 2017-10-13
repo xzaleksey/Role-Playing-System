@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.DeleteGameInteractor;
@@ -55,5 +56,7 @@ public interface InteractorProvider {
   GameInteractor getGameInteractor();
 
   LeaveGameInteractor getLeaveGameInteractor();
+
+  MyGamesInteractor getMygamesInteractor();
 }
       

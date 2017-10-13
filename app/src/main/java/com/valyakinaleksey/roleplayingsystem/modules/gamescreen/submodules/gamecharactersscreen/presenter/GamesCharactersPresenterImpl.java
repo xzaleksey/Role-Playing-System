@@ -77,8 +77,7 @@ public class GamesCharactersPresenterImpl
             case ADDED:
               return getAddObservable(gameModel, gameCharacterModelRxFirebaseChildEvent);
             case REMOVED:
-              for (Iterator<IFlexible> iterator = itemsAll.iterator(); iterator.hasNext(); ) {
-                IFlexible flexible = iterator.next();
+              for (IFlexible flexible : itemsAll) {
                 if (flexible instanceof AbstractGameCharacterListItem) {
                   if ((((AbstractGameCharacterListItem) flexible).getGameCharacterModel()).equals(
                       gameCharacterModelRxFirebaseChildEvent.getValue())) {
@@ -119,9 +118,7 @@ public class GamesCharactersPresenterImpl
           }
         })
         .compose(RxTransformers.applySchedulers())
-        .subscribe(gameCharacterModelRxFirebaseChildEvent -> {
-          updateView();
-        }, this::handleThrowable));
+        .subscribe(gameCharacterModelRxFirebaseChildEvent -> updateView(), this::handleThrowable));
   }
 
   private void updateView() {

@@ -49,7 +49,7 @@ public class MapsPresenterImpl extends BasePresenter<MapsView, MapsViewModel>
     GameModel gameModel = arguments.getParcelable(GameModel.KEY);
     mapsViewModel.setGameModel(gameModel);
     mapsViewModel.setMaster(
-        gameModel.getMasterId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+        gameModel.getMasterId().equals(FireBaseUtils.getCurrentUserId()));
     return mapsViewModel;
   }
 

@@ -4,7 +4,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.error_de
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.error_declaration.ErrorTypes;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
-import com.valyakinaleksey.roleplayingsystem.core.view.view_model.ShouldRequestUpdateViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 import timber.log.Timber;
 
 /**
@@ -13,7 +13,7 @@ import timber.log.Timber;
  * @param <D> type of data view operates on
  * @param <V> type of view
  */
-public abstract class AbsLceViewStateImpl<D extends ShouldRequestUpdateViewModel, V extends LceView<D>>
+public abstract class AbsLceViewStateImpl<D extends RequestUpdateViewModel, V extends LceView<D>>
     implements LceViewState<D, V> {
 
   protected int currentState;
