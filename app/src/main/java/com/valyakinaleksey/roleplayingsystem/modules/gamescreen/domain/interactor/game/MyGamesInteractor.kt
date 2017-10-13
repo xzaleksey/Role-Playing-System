@@ -11,13 +11,10 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import rx.Observable
 import rx.functions.Func2
 
-class MyGamesUsecase() : MyGamesInteractor {
-  private val myGamesIds: MutableSet<String> = mutableSetOf()
-
+class MyGamesUsecase : MyGamesInteractor {
   private val gamesInUsersQuery: Query = FireBaseUtils.getTableReference(
       FireBaseUtils.GAMES_IN_USERS)
       .child(FireBaseUtils.getCurrentUserId())
-
   private val gamesQuery: Query = FireBaseUtils.getTableReference(FireBaseUtils.GAMES)
 
   override fun getMyGamesObservable(

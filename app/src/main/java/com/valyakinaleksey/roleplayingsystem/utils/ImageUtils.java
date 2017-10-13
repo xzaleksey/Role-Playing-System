@@ -52,7 +52,6 @@ public class ImageUtils {
     }
     Drawable placeHolder =
         new MaterialDrawableProviderImpl(user.getName(), user.getUid()).getDrawable();
-    Activity context = (Activity) ivAvatar.getContext();
     loadAvatar(ivAvatar, uri, placeHolder);
   }
 }
