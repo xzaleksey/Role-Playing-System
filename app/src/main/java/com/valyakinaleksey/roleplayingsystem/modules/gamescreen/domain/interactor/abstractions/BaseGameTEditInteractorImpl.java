@@ -25,7 +25,7 @@ public abstract class BaseGameTEditInteractorImpl<T extends HasId>
       if (!aBoolean) {
         return Observable.just(new ArrayList<>());
       } else {
-        return RxFirebaseDatabase.getInstance().observeSingleValue(reference).map(dataSnapshot -> {
+        return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(reference).map(dataSnapshot -> {
           List<T> models = new ArrayList<>();
           for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
             models.add(snapshot.getValue(tClass));

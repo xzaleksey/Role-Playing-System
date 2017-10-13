@@ -1,22 +1,19 @@
 package com.valyakinaleksey.roleplayingsystem.utils;
 
-import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.kelvinapps.rxfirebase.RxHandler;
-import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Executor;
 import java.util.concurrent.TimeUnit;
 import rx.Observable;
-import rx.Subscriber;
 
 public class FireBaseUtils {
   public static final int IN_PROGRESS = 0;
@@ -67,14 +64,13 @@ public class FireBaseUtils {
   }
 
   public static Observable<Boolean> checkTableReferenceExists(String tableName) {
-    return RxFirebaseDatabase.getInstance()
-        .observeSingleValue(getTableReference(tableName))
-        .map(DataSnapshot::exists);
+    return RxFirebaseDatabase.
+        observeSingleValueEvent(getTableReference(tableName)).map(DataSnapshot::exists);
   }
 
   public static Observable<Boolean> checkReferenceExistsAndNotEmpty(Query query) {
-    return RxFirebaseDatabase.getInstance()
-        .observeSingleValue(query)
+    return RxFirebaseDatabase.
+        observeSingleValueEvent(query)
         .map(dataSnapshot -> dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0);
   }
 
@@ -83,9 +79,8 @@ public class FireBaseUtils {
   }
 
   public static Observable<Boolean> getConnectionObservable() {
-
-    return RxFirebaseDatabase.getInstance()
-        .observeValueEvent(getDatabaseReference().child(CHECK_CONNECTION_REFERENCE))
+    return RxFirebaseDatabase.
+        observeValueEvent(getDatabaseReference().child(CHECK_CONNECTION_REFERENCE))
         .map(dataSnapshot -> dataSnapshot.getValue(Boolean.class));
   }
 
