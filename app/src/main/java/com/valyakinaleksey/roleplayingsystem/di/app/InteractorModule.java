@@ -1,5 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesUsecase;
 import com.valyakinaleksey.roleplayingsystem.data.repository.maps.MapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
@@ -130,6 +132,10 @@ import dagger.Provides;
 
   @Provides @Singleton LeaveGameInteractor provideLeaveGameInteractor() {
     return new LeaveGameUseCase();
+  }
+
+  @Provides @Singleton MyGamesInteractor provideMyGamesInteractor() {
+    return new MyGamesUsecase();
   }
 }
       
