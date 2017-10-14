@@ -77,7 +77,7 @@ class MyGamesUsecase : MyGamesInteractor {
         dataSnaptshot.children.mapTo(ids) { it.getValue(GameModel::class.java)!!.id }
       }
       return@map ids
-    }.startWith(mutableListOf<String>())
+    }
   }
 
   private fun getMyGames(): Observable<MutableMap<String, GameModel>> {
@@ -89,7 +89,7 @@ class MyGamesUsecase : MyGamesInteractor {
             .forEach { models.put(it.id, it) }
       }
       return@map models
-    }.startWith(mutableMapOf())
+    }
   }
 }
 
