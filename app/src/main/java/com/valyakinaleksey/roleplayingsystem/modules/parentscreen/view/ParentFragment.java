@@ -106,6 +106,7 @@ public class ParentFragment extends
         .withToolbar(((AbsActivity) getActivity()).getToolbar())
         .withOnDrawerItemClickListener((view1, position, drawerItem) -> {
           getComponent().getPresenter().navigateToFragment(drawerItems.get(position).getNavId());
+          drawer.closeDrawer();
           return true;
         });
 

@@ -4,24 +4,22 @@ import android.content.Context
 import android.os.Bundle
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Query
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES_IN_USERS
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.createNewGame
 import com.valyakinaleksey.roleplayingsystem.utils.getCheckUserInGameObservable
 import com.valyakinaleksey.roleplayingsystem.utils.getValidatePasswordSubscription
@@ -32,17 +30,10 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameInteractor,
-    private val userGetInteractor: UserGetInteractor,
     private val validatePasswordInteractor: ValidatePasswordInteractor,
     private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
     private val parentPresenter: ParentPresenter,
     private val myGamesInteractor: MyGamesInteractor) : BasePresenter<MyGamesListView, MyGamesListViewViewModel>(), MyGamesListPresenter, RestorablePresenter<MyGamesListViewViewModel> {
-
-  private val getMyGamesQuery: Query
-    get() = FirebaseDatabase.getInstance()
-        .reference
-        .child(GAMES_IN_USERS)
-        .child(FireBaseUtils.getCurrentUserId())
 
   override fun initNewViewModel(arguments: Bundle?): MyGamesListViewViewModel {
     val gamesListViewModel = MyGamesListViewViewModel()
@@ -65,6 +56,11 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
   }
 
   override fun onFabPressed() {
+    val createGameDialogViewModel = CreateGameDialogViewModel()
+    createGameDialogViewModel.title = RpsApp.app().getString(R.string.create_game)
+    createGameDialogViewModel.gameModel = GameModel(StringUtils.EMPTY_STRING,
+        StringUtils.EMPTY_STRING)
+    viewModel.createGameDialogViewModel = createGameDialogViewModel
     view.showCreateGameDialog()
   }
 
@@ -82,6 +78,10 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
                   if (userInGame!!) {
                     navigateToGameScreen(context, model)
                   } else {
+                    val passwordDialogViewModel = PasswordDialogViewModel()
+                    passwordDialogViewModel.title = StringUtils.getStringById(R.string.create_game)
+                    passwordDialogViewModel.gameModel = model
+                    viewModel.passwordDialogViewModel = passwordDialogViewModel
                     view.showPasswordDialog()
                   }
                 }, { this.handleThrowable(it) }))

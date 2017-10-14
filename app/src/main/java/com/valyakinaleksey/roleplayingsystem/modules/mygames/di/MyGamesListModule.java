@@ -38,7 +38,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
       ValidatePasswordInteractor validatePasswordInteractor,
       CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter,
       MyGamesInteractor myGamesInteractor) {
-    return new MyGamesListPresenterImpl(createNewGameInteractor, userGetInteractor,
+    return new MyGamesListPresenterImpl(createNewGameInteractor,
         validatePasswordInteractor, checkUserJoinedGameInteractor, parentPresenter,
         myGamesInteractor);
   }
