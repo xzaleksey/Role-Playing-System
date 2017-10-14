@@ -2,10 +2,10 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maps
 
 import android.content.Intent;
 import android.net.Uri;
-import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kbeanie.multipicker.api.entity.ChosenFile;
+import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.data.repository.firebasestorage.MyUploadService;
 import com.valyakinaleksey.roleplayingsystem.data.repository.maps.MapsRepository;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
@@ -41,7 +41,7 @@ public class MapUseCase implements MapsInteractor {
       mapModel.setTempDateCreate(DateTime.now().getMillis());
       mapModel.setFileName(fileName);
       push.setValue(mapModel);
-      return RxFirebaseDatabase.getInstance().observeSingleValue(push).map(dataSnapshot -> {
+      return RxFirebaseDatabase.observeSingleValueEvent(push).map(dataSnapshot -> {
         push.child(FireBaseUtils.TEMP_DATE_CREATE).setValue(null);
         Intent intent = new Intent(RpsApp.app(), MyUploadService.class);
         intent.setAction(MyUploadService.ACTION_UPLOAD);

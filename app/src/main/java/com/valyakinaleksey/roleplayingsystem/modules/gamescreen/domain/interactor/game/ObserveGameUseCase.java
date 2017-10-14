@@ -21,7 +21,7 @@ public class ObserveGameUseCase implements ObserveGameInteractor {
     public Observable<GameModel> observeGameModelChanged(GameModel gameModel) {
         return gameRepository.observeGameChangedById(gameModel.getId())
                 .filter(firebaseChildEvent -> {
-                    DataSnapshot dataSnapshot = firebaseChildEvent.getDataSnapshot();
+                    DataSnapshot dataSnapshot = firebaseChildEvent.getValue();
                     String key = dataSnapshot.getKey();
                     if (key.equals(FIELD_DESCRIPTION)) {
                         gameModel.setDescription(dataSnapshot.getValue(String.class));

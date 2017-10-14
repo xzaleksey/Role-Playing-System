@@ -1,6 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions;
 
-import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
@@ -25,13 +24,14 @@ public abstract class BaseGameTEditInteractorImpl<T extends HasId>
       if (!aBoolean) {
         return Observable.just(new ArrayList<>());
       } else {
-        return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(reference).map(dataSnapshot -> {
-          List<T> models = new ArrayList<>();
-          for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-            models.add(snapshot.getValue(tClass));
-          }
-          return models;
-        });
+        return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(reference)
+            .map(dataSnapshot -> {
+              List<T> models = new ArrayList<>();
+              for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                models.add(snapshot.getValue(tClass));
+              }
+              return models;
+            });
       }
     });
   }
@@ -42,9 +42,7 @@ public abstract class BaseGameTEditInteractorImpl<T extends HasId>
     return Observable.just(gameModel).switchMap(gameModel1 -> {
       DatabaseReference reference = getDatabaseReference(gameModel).child(model.getId());
       reference.child(fieldName).setValue(o);
-      return RxFirebaseDatabase.getInstance()
-          .observeChildChanged(reference)
-          .map(firebaseChildEvent -> true);
+      return FireBaseUtils.observeChildChanged(reference).map(firebaseChildEvent -> true);
     });
   }
 
@@ -53,15 +51,14 @@ public abstract class BaseGameTEditInteractorImpl<T extends HasId>
     DatabaseReference push = reference.push();
     model.setId(push.getKey());
     push.setValue(model);
-    return RxFirebaseDatabase.getInstance().observeSingleValue(push).map(DataSnapshot::getKey);
+    return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(push)
+        .map(DataSnapshot::getKey);
   }
 
   @Override public Observable<Boolean> deleteTModel(GameModel gameModel, T model) {
     DatabaseReference reference = getDatabaseReference(gameModel).child(model.getId());
     reference.removeValue();
-    return RxFirebaseDatabase.getInstance()
-        .observeChildRemoved(reference)
-        .map(firebaseChildEvent -> true);
+    return FireBaseUtils.observeChildRemoved(reference).map(firebaseChildEvent -> true);
   }
 
   @Override public Observable<RxFirebaseChildEvent<T>> observeChildren(GameModel gameModel) {

@@ -159,9 +159,6 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull private Observable<?> loadLocalFile(File localFile) {
       Uri uri = Uri.fromFile(localFile);
       initClickListener(localFile.getAbsolutePath(), localFile.getName());
-      if (uri.equals(this.uri)) {
-        return Observable.just(true);
-      }
       this.uri = uri;
       loadImage(uri);
       return Observable.just(true);

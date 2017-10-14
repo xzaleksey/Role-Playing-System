@@ -1,11 +1,8 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model;
 
-import com.ezhome.rxfirebase2.FirebaseChildEvent;
 import com.google.firebase.database.Exclude;
-import com.google.firebase.database.PropertyName;
+import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,7 +17,7 @@ public class UserInGameModel implements Serializable {
   private String name;
 
   @Exclude private User user;
-  @Exclude private FirebaseChildEvent.EventType eventType;
+  @Exclude private RxFirebaseChildEvent.EventType eventType;
 
   public UserInGameModel() {
   }
@@ -38,11 +35,11 @@ public class UserInGameModel implements Serializable {
     this.user = user;
   }
 
-  @Exclude public FirebaseChildEvent.EventType getEventType() {
+  @Exclude public RxFirebaseChildEvent.EventType getEventType() {
     return eventType;
   }
 
-  @Exclude public void setEventType(FirebaseChildEvent.EventType eventType) {
+  @Exclude public void setEventType(RxFirebaseChildEvent.EventType eventType) {
     this.eventType = eventType;
   }
 

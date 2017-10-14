@@ -2,14 +2,12 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import com.crashlytics.android.Crashlytics;
-import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
@@ -19,9 +17,9 @@ import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePrese
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
@@ -29,7 +27,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Passwo
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
-
 import rx.Observable;
 import rx.Subscription;
 
@@ -165,8 +162,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
               }
             }, Crashlytics::logException));
 
-    compositeSubscription.add(RxFirebaseDatabase.getInstance()
-        .observeValueEvent(getFinishedGamesQuery())
+    compositeSubscription.add(RxFirebaseDatabase.observeValueEvent(getFinishedGamesQuery())
         .map(DataSnapshot::getChildrenCount)
         .subscribe(aLong -> {
           viewModel.setGamesCount(aLong.intValue());

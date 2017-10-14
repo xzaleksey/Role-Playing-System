@@ -9,11 +9,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
+import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.kelvinapps.rxfirebase.RxHandler;
+import com.kelvinapps.rxfirebase.exceptions.RxFirebaseDataException;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Executor;
 import java.util.concurrent.TimeUnit;
 import rx.Observable;
+import rx.functions.Func1;
+
+import static com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeChildEvent;
 
 public class FireBaseUtils {
   public static final int IN_PROGRESS = 0;
@@ -128,6 +134,53 @@ public class FireBaseUtils {
           }
         }
       });
+    });
+  }
+
+  public static Observable<RxFirebaseChildEvent<DataSnapshot>> observeChildAdded(
+      final Query firebaseRef) {
+    return RxFirebaseDatabase.observeChildEvent(firebaseRef)
+        .filter(filterChildEvent(RxFirebaseChildEvent.EventType.ADDED));
+  }
+
+  public static Observable<RxFirebaseChildEvent<DataSnapshot>> observeChildChanged(
+      final Query firebaseRef) {
+    return observeChildEvent(firebaseRef).filter(
+        filterChildEvent(RxFirebaseChildEvent.EventType.CHANGED));
+  }
+
+  public static Observable<RxFirebaseChildEvent<DataSnapshot>> observeChildRemoved(
+      final Query firebaseRef) {
+    return observeChildEvent(firebaseRef).filter(
+        filterChildEvent(RxFirebaseChildEvent.EventType.REMOVED));
+  }
+
+  public static Observable<RxFirebaseChildEvent<DataSnapshot>> observeChildMoved(
+      final Query firebaseRef) {
+    return observeChildEvent(firebaseRef).filter(
+        filterChildEvent(RxFirebaseChildEvent.EventType.MOVED));
+  }
+
+  private static <T> Func1<RxFirebaseChildEvent<T>, Boolean> filterChildEvent(
+      final RxFirebaseChildEvent.EventType type) {
+    return firebaseChildEvent -> firebaseChildEvent.getEventType() == type;
+  }
+
+  public static Observable<String> observeSetValuePush(final DatabaseReference firebaseRef,
+      final Object object) {
+    return Observable.create(subscriber -> {
+      final DatabaseReference ref = firebaseRef.push();
+      ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override public void onDataChange(DataSnapshot dataSnapshot) {
+          subscriber.onNext(ref.getKey());
+          subscriber.onCompleted();
+        }
+
+        @Override public void onCancelled(DatabaseError error) {
+          subscriber.onError(new RxFirebaseDataException(error));
+        }
+      });
+      ref.setValue(object);
     });
   }
 }
