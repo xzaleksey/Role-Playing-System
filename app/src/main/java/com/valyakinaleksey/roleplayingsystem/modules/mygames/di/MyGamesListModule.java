@@ -5,6 +5,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.communication.MyGamesListCommunicationBus;
@@ -35,10 +36,11 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
   @Provides @Named(PRESENTER) @PerFragmentScope MyGamesListPresenter providePresenter(
       CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor,
       ValidatePasswordInteractor validatePasswordInteractor,
-      CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
-      ParentPresenter parentPresenter) {
+      CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter,
+      MyGamesInteractor myGamesInteractor) {
     return new MyGamesListPresenterImpl(createNewGameInteractor, userGetInteractor,
-        validatePasswordInteractor, checkUserJoinedGameInteractor, parentPresenter);
+        validatePasswordInteractor, checkUserJoinedGameInteractor, parentPresenter,
+        myGamesInteractor);
   }
 
   @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {

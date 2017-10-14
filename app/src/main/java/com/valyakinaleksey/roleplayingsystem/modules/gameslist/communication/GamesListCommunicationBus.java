@@ -6,7 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigation
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.state.GamesListViewState;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
@@ -14,7 +14,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListVie
 import javax.inject.Inject;
 
 @PerFragmentScope public class GamesListCommunicationBus extends
-    SelfRestorableNavigationLceCommunicationBus<GamesListViewModel, GamesListView, GamesListPresenter, GamesListViewState>
+    SelfRestorableNavigationLceCommunicationBus<GamesListViewViewModel, GamesListView, GamesListPresenter, GamesListViewState>
     implements GamesListPresenter, GamesListView {
 
   @Override public void attachView(GamesListView view) {

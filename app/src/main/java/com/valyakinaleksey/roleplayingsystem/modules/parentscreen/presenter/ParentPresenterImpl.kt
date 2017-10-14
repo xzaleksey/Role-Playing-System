@@ -8,12 +8,21 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.GamesDescriptionFragment
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListFragment
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils
-import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.*
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.ADD_BACK_STACK
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.BACK
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAMES_LIST
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_DESCRIPTION_FRAGMENT
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_FRAGMENT
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.IMAGE_FRAGMENT
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.MY_GAMES
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.POP_BACK_STACK
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.SETTINGS
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.createFragment
 
@@ -23,11 +32,11 @@ class ParentPresenterImpl : BasePresenter<ParentView, ParentModel>(), ParentPres
 
   init {
     navigationHandler.put(GAMES_LIST, navigateToFragment<GamesListFragment>())
+    navigationHandler.put(MY_GAMES, navigateToFragment<MyGamesListFragment>())
     navigationHandler.put(GAME_FRAGMENT, navigateToFragment<ParentGameFragment>())
     navigationHandler.put(GAME_DESCRIPTION_FRAGMENT, navigateToFragment<GamesDescriptionFragment>())
     navigationHandler.put(IMAGE_FRAGMENT, navigateToFragment<ImageFragment>())
     navigationHandler.put(SETTINGS, { _, _ -> })
-    navigationHandler.put(MY_GAMES, { _, _ -> })
     navigationHandler.put(BACK, { _, _ -> })
   }
 

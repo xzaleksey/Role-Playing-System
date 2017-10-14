@@ -22,7 +22,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
@@ -33,8 +33,8 @@ import rx.Subscription;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
 
 @PerFragmentScope public class GamesListPresenterImpl
-    extends BasePresenter<GamesListView, GamesListViewModel>
-    implements GamesListPresenter, RestorablePresenter<GamesListViewModel> {
+    extends BasePresenter<GamesListView, GamesListViewViewModel>
+    implements GamesListPresenter, RestorablePresenter<GamesListViewViewModel> {
 
   private CreateNewGameInteractor createNewGameInteractor;
   private UserGetInteractor userGetInteractor;
@@ -53,14 +53,14 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
     this.parentPresenter = parentPresenter;
   }
 
-  @Override protected GamesListViewModel initNewViewModel(Bundle arguments) {
-    GamesListViewModel gamesListViewModel = new GamesListViewModel();
+  @Override protected GamesListViewViewModel initNewViewModel(Bundle arguments) {
+    GamesListViewViewModel gamesListViewModel = new GamesListViewViewModel();
     gamesListViewModel.setToolbarTitle(RpsApp.app().getString(R.string.list_of_games));
     setDatabaseQuery(gamesListViewModel);
     return gamesListViewModel;
   }
 
-  @Override public void restoreViewModel(GamesListViewModel viewModel) {
+  @Override public void restoreViewModel(GamesListViewViewModel viewModel) {
     super.restoreViewModel(viewModel);
     viewModel.setNeedUpdate(true);
     setDatabaseQuery(viewModel);
@@ -94,7 +94,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
     CreateGameDialogViewModel createGameDialogViewModel = new CreateGameDialogViewModel();
     createGameDialogViewModel.setTitle(RpsApp.app().getString(R.string.create_game));
     createGameDialogViewModel.setGameModel(new GameModel("", ""));
-    viewModel.setCreateGameDialogData(createGameDialogViewModel);
+    viewModel.setCreateGameDialogViewModel(createGameDialogViewModel);
     view.showCreateGameDialog();
   }
 
@@ -170,7 +170,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
         }, Crashlytics::logException));
   }
 
-  private void setDatabaseQuery(GamesListViewModel gamesListViewModel) {
+  private void setDatabaseQuery(GamesListViewViewModel gamesListViewModel) {
     gamesListViewModel.setQuery(getFinishedGamesQuery());
   }
 

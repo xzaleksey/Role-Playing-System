@@ -1,22 +1,18 @@
 package com.valyakinaleksey.roleplayingsystem.modules.mygames.presenter;
 
 import android.content.Context;
-import com.valyakinaleksey.roleplayingsystem.core.interfaces.Provider;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.CreateGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView;
+import eu.davidea.flexibleadapter.items.IFlexible;
 
-public interface MyGamesListPresenter extends Presenter<MyGamesListView> {
-    void createGame(GameModel gameModel);
+public interface MyGamesListPresenter extends Presenter<MyGamesListView>, CreateGamePresenter {
+  void loadComplete();
 
-    void loadComplete();
+  void onFabPressed();
 
-    void onFabPressed();
+  void navigateToGameScreen(Context context, GameModel model);
 
-    void navigateToGameScreen(Context context, GameModel model);
-
-    void checkPassword(Context context, GameModel model);
-
-    void validatePassword(Context context, String s, GameModel gameModel);
+  boolean onItemClicked(IFlexible<?> item);
 }

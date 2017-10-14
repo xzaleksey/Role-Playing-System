@@ -16,7 +16,7 @@
   <string name="error_invalid_password">This password is too short</string>
   <string name="error_incorrect_password">This password is incorrect</string>
   <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
+  <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
   <string name="error_empty_field">%s shouldn\'t be empty</string>
@@ -78,5 +78,8 @@
   <string name="led">Led</string>
   <string name="took_part">Took part in</string>
   <string name="leave_game">Leave game</string>
+  <string name="continue_lead_the_game">Continue lead game</string>
+  <string name="continue_play_the_game">Continue play game</string>
+  <string name="started">Started</string>
 
 </resources>

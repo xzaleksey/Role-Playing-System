@@ -4,7 +4,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.presenter.MyGamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
 import dagger.Component;
 
 /**

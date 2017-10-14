@@ -6,20 +6,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.internal.MDButton;
-import com.jakewharton.rxbinding.widget.RxTextView;
-import com.rengwuxian.materialedittext.MaterialEditText;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -30,17 +21,14 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameViewH
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListModule;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
-import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.utils.DialogExtensionsKt;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener;
-import rx.subscriptions.CompositeSubscription;
 
 public class GamesListFragment
-    extends AbsButterLceFragment<GamesListComponent, GamesListViewModel, GamesListView>
+    extends AbsButterLceFragment<GamesListComponent, GamesListViewViewModel, GamesListView>
     implements GamesListView {
 
   public static final String TAG = GamesListFragment.class.getSimpleName();
@@ -105,7 +93,7 @@ public class GamesListFragment
     if (recyclerView.getAdapter() == null) {
       recyclerView.setAdapter(gameListAdapter);
     }
-    if (data.getCreateGameDialogData() != null && (dialog == null || !dialog.isShowing())) {
+    if (data.getCreateGameDialogViewModel() != null && (dialog == null || !dialog.isShowing())) {
       showCreateGameDialog();
     }
     if (data.getPasswordDialogViewModel() != null && (dialog == null || !dialog.isShowing())) {
@@ -134,98 +122,13 @@ public class GamesListFragment
   }
 
   @Override public void showCreateGameDialog() {
-    View dialogView =
-        LayoutInflater.from(getContext()).inflate(R.layout.dialog_create_game_content, null);
-    MaterialEditText etName = (MaterialEditText) dialogView.findViewById(R.id.name);
-    MaterialEditText etDescription = (MaterialEditText) dialogView.findViewById(R.id.description);
-    MaterialEditText etPassword = (MaterialEditText) dialogView.findViewById(R.id.password);
-    CreateGameDialogViewModel dialogData = data.getCreateGameDialogData();
-    GameModel gameModel = dialogData.getGameModel();
-    etName.setText(gameModel.getName());
-    etDescription.setText(gameModel.getDescription());
-    etPassword.setText(gameModel.getPassword());
-    CompositeSubscription compositeSubscription = new CompositeSubscription();
-    dialog = new MaterialDialog.Builder(getContext()).title(dialogData.getTitle())
-        .customView(dialogView, true)
-        .autoDismiss(false)
-        .positiveText(android.R.string.ok)
-        .negativeText(android.R.string.cancel)
-        .onPositive((dialog, which) -> {
-          gameModel.setName(gameModel.getName().trim());
-          gameModel.setDescription(gameModel.getDescription().trim());
-          getComponent().getPresenter().createGame(dialogData.getGameModel());
-          dialog.dismiss();
-        })
-        .onNegative((dialog, which) -> {
-          dialog.dismiss();
-        })
-        .dismissListener(dialog1 -> {
-          data.setCreateGameDialogData(null);
-          compositeSubscription.unsubscribe();
-        })
-        .build();
-    MDButton actionButton = dialog.getActionButton(DialogAction.POSITIVE);
-    if (TextUtils.isEmpty(gameModel.getName())) {
-      actionButton.setEnabled(false);
-    }
-    etName.addTextChangedListener(new TextWatcher() {
-      @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-      }
-
-      @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-      }
-
-      @Override public void afterTextChanged(Editable s) {
-        if (s.toString().startsWith(" ")) {
-          s.delete(0, 1);
-        }
-      }
-    });
-    compositeSubscription.add(RxTextView.textChanges(etName).skip(1).subscribe(charSequence -> {
-      if (TextUtils.isEmpty(charSequence)) {
-        actionButton.setEnabled(false);
-      } else {
-        actionButton.setEnabled(true);
-      }
-      gameModel.setName(charSequence.toString());
-    }));
-    compositeSubscription.add(RxTextView.textChanges(etDescription).subscribe(charSequence -> {
-      gameModel.setDescription(charSequence.toString());
-    }));
-    compositeSubscription.add(RxTextView.textChanges(etPassword).subscribe(charSequence -> {
-      gameModel.setPassword(charSequence.toString());
-    }));
-    dialog.show();
-    etName.post(() -> {
-      etName.setSelection(etName.length());
-      KeyboardUtils.showSoftKeyboard(etName);
-    });
+    dialog =
+        DialogExtensionsKt.showCreateGameDialog(getContext(), data, getComponent().getPresenter());
   }
 
   @Override public void showPasswordDialog() {
-    PasswordDialogViewModel passwordDialogViewModel = data.getPasswordDialogViewModel();
-    CompositeSubscription compositeSubscription = new CompositeSubscription();
-    dialog = new MaterialDialog.Builder(getContext()).title(R.string.input_password)
-        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
-        .input(getString(R.string.password), passwordDialogViewModel.getInputPassword(), false,
-            (dialog1, input) -> {
-              getComponent().getPresenter()
-                  .validatePassword(getContext(), input.toString(),
-                      passwordDialogViewModel.getGameModel());
-            })
-        .dismissListener(dialog1 -> {
-          data.setPasswordDialogViewModel(null);
-          compositeSubscription.unsubscribe();
-        })
-        .show();
-    compositeSubscription.add(
-        RxTextView.textChanges((TextView) dialog.getView().findViewById(android.R.id.input))
-            .skip(1)
-            .subscribe(charSequence -> {
-              passwordDialogViewModel.setInputPassword(charSequence.toString());
-            }));
+    dialog =
+        DialogExtensionsKt.showPasswordDialog(getContext(), data, getComponent().getPresenter());
   }
 
   @Override public void updateGamesCount() {

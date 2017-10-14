@@ -66,5 +66,8 @@
   <string name="took_part">Участвовал в</string>
   <string name="leave_game">Покинуть игру</string>
   <string name="my_games">Мои игры</string>
+  <string name="continue_lead_the_game">Продолжить вести игру</string>
+  <string name="continue_play_the_game">Продолжить играть</string>
+  <string name="started">Начата</string>
 
 </resources>

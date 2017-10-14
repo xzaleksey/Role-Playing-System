@@ -8,8 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import autodagger.AutoComponent;
-import autodagger.AutoInjector;
 import butterknife.BindView;
 import com.kbeanie.multipicker.api.ImagePicker;
 import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback;
@@ -17,11 +15,9 @@ import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
-import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.adapter.MapAdapter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.HasMapsPresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.MapsModule;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.DaggerMapsFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.MapsFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
@@ -32,9 +28,6 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.kbeanie.multipicker.api.Picker.PICK_IMAGE_DEVICE;
 
-@AutoComponent(dependencies = { ParentGameComponent.class },
-    modules = MapsModule.class,
-    superinterfaces = { GlobalComponent.class, HasMapsPresenter.class }) @GameScope @AutoInjector
 public class MapsFragment
     extends AbsButterLceFragment<MapsFragmentComponent, MapsViewModel, MapsView>
     implements MapsView {

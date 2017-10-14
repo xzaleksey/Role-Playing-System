@@ -4,13 +4,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.database.Query;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasCreateGameViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasPasswordViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 
 import java.io.Serializable;
 
-public class GamesListViewModel extends BaseRequestUpdateViewModel
-    implements RequestUpdateViewModel, Parcelable, Serializable {
+public class GamesListViewViewModel extends BaseRequestUpdateViewModel
+    implements RequestUpdateViewModel, Parcelable, Serializable, HasPasswordViewModel,
+    HasCreateGameViewModel {
 
   private transient Query query;
   private CreateGameDialogViewModel createGameDialogViewModel;
@@ -18,7 +21,7 @@ public class GamesListViewModel extends BaseRequestUpdateViewModel
   private String toolbarTitle;
   private int gamesCount;
 
-  public GamesListViewModel() {
+  public GamesListViewViewModel() {
     setNeedUpdate(true);
   }
 
@@ -38,7 +41,7 @@ public class GamesListViewModel extends BaseRequestUpdateViewModel
     this.gamesCount = gamesCount;
   }
 
-  public void setCreateGameDialogData(CreateGameDialogViewModel dialogData) {
+  public void setCreateGameDialogViewModel(CreateGameDialogViewModel dialogData) {
     this.createGameDialogViewModel = dialogData;
   }
 
@@ -50,7 +53,7 @@ public class GamesListViewModel extends BaseRequestUpdateViewModel
     this.passwordDialogViewModel = passwordDialogViewModel;
   }
 
-  public CreateGameDialogViewModel getCreateGameDialogData() {
+  public CreateGameDialogViewModel getCreateGameDialogViewModel() {
     return createGameDialogViewModel;
   }
 
@@ -74,7 +77,7 @@ public class GamesListViewModel extends BaseRequestUpdateViewModel
     dest.writeInt(this.gamesCount);
   }
 
-  protected GamesListViewModel(Parcel in) {
+  protected GamesListViewViewModel(Parcel in) {
     super(in);
     this.createGameDialogViewModel =
         in.readParcelable(CreateGameDialogViewModel.class.getClassLoader());
@@ -84,13 +87,13 @@ public class GamesListViewModel extends BaseRequestUpdateViewModel
     this.gamesCount = in.readInt();
   }
 
-  public static final Creator<GamesListViewModel> CREATOR = new Creator<GamesListViewModel>() {
-    @Override public GamesListViewModel createFromParcel(Parcel source) {
-      return new GamesListViewModel(source);
+  public static final Creator<GamesListViewViewModel> CREATOR = new Creator<GamesListViewViewModel>() {
+    @Override public GamesListViewViewModel createFromParcel(Parcel source) {
+      return new GamesListViewViewModel(source);
     }
 
-    @Override public GamesListViewModel[] newArray(int size) {
-      return new GamesListViewModel[size];
+    @Override public GamesListViewViewModel[] newArray(int size) {
+      return new GamesListViewViewModel[size];
     }
   };
 }

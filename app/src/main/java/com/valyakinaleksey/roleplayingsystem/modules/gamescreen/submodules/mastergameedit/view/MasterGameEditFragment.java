@@ -4,24 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import autodagger.AutoComponent;
 import autodagger.AutoInjector;
 import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
-import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.di.HasGameEditPresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.di.MasterGameEditModule;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.di.DaggerMasterGameEditFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.di.MasterGameEditFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.model.MasterGameEditModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import javax.inject.Inject;
 
-@AutoComponent(dependencies = { ParentGameComponent.class },
-    modules = MasterGameEditModule.class,
-    superinterfaces = { GlobalComponent.class, HasGameEditPresenter.class }) @GameScope
 @AutoInjector public class MasterGameEditFragment extends
     AbsButterLceFragment<MasterGameEditFragmentComponent, MasterGameEditModel, MasterGameEditView>
     implements MasterGameEditView {

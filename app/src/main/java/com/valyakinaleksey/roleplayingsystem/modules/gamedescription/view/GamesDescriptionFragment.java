@@ -16,7 +16,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.DaggerGamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.GamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.model.GamesDescriptionModel;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
 import javax.inject.Inject;
 import timber.log.Timber;
 

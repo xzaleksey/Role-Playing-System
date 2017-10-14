@@ -9,25 +9,18 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import autodagger.AutoComponent;
-import autodagger.AutoInjector;
 import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
-import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.adapter.MasterLogAdapter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.HasMasterLogPresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.MasterLogModule;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.DaggerMasterLogFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.MasterLogFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.model.MasterLogModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
-@AutoComponent(dependencies = { ParentGameComponent.class },
-    modules = MasterLogModule.class,
-    superinterfaces = { GlobalComponent.class, HasMasterLogPresenter.class }) @GameScope
-@AutoInjector public class MasterLogFragment
+public class MasterLogFragment
     extends AbsButterLceFragment<MasterLogFragmentComponent, MasterLogModel, MasterLogView>
     implements MasterLogView {
 

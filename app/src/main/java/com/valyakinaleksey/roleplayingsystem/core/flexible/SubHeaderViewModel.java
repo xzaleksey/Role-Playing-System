@@ -11,6 +11,13 @@ import java.util.List;
 public class SubHeaderViewModel extends AbstractFlexibleItem<SubheaderViewHolder> {
   private String title;
 
+  public SubHeaderViewModel() {
+  }
+
+  public SubHeaderViewModel(String title) {
+    this.title = title;
+  }
+
   public String getTitle() {
     return title;
   }

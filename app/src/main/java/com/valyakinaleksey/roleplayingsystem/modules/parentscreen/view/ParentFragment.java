@@ -11,8 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import autodagger.AutoComponent;
-import autodagger.AutoInjector;
 import butterknife.BindString;
 import butterknife.BindView;
 import com.google.android.gms.auth.api.Auth;
@@ -22,30 +20,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.OnToolbarChangedListener;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
-import com.valyakinaleksey.roleplayingsystem.core.view.ParentScope;
-import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
-import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.HasParentPresenter;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentModule;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.*;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.DaggerParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.DrawerInfoModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-@AutoComponent(dependencies = {
-    AppComponent.class
-}, modules = ParentModule.class, superinterfaces = {
-    HasParentPresenter.class, GlobalComponent.class
-}) @ParentScope @AutoInjector public class ParentFragment
-    extends AbsButterLceFragment<ParentFragmentComponent, ParentModel, ParentView>
+public class ParentFragment extends
+    AbsButterLceFragment<com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent, ParentModel, ParentView>
     implements ParentView, OnToolbarChangedListener {
 
   public static final String TAG = ParentFragment.class.getSimpleName();
@@ -62,7 +52,8 @@ import java.util.List;
     return gamesDescriptionFragment;
   }
 
-  @Override protected ParentFragmentComponent createComponent() {
+  @Override
+  protected com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent createComponent() {
     return DaggerParentFragmentComponent.builder()
         .appComponent(RpsApp.getAppComponent(getActivity()))
         .parentModule(new ParentModule())
@@ -114,9 +105,6 @@ import java.util.List;
     DrawerBuilder drawerBuilder = new DrawerBuilder().withActivity(getActivity())
         .withToolbar(((AbsActivity) getActivity()).getToolbar())
         .withOnDrawerItemClickListener((view1, position, drawerItem) -> {
-          if (drawer.getPosition(drawerItem) == position) {
-            return false;
-          }
           getComponent().getPresenter().navigateToFragment(drawerItems.get(position).getNavId());
           return true;
         });

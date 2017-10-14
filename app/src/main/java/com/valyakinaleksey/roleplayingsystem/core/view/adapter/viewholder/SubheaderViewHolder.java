@@ -6,7 +6,7 @@ import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 
 public class SubheaderViewHolder extends ButterKnifeViewHolder {
-  @BindView(R.id.text) protected TextView tvTitle;
+  @BindView(R.id.text) TextView tvTitle;
 
   public SubheaderViewHolder(View itemView) {
     super(itemView);

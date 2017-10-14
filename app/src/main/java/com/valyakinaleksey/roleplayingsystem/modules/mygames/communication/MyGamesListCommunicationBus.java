@@ -3,16 +3,17 @@ package com.valyakinaleksey.roleplayingsystem.modules.mygames.communication;
 import android.content.Context;
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.presenter.MyGamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView;
-import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.state.MyGamesListViewState;
+import eu.davidea.flexibleadapter.items.IFlexible;
+import java.util.List;
 import javax.inject.Inject;
 
 @PerFragmentScope public class MyGamesListCommunicationBus extends
-    SelfRestorableNavigationLceCommunicationBus<GamesListViewModel, MyGamesListView, MyGamesListPresenter, MyGamesListViewState>
+    SelfRestorableNavigationLceCommunicationBus<MyGamesListViewViewModel, MyGamesListView, MyGamesListPresenter, MyGamesListViewState>
     implements MyGamesListPresenter, MyGamesListView {
 
   @Override public void attachView(MyGamesListView view) {
@@ -40,6 +41,10 @@ import javax.inject.Inject;
     presenter.navigateToGameScreen(context, model);
   }
 
+  @Override public boolean onItemClicked(IFlexible<?> item) {
+    return presenter.onItemClicked(item);
+  }
+
   @Override public void checkPassword(Context context, GameModel model) {
     presenter.checkPassword(context, model);
   }
@@ -58,5 +63,9 @@ import javax.inject.Inject;
 
   @Override public void showPasswordDialog() {
     getNavigationResolver().resolveNavigation(MyGamesListView::showPasswordDialog);
+  }
+
+  @Override public void updateList(List<IFlexible> iFlexibles) {
+    getNavigationResolver().resolveNavigation((view) -> view.updateList(iFlexibles));
   }
 }

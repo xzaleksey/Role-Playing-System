@@ -13,22 +13,30 @@ import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePrese
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView
-import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.GamesListViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
-import com.valyakinaleksey.roleplayingsystem.utils.*
-
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES_IN_USERS
+import com.valyakinaleksey.roleplayingsystem.utils.createNewGame
+import com.valyakinaleksey.roleplayingsystem.utils.getCheckUserInGameObservable
+import com.valyakinaleksey.roleplayingsystem.utils.getValidatePasswordSubscription
+import com.valyakinaleksey.roleplayingsystem.utils.navigateToGameDescriptionScreen
+import com.valyakinaleksey.roleplayingsystem.utils.navigateToGameScreen
+import eu.davidea.flexibleadapter.items.IFlexible
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameInteractor,
     private val userGetInteractor: UserGetInteractor,
     private val validatePasswordInteractor: ValidatePasswordInteractor,
     private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
-    private val parentPresenter: ParentPresenter) : BasePresenter<MyGamesListView, GamesListViewModel>(), MyGamesListPresenter, RestorablePresenter<GamesListViewModel> {
+    private val parentPresenter: ParentPresenter,
+    private val myGamesInteractor: MyGamesInteractor) : BasePresenter<MyGamesListView, MyGamesListViewViewModel>(), MyGamesListPresenter, RestorablePresenter<MyGamesListViewViewModel> {
 
   private val getMyGamesQuery: Query
     get() = FirebaseDatabase.getInstance()
@@ -36,15 +44,16 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
         .child(GAMES_IN_USERS)
         .child(FireBaseUtils.getCurrentUserId())
 
-  override fun initNewViewModel(arguments: Bundle?): GamesListViewModel {
-    val gamesListViewModel = GamesListViewModel()
+  override fun initNewViewModel(arguments: Bundle?): MyGamesListViewViewModel {
+    val gamesListViewModel = MyGamesListViewViewModel()
     gamesListViewModel.toolbarTitle = RpsApp.app().getString(R.string.my_games)
     return gamesListViewModel
   }
 
-  override fun restoreViewModel(viewModel: GamesListViewModel) {
-    super.restoreViewModel(viewModel)
-    viewModel.setNeedUpdate(true)
+  override fun restoreViewModel(
+      viewModelMy: MyGamesListViewViewModel) {
+    super.restoreViewModel(viewModelMy)
+    viewModelMy.setNeedUpdate(true)
   }
 
   override fun createGame(gameModel: GameModel) {
@@ -94,18 +103,22 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
   }
 
   override fun getData() {
+    view.setData(viewModel)
+    viewModel.setNeedUpdate(false)
+    view.showContent()
+    view.showLoading()
     compositeSubscription.add(
-        FireBaseUtils.checkReferenceExistsAndNotEmpty(FireBaseUtils.getTableReference(GAMES))
-            .doOnSubscribe {
-              view.setData(viewModel)
-              viewModel.setNeedUpdate(false)
-              view.showContent()
-              view.showLoading()
-            }
-            .subscribe({ exists ->
-              if (!exists) {
-                view.hideLoading()
-              }
+        myGamesInteractor.getMyGamesObservable()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ data ->
+              this.viewModel.items = data
+              view.hideLoading()
+              view.updateList(this.viewModel.items)
             }, { Crashlytics.logException(it) }))
+  }
+
+  override fun onItemClicked(item: IFlexible<*>): Boolean {
+    return true
   }
 }

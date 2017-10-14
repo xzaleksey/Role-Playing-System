@@ -24,7 +24,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ViewPagerAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.DaggerParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 import java.util.ArrayList;
 

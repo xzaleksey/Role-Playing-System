@@ -17,7 +17,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateV
 public abstract class AbsButterLceFragment<C extends HasPresenter, M extends RequestUpdateViewModel, V extends LceView<M>>
     extends AbsLceFragment<C, M, V> {
 
-  private Unbinder unbinder;
+  protected Unbinder unbinder;
 
   @Override protected void preSetupViews(View view) {
     super.preSetupViews(view);

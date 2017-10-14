@@ -26,3 +26,4 @@
 -keepclassmembers class com.valyakinaleksey.**.model.** {
   *;
 }
+-keep class **$$ViewBinder { *; }

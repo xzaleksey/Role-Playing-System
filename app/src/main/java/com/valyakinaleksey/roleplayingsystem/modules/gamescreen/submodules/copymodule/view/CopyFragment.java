@@ -4,26 +4,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import autodagger.AutoComponent;
-import autodagger.AutoInjector;
 import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
-import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyModule;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.HasCopyPresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.DaggerCopyFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.view.model.CopyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import javax.inject.Inject;
 
-@AutoComponent(dependencies = { ParentGameComponent.class },
-    modules = CopyModule.class,
-    superinterfaces = { GlobalComponent.class, HasCopyPresenter.class }) @GameScope @AutoInjector
-public class CopyFragment
-    extends AbsButterLceFragment<CopyFragmentComponent, CopyViewModel, CopyView>
+public class CopyFragment extends
+    AbsButterLceFragment<CopyFragmentComponent, CopyViewModel, CopyView>
     implements CopyView {
 
   public static final String TAG = CopyFragment.class.getSimpleName();
@@ -38,7 +31,8 @@ public class CopyFragment
     return gamesDescriptionFragment;
   }
 
-  @Override @SuppressWarnings("unchecked") protected CopyFragmentComponent createComponent() {
+  @Override @SuppressWarnings("unchecked")
+  protected CopyFragmentComponent createComponent() {
     return DaggerCopyFragmentComponent.builder()
         .parentGameComponent(
             ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent())
