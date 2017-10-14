@@ -43,8 +43,12 @@ public class SubHeaderViewModel extends AbstractFlexibleItem<SubheaderViewHolder
   }
 
   @Override public boolean equals(Object o) {
-    return this == o || o instanceof SubHeaderViewModel && ((SubHeaderViewModel) o).getTitle()
-        .equals(title);
+    return this == o || (o instanceof SubHeaderViewModel && ((SubHeaderViewModel) o).getTitle()
+        .equals(title));
+  }
+
+  @Override public int hashCode() {
+    return title != null ? title.hashCode() : 0;
   }
 }
       

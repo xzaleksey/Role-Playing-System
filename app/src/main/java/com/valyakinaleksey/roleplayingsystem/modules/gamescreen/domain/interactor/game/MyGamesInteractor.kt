@@ -53,7 +53,7 @@ class MyGamesUsecase : MyGamesInteractor {
     }
     if (myGames.isNotEmpty()) {
       result.add(SubHeaderViewModel(StringUtils.getStringById(R.string.continue_play_the_game)))
-      myMasterGames.mapTo(result) {
+      myGames.mapTo(result) {
         TwoLineWithIdViewModel(it.id, it.name, getSecondaryText(it))
       }
     }

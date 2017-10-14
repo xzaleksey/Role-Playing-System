@@ -3,7 +3,6 @@ package com.valyakinaleksey.roleplayingsystem.core.flexible;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.valyakinaleksey.roleplayingsystem.R;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.SubheaderViewHolder;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.TwoLineWithIdViewHolder;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
@@ -62,10 +61,17 @@ public class TwoLineWithIdViewModel extends AbstractFlexibleItem<TwoLineWithIdVi
 
   @Override public boolean equals(Object o) {
     return this == o
-        || o instanceof TwoLineWithIdViewModel
+        || (o instanceof TwoLineWithIdViewModel
         && ((TwoLineWithIdViewModel) o).id.equals(id)
         && ((TwoLineWithIdViewModel) o).getTitle().equals(title)
-        && ((TwoLineWithIdViewModel) o).getSecondaryText().equals(secondaryText);
+        && ((TwoLineWithIdViewModel) o).getSecondaryText().equals(secondaryText));
+  }
+
+  @Override public int hashCode() {
+    int result = id != null ? id.hashCode() : 0;
+    result = 31 * result + (title != null ? title.hashCode() : 0);
+    result = 31 * result + (secondaryText != null ? secondaryText.hashCode() : 0);
+    return result;
   }
 }
       
