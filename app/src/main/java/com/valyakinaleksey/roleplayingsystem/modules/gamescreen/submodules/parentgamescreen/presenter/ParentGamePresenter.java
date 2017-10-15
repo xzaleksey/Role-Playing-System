@@ -9,4 +9,6 @@ public interface ParentGamePresenter extends Presenter<ParentView> {
   void finishGame();
 
   void leaveGame();
+
+  void openGame();
 }

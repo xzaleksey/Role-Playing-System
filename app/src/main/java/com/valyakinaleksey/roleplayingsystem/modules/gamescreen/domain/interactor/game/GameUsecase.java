@@ -11,18 +11,20 @@ public class GameUsecase implements GameInteractor {
   private ObserveUsersInGameInteractor observeUsersInGameInteractor;
   private CheckUserJoinedGameInteractor checkUserJoinedGameInteractor;
   private LeaveGameInteractor leaveGameInteractor;
+  private OpenGameInteractor openGameInteractor;
 
   public GameUsecase(FinishGameInteractor finishGameInteractor,
       DeleteGameInteractor deleteGameInteractor, ObserveGameInteractor observeGameInteractor,
       ObserveUsersInGameInteractor observeUsersInGameInteractor,
       CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
-      LeaveGameInteractor leaveGameInteractor) {
+      LeaveGameInteractor leaveGameInteractor, OpenGameInteractor openGameInteractor) {
     this.finishGameInteractor = finishGameInteractor;
     this.deleteGameInteractor = deleteGameInteractor;
     this.observeGameInteractor = observeGameInteractor;
     this.observeUsersInGameInteractor = observeUsersInGameInteractor;
     this.checkUserJoinedGameInteractor = checkUserJoinedGameInteractor;
     this.leaveGameInteractor = leaveGameInteractor;
+    this.openGameInteractor = openGameInteractor;
   }
 
   @Override public Observable<Boolean> checkUserInGame(String userId, GameModel gameModel) {
@@ -51,6 +53,10 @@ public class GameUsecase implements GameInteractor {
 
   @Override public Observable<Void> leaveGame(GameModel gameModel) {
     return leaveGameInteractor.leaveGame(gameModel);
+  }
+
+  @Override public Observable<Boolean> openGame(GameModel gameModel) {
+    return openGameInteractor.openGame(gameModel);
   }
 }
       

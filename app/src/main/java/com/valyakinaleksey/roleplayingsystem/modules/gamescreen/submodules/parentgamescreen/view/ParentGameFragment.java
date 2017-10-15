@@ -35,7 +35,10 @@ public class ParentGameFragment
   public static final String TAG = ParentGameFragment.class.getSimpleName();
   public static final String DELETE_GAME = "delete_game";
   public static final String FINISH_GAME = "finish_game";
+  public static final String OPEN_GAME = "open_game";
   public static final String LEAVE_GAME = "leave_game";
+  public static final int FINISH_GAME_ID = 1;
+  public static final int OPEN_GAME_ID = 2;
 
   @BindView(R.id.viewpager) ViewPager viewPager;
 
@@ -100,6 +103,11 @@ public class ParentGameFragment
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     if (data != null) {
       if (data.isMaster()) {
+        if (data.getGameModel().isFinished()) {
+          menu.add(Menu.NONE, OPEN_GAME_ID, Menu.NONE, R.string.open_game);
+        } else {
+          menu.add(Menu.NONE, FINISH_GAME_ID, Menu.NONE, R.string.finish_game);
+        }
         inflater.inflate(R.menu.parent_game_menu_master, menu);
       } else {
         inflater.inflate(R.menu.parent_game_menu_player, menu);
@@ -111,7 +119,7 @@ public class ParentGameFragment
   @Override public void showContent() {
     super.showContent();
     preFillModel(data);
-    getActivity().invalidateOptionsMenu();
+    invalidateOptionsMenu();
     if (viewPager.getAdapter() == null) {
       if (data.isFirstNavigation() || adapter.getCount() == 0) {
         adapter.clear();
@@ -121,6 +129,10 @@ public class ParentGameFragment
       }
       viewPager.setAdapter(adapter);
     }
+  }
+
+  @Override public void invalidateOptionsMenu() {
+    getActivity().invalidateOptionsMenu();
   }
 
   @Override public void preFillModel(ParentGameModel data) {
@@ -133,8 +145,11 @@ public class ParentGameFragment
       case R.id.action_delete:
         BaseDialogFragment.newInstance(this).show(getFragmentManager(), DELETE_GAME);
         return true;
-      case R.id.action_finish_game:
+      case FINISH_GAME_ID:
         BaseDialogFragment.newInstance(this).show(getFragmentManager(), FINISH_GAME);
+        return true;
+      case OPEN_GAME_ID:
+        getComponent().getPresenter().openGame();
         return true;
       case R.id.action_leave_game:
         BaseDialogFragment.newInstance(this).show(getFragmentManager(), LEAVE_GAME);

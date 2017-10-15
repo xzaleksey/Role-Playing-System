@@ -6,5 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.paren
 
 public interface ParentView extends LceView<ParentGameModel> {
 
-    void navigate();
+  void invalidateOptionsMenu();
+
+  void navigate();
 }

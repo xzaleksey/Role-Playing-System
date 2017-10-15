@@ -2,7 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.pare
 
 import android.os.Bundle;
 import com.crashlytics.android.Crashlytics;
-import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
@@ -127,5 +126,16 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         .compose(RxTransformers.applySchedulers())
         .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
         .subscribe(aVoid -> parentPresenter.navigateBack(), Crashlytics::logException));
+  }
+
+  @Override public void openGame() {
+    compositeSubscription.add(gameInteractor.
+        openGame(viewModel.getGameModel())
+        .compose(RxTransformers.applySchedulers())
+        .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+        .subscribe(result -> {
+          viewModel.getGameModel().setFinished(false);
+          view.showContent();
+        }, Crashlytics::logException));
   }
 }

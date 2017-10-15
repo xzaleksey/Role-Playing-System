@@ -22,6 +22,10 @@ import javax.inject.Inject;
     super(presenter, viewState);
   }
 
+  @Override public void invalidateOptionsMenu() {
+    getNavigationResolver().resolveNavigation(ParentView::invalidateOptionsMenu);
+  }
+
   @Override public void navigate() {
     getNavigationResolver().resolveNavigation(ParentView::navigate);
   }
@@ -36,5 +40,9 @@ import javax.inject.Inject;
 
   @Override public void leaveGame() {
     presenter.leaveGame();
+  }
+
+  @Override public void openGame() {
+    presenter.openGame();
   }
 }

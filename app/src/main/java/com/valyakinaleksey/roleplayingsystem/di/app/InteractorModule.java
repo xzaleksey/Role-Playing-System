@@ -23,6 +23,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.LeaveGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.LeaveGameUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.OpenGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.OpenGameUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveGameInteractor;
@@ -120,14 +122,18 @@ import dagger.Provides;
     return new FinishGameUsecase();
   }
 
+  @Provides @Singleton OpenGameInteractor provideOpenGameInteractor() {
+    return new OpenGameUsecase();
+  }
+
   @Provides @Singleton GameInteractor provideGameInteractor(
       FinishGameInteractor finishGameInteractor, DeleteGameInteractor deleteGameInteractor,
       ObserveGameInteractor observeGameInteractor,
       ObserveUsersInGameInteractor observeUsersInGameInteractor,
       CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
-      LeaveGameInteractor leaveGameInteractor) {
+      LeaveGameInteractor leaveGameInteractor, OpenGameInteractor openGameInteractor) {
     return new GameUsecase(finishGameInteractor, deleteGameInteractor, observeGameInteractor,
-        observeUsersInGameInteractor, checkUserJoinedGameInteractor, leaveGameInteractor);
+        observeUsersInGameInteractor, checkUserJoinedGameInteractor, leaveGameInteractor, openGameInteractor);
   }
 
   @Provides @Singleton LeaveGameInteractor provideLeaveGameInteractor() {

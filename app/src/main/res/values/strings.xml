@@ -83,5 +83,6 @@
   <string name="started">Started</string>
   <string name="participated_in">Took part in</string>
   <string name="completed_games">Completed games</string>
+  <string name="open_game">Open game</string>
 
 </resources>
