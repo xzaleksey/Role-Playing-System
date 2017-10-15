@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
@@ -74,7 +75,6 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @BindView(R.id.iv_delete) ImageView ivDelete;
     @BindView(R.id.divider) View divider;
     @BindView(R.id.bottom_container) View bottomContainer;
-    private Uri uri;
     private MapsPresenter mapsPresenter;
 
     public MapViewHolder(View itemView) {
@@ -104,7 +104,9 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else { // try to load from internet
           return loadFileFromInternet(mapModel);
         }
-      }).subscribe();
+      }).subscribe(o -> {
+
+      }, Crashlytics::logException);
     }
 
     private void initClickListener(String path, String fileName) {
@@ -159,7 +161,6 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull private Observable<?> loadLocalFile(File localFile) {
       Uri uri = Uri.fromFile(localFile);
       initClickListener(localFile.getAbsolutePath(), localFile.getName());
-      this.uri = uri;
       loadImage(uri);
       return Observable.just(true);
     }
@@ -172,7 +173,6 @@ public class MapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             .onErrorReturn(
                 throwable -> StorageUtils.resourceToUri(R.drawable.common_full_open_on_phone))
             .map(uri -> {
-              this.uri = uri;
               loadImage(uri);
               return Observable.just(true);
             });

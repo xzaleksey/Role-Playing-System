@@ -3,7 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.mygames.di;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
@@ -34,13 +34,12 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
   }
 
   @Provides @Named(PRESENTER) @PerFragmentScope MyGamesListPresenter providePresenter(
-      CreateNewGameInteractor createNewGameInteractor, UserGetInteractor userGetInteractor,
-      ValidatePasswordInteractor validatePasswordInteractor,
+      CreateNewGameInteractor createNewGameInteractor, ValidatePasswordInteractor validatePasswordInteractor,
       CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter,
-      MyGamesInteractor myGamesInteractor) {
+      MyGamesInteractor myGamesInteractor, GameRepository gamesRepository) {
     return new MyGamesListPresenterImpl(createNewGameInteractor,
         validatePasswordInteractor, checkUserJoinedGameInteractor, parentPresenter,
-        myGamesInteractor);
+        myGamesInteractor, gamesRepository);
   }
 
   @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {

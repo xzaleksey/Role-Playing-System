@@ -8,17 +8,17 @@ import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
 
-public interface GlobalComponent extends InteractorProvider {
-    Context context();
+public interface GlobalComponent extends InteractorProvider, RepositoryProvider {
+  Context context();
 
-    PathManager pathManager();
+  PathManager pathManager();
 
-    FirebaseAuth firebaseAuth();
+  FirebaseAuth firebaseAuth();
 
-    SharedPreferencesHelper sharedPrefencesPreferencesHelper();
+  SharedPreferencesHelper sharedPrefencesPreferencesHelper();
 
-    SimpleCrypto getSimpleCrypto();
+  SimpleCrypto getSimpleCrypto();
 
-    SectionsAdapter getSectionsAdapter();
+  SectionsAdapter getSectionsAdapter();
 }
       

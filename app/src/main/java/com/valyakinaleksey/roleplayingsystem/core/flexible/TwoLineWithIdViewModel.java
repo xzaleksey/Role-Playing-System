@@ -46,7 +46,7 @@ public class TwoLineWithIdViewModel extends AbstractFlexibleItem<TwoLineWithIdVi
   @Override
   public TwoLineWithIdViewHolder createViewHolder(FlexibleAdapter adapter, LayoutInflater inflater,
       ViewGroup parent) {
-    return new TwoLineWithIdViewHolder(inflater.inflate(getLayoutRes(), parent, false));
+    return new TwoLineWithIdViewHolder(inflater.inflate(getLayoutRes(), parent, false), adapter);
   }
 
   @Override
@@ -60,8 +60,7 @@ public class TwoLineWithIdViewModel extends AbstractFlexibleItem<TwoLineWithIdVi
   }
 
   @Override public boolean equals(Object o) {
-    return this == o
-        || (o instanceof TwoLineWithIdViewModel
+    return this == o || (o instanceof TwoLineWithIdViewModel
         && ((TwoLineWithIdViewModel) o).id.equals(id)
         && ((TwoLineWithIdViewModel) o).getTitle().equals(title)
         && ((TwoLineWithIdViewModel) o).getSecondaryText().equals(secondaryText));

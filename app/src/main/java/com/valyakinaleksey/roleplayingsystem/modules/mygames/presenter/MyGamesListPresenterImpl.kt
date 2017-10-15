@@ -5,9 +5,11 @@ import android.os.Bundle
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.auth.FirebaseAuth
 import com.valyakinaleksey.roleplayingsystem.R
+import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor
@@ -19,6 +21,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Passwo
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
+import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.createNewGame
 import com.valyakinaleksey.roleplayingsystem.utils.getCheckUserInGameObservable
@@ -33,7 +36,8 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
     private val validatePasswordInteractor: ValidatePasswordInteractor,
     private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
     private val parentPresenter: ParentPresenter,
-    private val myGamesInteractor: MyGamesInteractor) : BasePresenter<MyGamesListView, MyGamesListViewViewModel>(), MyGamesListPresenter, RestorablePresenter<MyGamesListViewViewModel> {
+    private val myGamesInteractor: MyGamesInteractor,
+    private val gameRepository: GameRepository) : BasePresenter<MyGamesListView, MyGamesListViewViewModel>(), MyGamesListPresenter, RestorablePresenter<MyGamesListViewViewModel> {
 
   override fun initNewViewModel(arguments: Bundle?): MyGamesListViewViewModel {
     val gamesListViewModel = MyGamesListViewViewModel()
@@ -119,6 +123,15 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
   }
 
   override fun onItemClicked(item: IFlexible<*>): Boolean {
+    if (item is TwoLineWithIdViewModel) {
+      val gameModel = gameRepository.getGameModelById(item.id)
+      if (gameModel != null) {
+        val bundle = Bundle()
+        bundle.putParcelable(GameModel.KEY, gameModel)
+        bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
+        parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle)
+      }
+    }
     return true
   }
 }
