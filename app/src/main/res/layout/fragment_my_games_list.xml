@@ -6,6 +6,6 @@
     tools:appContext="com.valyakinaleksey.roleplayingsystem.modules.mainscreen.view.MainActivity"
     >
 
-  <include layout="@layout/recycler_view_with_padding"/>
+  <include layout="@layout/recycler_view_white"/>
   <include layout="@layout/fab_plus"/>
 </android.support.design.widget.CoordinatorLayout>

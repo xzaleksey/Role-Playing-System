@@ -3,6 +3,9 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interact
 import com.google.firebase.database.Query
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.valyakinaleksey.roleplayingsystem.R
+import com.valyakinaleksey.roleplayingsystem.R.string
+import com.valyakinaleksey.roleplayingsystem.core.flexible.CommonDividerViewModel
+import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
@@ -44,20 +47,46 @@ class MyGamesUsecase : MyGamesInteractor {
   private fun getFilledModel(myMasterGames: MutableList<GameModel>,
       myGames: MutableList<GameModel>): MutableList<IFlexible<*>> {
     val result = mutableListOf<IFlexible<*>>()
-
-    if (myMasterGames.isNotEmpty()) {
-      result.add(SubHeaderViewModel(StringUtils.getStringById(R.string.continue_lead_the_game)))
-      myMasterGames.mapTo(result) {
-        TwoLineWithIdViewModel(it.id, it.name, getMasterSecondaryText(it))
-      }
-    }
-    if (myGames.isNotEmpty()) {
-      result.add(SubHeaderViewModel(StringUtils.getStringById(R.string.continue_play_the_game)))
-      myGames.mapTo(result) {
-        TwoLineWithIdViewModel(it.id, it.name, getSecondaryText(it))
-      }
-    }
+    fillMasterGames(myMasterGames, result)
+    fillMyGames(myGames, result)
     return result
+  }
+
+  private fun fillMasterGames(
+      myMasterGames: MutableList<GameModel>,
+      result: MutableList<IFlexible<*>>) {
+    if (myMasterGames.isNotEmpty()) {
+      result.add(SubHeaderViewModel(StringUtils.getStringById(string.continue_lead_the_game)))
+      for ((index, myMasterGame) in myMasterGames.withIndex()) {
+        result.add(TwoLineWithIdViewModel(myMasterGame.id, myMasterGame.name,
+            getMasterSecondaryText(myMasterGame)))
+        addDivider(index, myMasterGames, result)
+      }
+    }
+  }
+
+  private fun fillMyGames(
+      myGames: MutableList<GameModel>,
+      result: MutableList<IFlexible<*>>) {
+    if (myGames.isNotEmpty()) {
+      result.add(SubHeaderViewModel(StringUtils.getStringById(string.continue_play_the_game)))
+      for ((index, myGame) in myGames.withIndex()) {
+        result.add(TwoLineWithIdViewModel(myGame.id, myGame.name,
+            getSecondaryText(myGame)))
+        addDivider(index, myGames, result)
+      }
+    }
+  }
+
+  private fun addDivider(index: Int,
+      games: MutableList<GameModel>,
+      result: MutableList<IFlexible<*>>) {
+    val divider: IFlexible<*> = if (index != games.lastIndex) {
+      CommonDividerViewModel(result.size)
+    } else {
+      ShadowDividerViewModel(result.size)
+    }
+    result.add(divider)
   }
 
   private fun getSecondaryText(gameModel: GameModel): String {
