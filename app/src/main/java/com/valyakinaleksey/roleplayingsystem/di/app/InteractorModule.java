@@ -134,8 +134,8 @@ import dagger.Provides;
     return new LeaveGameUseCase();
   }
 
-  @Provides @Singleton MyGamesInteractor provideMyGamesInteractor() {
-    return new MyGamesUsecase();
+  @Provides @Singleton MyGamesInteractor provideMyGamesInteractor(GameRepository gamesRepository) {
+    return new MyGamesUsecase(gamesRepository);
   }
 }
       

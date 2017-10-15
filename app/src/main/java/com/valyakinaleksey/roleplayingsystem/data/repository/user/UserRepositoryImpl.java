@@ -18,13 +18,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import rx.Observable;
 import rx.Subscription;
+import rx.subscriptions.Subscriptions;
 import timber.log.Timber;
 
 import static com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeChildEvent;
 
 public class UserRepositoryImpl implements UserRepository {
   private ConcurrentHashMap<String, User> stringUserConcurrentHashMap;
-  private Subscription subscription;
+  private Subscription subscription = Subscriptions.unsubscribed();
 
   public UserRepositoryImpl() {
     stringUserConcurrentHashMap = new ConcurrentHashMap<>();
@@ -110,14 +111,15 @@ public class UserRepositoryImpl implements UserRepository {
   @Override public Observable<List<User>> getUserByGameId(String id) {
     DatabaseReference databaseReference =
         FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.GAMES_IN_USERS).child(id);
-    return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(databaseReference).map(dataSnapshot -> {
-      List<User> users = new ArrayList<>();
-      for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-        UserInGameModel value = snapshot.getValue(UserInGameModel.class);
-        users.add(stringUserConcurrentHashMap.get(value.getUid()));
-      }
-      return users;
-    });
+    return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(databaseReference)
+        .map(dataSnapshot -> {
+          List<User> users = new ArrayList<>();
+          for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            UserInGameModel value = snapshot.getValue(UserInGameModel.class);
+            users.add(stringUserConcurrentHashMap.get(value.getUid()));
+          }
+          return users;
+        });
   }
 
   @Override public Observable<RxFirebaseChildEvent<DataSnapshot>> observeUsersInGame(String id) {

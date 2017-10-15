@@ -11,6 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import java.util.List;
 
@@ -46,8 +47,13 @@ public class GameCharacterListItemWithUser extends
       super.bind(gameCharacterListItemWithUser, gamesCharactersPresenter);
       User user = gameCharacterListItemWithUser.getUser();
       userName.setText(user.getName());
-      userDescription.setText("Участвовал во многих играх");
+      userDescription.setText(getUserDescription(user));
       ImageUtils.loadAvatar(userAvatar, user);
+    }
+
+    private CharSequence getUserDescription(User user) {
+      return StringUtils.getStringById(R.string.participated_in) + " " + StringUtils.getPluralById(
+          R.plurals.games_count_in, user.getCountOfGamesPlayed() + user.getCountOfGamesMastered());
     }
   }
 

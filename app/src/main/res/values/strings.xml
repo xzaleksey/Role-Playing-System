@@ -81,5 +81,7 @@
   <string name="continue_lead_the_game">Continue lead game</string>
   <string name="continue_play_the_game">Continue play game</string>
   <string name="started">Started</string>
+  <string name="participated_in">Took part in</string>
+  <string name="completed_games">Completed games</string>
 
 </resources>

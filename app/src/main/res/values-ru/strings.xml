@@ -69,5 +69,7 @@
   <string name="continue_lead_the_game">Продолжить вести игру</string>
   <string name="continue_play_the_game">Продолжить играть</string>
   <string name="started">Начата</string>
+  <string name="participated_in">Участвовал в</string>
+  <string name="completed_games">Завершенные игры</string>
 
 </resources>

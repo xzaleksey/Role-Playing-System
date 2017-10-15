@@ -8,6 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.core.flexible.CommonDividerViewMode
 import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.utils.DateFormats
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
@@ -17,11 +18,10 @@ import org.joda.time.DateTime
 import rx.Observable
 import rx.functions.Func2
 
-class MyGamesUsecase : MyGamesInteractor {
+class MyGamesUsecase(private val gamesRepository: GameRepository) : MyGamesInteractor {
   private val gamesInUsersQuery: Query = FireBaseUtils.getTableReference(
       FireBaseUtils.GAMES_IN_USERS)
       .child(FireBaseUtils.getCurrentUserId())
-  private val gamesQuery: Query = FireBaseUtils.getTableReference(FireBaseUtils.GAMES)
 
   override fun getMyGamesObservable(): Observable<MutableList<IFlexible<*>>> {
     return Observable.combineLatest(getMyGameIds(), getMyGames(),
@@ -29,9 +29,12 @@ class MyGamesUsecase : MyGamesInteractor {
           val currentUserId = FireBaseUtils.getCurrentUserId()
           val myGames: MutableList<GameModel> = mutableListOf()
           val myMasterGames: MutableList<GameModel> = mutableListOf()
+          val finishedGames: MutableList<GameModel> = mutableListOf()
           for (id in ids) {
             gameModels[id]?.let { gameModel ->
-              if (gameModel.masterId == currentUserId) {
+              if (gameModel.isFinished) {
+                finishedGames.add(gameModel)
+              } else if (gameModel.masterId == currentUserId) {
                 myMasterGames.add(gameModel)
               } else {
                 myGames.add(gameModel)
@@ -40,15 +43,18 @@ class MyGamesUsecase : MyGamesInteractor {
           }
 
 
-          return@Func2 getFilledModel(myMasterGames, myGames)
+          return@Func2 getFilledModel(myMasterGames, myGames, finishedGames)
         }).onBackpressureLatest()
   }
 
-  private fun getFilledModel(myMasterGames: MutableList<GameModel>,
-      myGames: MutableList<GameModel>): MutableList<IFlexible<*>> {
+  private fun getFilledModel(
+      myMasterGames: MutableList<GameModel>,
+      myGames: MutableList<GameModel>,
+      finishedGames: MutableList<GameModel>): MutableList<IFlexible<*>> {
     val result = mutableListOf<IFlexible<*>>()
     fillMasterGames(myMasterGames, result)
     fillMyGames(myGames, result)
+    fillFinishedGames(finishedGames, result)
     return result
   }
 
@@ -78,6 +84,18 @@ class MyGamesUsecase : MyGamesInteractor {
     }
   }
 
+  private fun fillFinishedGames(finishedGames: MutableList<GameModel>,
+      result: MutableList<IFlexible<*>>) {
+    if (finishedGames.isNotEmpty()) {
+      result.add(SubHeaderViewModel(StringUtils.getStringById(string.completed_games)))
+      for ((index, myMasterGame) in finishedGames.withIndex()) {
+        result.add(TwoLineWithIdViewModel(myMasterGame.id, myMasterGame.name,
+            getFinishedSecondaryText(myMasterGame)))
+        addDivider(index, finishedGames, result)
+      }
+    }
+  }
+
   private fun addDivider(index: Int,
       games: MutableList<GameModel>,
       result: MutableList<IFlexible<*>>) {
@@ -94,9 +112,14 @@ class MyGamesUsecase : MyGamesInteractor {
   }
 
   private fun getMasterSecondaryText(
-      myMasterGame: GameModel): String? {
+      myMasterGame: GameModel): String {
     return StringUtils.getStringById(R.string.started) + " " + DateTime(
         myMasterGame.dateCreateLong).toString(DateFormats.dayMonthFull)
+  }
+
+  private fun getFinishedSecondaryText(
+      gameModel: GameModel): String {
+    return getMasterSecondaryText(gameModel)
   }
 
   private fun getMyGameIds(): Observable<MutableList<String>> {
@@ -109,17 +132,8 @@ class MyGamesUsecase : MyGamesInteractor {
     }
   }
 
-  private fun getMyGames(): Observable<MutableMap<String, GameModel>> {
-    return RxFirebaseDatabase.observeValueEvent(gamesQuery).map { dataSnaptshot ->
-      val models = mutableMapOf<String, GameModel>()
-      if (dataSnaptshot.exists()) {
-        dataSnaptshot.children
-            .map { it.getValue(GameModel::class.java)!! }
-            .forEach { models.put(it.id, it) }
-      }
-      return@map models
-    }
-  }
+  private fun getMyGames(): Observable<MutableMap<String, GameModel>> =
+      gamesRepository.observeGames()
 }
 
 
