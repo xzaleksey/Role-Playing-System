@@ -61,10 +61,10 @@ public class GameRepositoryImpl implements GameRepository {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                   GameModel value = snapshot.getValue(GameModel.class);
                   result.put(value.getId(), value);
-                  synchronized (this) {
-                    gamesMap = result;
-                    subject.onNext(gamesMap);
-                  }
+                }
+                synchronized (this) {
+                  gamesMap = result;
+                  subject.onNext(gamesMap);
                 }
               }
             }, throwable -> Timber.e(throwable, "games error"));

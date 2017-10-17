@@ -6,9 +6,11 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.TwoLineWithIdViewHolder;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import java.io.Serializable;
 import java.util.List;
 
-public class TwoLineWithIdViewModel extends AbstractFlexibleItem<TwoLineWithIdViewHolder> {
+public class TwoLineWithIdViewModel extends AbstractFlexibleItem<TwoLineWithIdViewHolder>
+    implements Serializable {
   private String id;
   private String title;
   private String secondaryText;

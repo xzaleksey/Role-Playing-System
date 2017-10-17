@@ -124,7 +124,7 @@ dependencies {
 
 
   compile 'com.jakewharton:butterknife:8.8.1'
-  apt 'com.jakewharton:butterknife-compiler:8.8.1'
+//  apt 'com.jakewharton:butterknife-compiler:8.8.1'
   kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
   // Dagger 2
@@ -132,7 +132,7 @@ dependencies {
   compile "com.google.dagger:dagger-android-support:2.11"
   apt 'com.google.dagger:dagger-compiler:2.11'
   kapt 'com.google.dagger:dagger-compiler:2.11'
-  apt 'com.github.lukaspili.autodagger2:autodagger2-compiler:1.1'
+//  apt 'com.github.lukaspili.autodagger2:autodagger2-compiler:1.1'
   compile 'com.github.lukaspili.autodagger2:autodagger2:1.1'
   provided 'org.glassfish:javax.annotation:10.0-b28'
 

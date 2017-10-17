@@ -6,9 +6,11 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.SubheaderViewHolder;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import java.io.Serializable;
 import java.util.List;
 
-public class SubHeaderViewModel extends AbstractFlexibleItem<SubheaderViewHolder> {
+public class SubHeaderViewModel extends AbstractFlexibleItem<SubheaderViewHolder> implements
+    Serializable {
   private String title;
 
   public SubHeaderViewModel() {
