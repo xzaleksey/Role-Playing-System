@@ -65,7 +65,8 @@ public class GamesListFragment
     layoutManager.setReverseLayout(true);
     layoutManager.setStackFromEnd(true);
     setupFabButton();
-    flexibleAdapter = new FlexibleAdapter<>(Collections.emptyList());
+    flexibleAdapter =
+        new FlexibleAdapter<>(data == null ? Collections.emptyList() : data.getItems());
     flexibleAdapter.mItemClickListener = new FlexibleAdapter.OnItemClickListener() {
       @Override public boolean onItemClick(int position) {
         return getComponent().getPresenter().onItemClick(flexibleAdapter.getItem(position));

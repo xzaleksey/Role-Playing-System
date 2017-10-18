@@ -24,14 +24,15 @@ public class GameListUsecase implements GameListInteractor {
 
   @Override public Observable<List<IFlexible<?>>> observeGameViewModels() {
     return gameRepository.observeGames()
-        .zipWith(userRepository.getUsersMap(), (stringGameModelMap, stringUserMap) -> {
+        .concatMap(stringGameModelMap -> userRepository.getUsersMap().map(stringUserMap -> {
           List<IFlexible<?>> gameListItemViewModels = new ArrayList<>();
           for (GameModel gameModel : stringGameModelMap.values()) {
             gameListItemViewModels.add(
                 new GameListItemViewModel(gameModel, getPhotoUrl(stringUserMap, gameModel)));
           }
           return gameListItemViewModels;
-        });
+        }))
+        .onBackpressureLatest();
   }
 
   private String getPhotoUrl(Map<String, User> stringUserMap, GameModel gameModel) {

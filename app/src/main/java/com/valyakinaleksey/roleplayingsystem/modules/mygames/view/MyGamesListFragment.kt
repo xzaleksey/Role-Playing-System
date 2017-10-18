@@ -48,7 +48,7 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
   }
 
   private fun setupRecyclerView() {
-    flexibleAdapter = FlexibleAdapter(mutableListOf())
+    flexibleAdapter = FlexibleAdapter(data?.items ?: mutableListOf())
     flexibleAdapter.mItemClickListener = FlexibleAdapter.OnItemClickListener { pos ->
       val item = flexibleAdapter.getItem(pos)
       component.presenter.onItemClicked(item)

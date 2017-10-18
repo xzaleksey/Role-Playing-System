@@ -38,7 +38,7 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
     private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
     private val parentPresenter: ParentPresenter) : BasePresenter<GamesListView, GamesListViewViewModel>(), GamesListPresenter, RestorablePresenter<GamesListViewViewModel> {
 
-  override fun initNewViewModel(arguments: Bundle): GamesListViewViewModel {
+  override fun initNewViewModel(arguments: Bundle?): GamesListViewViewModel {
     val gamesListViewModel = GamesListViewViewModel()
     gamesListViewModel.toolbarTitle = RpsApp.app().getString(R.string.list_of_games)
     return gamesListViewModel
