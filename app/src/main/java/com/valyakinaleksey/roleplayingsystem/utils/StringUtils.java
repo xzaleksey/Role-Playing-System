@@ -32,5 +32,9 @@ public class StringUtils {
   public static boolean isEmpty(CharSequence text) {
     return text == null || text.length() == 0;
   }
+
+  public static boolean areEqual(String s, String s1) {
+    return s == null ? s1 == null : s.equals(s1);
+  }
 }
       

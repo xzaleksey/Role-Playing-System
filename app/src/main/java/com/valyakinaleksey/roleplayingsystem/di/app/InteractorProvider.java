@@ -18,6 +18,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamec
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.interactor.MapsInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.interactor.MasterLogInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.GameListInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 
 public interface InteractorProvider {
@@ -58,5 +59,7 @@ public interface InteractorProvider {
   LeaveGameInteractor getLeaveGameInteractor();
 
   MyGamesInteractor getMygamesInteractor();
+
+  GameListInteractor getGameListInteractor();
 }
       

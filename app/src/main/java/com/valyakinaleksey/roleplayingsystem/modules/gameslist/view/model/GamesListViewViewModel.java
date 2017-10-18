@@ -2,35 +2,35 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.google.firebase.database.Query;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasCreateGameViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasPasswordViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
-
+import eu.davidea.flexibleadapter.items.IFlexible;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 public class GamesListViewViewModel extends BaseRequestUpdateViewModel
     implements RequestUpdateViewModel, Parcelable, Serializable, HasPasswordViewModel,
     HasCreateGameViewModel {
 
-  private transient Query query;
   private CreateGameDialogViewModel createGameDialogViewModel;
   private PasswordDialogViewModel passwordDialogViewModel;
   private String toolbarTitle;
+  private transient List<IFlexible<?>> items = Collections.emptyList();
   private int gamesCount;
 
   public GamesListViewViewModel() {
     setNeedUpdate(true);
   }
 
-  public Query getQuery() {
-    return query;
+  public List<IFlexible<?>> getItems() {
+    return items;
   }
 
-  public void setQuery(Query query) {
-    this.query = query;
+  public void setItems(List<IFlexible<?>> items) {
+    this.items = items;
   }
 
   public int getGamesCount() {
@@ -87,13 +87,14 @@ public class GamesListViewViewModel extends BaseRequestUpdateViewModel
     this.gamesCount = in.readInt();
   }
 
-  public static final Creator<GamesListViewViewModel> CREATOR = new Creator<GamesListViewViewModel>() {
-    @Override public GamesListViewViewModel createFromParcel(Parcel source) {
-      return new GamesListViewViewModel(source);
-    }
+  public static final Creator<GamesListViewViewModel> CREATOR =
+      new Creator<GamesListViewViewModel>() {
+        @Override public GamesListViewViewModel createFromParcel(Parcel source) {
+          return new GamesListViewViewModel(source);
+        }
 
-    @Override public GamesListViewViewModel[] newArray(int size) {
-      return new GamesListViewViewModel[size];
-    }
-  };
+        @Override public GamesListViewViewModel[] newArray(int size) {
+          return new GamesListViewViewModel[size];
+        }
+      };
 }

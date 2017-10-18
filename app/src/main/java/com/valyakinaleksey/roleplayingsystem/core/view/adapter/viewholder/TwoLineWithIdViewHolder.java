@@ -7,8 +7,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.viewholders.FlexibleViewHolder;
 
 public class TwoLineWithIdViewHolder extends FlexibleViewHolder {
-  TextView tvTitle;
-  TextView tvSecondary;
+  private TextView tvTitle;
+  private TextView tvSecondary;
 
   public TwoLineWithIdViewHolder(View itemView, FlexibleAdapter flexibleAdapter) {
     super(itemView, flexibleAdapter);

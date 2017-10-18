@@ -41,6 +41,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maste
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.interactor.MasterLogUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.GameListInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.GameListUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
@@ -133,7 +135,8 @@ import dagger.Provides;
       CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
       LeaveGameInteractor leaveGameInteractor, OpenGameInteractor openGameInteractor) {
     return new GameUsecase(finishGameInteractor, deleteGameInteractor, observeGameInteractor,
-        observeUsersInGameInteractor, checkUserJoinedGameInteractor, leaveGameInteractor, openGameInteractor);
+        observeUsersInGameInteractor, checkUserJoinedGameInteractor, leaveGameInteractor,
+        openGameInteractor);
   }
 
   @Provides @Singleton LeaveGameInteractor provideLeaveGameInteractor() {
@@ -142,6 +145,11 @@ import dagger.Provides;
 
   @Provides @Singleton MyGamesInteractor provideMyGamesInteractor(GameRepository gamesRepository) {
     return new MyGamesUsecase(gamesRepository);
+  }
+
+  @Provides @Singleton GameListInteractor provideGamesListInteractor(GameRepository gamesRepository,
+      UserRepository userRepostiory) {
+    return new GameListUsecase(userRepostiory, gamesRepository);
   }
 }
       

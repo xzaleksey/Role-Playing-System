@@ -11,6 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.state.
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
 
+import eu.davidea.flexibleadapter.items.IFlexible;
 import javax.inject.Inject;
 
 @PerFragmentScope public class GamesListCommunicationBus extends
@@ -42,16 +43,16 @@ import javax.inject.Inject;
     presenter.navigateToGameScreen(context, model);
   }
 
+  @Override public boolean onItemClick(IFlexible<?> item) {
+    return presenter.onItemClick(item);
+  }
+
   @Override public void checkPassword(Context context, GameModel model) {
     presenter.checkPassword(context, model);
   }
 
   @Override public void validatePassword(Context context, String s, GameModel gameModel) {
     presenter.validatePassword(context, s, gameModel);
-  }
-
-  @Override public UserGetInteractor getValue() {
-    return presenter.getValue();
   }
 
   @Override public void onGameCreated() {

@@ -52,7 +52,7 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
   }
 
   override fun createGame(gameModel: GameModel) {
-    createNewGame(gameModel, view, createNewGameInteractor)
+    compositeSubscription.add(createNewGame(gameModel, view, createNewGameInteractor))
   }
 
   override fun loadComplete() {

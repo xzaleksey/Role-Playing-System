@@ -15,9 +15,6 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameListAdapter;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.adapter.GameViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListModule;
@@ -26,6 +23,9 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragm
 import com.valyakinaleksey.roleplayingsystem.utils.DialogExtensionsKt;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
+import java.util.Collections;
 
 public class GamesListFragment
     extends AbsButterLceFragment<GamesListComponent, GamesListViewViewModel, GamesListView>
@@ -38,7 +38,7 @@ public class GamesListFragment
   @BindView(R.id.fab) FloatingActionButton fab;
   @BindView(R.id.tv_games_count) TextView tvGamesGount;
 
-  private GameListAdapter gameListAdapter;
+  private FlexibleAdapter<IFlexible<?>> flexibleAdapter;
   private MaterialDialog dialog;
 
   public static GamesListFragment newInstance(Bundle args) {
@@ -65,9 +65,16 @@ public class GamesListFragment
     layoutManager.setReverseLayout(true);
     layoutManager.setStackFromEnd(true);
     setupFabButton();
+    flexibleAdapter = new FlexibleAdapter<>(Collections.emptyList());
+    flexibleAdapter.mItemClickListener = new FlexibleAdapter.OnItemClickListener() {
+      @Override public boolean onItemClick(int position) {
+        return getComponent().getPresenter().onItemClick(flexibleAdapter.getItem(position));
+      }
+    };
     recyclerView.addOnScrollListener(new HideFablListener(fab));
     recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
         ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
+    recyclerView.setAdapter(flexibleAdapter);
   }
 
   @Override public void loadData() {
@@ -77,22 +84,6 @@ public class GamesListFragment
   @Override public void showContent() {
     super.showContent();
     ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
-    if (gameListAdapter == null) {
-      gameListAdapter =
-          new GameListAdapter(GameModel.class, R.layout.games_list_item, GameViewHolder.class,
-              data.getQuery(), getComponent().getPresenter());
-      gameListAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-        @Override public void onItemRangeInserted(int positionStart, int itemCount) {
-          super.onItemRangeInserted(positionStart, itemCount);
-          if (positionStart == 0) {
-            getComponent().getPresenter().loadComplete();
-          }
-        }
-      });
-    }
-    if (recyclerView.getAdapter() == null) {
-      recyclerView.setAdapter(gameListAdapter);
-    }
     if (data.getCreateGameDialogViewModel() != null && (dialog == null || !dialog.isShowing())) {
       showCreateGameDialog();
     }
@@ -100,13 +91,7 @@ public class GamesListFragment
       showPasswordDialog();
     }
     updateGamesCount();
-  }
-
-  @Override public void onDestroy() {
-    if (gameListAdapter != null) {
-      gameListAdapter.cleanup();
-    }
-    super.onDestroy();
+    flexibleAdapter.updateDataSet(data.getItems(), true);
   }
 
   @Override protected int getContentResId() {
