@@ -3,14 +3,20 @@ package com.valyakinaleksey.roleplayingsystem.modules.gameslist.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -18,7 +24,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListModule;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.DialogExtensionsKt;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
@@ -26,9 +32,11 @@ import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablL
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
+import timber.log.Timber;
 
 public class GamesListFragment
-    extends AbsButterLceFragment<GamesListComponent, GamesListViewViewModel, GamesListView>
+    extends AbsButterLceFragment<GamesListComponent, GamesListViewModel, GamesListView>
     implements GamesListView {
 
   public static final String TAG = GamesListFragment.class.getSimpleName();
@@ -40,6 +48,7 @@ public class GamesListFragment
 
   private FlexibleAdapter<IFlexible<?>> flexibleAdapter;
   private MaterialDialog dialog;
+  private SearchView searchView;
 
   public static GamesListFragment newInstance(Bundle args) {
     return new GamesListFragment();
@@ -56,6 +65,31 @@ public class GamesListFragment
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getComponent().inject(this);
+    setHasOptionsMenu(true);
+  }
+
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
+    inflater.inflate(R.menu.games_list_menu, menu);
+    MenuItem item = menu.findItem(R.id.action_search);
+    item.setShowAsAction(
+        MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    if (searchView == null) {
+      initSearchView();
+    }
+    item.setActionView(searchView);
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    compositeSubscription.add(RxSearchView.queryTextChangeEvents(searchView)
+        .throttleLast(100, TimeUnit.MILLISECONDS)
+        .debounce(100, TimeUnit.MILLISECONDS)
+        .subscribe(searchViewQueryTextEvent -> {
+          Timber.d("new query " + searchViewQueryTextEvent.queryText().toString());
+          getComponent().getPresenter()
+              .onSearchQueryChanged(searchViewQueryTextEvent.queryText().toString());
+        }));
   }
 
   @Override public void setupViews(View view) {
@@ -65,6 +99,7 @@ public class GamesListFragment
     layoutManager.setReverseLayout(true);
     layoutManager.setStackFromEnd(true);
     setupFabButton();
+    initSearchView();
     flexibleAdapter =
         new FlexibleAdapter<>(data == null ? Collections.emptyList() : data.getItems());
     flexibleAdapter.mItemClickListener = new FlexibleAdapter.OnItemClickListener() {
@@ -76,6 +111,11 @@ public class GamesListFragment
     recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
         ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
     recyclerView.setAdapter(flexibleAdapter);
+  }
+
+  private void initSearchView() {
+    searchView = new SearchView(
+        ((AppCompatActivity) getActivity()).getSupportActionBar().getThemedContext());
   }
 
   @Override public void loadData() {

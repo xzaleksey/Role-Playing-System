@@ -44,14 +44,12 @@ public class GameListItemViewModel extends AbstractFlexibleItem<GameListViewHold
 
   @Override public boolean equals(Object o) {
     return this == o
-        || (o instanceof GameListItemViewModel
-        && ((GameListItemViewModel) o).gameModel.getId()
-        .equals(gameModel.getId())
-        && ((GameListItemViewModel) o).photoUrl.equals(photoUrl)
-        && ((GameListItemViewModel) o).gameModel.getName().equals(gameModel.getName()))
+        || (o instanceof GameListItemViewModel && ((GameListItemViewModel) o).gameModel.getId()
+        .equals(gameModel.getId()) && StringUtils.areEqual(((GameListItemViewModel) o).photoUrl,
+        photoUrl) && ((GameListItemViewModel) o).gameModel.getName().equals(gameModel.getName()))
         && ((GameListItemViewModel) o).gameModel.getMasterName().equals(gameModel.getMasterName())
         && StringUtils.areEqual(((GameListItemViewModel) o).gameModel.getPassword(),
-        (gameModel.getMasterName()));
+        (gameModel.getPassword()));
   }
 
   @Override public int hashCode() {

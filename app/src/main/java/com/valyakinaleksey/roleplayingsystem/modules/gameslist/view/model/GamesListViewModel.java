@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasCreateGameViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasPasswordViewModel;
+import com.valyakinaleksey.roleplayingsystem.core.model.FilterModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -11,7 +12,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class GamesListViewViewModel extends BaseRequestUpdateViewModel
+public class GamesListViewModel extends BaseRequestUpdateViewModel
     implements RequestUpdateViewModel, Parcelable, Serializable, HasPasswordViewModel,
     HasCreateGameViewModel {
 
@@ -20,13 +21,18 @@ public class GamesListViewViewModel extends BaseRequestUpdateViewModel
   private String toolbarTitle;
   private transient List<IFlexible<?>> items = Collections.emptyList();
   private int gamesCount;
+  private FilterModel filterModel = new FilterModel();
 
-  public GamesListViewViewModel() {
+  public GamesListViewModel() {
     setNeedUpdate(true);
   }
 
   public List<IFlexible<?>> getItems() {
     return items;
+  }
+
+  public FilterModel getFilterModel() {
+    return filterModel;
   }
 
   public void setItems(List<IFlexible<?>> items) {
@@ -75,9 +81,10 @@ public class GamesListViewViewModel extends BaseRequestUpdateViewModel
     dest.writeParcelable(this.passwordDialogViewModel, flags);
     dest.writeString(this.toolbarTitle);
     dest.writeInt(this.gamesCount);
+    dest.writeSerializable(this.filterModel);
   }
 
-  protected GamesListViewViewModel(Parcel in) {
+  protected GamesListViewModel(Parcel in) {
     super(in);
     this.createGameDialogViewModel =
         in.readParcelable(CreateGameDialogViewModel.class.getClassLoader());
@@ -85,16 +92,16 @@ public class GamesListViewViewModel extends BaseRequestUpdateViewModel
         in.readParcelable(PasswordDialogViewModel.class.getClassLoader());
     this.toolbarTitle = in.readString();
     this.gamesCount = in.readInt();
+    this.filterModel = (FilterModel) in.readSerializable();
   }
 
-  public static final Creator<GamesListViewViewModel> CREATOR =
-      new Creator<GamesListViewViewModel>() {
-        @Override public GamesListViewViewModel createFromParcel(Parcel source) {
-          return new GamesListViewViewModel(source);
-        }
+  public static final Creator<GamesListViewModel> CREATOR = new Creator<GamesListViewModel>() {
+    @Override public GamesListViewModel createFromParcel(Parcel source) {
+      return new GamesListViewModel(source);
+    }
 
-        @Override public GamesListViewViewModel[] newArray(int size) {
-          return new GamesListViewViewModel[size];
-        }
-      };
+    @Override public GamesListViewModel[] newArray(int size) {
+      return new GamesListViewModel[size];
+    }
+  };
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import com.crashlytics.android.Crashlytics
 import com.valyakinaleksey.roleplayingsystem.R
+import com.valyakinaleksey.roleplayingsystem.core.model.FilterModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
@@ -18,7 +19,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
@@ -30,21 +31,24 @@ import com.valyakinaleksey.roleplayingsystem.utils.navigateToGameDescriptionScre
 import com.valyakinaleksey.roleplayingsystem.utils.navigateToGameScreen
 import eu.davidea.flexibleadapter.items.IFlexible
 import rx.Observable
+import rx.subjects.BehaviorSubject
 
 @PerFragmentScope
 class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameInteractor,
     private val gamesListInteractor: GameListInteractor,
     private val validatePasswordInteractor: ValidatePasswordInteractor,
     private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
-    private val parentPresenter: ParentPresenter) : BasePresenter<GamesListView, GamesListViewViewModel>(), GamesListPresenter, RestorablePresenter<GamesListViewViewModel> {
+    private val parentPresenter: ParentPresenter) : BasePresenter<GamesListView, GamesListViewModel>(), GamesListPresenter, RestorablePresenter<GamesListViewModel> {
 
-  override fun initNewViewModel(arguments: Bundle?): GamesListViewViewModel {
-    val gamesListViewModel = GamesListViewViewModel()
+  private val filterSubject: BehaviorSubject<FilterModel> = BehaviorSubject.create(FilterModel())
+
+  override fun initNewViewModel(arguments: Bundle?): GamesListViewModel {
+    val gamesListViewModel = GamesListViewModel()
     gamesListViewModel.toolbarTitle = RpsApp.app().getString(R.string.list_of_games)
     return gamesListViewModel
   }
 
-  override fun restoreViewModel(viewModel: GamesListViewViewModel) {
+  override fun restoreViewModel(viewModel: GamesListViewModel) {
     super.restoreViewModel(viewModel)
     viewModel.setNeedUpdate(true)
   }
@@ -116,7 +120,7 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
             }, { Crashlytics.logException(it) }))
 
     compositeSubscription.add(
-        gamesListInteractor.observeGameViewModels()
+        gamesListInteractor.observeGameViewModelsWithFilter(filterSubject)
             .compose(RxTransformers.applySchedulers())
             .subscribe({ items ->
               view.hideLoading()
@@ -143,4 +147,10 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
     }
     return true
   }
+
+  override fun onSearchQueryChanged(queryText: String) {
+    viewModel.filterModel.query = queryText
+    filterSubject.onNext(viewModel.filterModel.copy())
+  }
+
 }

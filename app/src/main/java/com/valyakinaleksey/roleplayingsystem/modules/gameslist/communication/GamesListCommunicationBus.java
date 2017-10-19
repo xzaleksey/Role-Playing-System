@@ -4,9 +4,8 @@ import android.content.Context;
 
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
-import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.state.GamesListViewState;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
@@ -15,7 +14,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import javax.inject.Inject;
 
 @PerFragmentScope public class GamesListCommunicationBus extends
-    SelfRestorableNavigationLceCommunicationBus<GamesListViewViewModel, GamesListView, GamesListPresenter, GamesListViewState>
+    SelfRestorableNavigationLceCommunicationBus<GamesListViewModel, GamesListView, GamesListPresenter, GamesListViewState>
     implements GamesListPresenter, GamesListView {
 
   @Override public void attachView(GamesListView view) {
@@ -45,6 +44,10 @@ import javax.inject.Inject;
 
   @Override public boolean onItemClick(IFlexible<?> item) {
     return presenter.onItemClick(item);
+  }
+
+  @Override public void onSearchQueryChanged(String queryText) {
+    presenter.onSearchQueryChanged(queryText);
   }
 
   @Override public void checkPassword(Context context, GameModel model) {
