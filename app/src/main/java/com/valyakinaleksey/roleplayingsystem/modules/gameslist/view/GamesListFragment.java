@@ -53,6 +53,7 @@ public class GamesListFragment
   private FlexibleAdapter<IFlexible<?>> flexibleAdapter;
   private MaterialDialog dialog;
   private SearchView searchView;
+  private MenuItem searchViewItem;
 
   public static GamesListFragment newInstance(Bundle args) {
     return new GamesListFragment();
@@ -75,26 +76,35 @@ public class GamesListFragment
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
     inflater.inflate(R.menu.games_list_menu, menu);
-    MenuItem item = menu.findItem(R.id.action_search);
-    item.setShowAsAction(
+    searchViewItem = menu.findItem(R.id.action_search);
+    searchViewItem.setShowAsAction(
         MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
-    if (searchView == null) {
-      initSearchView();
-    }
-    item.setActionView(searchView);
+    initSearchView();
+    searchViewItem.setActionView(searchView);
   }
 
   @Override public void onStart() {
     super.onStart();
-    compositeSubscription.add(RxSearchView.queryTextChangeEvents(searchView)
-        .debounce(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
-        .throttleLast(THROTTLE_INTERVAL, TimeUnit.MILLISECONDS)
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(searchViewQueryTextEvent -> {
-          Timber.d("new query " + searchViewQueryTextEvent.queryText().toString());
-          getComponent().getPresenter()
-              .onSearchQueryChanged(searchViewQueryTextEvent.queryText().toString());
-        }));
+    searchView.post(() -> {
+      if (searchView != null) {
+        if (searchViewItem != null && data != null) {
+          String query = data.getFilterModel().getQuery();
+          if (!StringUtils.isEmpty(query)) {
+            searchViewItem.expandActionView();
+            searchView.setQuery(query, false);
+          }
+        }
+        compositeSubscription.add(RxSearchView.queryTextChangeEvents(searchView)
+            .debounce(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
+            .throttleLast(THROTTLE_INTERVAL, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(searchViewQueryTextEvent -> {
+              Timber.d("new query " + searchViewQueryTextEvent.queryText().toString());
+              getComponent().getPresenter()
+                  .onSearchQueryChanged(searchViewQueryTextEvent.queryText().toString());
+            }));
+      }
+    });
   }
 
   @Override public void setupViews(View view) {
@@ -116,6 +126,9 @@ public class GamesListFragment
   }
 
   private void initSearchView() {
+    if (searchView != null) {
+      return;
+    }
     searchView = new SearchView(
         ((AppCompatActivity) getActivity()).getSupportActionBar().getThemedContext());
   }
@@ -184,6 +197,7 @@ public class GamesListFragment
 
   @Override public void onDestroyView() {
     dialog = null;
+    searchView = null;
     super.onDestroyView();
   }
 
