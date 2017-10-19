@@ -126,11 +126,7 @@ public class GamesListFragment
     restoreDialogs();
     updateGamesCount();
     List<IFlexible<?>> items = data.getItems();
-    boolean shouldAnimate = true;
-    if (items.isEmpty()) {
-      shouldAnimate = false;
-    }
-    flexibleAdapter.updateDataSet(items, shouldAnimate);
+    flexibleAdapter.updateDataSet(items, true);
   }
 
   private void restoreDialogs() {
