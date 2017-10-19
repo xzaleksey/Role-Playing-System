@@ -1,4 +1,5 @@
 @file:JvmName("DialogExtensionsKt")
+
 package com.valyakinaleksey.roleplayingsystem.utils
 
 import android.content.Context

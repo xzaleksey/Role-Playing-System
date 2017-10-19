@@ -38,14 +38,14 @@ public class GameListUsecase implements GameListInteractor {
         .onBackpressureLatest();
   }
 
-  @Override public Observable<List<IFlexible<?>>> observeGameViewModelsWithFilter(
+  @Override public Observable<GameListResult> observeGameViewModelsWithFilter(
       Observable<FilterModel> filterModelObservable) {
     return Observable.combineLatest(
         gameRepository.observeGames().throttleLast(100, TimeUnit.MILLISECONDS),
         filterModelObservable,
-        new Func2<Map<String, GameModel>, FilterModel, Observable<List<IFlexible<?>>>>() {
+        new Func2<Map<String, GameModel>, FilterModel, Observable<GameListResult>>() {
           @Override
-          public Observable<List<IFlexible<?>>> call(Map<String, GameModel> stringGameModelMap,
+          public Observable<GameListResult> call(Map<String, GameModel> stringGameModelMap,
               FilterModel filterModel) {
             return userRepository.getUsersMap().map(stringUserMap -> {
               List<IFlexible<?>> gameListItemViewModels = new ArrayList<>();
@@ -53,12 +53,14 @@ public class GameListUsecase implements GameListInteractor {
               for (GameModel gameModel : stringGameModelMap.values()) {
                 if (StringUtils.isEmpty(query) || gameModel.getName()
                     .toLowerCase()
+                    .startsWith(query) || gameModel.getMasterName()
+                    .toLowerCase()
                     .startsWith(query)) {
                   gameListItemViewModels.add(
                       new GameListItemViewModel(gameModel, getPhotoUrl(stringUserMap, gameModel)));
                 }
               }
-              return gameListItemViewModels;
+              return new GameListResult(gameListItemViewModels, filterModel);
             });
           }
         }).concatMap(listObservable -> listObservable).onBackpressureLatest();

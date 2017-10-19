@@ -6,4 +6,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesL
 
 public interface GamesListView extends LceView<GamesListViewModel>, CreateGameView {
   void updateGamesCount();
+
+  void scrollToTop();
 }

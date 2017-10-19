@@ -32,6 +32,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablL
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import timber.log.Timber;
 
@@ -94,10 +95,7 @@ public class GamesListFragment
 
   @Override public void setupViews(View view) {
     super.setupViews(view);
-    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
     tvGamesGount.setText(StringUtils.getPluralById(R.plurals.games_count, 0));
-    layoutManager.setReverseLayout(true);
-    layoutManager.setStackFromEnd(true);
     setupFabButton();
     initSearchView();
     flexibleAdapter =
@@ -125,14 +123,23 @@ public class GamesListFragment
   @Override public void showContent() {
     super.showContent();
     ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
+    restoreDialogs();
+    updateGamesCount();
+    List<IFlexible<?>> items = data.getItems();
+    boolean shouldAnimate = true;
+    if (items.isEmpty()) {
+      shouldAnimate = false;
+    }
+    flexibleAdapter.updateDataSet(items, shouldAnimate);
+  }
+
+  private void restoreDialogs() {
     if (data.getCreateGameDialogViewModel() != null && (dialog == null || !dialog.isShowing())) {
       showCreateGameDialog();
     }
     if (data.getPasswordDialogViewModel() != null && (dialog == null || !dialog.isShowing())) {
       showPasswordDialog();
     }
-    updateGamesCount();
-    flexibleAdapter.updateDataSet(data.getItems(), true);
   }
 
   @Override protected int getContentResId() {
@@ -165,6 +172,14 @@ public class GamesListFragment
     } else {
       tvGamesGount.setVisibility(View.GONE);
     }
+  }
+
+  @Override public void scrollToTop() {
+    recyclerView.postDelayed(() -> {
+      if (recyclerView != null) {
+        recyclerView.getLayoutManager().scrollToPosition(0);
+      }
+    }, 50);
   }
 
   @Override public void onDestroyView() {

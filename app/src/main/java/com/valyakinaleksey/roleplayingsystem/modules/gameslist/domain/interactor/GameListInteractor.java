@@ -7,5 +7,5 @@ import rx.Observable;
 
 public interface GameListInteractor {
   Observable<List<IFlexible<?>>> observeGameViewModels();
-  Observable<List<IFlexible<?>>> observeGameViewModelsWithFilter(Observable<FilterModel> filterModelObservable);
+  Observable<GameListResult> observeGameViewModelsWithFilter(Observable<FilterModel> filterModelObservable);
 }

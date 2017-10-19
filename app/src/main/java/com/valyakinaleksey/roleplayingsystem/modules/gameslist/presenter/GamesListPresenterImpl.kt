@@ -122,11 +122,15 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
     compositeSubscription.add(
         gamesListInteractor.observeGameViewModelsWithFilter(filterSubject)
             .compose(RxTransformers.applySchedulers())
-            .subscribe({ items ->
+            .subscribe({ gameListResult ->
               view.hideLoading()
+              val items = gameListResult.items
               viewModel.items = items
               viewModel.gamesCount = items.size
               view.showContent()
+              if (gameListResult.filterModel.isCleared()) {
+                view.scrollToTop()
+              }
             }, { Crashlytics.logException(it) }))
 
   }
@@ -149,7 +153,7 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
   }
 
   override fun onSearchQueryChanged(queryText: String) {
-    viewModel.filterModel.query = queryText
+    viewModel.filterModel.setQuery(queryText)
     filterSubject.onNext(viewModel.filterModel.copy())
   }
 

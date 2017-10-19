@@ -11,10 +11,12 @@ import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
+import com.valyakinaleksey.roleplayingsystem.utils.CollectionExtensions;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import rx.Observable;
 import rx.Subscription;
@@ -58,8 +60,10 @@ public class GameRepositoryImpl implements GameRepository {
             .subscribe(dataSnapshot -> {
               if (dataSnapshot.exists()) {
                 LinkedHashMap<String, GameModel> result = new LinkedHashMap<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                  GameModel value = snapshot.getValue(GameModel.class);
+                List<DataSnapshot> dataSnapshots =
+                    CollectionExtensions.makeList(dataSnapshot.getChildren());
+                for (int i = dataSnapshots.size() - 1; i >= 0; i--) {
+                  GameModel value = dataSnapshots.get(i).getValue(GameModel.class);
                   result.put(value.getId(), value);
                 }
                 synchronized (this) {

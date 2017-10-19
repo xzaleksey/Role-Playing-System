@@ -73,4 +73,8 @@ import javax.inject.Inject;
   @Override public void updateGamesCount() {
     getNavigationResolver().resolveNavigation(GamesListView::updateGamesCount);
   }
+
+  @Override public void scrollToTop() {
+    getNavigationResolver().resolveNavigation(GamesListView::scrollToTop);
+  }
 }
