@@ -34,6 +34,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class GamesListFragment
@@ -41,6 +42,8 @@ public class GamesListFragment
     implements GamesListView {
 
   public static final String TAG = GamesListFragment.class.getSimpleName();
+  public static final int DEBOUNCE_TIMEOUT = 200;
+  public static final int THROTTLE_INTERVAL = 100;
 
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.error_empty_field) String errorEmptyField;
@@ -84,8 +87,9 @@ public class GamesListFragment
   @Override public void onStart() {
     super.onStart();
     compositeSubscription.add(RxSearchView.queryTextChangeEvents(searchView)
-        .throttleLast(100, TimeUnit.MILLISECONDS)
-        .debounce(100, TimeUnit.MILLISECONDS)
+        .debounce(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
+        .throttleLast(THROTTLE_INTERVAL, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(searchViewQueryTextEvent -> {
           Timber.d("new query " + searchViewQueryTextEvent.queryText().toString());
           getComponent().getPresenter()

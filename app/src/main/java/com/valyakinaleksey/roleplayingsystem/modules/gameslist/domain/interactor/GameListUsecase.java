@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import rx.Observable;
-import rx.functions.Func2;
 
 public class GameListUsecase implements GameListInteractor {
 
+  public static final int INTERVAL_DURATION = 100;
   private UserRepository userRepository;
   private GameRepository gameRepository;
 
@@ -41,29 +41,22 @@ public class GameListUsecase implements GameListInteractor {
   @Override public Observable<GameListResult> observeGameViewModelsWithFilter(
       Observable<FilterModel> filterModelObservable) {
     return Observable.combineLatest(
-        gameRepository.observeGames().throttleLast(100, TimeUnit.MILLISECONDS),
-        filterModelObservable,
-        new Func2<Map<String, GameModel>, FilterModel, Observable<GameListResult>>() {
-          @Override
-          public Observable<GameListResult> call(Map<String, GameModel> stringGameModelMap,
-              FilterModel filterModel) {
-            return userRepository.getUsersMap().map(stringUserMap -> {
-              List<IFlexible<?>> gameListItemViewModels = new ArrayList<>();
-              String query = filterModel.getQuery().toLowerCase();
-              for (GameModel gameModel : stringGameModelMap.values()) {
-                if (StringUtils.isEmpty(query) || gameModel.getName()
-                    .toLowerCase()
-                    .startsWith(query) || gameModel.getMasterName()
-                    .toLowerCase()
-                    .startsWith(query)) {
-                  gameListItemViewModels.add(
-                      new GameListItemViewModel(gameModel, getPhotoUrl(stringUserMap, gameModel)));
-                }
-              }
-              return new GameListResult(gameListItemViewModels, filterModel);
-            });
+        gameRepository.observeGames().throttleLast(INTERVAL_DURATION, TimeUnit.MILLISECONDS),
+        filterModelObservable, (stringGameModelMap, filterModel) -> userRepository.getUsersMap().map(stringUserMap -> {
+          List<IFlexible<?>> gameListItemViewModels = new ArrayList<>();
+          String query = filterModel.getQuery().toLowerCase();
+          for (GameModel gameModel : stringGameModelMap.values()) {
+            if (StringUtils.isEmpty(query) || gameModel.getName()
+                .toLowerCase()
+                .startsWith(query) || gameModel.getMasterName()
+                .toLowerCase()
+                .startsWith(query)) {
+              gameListItemViewModels.add(
+                  new GameListItemViewModel(gameModel, getPhotoUrl(stringUserMap, gameModel)));
+            }
           }
-        }).concatMap(listObservable -> listObservable).onBackpressureLatest();
+          return new GameListResult(gameListItemViewModels, filterModel);
+        })).concatMap(listObservable -> listObservable).onBackpressureLatest();
   }
 
   private String getPhotoUrl(Map<String, User> stringUserMap, GameModel gameModel) {
