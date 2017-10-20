@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.data.repository.maps;
+package com.valyakinaleksey.roleplayingsystem.data.repository.game.map;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.kelvinapps.rxfirebase.RxFirebaseStorage;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
@@ -16,21 +17,24 @@ import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import id.zelory.compressor.Compressor;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 import timber.log.Timber;
 
+import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel.PHOTO_URL;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ERROR;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_MAPS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.STATUS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.SUCCESS;
 
-public class MapsRepositoryImpl implements MapsRepository {
+public class FileMapsRepositoryImpl implements FileMapsRepository {
 
   private PathManager pathManager;
   private StorageReference storageReference;
 
-  public MapsRepositoryImpl(PathManager pathManager) {
+  public FileMapsRepositoryImpl(PathManager pathManager) {
     this.pathManager = pathManager;
     storageReference = FirebaseStorage.getInstance().getReference();
   }
@@ -54,33 +58,49 @@ public class MapsRepositoryImpl implements MapsRepository {
         .child(mapId)
         .child(fileUri.getLastPathSegment());
     PublishSubject<Integer> integerPublishSubject = PublishSubject.create();
-    // [END get_child_ref]
 
-    // Upload file to Firebase Storage
     Timber.d("uploadMap:dst:" + photoRef.getPath());
 
-    int notifId = mapId.hashCode();
+    int notificationOd = mapId.hashCode();
     photoRef.putFile(fileUri).addOnProgressListener(taskSnapshot -> {
       Timber.d("uploadMap:inProgress " + (taskSnapshot.getBytesTransferred()
           / taskSnapshot.getTotalByteCount() * 100));
-      NotificationUtils.showProgressNotification(notifId,
+      NotificationUtils.showProgressNotification(notificationOd,
           StringUtils.getStringById(R.string.progress_uploading),
           taskSnapshot.getBytesTransferred(), taskSnapshot.getTotalByteCount());
     }).addOnSuccessListener(taskSnapshot -> {
-      // Upload succeeded
-      Timber.d("uploadMap:onSuccess");
-      NotificationUtils.dismissNotification(notifId);
-      getReference(gameId).child(mapId).child(STATUS).setValue(SUCCESS);
-      integerPublishSubject.onNext(SUCCESS);
+      onSuccess(gameId, mapId, integerPublishSubject, notificationOd, taskSnapshot);
     }).addOnFailureListener(exception -> {
-      // Upload failed
-      Timber.d("uploadMap:onFailed");
-      NotificationUtils.dismissNotification(notifId);
-      getReference(gameId).child(mapId).child(STATUS).setValue(ERROR);
-      integerPublishSubject.onNext(FireBaseUtils.ERROR);
-      Timber.d(exception);
+      onFail(gameId, mapId, integerPublishSubject, notificationOd, exception);
     });
     return integerPublishSubject;
+  }
+
+  private void onFail(String gameId, String mapId, PublishSubject<Integer> integerPublishSubject,
+      int notificationOd, Exception exception) {
+    Timber.d("uploadMap:onFailed");
+    NotificationUtils.dismissNotification(notificationOd);
+    getReference(gameId).child(mapId).child(STATUS).setValue(ERROR);
+    integerPublishSubject.onNext(FireBaseUtils.ERROR);
+    Timber.d(exception);
+  }
+
+  private void onSuccess(String gameId, String mapId, PublishSubject<Integer> integerPublishSubject,
+      int notificationOd, UploadTask.TaskSnapshot taskSnapshot) {
+    Timber.d("uploadMap:onSuccess");
+    NotificationUtils.dismissNotification(notificationOd);
+    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+    String downloadUrlString = StringUtils.EMPTY_STRING;
+    if (downloadUrl != null) {
+      downloadUrlString = downloadUrl.toString();
+    }
+
+    DatabaseReference reference = getReference(gameId).child(mapId);
+    Map<String, Object> childUpdates = new HashMap<>();
+    childUpdates.put(STATUS, SUCCESS);
+    childUpdates.put(PHOTO_URL, downloadUrlString);
+    reference.updateChildren(childUpdates);
+    integerPublishSubject.onNext(SUCCESS);
   }
 
   @Override public Observable<Void> deleteMap(String gameId, String mapId, String fileName) {

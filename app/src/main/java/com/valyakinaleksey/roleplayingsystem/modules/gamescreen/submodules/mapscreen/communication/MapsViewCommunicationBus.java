@@ -1,17 +1,18 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.communication;
 
 import com.kbeanie.multipicker.api.entity.ChosenImage;
-import com.valyakinaleksey.roleplayingsystem.core.proxy.AdapterNotifierCommunicationBus;
+import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter.MapsPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.state.MapsViewState;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import javax.inject.Inject;
 
-@PerFragmentScope public class MapsViewCommunicationBus
-    extends AdapterNotifierCommunicationBus<MapsViewModel, MapsView, MapsPresenter, MapsViewState>
+@PerFragmentScope public class MapsViewCommunicationBus extends
+    SelfRestorableNavigationLceCommunicationBus<MapsViewModel, MapsView, MapsPresenter, MapsViewState>
     implements MapsPresenter, MapsView {
 
   @Override public void attachView(MapsView view) {
@@ -20,10 +21,6 @@ import javax.inject.Inject;
 
   @Inject public MapsViewCommunicationBus(MapsPresenter presenter, MapsViewState viewState) {
     super(presenter, viewState);
-  }
-
-  @Override public void updateView() {
-    getNavigationResolver().resolveNavigation(MapsView::updateView);
   }
 
   @Override public void loadComplete() {
@@ -44,5 +41,9 @@ import javax.inject.Inject;
 
   @Override public void openImage(String path, String fileName) {
     presenter.openImage(path, fileName);
+  }
+
+  @Override public boolean onItemClick(IFlexible<?> item) {
+   return presenter.onItemClick(item);
   }
 }

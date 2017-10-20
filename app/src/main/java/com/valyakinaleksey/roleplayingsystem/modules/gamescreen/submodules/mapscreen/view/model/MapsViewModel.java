@@ -5,26 +5,24 @@ import android.os.Parcelable;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import java.io.Serializable;
-import java.util.List;
 
 public class MapsViewModel extends BaseRequestUpdateViewModel
     implements RequestUpdateViewModel, Parcelable, Serializable {
 
   private GameModel gameModel;
-  private transient List<MapModel> mapModels;
+  private transient MapsListFlexibleModel mapModel;
   private boolean isMaster;
 
   public MapsViewModel() {
   }
 
-  public List<MapModel> getMapModels() {
-    return mapModels;
+  public MapsListFlexibleModel getMapModel() {
+    return mapModel;
   }
 
-  public void setMapModels(List<MapModel> mapModels) {
-    this.mapModels = mapModels;
+  public void setMapModel(MapsListFlexibleModel mapModel) {
+    this.mapModel = mapModel;
   }
 
   public GameModel getGameModel() {
@@ -36,7 +34,7 @@ public class MapsViewModel extends BaseRequestUpdateViewModel
   }
 
   @Override public boolean isUpdatedRequired() {
-    return mapModels == null;
+    return mapModel == null;
   }
 
   public boolean isMaster() {

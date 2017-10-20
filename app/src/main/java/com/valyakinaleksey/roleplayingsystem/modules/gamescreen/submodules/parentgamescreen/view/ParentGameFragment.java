@@ -21,8 +21,10 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.SerializableTuple;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseDialogFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ViewPagerAdapter;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.DaggerParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
@@ -31,7 +33,6 @@ import java.util.ArrayList;
 public class ParentGameFragment
     extends AbsButterLceFragment<ParentGameComponent, ParentGameModel, ParentView>
     implements ParentView, DialogProvider {
-
   public static final String TAG = ParentGameFragment.class.getSimpleName();
   public static final String DELETE_GAME = "delete_game";
   public static final String FINISH_GAME = "finish_game";
@@ -44,6 +45,7 @@ public class ParentGameFragment
 
   private TabLayout tabLayout;
   private ViewPagerAdapter adapter;
+  private String gameId;
 
   public static ParentGameFragment newInstance(Bundle arguments) {
     ParentGameFragment gamesDescriptionFragment = new ParentGameFragment();
@@ -53,6 +55,7 @@ public class ParentGameFragment
 
   @Override @SuppressWarnings("unchecked") protected ParentGameComponent createComponent() {
     return DaggerParentGameComponent.builder()
+        .parentGameModule(new ParentGameModule(gameId))
         .parentFragmentComponent(
             ((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
         .build();
@@ -60,6 +63,9 @@ public class ParentGameFragment
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Bundle arguments = savedInstanceState == null ? getArguments() : savedInstanceState;
+    GameModel gameModel = arguments.getParcelable(GameModel.KEY);
+    gameId = gameModel.getId();
     getComponent().inject(this);
   }
 

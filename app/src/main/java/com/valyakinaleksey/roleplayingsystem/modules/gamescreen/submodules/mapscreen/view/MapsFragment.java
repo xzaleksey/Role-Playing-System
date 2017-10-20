@@ -15,14 +15,17 @@ import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.adapter.MapAdapter;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.adapter.MapViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.DaggerMapsFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.MapsFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.ItemOffsetDecoration;
-import java.util.ArrayList;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
+import java.util.Collections;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -37,7 +40,7 @@ public class MapsFragment
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindView(R.id.fab) FloatingActionButton fab;
   private ImagePicker imagePicker;
-  private MapAdapter mapAdapter;
+  private FlexibleAdapter<IFlexible<?>> flexibleAdapter;
 
   public static MapsFragment newInstance(Bundle arguments) {
     MapsFragment gamesDescriptionFragment = new MapsFragment();
@@ -56,23 +59,28 @@ public class MapsFragment
     super.onCreate(savedInstanceState);
     imagePicker = new ImagePicker(this);
     imagePicker.setImagePickerCallback(getImagePickerCallback());
-    mapAdapter = new MapAdapter(new ArrayList<>(), false, getComponent().getPresenter());
   }
 
   @Override public void setupViews(View view) {
     super.setupViews(view);
     fab.setVisibility(View.GONE);
     fab.setOnClickListener(v -> imagePicker.pickImage());
-    recyclerView.setAdapter(mapAdapter);
     GridLayoutManager gridLayoutManager;
     if (ScreenUtils.getScreenOrientation(getActivity()) == Configuration.ORIENTATION_LANDSCAPE) {
-      gridLayoutManager = new GridLayoutManager(getContext(), MapAdapter.COLUMSN_COUNT_LANDSCAPE);
+      gridLayoutManager =
+          new GridLayoutManager(getContext(), MapViewHolder.COLUMSN_COUNT_LANDSCAPE);
     } else {
-      gridLayoutManager = new GridLayoutManager(getContext(), MapAdapter.COLUMNS_COUNT);
+      gridLayoutManager = new GridLayoutManager(getContext(), MapViewHolder.COLUMNS_COUNT);
     }
+    flexibleAdapter = new FlexibleAdapter<>(Collections.emptyList());
+    flexibleAdapter.mItemClickListener = position -> {
+      return getComponent().getPresenter().onItemClick(flexibleAdapter.getItem(position));
+    };
+
     recyclerView.setLayoutManager(gridLayoutManager);
     recyclerView.addItemDecoration(
         new ItemOffsetDecoration(getContext(), R.dimen.common_margin_between_elements));
+    recyclerView.setAdapter(flexibleAdapter);
   }
 
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -94,26 +102,17 @@ public class MapsFragment
   @Override public void showContent() {
     super.showContent();
     if (data.isMaster()) {
-      mapAdapter.setIsMaster(true);
       fab.setVisibility(View.VISIBLE);
     }
-    mapAdapter.update(data.getMapModels());
+    flexibleAdapter.updateDataSet(data.getMapModel().getMapsViewModel(), true);
   }
 
   @Override public void onResume() {
     super.onResume();
   }
 
-  @Override protected void initSubscriptions() {
-
-  }
-
   @Override protected int getContentResId() {
     return R.layout.fragment_maps;
-  }
-
-  @Override public void updateView() {
-
   }
 
   private ImagePickerCallback getImagePickerCallback() {
@@ -123,24 +122,9 @@ public class MapsFragment
       }
 
       @Override public void onError(String s) {
-
+        BaseError.SNACK.setValue(s);
+        showError(BaseError.SNACK);
       }
     };
-  }
-
-  @Override public void notifyItemInserted(int index) {
-    mapAdapter.notifyItemInserted(index);
-  }
-
-  @Override public void notifyItemChanged(int index) {
-    mapAdapter.notifyItemChanged(index);
-  }
-
-  @Override public void notifyItemRemoved(int index) {
-    mapAdapter.notifyItemRemoved(index);
-  }
-
-  @Override public void notifyItemMoved(int oldIndex, int index) {
-    mapAdapter.notifyItemMoved(oldIndex, index);
   }
 }

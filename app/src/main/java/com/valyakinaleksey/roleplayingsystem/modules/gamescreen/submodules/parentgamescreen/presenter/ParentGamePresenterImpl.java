@@ -41,6 +41,11 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
     return parentGameModel;
   }
 
+  @Override public void onSaveInstanceState(Bundle bundle) {
+    super.onSaveInstanceState(bundle);
+    bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
+  }
+
   @Override public void restoreViewModel(ParentGameModel viewModel) {
     super.restoreViewModel(viewModel);
     initSubscriptions(viewModel.getGameModel());

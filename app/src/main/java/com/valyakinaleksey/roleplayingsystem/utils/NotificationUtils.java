@@ -4,10 +4,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity;
@@ -24,16 +23,17 @@ public class NotificationUtils {
   public static void showProgressNotification(int notifId, String caption, long completedUnits,
       long totalUnits) {
     int percentComplete = 0;
+
     if (totalUnits > 0) {
       percentComplete = (int) (100 * completedUnits / totalUnits);
     }
 
-    android.support.v4.app.NotificationCompat.Builder builder =
-        new android.support.v4.app.NotificationCompat.Builder(RpsApp.app()).setSmallIcon(
-            R.drawable.ic_launcher)
+    NotificationCompat.Builder builder =
+        new NotificationCompat.Builder(RpsApp.app()).setSmallIcon(R.drawable.ic_launcher)
             .setContentTitle(getStringById(R.string.app_name))
             .setContentText(caption)
             .setProgress(100, percentComplete, false)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .setOngoing(true)
             .setAutoCancel(false);
 

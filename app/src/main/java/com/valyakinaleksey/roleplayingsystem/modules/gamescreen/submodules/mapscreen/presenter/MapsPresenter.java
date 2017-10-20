@@ -1,19 +1,17 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter;
 
-
 import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsView;
+import eu.davidea.flexibleadapter.items.IFlexible;
 
-public interface MapsPresenter extends Presenter<MapsView> {
-    void loadComplete();
+public interface MapsPresenter extends Presenter<MapsView>, MapHandler {
+  void loadComplete();
 
-    void uploadImage(ChosenImage chosenImage);
+  void uploadImage(ChosenImage chosenImage);
 
-    void changeMapVisibility(MapModel mapModel, boolean isChecked);
 
-    void deleteMap(MapModel mapModel);
+  void openImage(String path, String fileName);
 
-    void openImage(String path, String fileName);
+  boolean onItemClick(IFlexible<?> item);
 }

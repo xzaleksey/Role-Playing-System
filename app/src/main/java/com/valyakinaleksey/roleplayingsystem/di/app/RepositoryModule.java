@@ -2,10 +2,12 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepositoryImpl;
-import com.valyakinaleksey.roleplayingsystem.data.repository.maps.MapsRepository;
-import com.valyakinaleksey.roleplayingsystem.data.repository.maps.MapsRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseFirebaseMapRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import dagger.Module;
 import dagger.Provides;
@@ -24,7 +26,11 @@ import javax.inject.Singleton;
     return new UserRepositoryImpl();
   }
 
-  @Provides @Singleton MapsRepository provideMapsRepository(PathManager pathManager) {
-    return new MapsRepositoryImpl(pathManager);
+  @Provides @Singleton FileMapsRepository provideMapsRepository(PathManager pathManager) {
+    return new FileMapsRepositoryImpl(pathManager);
+  }
+
+  @Provides @Singleton FirebaseMapRepository mapRepository() {
+    return new FirebaseFirebaseMapRepositoryImpl();
   }
 }

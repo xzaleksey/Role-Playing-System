@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di;
 
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
+import com.valyakinaleksey.roleplayingsystem.core.qualifiers.GameId;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenter;
@@ -16,4 +17,6 @@ import dagger.Component;
   void inject(ParentGameFragment gamesListFragment);
 
   ParentPresenter parentPresenter();
+
+  @GameId String getGameId();
 }

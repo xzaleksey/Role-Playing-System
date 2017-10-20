@@ -1,8 +1,9 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesUsecase;
-import com.valyakinaleksey.roleplayingsystem.data.repository.maps.MapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetUseCase;
@@ -110,8 +111,9 @@ import dagger.Provides;
     return new GameRacesUsecase();
   }
 
-  @Provides @Singleton MapsInteractor provideMapsInteractor(MapsRepository mapsRepository) {
-    return new MapUseCase(mapsRepository);
+  @Provides @Singleton MapsInteractor provideMapsInteractor(FileMapsRepository fileMapsRepository,
+      FirebaseMapRepository firebaseMapRepository) {
+    return new MapUseCase(fileMapsRepository, firebaseMapRepository);
   }
 
   @Provides @Singleton GameCharactersInteractor provideGameCharactersInteractor(

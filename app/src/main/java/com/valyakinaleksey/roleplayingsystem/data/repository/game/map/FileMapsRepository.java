@@ -1,11 +1,11 @@
-package com.valyakinaleksey.roleplayingsystem.data.repository.maps;
+package com.valyakinaleksey.roleplayingsystem.data.repository.game.map;
 
 import android.net.Uri;
 import java.io.File;
 import rx.Observable;
 
-public interface MapsRepository {
-  String MAP_REPOSOTORY = "MapRepository";
+public interface FileMapsRepository {
+  String MAP_REPOSOTORY = "FirebaseMapRepository";
 
   Observable<File> createLocalFileCopy(String gameId, String key, File file);
 
