@@ -24,7 +24,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Passwo
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES
-import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.createNewGame
 import com.valyakinaleksey.roleplayingsystem.utils.navigateToGameDescriptionScreen
@@ -70,17 +69,19 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
     view.showCreateGameDialog()
   }
 
-  override fun navigateToGameScreen(context: Context, model: GameModel) {
+  override fun navigateToGameScreen(
+      model: GameModel) {
     compositeSubscription.add(
         navigateToGameScreen(model, parentPresenter, checkUserJoinedGameInteractor))
   }
 
-  override fun checkPassword(context: Context, model: GameModel) {
+  override fun checkPassword(
+      model: GameModel) {
     val currentUserId = FireBaseUtils.getCurrentUserId()
     compositeSubscription.add(
         getCheckUserInGameObservable(model, currentUserId).subscribe({ userInGame: Boolean ->
           if (userInGame) {
-            navigateToGameScreen(context, model)
+            navigateToGameScreen(model)
           } else {
             val passwordDialogViewModel = PasswordDialogViewModel()
             passwordDialogViewModel.title = RpsApp.app().getString(R.string.create_game)
@@ -144,10 +145,12 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
 
   override fun onItemClick(item: IFlexible<*>?): Boolean {
     if (item is GameListItemViewModel) {
-      val bundle = Bundle()
-      bundle.putParcelable(GameModel.KEY, item.gameModel)
-      bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
-      parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle)
+      val gameModel = item.gameModel
+      if (StringUtils.isEmpty(gameModel.password)) {
+        navigateToGameScreen(gameModel, parentPresenter, checkUserJoinedGameInteractor)
+      } else {
+        checkPassword(gameModel)
+      }
     }
     return true
   }

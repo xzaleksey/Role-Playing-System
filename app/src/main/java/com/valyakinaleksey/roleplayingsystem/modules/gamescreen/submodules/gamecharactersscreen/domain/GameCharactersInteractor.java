@@ -12,5 +12,8 @@ public interface GameCharactersInteractor extends GameTEditInteractor<GameCharac
       GameCharacterModel gameCharacterModel);
 
   Observable<Void> chooseCharacter(GameModel gameModel, GameCharacterModel gameCharacterModel);
+
+  Observable<Void> changeCharacterVisibility(GameModel gameModel,
+      GameCharacterModel gameCharacterModel);
 }
       

@@ -6,10 +6,13 @@ import android.view.View;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.viewholders.FlexibleViewHolder;
 
@@ -25,8 +28,15 @@ public class AbstractGameCharacterItemViewHolder extends FlexibleViewHolder {
 
   public void bind(AbstractGameCharacterListItem abstractGameCharacterListItem,
       GamesCharactersPresenter gamesCharactersPresenter) {
-    avatar.setImageResource(R.drawable.ic_done_black_24dp);
-    characterName.setText(abstractGameCharacterListItem.getGameCharacterModel().getName());
+
+    avatar.setImageDrawable(null);
+    GameCharacterModel gameCharacterModel = abstractGameCharacterListItem.getGameCharacterModel();
+    if (StringUtils.isEmpty(gameCharacterModel.photoUrl)) {
+      avatar.setImageResource(R.drawable.mage);
+    } else {
+      Glide.with(itemView.getContext()).load(gameCharacterModel.photoUrl).into(avatar);
+    }
+    characterName.setText(gameCharacterModel.getName());
     GameRaceModel gameRaceModel = abstractGameCharacterListItem.getGameRaceModel();
     GameClassModel gameClassModel = abstractGameCharacterListItem.getGameClassModel();
 

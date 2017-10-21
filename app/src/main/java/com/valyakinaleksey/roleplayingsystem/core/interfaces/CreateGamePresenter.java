@@ -6,7 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 public interface CreateGamePresenter {
   void createGame(GameModel gameModel);
 
-  void checkPassword(Context context, GameModel model);
+  void checkPassword(GameModel model);
 
   void validatePassword(Context context, String input, GameModel gameModel);
 }

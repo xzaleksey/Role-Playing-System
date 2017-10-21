@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 import android.content.Context;
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.presenter.GamesCharactersPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
@@ -37,5 +38,10 @@ import javax.inject.Inject;
   @Override
   public void play(Context context, AbstractGameCharacterListItem abstractGameCharacterListItem) {
     presenter.play(context, abstractGameCharacterListItem);
+  }
+
+  @Override
+  public void changeNpcVisibility(GameCharacterModel gameCharacterModel, boolean isVisible) {
+    presenter.changeNpcVisibility(gameCharacterModel, isVisible);
   }
 }

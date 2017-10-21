@@ -105,5 +105,12 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
       }
     });
   }
+
+  @Override public Observable<Void> changeCharacterVisibility(GameModel gameModel,
+      GameCharacterModel gameCharacterModel) {
+    return FireBaseUtils.setData(true,
+        getDatabaseReference(gameModel).child(gameCharacterModel.getId())
+            .child(GameCharacterModel.VISIBLE));
+  }
 }
       

@@ -11,7 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamec
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.io.Serializable;
 
-public abstract class AbstractGameCharacterListItem<T extends RecyclerView.ViewHolder>
+public abstract class AbstractGameCharacterListItem <T extends RecyclerView.ViewHolder>
     implements Serializable, Parcelable, IFlexible<T> {
   private GameCharacterModel gameCharacterModel;
   private GameModel gameModel;

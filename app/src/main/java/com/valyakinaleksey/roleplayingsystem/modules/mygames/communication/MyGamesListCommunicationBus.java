@@ -37,16 +37,16 @@ import javax.inject.Inject;
     presenter.onFabPressed();
   }
 
-  @Override public void navigateToGameScreen(Context context, GameModel model) {
-    presenter.navigateToGameScreen(context, model);
+  @Override public void navigateToGameScreen(GameModel model) {
+    presenter.navigateToGameScreen(model);
   }
 
   @Override public boolean onItemClicked(IFlexible<?> item) {
     return presenter.onItemClicked(item);
   }
 
-  @Override public void checkPassword(Context context, GameModel model) {
-    presenter.checkPassword(context, model);
+  @Override public void checkPassword(GameModel model) {
+    presenter.checkPassword(model);
   }
 
   @Override public void validatePassword(Context context, String s, GameModel gameModel) {

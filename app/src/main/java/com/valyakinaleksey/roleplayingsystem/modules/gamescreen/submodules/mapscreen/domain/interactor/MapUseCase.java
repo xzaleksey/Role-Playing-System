@@ -5,7 +5,6 @@ import android.net.Uri;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kbeanie.multipicker.api.entity.ChosenFile;
-import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.data.repository.firebasestorage.MyUploadService;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
@@ -44,25 +43,24 @@ public class MapUseCase implements MapsInteractor {
     DatabaseReference push = fileReference.push();
     String key = push.getKey();
     return fileMapsRepository.
-        createLocalFileCopy(gameModel.getId(), key,
-        new File(chosenFile.getOriginalPath())).switchMap(file -> {
-      String fileName = file.getName();
-      MapModel mapModel = new MapModel(fileName);
-      mapModel.setTempDateCreate(DateTime.now().getMillis());
-      mapModel.setFileName(fileName);
-      push.setValue(mapModel);
-      return RxFirebaseDatabase.observeSingleValueEvent(push).map(dataSnapshot -> {
-        push.child(FireBaseUtils.TEMP_DATE_CREATE).setValue(null);
-        Intent intent = new Intent(RpsApp.app(), MyUploadService.class);
-        intent.setAction(MyUploadService.ACTION_UPLOAD);
-        intent.putExtra(MyUploadService.REPOSITORY_TYPE, FileMapsRepository.MAP_REPOSOTORY);
-        intent.putExtra(MyUploadService.EXTRA_FILE_URI, Uri.fromFile(file));
-        intent.putExtra(FireBaseUtils.ID, gameModel.getId());
-        intent.putExtra(MapModel.MAP_MODEL_ID, key);
-        RpsApp.app().startService(intent);
-        return mapModel;
-      });
-    });
+        createLocalFileCopy(gameModel.getId(), key, new File(chosenFile.getOriginalPath()))
+        .switchMap(file -> {
+          String fileName = file.getName();
+          MapModel mapModel = new MapModel(fileName);
+          mapModel.setTempDateCreate(DateTime.now().getMillis());
+          mapModel.setFileName(fileName);
+          return FireBaseUtils.setData(mapModel, push).map(aVoid -> {
+            push.child(FireBaseUtils.TEMP_DATE_CREATE).setValue(null);
+            Intent intent = new Intent(RpsApp.app(), MyUploadService.class);
+            intent.setAction(MyUploadService.ACTION_UPLOAD);
+            intent.putExtra(MyUploadService.REPOSITORY_TYPE, FileMapsRepository.MAP_REPOSOTORY);
+            intent.putExtra(MyUploadService.EXTRA_FILE_URI, Uri.fromFile(file));
+            intent.putExtra(FireBaseUtils.ID, gameModel.getId());
+            intent.putExtra(MapModel.MAP_MODEL_ID, key);
+            RpsApp.app().startService(intent);
+            return mapModel;
+          });
+        });
   }
 
   @Override public void changeMapVisibility(MapModel mapModel, boolean isVisible) {

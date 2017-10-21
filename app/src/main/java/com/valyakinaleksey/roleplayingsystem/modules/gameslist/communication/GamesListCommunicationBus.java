@@ -38,8 +38,8 @@ import javax.inject.Inject;
     presenter.onFabPressed();
   }
 
-  @Override public void navigateToGameScreen(Context context, GameModel model) {
-    presenter.navigateToGameScreen(context, model);
+  @Override public void navigateToGameScreen(GameModel model) {
+    presenter.navigateToGameScreen(model);
   }
 
   @Override public boolean onItemClick(IFlexible<?> item) {
@@ -50,8 +50,8 @@ import javax.inject.Inject;
     presenter.onSearchQueryChanged(queryText);
   }
 
-  @Override public void checkPassword(Context context, GameModel model) {
-    presenter.checkPassword(context, model);
+  @Override public void checkPassword(GameModel model) {
+    presenter.checkPassword(model);
   }
 
   @Override public void validatePassword(Context context, String s, GameModel gameModel) {

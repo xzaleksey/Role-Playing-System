@@ -68,19 +68,21 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
     view.showCreateGameDialog()
   }
 
-  override fun navigateToGameScreen(context: Context, model: GameModel) {
+  override fun navigateToGameScreen(
+      model: GameModel) {
     compositeSubscription.add(
         navigateToGameScreen(model, parentPresenter, checkUserJoinedGameInteractor))
   }
 
-  override fun checkPassword(context: Context, model: GameModel) {
+  override fun checkPassword(
+      model: GameModel) {
     val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
     compositeSubscription.add(
         getCheckUserInGameObservable(model, currentUserId, checkUserJoinedGameInteractor)
             .subscribe(
                 { userInGame ->
                   if (userInGame!!) {
-                    navigateToGameScreen(context, model)
+                    navigateToGameScreen(model)
                   } else {
                     val passwordDialogViewModel = PasswordDialogViewModel()
                     passwordDialogViewModel.title = StringUtils.getStringById(R.string.create_game)

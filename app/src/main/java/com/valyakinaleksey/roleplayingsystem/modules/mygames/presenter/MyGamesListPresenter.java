@@ -1,6 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.modules.mygames.presenter;
 
-import android.content.Context;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.CreateGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -12,7 +11,7 @@ public interface MyGamesListPresenter extends Presenter<MyGamesListView>, Create
 
   void onFabPressed();
 
-  void navigateToGameScreen(Context context, GameModel model);
+  void navigateToGameScreen(GameModel model);
 
   boolean onItemClicked(IFlexible<?> item);
 }

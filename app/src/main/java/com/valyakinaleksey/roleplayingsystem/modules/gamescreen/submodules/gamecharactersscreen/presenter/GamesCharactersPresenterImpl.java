@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
+import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
@@ -214,6 +215,19 @@ public class GamesCharactersPresenterImpl
 
       }, this::handleThrowable);
     }
+  }
+
+  @Override
+  public void changeNpcVisibility(GameCharacterModel gameCharacterModel, boolean isVisible) {
+    compositeSubscription.add(
+        gameCharactersInteractor.changeCharacterVisibility(viewModel.getGameModel(),
+            gameCharacterModel)
+            .compose(RxTransformers.applyIoSchedulers())
+            .subscribe(new DataObserver<Void>() {
+              @Override public void onData(Void data) {
+
+              }
+            }));
   }
 
   private void initTitleNav(GamesCharactersViewModel gamesCharactersViewModel) {
