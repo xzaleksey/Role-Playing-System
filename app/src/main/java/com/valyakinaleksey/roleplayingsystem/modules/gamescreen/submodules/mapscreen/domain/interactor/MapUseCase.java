@@ -43,7 +43,8 @@ public class MapUseCase implements MapsInteractor {
     DatabaseReference fileReference = getReference(gameModel.getId());
     DatabaseReference push = fileReference.push();
     String key = push.getKey();
-    return fileMapsRepository.createLocalFileCopy(gameModel.getId(), key,
+    return fileMapsRepository.
+        createLocalFileCopy(gameModel.getId(), key,
         new File(chosenFile.getOriginalPath())).switchMap(file -> {
       String fileName = file.getName();
       MapModel mapModel = new MapModel(fileName);

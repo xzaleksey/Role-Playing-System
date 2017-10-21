@@ -10,7 +10,6 @@ public interface MapsPresenter extends Presenter<MapsView>, MapHandler {
 
   void uploadImage(ChosenImage chosenImage);
 
-
   void openImage(String path, String fileName);
 
   boolean onItemClick(IFlexible<?> item);

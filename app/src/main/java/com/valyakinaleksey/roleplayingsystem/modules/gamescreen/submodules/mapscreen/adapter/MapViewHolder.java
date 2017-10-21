@@ -22,6 +22,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.viewholders.FlexibleViewHolder;
+import java.io.File;
 import rx.Subscription;
 import timber.log.Timber;
 
@@ -67,10 +68,16 @@ public class MapViewHolder extends FlexibleViewHolder {
     }
     tvName.setText(mapModel.getFileName());
     ivMap.setImageDrawable(null);
+    ivMap.setOnClickListener(null);
     if (mapModel.localFileExists()) {
-      loadImage(Uri.fromFile(mapModel.getLocalFile()));
+      File localFile = mapModel.getLocalFile();
+      loadImage(Uri.fromFile(localFile));
+      ivMap.setOnClickListener(
+          v -> mapsPresenter.openImage(localFile.getAbsolutePath(), mapModel.getFileName()));
     } else if (mapModel.getStatus() == FireBaseUtils.SUCCESS) {
       loadImage(Uri.parse(mapModel.photoUrl));
+      ivMap.setOnClickListener(
+          v -> mapsPresenter.openImage(mapModel.photoUrl, mapModel.getFileName()));
     }
   }
 

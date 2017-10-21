@@ -73,10 +73,6 @@ public class MapsFragment
       gridLayoutManager = new GridLayoutManager(getContext(), MapViewHolder.COLUMNS_COUNT);
     }
     flexibleAdapter = new FlexibleAdapter<>(Collections.emptyList());
-    flexibleAdapter.mItemClickListener = position -> {
-      return getComponent().getPresenter().onItemClick(flexibleAdapter.getItem(position));
-    };
-
     recyclerView.setLayoutManager(gridLayoutManager);
     recyclerView.addItemDecoration(
         new ItemOffsetDecoration(getContext(), R.dimen.common_margin_between_elements));

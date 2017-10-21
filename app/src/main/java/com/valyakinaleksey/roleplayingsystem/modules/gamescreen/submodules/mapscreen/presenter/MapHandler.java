@@ -6,4 +6,7 @@ public interface MapHandler {
   void deleteMap(MapModel mapModel);
 
   void changeMapVisibility(MapModel mapModel, boolean isChecked);
+
+  void openImage(String path, String fileName);
+
 }
