@@ -41,6 +41,10 @@ import javax.inject.Inject;
     presenter.navigateBack();
   }
 
+  @Override public void tryOpenDeepLink(Bundle args) {
+    presenter.tryOpenDeepLink(args);
+  }
+
   @Override public void updateToolbar() {
     getNavigationResolver().resolveNavigation(ParentView::updateToolbar);
   }

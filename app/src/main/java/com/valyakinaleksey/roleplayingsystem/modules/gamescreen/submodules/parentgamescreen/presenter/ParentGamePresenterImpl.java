@@ -72,8 +72,6 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
                     RpsApp.app().getString(R.string.info)));
                 fragmentsInfo.add(new SerializableTuple<>(GAME_MASTER_LOG_FRAGMENT,
                     RpsApp.app().getString(R.string.log)));
-              } else { // user
-
               }
               fragmentsInfo.add(new SerializableTuple<>(GAME_CHARACTERS_FRAGMENT,
                   RpsApp.app().getString(R.string.characters)));
@@ -82,14 +80,17 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
             } else {
               Bundle bundle = new Bundle();
               bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
+              bundle.putBoolean(NavigationUtils.POP_BACK_STACK, true);
               bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
               parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
             }
-            view.setData(viewModel);
-            viewModel.setFirstNavigation(true);
-            view.showContent();
-            viewModel.setFirstNavigation(false);
-            view.setData(viewModel); // to save first nav state
+            if (view != null) {
+              view.setData(viewModel);
+              viewModel.setFirstNavigation(true);
+              view.showContent();
+              viewModel.setFirstNavigation(false);
+              view.setData(viewModel); // to save first nav state
+            }
           }, this::handleThrowable));
     }
 

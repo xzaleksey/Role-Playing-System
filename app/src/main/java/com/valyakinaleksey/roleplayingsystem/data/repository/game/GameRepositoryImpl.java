@@ -53,25 +53,28 @@ public class GameRepositoryImpl implements GameRepository {
   }
 
   private void initSubscription() {
-    subscription =
-        RxFirebaseDatabase.observeValueEvent(FireBaseUtils.getTableReference(FireBaseUtils.GAMES))
-            .compose(RxTransformers.applyIoSchedulers())
-            .onBackpressureLatest()
-            .subscribe(dataSnapshot -> {
-              if (dataSnapshot.exists()) {
-                LinkedHashMap<String, GameModel> result = new LinkedHashMap<>();
-                List<DataSnapshot> dataSnapshots =
-                    CollectionExtensions.makeList(dataSnapshot.getChildren());
-                for (int i = dataSnapshots.size() - 1; i >= 0; i--) {
-                  GameModel value = dataSnapshots.get(i).getValue(GameModel.class);
-                  result.put(value.getId(), value);
-                }
-                synchronized (this) {
-                  gamesMap = result;
-                  subject.onNext(gamesMap);
-                }
-              }
-            }, throwable -> Timber.e(throwable, "games error"));
+    subscription = RxFirebaseDatabase.observeValueEvent(getGamesQuery())
+        .compose(RxTransformers.applyIoSchedulers())
+        .onBackpressureLatest()
+        .subscribe(dataSnapshot -> {
+          if (dataSnapshot.exists()) {
+            LinkedHashMap<String, GameModel> result = new LinkedHashMap<>();
+            List<DataSnapshot> dataSnapshots =
+                CollectionExtensions.makeList(dataSnapshot.getChildren());
+            for (int i = dataSnapshots.size() - 1; i >= 0; i--) {
+              GameModel value = dataSnapshots.get(i).getValue(GameModel.class);
+              result.put(value.getId(), value);
+            }
+            synchronized (this) {
+              gamesMap = result;
+              subject.onNext(gamesMap);
+            }
+          }
+        }, throwable -> Timber.e(throwable, "games error"));
+  }
+
+  private DatabaseReference getGamesQuery() {
+    return FireBaseUtils.getTableReference(FireBaseUtils.GAMES);
   }
 
   @Override public Observable<Map<String, GameModel>> observeGames() {
@@ -80,6 +83,14 @@ public class GameRepositoryImpl implements GameRepository {
 
   @Override public synchronized GameModel getGameModelById(String id) {
     return gamesMap.get(id);
+  }
+
+  @Override public Observable<GameModel> getGameModelObservableById(String id) {
+    GameModel gameModel = gamesMap.get(id);
+    if (gameModel != null) {
+      return Observable.just(gameModel);
+    }
+    return RxFirebaseDatabase.observeSingleValueEvent(getGamesQuery().child(id), GameModel.class);
   }
 
   @Override

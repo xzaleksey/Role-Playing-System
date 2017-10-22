@@ -1,6 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.support.multidex.MultiDexApplication;
 import butterknife.ButterKnife;
@@ -43,15 +42,14 @@ public class RpsApp extends MultiDexApplication {
         return font;
     }
 
-    public static AppComponent getAppComponent(Context context) {
-        RpsApp app = (RpsApp) context.getApplicationContext();
-        if (app.component == null) {
-            app.component = DaggerAppComponent.builder()
-                    .appModule(app.getApplicationModule())
+    public static AppComponent getAppComponent() {
+        if (instance.component == null) {
+            instance.component = DaggerAppComponent.builder()
+                    .appModule(instance.getApplicationModule())
                     .interactorModule(new InteractorModule())
                     .build();
         }
-        return app.component;
+        return instance.component;
     }
 
     public static RpsApp app() {

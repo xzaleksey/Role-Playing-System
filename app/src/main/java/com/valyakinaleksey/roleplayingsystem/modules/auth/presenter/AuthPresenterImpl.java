@@ -285,7 +285,12 @@ import timber.log.Timber;
   }
 
   private void navigateToMainActivity(FragmentActivity activity) {
-    activity.startActivity(new Intent(activity, ParentActivity.class));
+    Intent intent = new Intent(activity, ParentActivity.class);
+    Intent authActivityIntent = activity.getIntent();
+    if (authActivityIntent != null && authActivityIntent.getExtras() != null) {
+      intent.putExtras(authActivityIntent.getExtras());
+    }
+    activity.startActivity(intent);
     activity.finish();
   }
 }

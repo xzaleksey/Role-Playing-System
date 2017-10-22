@@ -37,7 +37,7 @@ public class MyUploadService extends MyBaseTaskService {
   @Override public void onCreate() {
     super.onCreate();
 
-    RpsApp.getAppComponent(RpsApp.app()).inject(this);
+    RpsApp.getAppComponent().inject(this);
   }
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {

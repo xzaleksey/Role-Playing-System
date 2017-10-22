@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.valyakinaleksey.roleplayingsystem">
 
-  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-  <uses-permission android:name="android.permission.READ_PROFILE" />
-  <uses-permission android:name="android.permission.READ_CONTACTS" />
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+  <uses-permission android:name="android.permission.READ_PROFILE"/>
+  <uses-permission android:name="android.permission.READ_CONTACTS"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
   <application
       android:name=".di.app.RpsApp"
@@ -24,23 +25,47 @@
         android:theme="@style/AppThemeBase.TextWhite"
         android:windowSoftInputMode="adjustResize">
       <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
 
-    <activity android:name=".modules.gamescreen.view.ParentActivity">
+    <activity
+        android:name=".modules.deeplink.DeepLinkDispatchActivity"
+        android:excludeFromRecents="true"
+        android:theme="@style/AppThemeTransparent"
+        android:exported="true"
+        android:launchMode="singleInstance"
+        android:noHistory="true"
+        tools:ignore="GoogleAppIndexingUrlError">
+
+      <!-- we need to be able to always catch external events -->
       <intent-filter>
-        <category android:name="android.intent.category.DEFAULT" />
+        <action android:name="android.intent.action.VIEW"/>
+
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+
+        <data android:scheme="@string/intent_basic_app_scheme"/>
+      </intent-filter>
+    </activity>
+
+
+    <activity
+        android:name=".modules.gamescreen.view.ParentActivity"
+        android:launchMode="singleTask"
+        >
+      <intent-filter>
+        <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
 
     <service
         android:name=".data.repository.firebasestorage.MyUploadService"
-        android:exported="false" />
+        android:exported="false"/>
     <meta-data
         android:name="io.fabric.ApiKey"
-        android:value="9b8e15881e384cd449298d24501ac8c0594ac0b8" />
+        android:value="9b8e15881e384cd449298d24501ac8c0594ac0b8"/>
   </application>
 
 </manifest>

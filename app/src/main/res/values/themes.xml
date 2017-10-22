@@ -52,4 +52,11 @@
   <style name="AppThemeBase.Widget.Button" parent="Base.Widget.AppCompat.Button">
     <item name="fontPath">fonts/Roboto-Medium.ttf</item>
   </style>
+
+  <style name="AppThemeTransparent" parent="AppTheme">
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:backgroundDimEnabled">false</item>
+  </style>
 </resources>

@@ -104,6 +104,10 @@ public class FireBaseUtils {
     return currentUser.getUid();
   }
 
+  public static boolean isLoggedIn() {
+    return !getCurrentUserId().isEmpty();
+  }
+
   public static Observable<Void> deleteValue(DatabaseReference databaseReference) {
     return Observable.create(
         subscriber -> RxHandler.assignOnTask(subscriber, databaseReference.removeValue()));

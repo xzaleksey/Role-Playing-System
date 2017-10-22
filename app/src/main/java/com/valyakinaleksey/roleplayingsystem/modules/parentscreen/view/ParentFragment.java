@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -55,7 +56,7 @@ public class ParentFragment extends
   @Override
   protected com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent createComponent() {
     return DaggerParentFragmentComponent.builder()
-        .appComponent(RpsApp.getAppComponent(getActivity()))
+        .appComponent(RpsApp.getAppComponent())
         .parentModule(new ParentModule())
         .build();
   }
@@ -95,8 +96,8 @@ public class ParentFragment extends
 
   private void initDrawerItems() {
     List<DrawerInfoModel> result = new ArrayList<>();
-    result.add(new DrawerInfoModel(getString(R.string.list_of_games), NavigationUtils.GAMES_LIST));
     result.add(new DrawerInfoModel(getString(R.string.my_games), NavigationUtils.MY_GAMES));
+    result.add(new DrawerInfoModel(getString(R.string.list_of_games), NavigationUtils.GAMES_LIST));
     result.add(new DrawerInfoModel(getString(R.string.settings), NavigationUtils.SETTINGS));
     drawerItems = result;
   }
@@ -179,5 +180,9 @@ public class ParentFragment extends
   @Override public void onTitleChanged(String title) {
     data.setToolbarTitle(title);
     updateToolbar();
+  }
+
+  public void handleNewIntent(Intent intent) {
+    getComponent().getPresenter().tryOpenDeepLink(intent.getExtras());
   }
 }

@@ -1,9 +1,10 @@
 package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di;
 
-
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.ParentScope;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.communication.ParentViewCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenterImpl;
@@ -19,35 +20,26 @@ import dagger.Provides;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
-@Module
-public class ParentModule {
+@Module public class ParentModule {
 
-    private final static String VIEW_STATE_FILE_NAME = ParentModule.class.getSimpleName();
+  private final static String VIEW_STATE_FILE_NAME = ParentModule.class.getSimpleName();
 
+  @Provides ParentGameViewState provideViewState(ViewStateStorage storage) {
+    return new ParentGameViewState(storage);
+  }
 
-    @Provides
-    ParentGameViewState provideViewState(ViewStateStorage storage) {
-        return new ParentGameViewState(storage);
-    }
+  @AutoExpose(ParentFragment.class) @Provides @ParentScope ParentPresenter provideCommunicationBus(
+      @Named(PRESENTER) ParentPresenter presenter, ParentGameViewState viewState) {
+    return new ParentViewCommunicationBus(presenter, viewState);
+  }
 
-    @AutoExpose(ParentFragment.class)
-    @Provides
-    @ParentScope
-    ParentPresenter provideCommunicationBus(@Named(PRESENTER) ParentPresenter presenter, ParentGameViewState viewState) {
-        return new ParentViewCommunicationBus(presenter, viewState);
-    }
+  @Provides @Named(PRESENTER) @ParentScope ParentPresenter providePresenter(
+      GameRepository gameRepository, CheckUserJoinedGameInteractor checkUserInteractor) {
+    return new ParentPresenterImpl(gameRepository, checkUserInteractor);
+  }
 
-    @Provides
-    @Named(PRESENTER)
-    @ParentScope
-    ParentPresenter providePresenter() {
-        return new ParentPresenterImpl();
-    }
-
-
-    @Provides
-    ViewStateStorage provideViewStateStorage(PathManager manager) {
-        String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
-        return new FileViewStateStorage(fullPath);
-    }
+  @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {
+    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
+    return new FileViewStateStorage(fullPath);
+  }
 }

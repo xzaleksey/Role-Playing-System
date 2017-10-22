@@ -3,22 +3,17 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.valyakinaleksey.roleplayingsystem.BuildConfig;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
-import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
-import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepositoryImpl;
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepositoryImpl;
-import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
+import com.valyakinaleksey.roleplayingsystem.modules.deeplink.DeepLinksParser;
+import com.valyakinaleksey.roleplayingsystem.modules.deeplink.DeepLinksParserImpl;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
+import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 /**
  * Base app module
@@ -52,12 +47,15 @@ import dagger.Provides;
     return new SharedPreferencesHelper(sharedPreferences);
   }
 
-
   @Provides @Singleton SimpleCrypto provideSimpleCrypto() {
     return SimpleCrypto.getDefault(BuildConfig.masterPassword, "salt", new byte[16]);
   }
 
   @Provides SectionsAdapter provideSectionsAdapter() {
     return new SectionsAdapter();
+  }
+
+  @Provides DeepLinksParser deepLinksParser() {
+    return new DeepLinksParserImpl(mApp);
   }
 }

@@ -26,10 +26,6 @@ import javax.inject.Inject;
     getNavigationResolver().resolveNavigation(ParentView::invalidateOptionsMenu);
   }
 
-  @Override public void navigate() {
-    getNavigationResolver().resolveNavigation(ParentView::navigate);
-  }
-
   @Override public void deleteGame() {
     presenter.deleteGame();
   }

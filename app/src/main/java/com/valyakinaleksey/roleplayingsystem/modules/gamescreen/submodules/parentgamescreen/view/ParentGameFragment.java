@@ -125,6 +125,9 @@ public class ParentGameFragment
   @Override public void showContent() {
     super.showContent();
     preFillModel(data);
+    if (!data.getFragmentsInfo().isEmpty()) {
+      tabLayout.setVisibility(View.VISIBLE);
+    }
     invalidateOptionsMenu();
     if (viewPager.getAdapter() == null) {
       if (data.isFirstNavigation() || adapter.getCount() == 0) {
@@ -171,21 +174,8 @@ public class ParentGameFragment
 
   @Override public void onDestroyView() {
     tabLayout.setupWithViewPager(null);
-    super.onDestroyView();
-  }
-
-  @Override public void navigate() {
-
-  }
-
-  @Override public void onStart() {
-    super.onStart();
-    tabLayout.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void onStop() {
     tabLayout.setVisibility(View.GONE);
-    super.onStop();
+    super.onDestroyView();
   }
 
   @Override public Dialog getDialog(String tag) {

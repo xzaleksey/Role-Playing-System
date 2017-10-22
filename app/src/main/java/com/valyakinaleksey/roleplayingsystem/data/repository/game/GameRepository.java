@@ -13,6 +13,8 @@ public interface GameRepository {
 
   GameModel getGameModelById(String id);
 
+  Observable<GameModel> getGameModelObservableById(String id);
+
   Observable<RxFirebaseChildEvent<DataSnapshot>> observeGameChangedById(String id);
 
   Observable<Boolean> observeGameRemovedById(String id);

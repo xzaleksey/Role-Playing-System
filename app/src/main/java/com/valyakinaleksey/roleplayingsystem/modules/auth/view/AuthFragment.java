@@ -59,7 +59,7 @@ public class AuthFragment extends AbsButterLceFragment<AuthComponent, AuthViewMo
     protected AuthComponent createComponent() {
         return DaggerAuthComponent
                 .builder()
-                .appComponent(RpsApp.getAppComponent(getActivity()))
+                .appComponent(RpsApp.getAppComponent())
                 .build();
     }
 
