@@ -133,7 +133,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository) : MyGamesInter
   }
 
   private fun getMyGames(): Observable<MutableMap<String, GameModel>> =
-      gamesRepository.observeGames()
+      gamesRepository.observeData()
 }
 
 

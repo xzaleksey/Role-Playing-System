@@ -30,7 +30,7 @@ public class GamesCharactersFragment extends
   @BindView(R.id.fab) FloatingActionButton fab;
   @BindView(R.id.title_switcher) AnimatedTitlesLayout titleLayout;
 
-  FlexibleAdapter<IFlexible> flexibleAdapter;
+  FlexibleAdapter<IFlexible<?>> flexibleAdapter;
   private HideFablListener listener;
 
   public static GamesCharactersFragment newInstance(Bundle arguments) {

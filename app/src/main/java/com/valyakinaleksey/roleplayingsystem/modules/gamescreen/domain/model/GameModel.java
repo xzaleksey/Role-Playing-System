@@ -2,22 +2,18 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.firebase.database.Exclude;
-import com.google.firebase.database.PropertyName;
-
 import com.google.firebase.database.ServerValue;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.DATE_CREATE;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_NAME;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
 
-public class GameModel implements Serializable, Parcelable {
+public class GameModel implements Serializable, Parcelable, HasId {
   public static final String FIELD_FINISHED = "finished";
   public static final String FIELD_MASTER_ID = "masterId";
 
@@ -72,10 +68,12 @@ public class GameModel implements Serializable, Parcelable {
     this.masterName = masterName;
   }
 
+  @Override
   public String getId() {
     return id;
   }
 
+  @Override
   public void setId(String id) {
     this.id = id;
   }

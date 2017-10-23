@@ -2,29 +2,23 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 
 import android.content.Context;
 import android.os.Bundle;
-
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithoutUser;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import rx.Observable;
+import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel.FREE_TAB;
 import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel.NPC_TAB;
@@ -37,7 +31,7 @@ public class GamesCharactersPresenterImpl
     implements GamesCharactersPresenter {
 
   private GameCharactersInteractor gameCharactersInteractor;
-  private List<IFlexible> itemsAll = new ArrayList<>();
+  private List<IFlexible<?>> itemsAll = new ArrayList<>();
 
   public GamesCharactersPresenterImpl(GameCharactersInteractor gameCharactersInteractor) {
     this.gameCharactersInteractor = gameCharactersInteractor;
@@ -71,124 +65,12 @@ public class GamesCharactersPresenterImpl
 
   private void initSubscriptions() {
     GameModel gameModel = viewModel.getGameModel();
-    compositeSubscription.add(gameCharactersInteractor.observeChildren(gameModel)
-        .onBackpressureBuffer()
-        .concatMap(gameCharacterModelRxFirebaseChildEvent -> {
-          switch (gameCharacterModelRxFirebaseChildEvent.getEventType()) {
-            case ADDED:
-              return getAddObservable(gameModel, gameCharacterModelRxFirebaseChildEvent);
-            case REMOVED:
-              for (IFlexible flexible : itemsAll) {
-                if (flexible instanceof AbstractGameCharacterListItem) {
-                  if ((((AbstractGameCharacterListItem) flexible).getGameCharacterModel()).equals(
-                      gameCharacterModelRxFirebaseChildEvent.getValue())) {
-                    return Observable.just(itemsAll.remove(flexible));
-                  }
-                }
-              }
-            case CHANGED:
-              int index = -1;
-              for (Iterator<IFlexible> iterator = itemsAll.iterator(); iterator.hasNext(); ) {
-                IFlexible flexible = iterator.next();
-                index++;
-                if (flexible instanceof AbstractGameCharacterListItem) {
-                  GameCharacterModel oldValue =
-                      ((AbstractGameCharacterListItem) flexible).getGameCharacterModel();
-                  GameCharacterModel newValue = gameCharacterModelRxFirebaseChildEvent.getValue();
-
-                  if ((oldValue).equals(newValue)) {
-                    if (TextUtils.isEmpty(oldValue.getUid()) && !TextUtils.isEmpty(
-                        newValue.getUid())) { //player occupied char
-                      iterator.remove();
-                      return getAddObservable(gameModel, gameCharacterModelRxFirebaseChildEvent);
-                    } else if (!TextUtils.isEmpty(oldValue.getUid()) && TextUtils.isEmpty(
-                        newValue.getUid())) { //player cleared char
-                      iterator.remove();
-                      return getAddObservable(gameModel, gameCharacterModelRxFirebaseChildEvent);
-                    }
-                    break;
-                  }
-                }
-              }
-              final int finalIndex = index;
-              return getCharacterFilled(gameModel, gameCharacterModelRxFirebaseChildEvent).doOnNext(
-                  abstractGameCharacterListItem -> itemsAll.set(finalIndex,
-                      abstractGameCharacterListItem));
-            default:
-              return Observable.just(gameCharacterModelRxFirebaseChildEvent);
-          }
-        })
-        .compose(RxTransformers.applySchedulers())
-        .subscribe(gameCharacterModelRxFirebaseChildEvent -> updateView(), this::handleThrowable));
   }
 
   private void updateView() {
-    List<IFlexible> iFlexibles = getFilteredList();
-    viewModel.setiFlexibles(iFlexibles);
+    //viewModel.setiFlexibles(iFlexibles);
     view.setData(viewModel);
     view.showContent();
-  }
-
-  @NonNull private List<IFlexible> getFilteredList() {
-    List<IFlexible> iFlexibles = new ArrayList<>(itemsAll);
-    boolean hasChar = false;
-    for (Iterator<IFlexible> iterator = iFlexibles.iterator(); iterator.hasNext(); ) {
-      IFlexible iFlexible = iterator.next();
-      if (iFlexible instanceof AbstractGameCharacterListItem) {
-        AbstractGameCharacterListItem abstractGameCharacterListItem =
-            (AbstractGameCharacterListItem) iFlexible;
-
-        String uid = abstractGameCharacterListItem.getGameCharacterModel().getUid();
-        switch (viewModel.getNavigationTab()) {
-          case OCCUPIED_TAB:
-            if (TextUtils.isEmpty(uid) || viewModel.getGameModel().getMasterId().equals(uid)) {
-              iterator.remove();
-            }
-            break;
-          case FREE_TAB:
-            if (!TextUtils.isEmpty(uid)) {
-              iterator.remove();
-            }
-            break;
-          case NPC_TAB:
-            if (!viewModel.getGameModel().getMasterId().equals(uid)) {
-              iterator.remove();
-            }
-            break;
-        }
-
-        if (FireBaseUtils.getCurrentUserId().equals(uid)) {
-          hasChar = true;
-        }
-      }
-    }
-    if (viewModel.isMaster()) hasChar = false;
-    if (viewModel.getNavigationTab() == FREE_TAB) {
-      for (IFlexible iFlexible : iFlexibles) {
-        if (iFlexible instanceof GameCharacterListItemWithoutUser) {
-          ((GameCharacterListItemWithoutUser) iFlexible).setShowPlayButton(!hasChar);
-        }
-      }
-    }
-    viewModel.setHasCharacter(hasChar);
-    return iFlexibles;
-  }
-
-  @NonNull private Observable<?> getAddObservable(GameModel gameModel,
-      RxFirebaseChildEvent<GameCharacterModel> gameCharacterModelRxFirebaseChildEvent) {
-    return getCharacterFilled(gameModel, gameCharacterModelRxFirebaseChildEvent).doOnNext(
-        abstractGameCharacterListItem -> {
-          abstractGameCharacterListItem.setGamesCharactersPresenter(this);
-          abstractGameCharacterListItem.setMaster(
-              viewModel.getGameModel().getMasterId().equals(FireBaseUtils.getCurrentUserId()));
-          itemsAll.add(abstractGameCharacterListItem);
-        });
-  }
-
-  private Observable<AbstractGameCharacterListItem> getCharacterFilled(GameModel gameModel,
-      RxFirebaseChildEvent<GameCharacterModel> gameCharacterModelRxFirebaseChildEvent) {
-    return gameCharactersInteractor.getAbstractGameCharacterListItem(gameModel,
-        gameCharacterModelRxFirebaseChildEvent.getValue());
   }
 
   @Override public void createCharacter() {
@@ -225,7 +107,7 @@ public class GamesCharactersPresenterImpl
             .compose(RxTransformers.applyIoSchedulers())
             .subscribe(new DataObserver<Void>() {
               @Override public void onData(Void data) {
-
+                Timber.d("success change Npc visibility");
               }
             }));
   }

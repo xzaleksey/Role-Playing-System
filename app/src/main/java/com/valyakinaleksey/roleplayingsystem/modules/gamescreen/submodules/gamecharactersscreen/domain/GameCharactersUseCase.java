@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.AccessFirebaseException;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions.BaseGameTEditInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
@@ -13,10 +14,13 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemNPC;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithUser;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithoutUser;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
+import eu.davidea.flexibleadapter.items.IFlexible;
+import java.util.List;
 import rx.Observable;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERS;
@@ -28,17 +32,32 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
   private GameClassesInteractor gameClassesInteractor;
   private GameRacesInteractor gameRacesInteractor;
   private UserRepository userRepository;
+  private CharactersRepository charactersRepository;
 
   public GameCharactersUseCase(GameClassesInteractor gameClassesInteractor,
-      GameRacesInteractor gameRacesInteractor, UserRepository userRepository) {
+      GameRacesInteractor gameRacesInteractor, UserRepository userRepository,
+      CharactersRepository charactersRepository) {
     super(GameCharacterModel.class);
     this.gameClassesInteractor = gameClassesInteractor;
     this.gameRacesInteractor = gameRacesInteractor;
     this.userRepository = userRepository;
+    this.charactersRepository = charactersRepository;
   }
 
   @Override public DatabaseReference getDatabaseReference(GameModel gameModel) {
     return getTableReference(GAME_CHARACTERS).child(gameModel.getId());
+  }
+
+  @Override public Observable<List<IFlexible<?>>> observeCharacters(GameModel gameModel,
+      Observable<CharactersFilterModel> charactersFilterModelObservable) {
+
+    //Observable.combineLatest(charactersRepository.observeCharacters(),
+    //    charactersFilterModelObservable, (stringGameCharacterModelMap, charactersFilterModel) -> {
+    //      for (GameCharacterModel gameCharacterModel : stringGameCharacterModelMap.values()) {
+    //
+    //      }
+    //    })
+        return null;
   }
 
   @Override public Observable<AbstractGameCharacterListItem> getAbstractGameCharacterListItem(
@@ -47,6 +66,8 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
     boolean free = TextUtils.isEmpty(gameCharacterModel.getUid());
     if (free) {
       abstractGameCharacterListItem = new GameCharacterListItemWithoutUser();
+    } else if (gameCharacterModel.getUid().equals(gameModel.getMasterId())) {
+      abstractGameCharacterListItem = new GameCharacterListItemNPC();
     } else {
       abstractGameCharacterListItem = new GameCharacterListItemWithUser();
     }

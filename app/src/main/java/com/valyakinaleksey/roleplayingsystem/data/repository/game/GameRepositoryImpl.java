@@ -8,16 +8,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.AbstractFirebaseRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
-import com.valyakinaleksey.roleplayingsystem.utils.CollectionExtensions;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 import rx.Subscription;
 import rx.subjects.BehaviorSubject;
@@ -35,13 +34,15 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_LOG
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_RACES;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.USERS_IN_GAME;
 
-public class GameRepositoryImpl implements GameRepository {
+public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel>
+    implements GameRepository {
 
   private Subscription subscription = Subscriptions.unsubscribed();
   private Map<String, GameModel> gamesMap = Collections.emptyMap();
   private BehaviorSubject<Map<String, GameModel>> subject = BehaviorSubject.create(gamesMap);
 
   public GameRepositoryImpl() {
+    super(GameModel.class);
     FirebaseAuth.getInstance().addAuthStateListener(firebaseAuth -> {
       FirebaseUser user = firebaseAuth.getCurrentUser();
       if (user == null) {
@@ -53,31 +54,17 @@ public class GameRepositoryImpl implements GameRepository {
   }
 
   private void initSubscription() {
-    subscription = RxFirebaseDatabase.observeValueEvent(getGamesQuery())
-        .compose(RxTransformers.applyIoSchedulers())
+    subscription = observeData().compose(RxTransformers.applyIoSchedulers())
         .onBackpressureLatest()
-        .subscribe(dataSnapshot -> {
-          if (dataSnapshot.exists()) {
-            LinkedHashMap<String, GameModel> result = new LinkedHashMap<>();
-            List<DataSnapshot> dataSnapshots =
-                CollectionExtensions.makeList(dataSnapshot.getChildren());
-            for (int i = dataSnapshots.size() - 1; i >= 0; i--) {
-              GameModel value = dataSnapshots.get(i).getValue(GameModel.class);
-              result.put(value.getId(), value);
-            }
-            synchronized (this) {
-              gamesMap = result;
-              subject.onNext(gamesMap);
-            }
+        .subscribe(gameModelMap -> {
+          synchronized (this) {
+            gamesMap = gameModelMap;
+            subject.onNext(gameModelMap);
           }
         }, throwable -> Timber.e(throwable, "games error"));
   }
 
-  private DatabaseReference getGamesQuery() {
-    return FireBaseUtils.getTableReference(FireBaseUtils.GAMES);
-  }
-
-  @Override public Observable<Map<String, GameModel>> observeGames() {
+  @Override public Observable<Map<String, GameModel>> observeData() {
     return subject;
   }
 
@@ -90,7 +77,8 @@ public class GameRepositoryImpl implements GameRepository {
     if (gameModel != null) {
       return Observable.just(gameModel);
     }
-    return RxFirebaseDatabase.observeSingleValueEvent(getGamesQuery().child(id), GameModel.class);
+    return RxFirebaseDatabase.observeSingleValueEvent(getDataBaseReference().child(id),
+        GameModel.class);
   }
 
   @Override
@@ -137,6 +125,10 @@ public class GameRepositoryImpl implements GameRepository {
         });
 
     return booleanPublishSubject;
+  }
+
+  @NotNull @Override public DatabaseReference getDataBaseReference() {
+    return FireBaseUtils.getTableReference(FireBaseUtils.GAMES);
   }
 }
       

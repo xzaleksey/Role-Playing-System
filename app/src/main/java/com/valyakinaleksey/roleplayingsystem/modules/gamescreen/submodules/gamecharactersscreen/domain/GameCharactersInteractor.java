@@ -4,9 +4,14 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
+import eu.davidea.flexibleadapter.items.IFlexible;
+import java.util.List;
 import rx.Observable;
 
 public interface GameCharactersInteractor extends GameTEditInteractor<GameCharacterModel> {
+
+  Observable<List<IFlexible<?>>> observeCharacters(GameModel gameModel,
+      Observable<CharactersFilterModel> charactersFilterModelObservable);
 
   Observable<AbstractGameCharacterListItem> getAbstractGameCharacterListItem(GameModel gameModel,
       GameCharacterModel gameCharacterModel);

@@ -26,7 +26,7 @@ public class GameListUsecase implements GameListInteractor {
   }
 
   @Override public Observable<List<IFlexible<?>>> observeGameViewModels() {
-    return gameRepository.observeGames()
+    return gameRepository.observeData()
         .concatMap(stringGameModelMap -> userRepository.getUsersMap().map(stringUserMap -> {
           List<IFlexible<?>> gameListItemViewModels = new ArrayList<>();
           for (GameModel gameModel : stringGameModelMap.values()) {
@@ -41,7 +41,7 @@ public class GameListUsecase implements GameListInteractor {
   @Override public Observable<GameListResult> observeGameViewModelsWithFilter(
       Observable<FilterModel> filterModelObservable) {
     return Observable.combineLatest(
-        gameRepository.observeGames().throttleLast(INTERVAL_DURATION, TimeUnit.MILLISECONDS),
+        gameRepository.observeData().throttleLast(INTERVAL_DURATION, TimeUnit.MILLISECONDS),
         filterModelObservable, (stringGameModelMap, filterModel) -> userRepository.getUsersMap().map(stringUserMap -> {
           List<IFlexible<?>> gameListItemViewModels = new ArrayList<>();
           String query = filterModel.getQuery().toLowerCase();

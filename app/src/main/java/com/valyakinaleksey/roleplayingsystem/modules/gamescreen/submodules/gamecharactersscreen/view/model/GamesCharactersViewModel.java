@@ -11,6 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GamesCharactersViewModel extends BaseRequestUpdateViewModel
@@ -20,7 +21,7 @@ public class GamesCharactersViewModel extends BaseRequestUpdateViewModel
   public static final int NPC_TAB = 2;
 
   private GameModel gameModel;
-  private transient List<IFlexible> iFlexibles;
+  private transient List<IFlexible<?>> iFlexibles = Collections.emptyList();
   private boolean master;
   private boolean hasCharacter;
   private int navigationTab;
@@ -54,11 +55,11 @@ public class GamesCharactersViewModel extends BaseRequestUpdateViewModel
     this.gameModel = gameModel;
   }
 
-  public List<IFlexible> getiFlexibles() {
+  public List<IFlexible<?>> getiFlexibles() {
     return iFlexibles;
   }
 
-  public void setiFlexibles(List<IFlexible> iFlexibles) {
+  public void setiFlexibles(List<IFlexible<?>> iFlexibles) {
     this.iFlexibles = iFlexibles;
   }
 

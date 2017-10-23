@@ -4,7 +4,18 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.qualifiers.GameId;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameClassesRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameClassesRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRacesRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRacesRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.communication.ParentViewCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenterImpl;
@@ -48,5 +59,24 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
   @Provides @PerFragmentScope @GameId String getGameId() {
     return gameId;
+  }
+
+  @Provides @PerFragmentScope CharactersRepository charactersRepository() {
+    return new CharactersRepositoryImpl(gameId);
+  }
+
+  @Provides @PerFragmentScope GameClassesRepository gameClassesRepository() {
+    return new GameClassesRepositoryImpl(gameId);
+  }
+
+  @Provides @PerFragmentScope GameRacesRepository gameRacesRepository() {
+    return new GameRacesRepositoryImpl(gameId);
+  }
+
+  @Provides @PerFragmentScope GameCharactersInteractor provideGameCharactersInteractor(
+      GameClassesInteractor gameClassesInteractor, GameRacesInteractor gameRacesInteractor,
+      UserRepository userRepository, CharactersRepository charactersRepository) {
+    return new GameCharactersUseCase(gameClassesInteractor, gameRacesInteractor, userRepository,
+        charactersRepository);
   }
 }
