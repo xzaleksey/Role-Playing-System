@@ -7,11 +7,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.CreateGameView
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
-import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView
-import com.valyakinaleksey.roleplayingsystem.core.view.View
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor

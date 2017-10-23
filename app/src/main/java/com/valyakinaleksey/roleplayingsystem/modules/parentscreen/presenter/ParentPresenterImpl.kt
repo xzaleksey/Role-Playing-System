@@ -10,7 +10,6 @@ import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.GamesDescriptionFragment
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModelInfo
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListFragment
@@ -31,6 +30,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.POP_BACK_STAC
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.SETTINGS
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.createFragment
+import com.valyakinaleksey.roleplayingsystem.utils.navigateToGameScreen
 import rx.Subscription
 
 class ParentPresenterImpl(
@@ -93,24 +93,12 @@ class ParentPresenterImpl(
   private fun getGameScreenSubscription(arguments: Bundle): Subscription? {
     return gameRepository.getGameModelObservableById(
         arguments.getString(DeepLinksUtils.DEEPLINK_GAME_ID_TAG))
-        .flatMap { gameModel ->
-          return@flatMap checkUserJoinedGameInteractor.checkUserInGame(
-              FireBaseUtils.getCurrentUserId(), gameModel).map { isInGame ->
-            GameModelInfo(gameModel, isInGame)
-          }
-        }
         .compose(
             RxTransformers.applySchedulers()).subscribe(
-        object : DataObserver<GameModelInfo>() {
-          override fun onData(data: GameModelInfo) {
-            val bundle = Bundle()
-            bundle.putParcelable(GameModel.KEY, data.gameModel)
-            bundle.putBoolean(ADD_BACK_STACK, true)
-            if (data.isUserInGame) {
-              navigateToFragment(GAME_FRAGMENT, bundle)
-            } else {
-              navigateToFragment(GAME_DESCRIPTION_FRAGMENT, bundle)
-            }
+        object : DataObserver<GameModel>() {
+          override fun onData(data: GameModel) {
+            compositeSubscription.add(
+                navigateToGameScreen(data, this@ParentPresenterImpl, checkUserJoinedGameInteractor))
           }
         })
   }
