@@ -62,10 +62,10 @@ public class ParentGameFragment
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
     Bundle arguments = savedInstanceState == null ? getArguments() : savedInstanceState;
     GameModel gameModel = arguments.getParcelable(GameModel.KEY);
     gameId = gameModel.getId();
+    super.onCreate(savedInstanceState);
     getComponent().inject(this);
   }
 

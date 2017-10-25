@@ -11,7 +11,6 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import rx.Observable;
 
 public class GameListUsecase implements GameListInteractor {
@@ -41,7 +40,7 @@ public class GameListUsecase implements GameListInteractor {
   @Override public Observable<GameListResult> observeGameViewModelsWithFilter(
       Observable<FilterModel> filterModelObservable) {
     return Observable.combineLatest(
-        gameRepository.observeData().throttleLast(INTERVAL_DURATION, TimeUnit.MILLISECONDS),
+        gameRepository.observeData(),
         filterModelObservable, (stringGameModelMap, filterModel) -> userRepository.getUsersMap().map(stringUserMap -> {
           List<IFlexible<?>> gameListItemViewModels = new ArrayList<>();
           String query = filterModel.getQuery().toLowerCase();

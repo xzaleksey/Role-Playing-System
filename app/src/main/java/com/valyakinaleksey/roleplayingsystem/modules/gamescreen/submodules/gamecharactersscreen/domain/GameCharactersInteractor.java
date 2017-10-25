@@ -13,9 +13,6 @@ public interface GameCharactersInteractor extends GameTEditInteractor<GameCharac
   Observable<List<IFlexible<?>>> observeCharacters(GameModel gameModel,
       Observable<CharactersFilterModel> charactersFilterModelObservable);
 
-  Observable<AbstractGameCharacterListItem> getAbstractGameCharacterListItem(GameModel gameModel,
-      GameCharacterModel gameCharacterModel);
-
   Observable<Void> chooseCharacter(GameModel gameModel, GameCharacterModel gameCharacterModel);
 
   Observable<Void> changeCharacterVisibility(GameModel gameModel,

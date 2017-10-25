@@ -8,6 +8,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FORMAT_S
 
 public class StringUtils {
   public static final String EMPTY_STRING = "";
+  public static final String UNDEFINED = "UNDEFINED";
 
   public static String getStringById(@StringRes int resId) {
     return RpsApp.app().getString(resId);

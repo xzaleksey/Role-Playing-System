@@ -2,9 +2,11 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.firebase.database.Exclude;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasDescription;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasName;
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import java.io.Serializable;
 
 public class GameCharacterModel
@@ -18,6 +20,9 @@ public class GameCharacterModel
   private String raceId;
   public String photoUrl;
   public boolean visible = true;
+  @Exclude public User user;
+  @Exclude public GameRaceModel gameRaceModel;
+  @Exclude public GameClassModel gameClassModel;
 
   @Override public String getId() {
     return id;
@@ -85,11 +90,29 @@ public class GameCharacterModel
     if (uid != null ? !uid.equals(that.uid) : that.uid != null) return false;
     if (classId != null ? !classId.equals(that.classId) : that.classId != null) return false;
     if (raceId != null ? !raceId.equals(that.raceId) : that.raceId != null) return false;
-    return photoUrl != null ? photoUrl.equals(that.photoUrl) : that.photoUrl == null;
+    if (photoUrl != null ? !photoUrl.equals(that.photoUrl) : that.photoUrl != null) return false;
+    if (user != null ? !user.equals(that.user) : that.user != null) return false;
+    if (gameRaceModel != null ? !gameRaceModel.equals(that.gameRaceModel)
+        : that.gameRaceModel != null) {
+      return false;
+    }
+    return gameClassModel != null ? gameClassModel.equals(that.gameClassModel)
+        : that.gameClassModel == null;
   }
 
   @Override public int hashCode() {
-    return id != null ? id.hashCode() : 0;
+    int result = id != null ? id.hashCode() : 0;
+    result = 31 * result + (description != null ? description.hashCode() : 0);
+    result = 31 * result + (name != null ? name.hashCode() : 0);
+    result = 31 * result + (uid != null ? uid.hashCode() : 0);
+    result = 31 * result + (classId != null ? classId.hashCode() : 0);
+    result = 31 * result + (raceId != null ? raceId.hashCode() : 0);
+    result = 31 * result + (photoUrl != null ? photoUrl.hashCode() : 0);
+    result = 31 * result + (visible ? 1 : 0);
+    result = 31 * result + (user != null ? user.hashCode() : 0);
+    result = 31 * result + (gameRaceModel != null ? gameRaceModel.hashCode() : 0);
+    result = 31 * result + (gameClassModel != null ? gameClassModel.hashCode() : 0);
+    return result;
   }
 
   @Override public int describeContents() {
@@ -105,6 +128,9 @@ public class GameCharacterModel
     dest.writeString(this.raceId);
     dest.writeString(this.photoUrl);
     dest.writeByte(this.visible ? (byte) 1 : (byte) 0);
+    dest.writeParcelable(this.user, flags);
+    dest.writeParcelable(this.gameRaceModel, flags);
+    dest.writeParcelable(this.gameClassModel, flags);
   }
 
   protected GameCharacterModel(Parcel in) {
@@ -116,6 +142,9 @@ public class GameCharacterModel
     this.raceId = in.readString();
     this.photoUrl = in.readString();
     this.visible = in.readByte() != 0;
+    this.user = in.readParcelable(User.class.getClassLoader());
+    this.gameRaceModel = in.readParcelable(GameRaceModel.class.getClassLoader());
+    this.gameClassModel = in.readParcelable(GameClassModel.class.getClassLoader());
   }
 
   public static final Creator<GameCharacterModel> CREATOR = new Creator<GameCharacterModel>() {

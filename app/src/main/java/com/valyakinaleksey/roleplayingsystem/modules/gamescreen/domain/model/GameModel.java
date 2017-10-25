@@ -68,13 +68,11 @@ public class GameModel implements Serializable, Parcelable, HasId {
     this.masterName = masterName;
   }
 
-  @Override
-  public String getId() {
+  @Override public String getId() {
     return id;
   }
 
-  @Override
-  public void setId(String id) {
+  @Override public void setId(String id) {
     this.id = id;
   }
 
@@ -139,6 +137,10 @@ public class GameModel implements Serializable, Parcelable, HasId {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  @Exclude public boolean isMaster(String guid) {
+    return masterId != null ? masterId.equals(guid) : guid == null;
   }
 
   @Override public int describeContents() {

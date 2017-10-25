@@ -20,23 +20,27 @@ public class GameCharacterListItemNPC extends
     if (this == o) return true;
     if (!(o instanceof GameCharacterListItemNPC)) return false;
     if (!super.equals(o)) return false;
-
+    if (getGameCharacterModel().visible
+        != ((AbstractGameCharacterListItem) o).getGameCharacterModel().visible) {
+      return false;
+    }
     return true;
   }
 
-  @Override
-  public GameCharacterListItemNPCViewHolder createViewHolder(FlexibleAdapter adapter,
+  @Override public GameCharacterListItemNPCViewHolder createViewHolder(FlexibleAdapter adapter,
       LayoutInflater inflater, ViewGroup parent) {
-    return new GameCharacterListItemNPCViewHolder(
-        inflater.inflate(getLayoutRes(), parent, false), adapter);
+    return new GameCharacterListItemNPCViewHolder(inflater.inflate(getLayoutRes(), parent, false),
+        adapter);
   }
 
-  @Override public void bindViewHolder(FlexibleAdapter adapter,
-      GameCharacterListItemNPCViewHolder holder, int position, List payloads) {
+  @Override
+  public void bindViewHolder(FlexibleAdapter adapter, GameCharacterListItemNPCViewHolder holder,
+      int position, List payloads) {
     holder.bind(this, getGamesCharactersPresenter());
   }
 
   public GameCharacterListItemNPC() {
+    type = GamesCharactersViewModel.NPC_TAB;
   }
 
   @Override public boolean isEnabled() {

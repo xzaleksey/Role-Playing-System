@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.core.firebase
 
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId
@@ -12,8 +13,15 @@ abstract class AbstractFirebaseRepositoryImpl<T : HasId>(
     private val clazz: Class<T>) : FirebaseRepository<T> {
 
   override fun observeData(): Observable<MutableMap<String, T>> {
+    return RxFirebaseDatabase.observeValueEvent(getDataBaseReference(), getDataFunc())
+  }
 
-    return RxFirebaseDatabase.observeValueEvent(getDataBaseReference(), Func1 {
+  override fun getData(): Observable<MutableMap<String, T>> {
+    return RxFirebaseDatabase.observeSingleValueEvent(getDataBaseReference(), getDataFunc())
+  }
+
+  private fun getDataFunc(): Func1<DataSnapshot, MutableMap<String, T>> {
+    return Func1 {
       val result: MutableMap<String, T> = linkedMapOf()
 
       if (it.exists()) {
@@ -30,7 +38,7 @@ abstract class AbstractFirebaseRepositoryImpl<T : HasId>(
             }
       }
       return@Func1 result
-    })
+    }
   }
 
   abstract fun getDataBaseReference(): DatabaseReference

@@ -5,13 +5,14 @@ import android.os.Parcelable;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasDescription;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasName;
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.io.Serializable;
 
 public class GameRaceModel implements Serializable, Parcelable, HasId, HasName, HasDescription {
-  private String id;
+  private String id = "UNDEFINED";
 
-  private String name;
-  private String description;
+  private String name = StringUtils.EMPTY_STRING;
+  private String description = StringUtils.EMPTY_STRING;
 
   public String getId() {
     return id;

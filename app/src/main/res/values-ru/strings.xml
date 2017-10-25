@@ -72,5 +72,6 @@
   <string name="participated_in">Участвовал в</string>
   <string name="completed_games">Завершенные игры</string>
   <string name="open_game">Открыть игру</string>
+  <string name="undefined">Не задано</string>
 
 </resources>

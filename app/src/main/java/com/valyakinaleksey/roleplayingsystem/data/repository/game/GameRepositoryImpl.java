@@ -16,6 +16,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 import rx.Subscription;
@@ -54,7 +55,9 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
   }
 
   private void initSubscription() {
-    subscription = observeData().compose(RxTransformers.applyIoSchedulers())
+    subscription = super.observeData()
+        .throttleLast(50, TimeUnit.MILLISECONDS)
+        .compose(RxTransformers.applyIoSchedulers())
         .onBackpressureLatest()
         .subscribe(gameModelMap -> {
           synchronized (this) {

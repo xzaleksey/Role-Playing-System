@@ -2,45 +2,34 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 
 import android.text.TextUtils;
 import com.google.firebase.database.DatabaseReference;
-import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.AccessFirebaseException;
-import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions.BaseGameTEditInteractorImpl;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemNPC;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithUser;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithoutUser;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import rx.Observable;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERS;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.getCurrentUserId;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.getTableReference;
 
 public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameCharacterModel>
     implements GameCharactersInteractor {
 
-  private GameClassesInteractor gameClassesInteractor;
-  private GameRacesInteractor gameRacesInteractor;
-  private UserRepository userRepository;
   private CharactersRepository charactersRepository;
 
-  public GameCharactersUseCase(GameClassesInteractor gameClassesInteractor,
-      GameRacesInteractor gameRacesInteractor, UserRepository userRepository,
-      CharactersRepository charactersRepository) {
+  public GameCharactersUseCase(CharactersRepository charactersRepository) {
     super(GameCharacterModel.class);
-    this.gameClassesInteractor = gameClassesInteractor;
-    this.gameRacesInteractor = gameRacesInteractor;
-    this.userRepository = userRepository;
     this.charactersRepository = charactersRepository;
   }
 
@@ -50,68 +39,74 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
 
   @Override public Observable<List<IFlexible<?>>> observeCharacters(GameModel gameModel,
       Observable<CharactersFilterModel> charactersFilterModelObservable) {
+    return Observable.combineLatest(getMappedModels(gameModel), charactersFilterModelObservable,
+        (models, charactersFilterModel) -> {
+          List<IFlexible<?>> filteredModels = new ArrayList<>();
+          for (AbstractGameCharacterListItem model : models) {
+            switch (charactersFilterModel.getType()) {
+              case GamesCharactersViewModel.FREE_TAB:
+                if (model.getType() == GamesCharactersViewModel.FREE_TAB) {
+                  filteredModels.add(model);
+                }
+                break;
+              case GamesCharactersViewModel.OCCUPIED_TAB:
+                if (model.getType() == GamesCharactersViewModel.OCCUPIED_TAB) {
+                  filteredModels.add(model);
+                }
+                break;
 
-    //Observable.combineLatest(charactersRepository.observeCharacters(),
-    //    charactersFilterModelObservable, (stringGameCharacterModelMap, charactersFilterModel) -> {
-    //      for (GameCharacterModel gameCharacterModel : stringGameCharacterModelMap.values()) {
-    //
-    //      }
-    //    })
-        return null;
+              case GamesCharactersViewModel.NPC_TAB:
+                if (model.getType() == GamesCharactersViewModel.NPC_TAB) {
+                  filteredModels.add(model);
+                }
+                break;
+            }
+          }
+          return filteredModels;
+        });
   }
 
-  @Override public Observable<AbstractGameCharacterListItem> getAbstractGameCharacterListItem(
-      GameModel gameModel, GameCharacterModel gameCharacterModel) {
-    AbstractGameCharacterListItem abstractGameCharacterListItem;
-    boolean free = TextUtils.isEmpty(gameCharacterModel.getUid());
-    if (free) {
-      abstractGameCharacterListItem = new GameCharacterListItemWithoutUser();
-    } else if (gameCharacterModel.getUid().equals(gameModel.getMasterId())) {
-      abstractGameCharacterListItem = new GameCharacterListItemNPC();
-    } else {
-      abstractGameCharacterListItem = new GameCharacterListItemWithUser();
-    }
-    abstractGameCharacterListItem.setGameModel(gameModel);
-    abstractGameCharacterListItem.setGameCharacterModel(gameCharacterModel);
-    Observable<AbstractGameCharacterListItem> abstractGameCharacterListItemObservable;
-    if (free) {
-      abstractGameCharacterListItemObservable = Observable.just(abstractGameCharacterListItem);
-    } else {
-      abstractGameCharacterListItemObservable = Observable.just(abstractGameCharacterListItem)
-          .zipWith(userRepository.getUserByUid(gameCharacterModel.getUid()),
-              (abstractGameCharacterListItem1, user) -> {
-                ((GameCharacterListItemWithUser) abstractGameCharacterListItem1).setUser(user);
-                return abstractGameCharacterListItem;
-              });
-    }
-
-    return abstractGameCharacterListItemObservable.switchMap(abstractGameCharacterListItem1 -> {
-      String classId = gameCharacterModel.getClassId();
-      if (TextUtils.isEmpty(classId)) {
-        GameClassModel gameClassModel = new GameClassModel();
-        gameClassModel.setName("");
-        abstractGameCharacterListItem.setGameClassModel(gameClassModel);
-        return Observable.just(abstractGameCharacterListItem1);
-      } else {
-        return gameClassesInteractor.getSingleChild(gameModel, classId).map(gameClassModel -> {
-          abstractGameCharacterListItem1.setGameClassModel(gameClassModel);
-          return abstractGameCharacterListItem1;
+  private Observable<List<AbstractGameCharacterListItem>> getMappedModels(GameModel gameModel) {
+    String currentUserId = getCurrentUserId();
+    String masterId = gameModel.getMasterId();
+    boolean isMaster = masterId.equals(currentUserId);
+    return charactersRepository.observeData()
+        .throttleLast(50, TimeUnit.MILLISECONDS)
+        .map(stringGameCharacterModelMap -> {
+          ArrayList<AbstractGameCharacterListItem> abstractGameCharacterListItems =
+              new ArrayList<>();
+          ArrayList<GameCharacterListItemWithoutUser> gameCharacterListItemWithoutUsers =
+              new ArrayList<>();
+          boolean hasCharacter = isMaster;
+          for (GameCharacterModel gameCharacterModel : stringGameCharacterModelMap.values()) {
+            AbstractGameCharacterListItem abstractGameCharacterListItem;
+            if (gameCharacterModel.user == null) {
+              GameCharacterListItemWithoutUser gameCharacterListItemWithoutUser =
+                  new GameCharacterListItemWithoutUser();
+              abstractGameCharacterListItem = gameCharacterListItemWithoutUser;
+              gameCharacterListItemWithoutUsers.add(gameCharacterListItemWithoutUser);
+            } else if (masterId.equals(gameCharacterModel.getUid())) {
+              abstractGameCharacterListItem = new GameCharacterListItemNPC();
+            } else {
+              if (currentUserId.equals(gameCharacterModel.getUid())) {
+                hasCharacter = true;
+              }
+              abstractGameCharacterListItem = new GameCharacterListItemWithUser();
+            }
+            if (isMaster || gameCharacterModel.visible) {
+              abstractGameCharacterListItem.setGameCharacterModel(gameCharacterModel);
+              abstractGameCharacterListItem.setGameModel(gameModel);
+              abstractGameCharacterListItem.setMaster(isMaster);
+              abstractGameCharacterListItems.add(abstractGameCharacterListItem);
+            }
+          }
+          if (!hasCharacter) {
+            for (GameCharacterListItemWithoutUser gameCharacterListItemWithoutUser : gameCharacterListItemWithoutUsers) {
+              gameCharacterListItemWithoutUser.setShowPlayButton(true);
+            }
+          }
+          return abstractGameCharacterListItems;
         });
-      }
-    }).switchMap(abstractGameCharacterListItem1 -> {
-      String raceId = gameCharacterModel.getRaceId();
-      if (TextUtils.isEmpty(raceId)) {
-        GameRaceModel gameRaceModel = new GameRaceModel();
-        gameRaceModel.setName(StringUtils.getStringById(R.string.human));
-        abstractGameCharacterListItem.setGameRaceModel(gameRaceModel);
-        return Observable.just(abstractGameCharacterListItem1);
-      } else {
-        return gameRacesInteractor.getSingleChild(gameModel, raceId).map(gameRaceModel -> {
-          abstractGameCharacterListItem1.setGameRaceModel(gameRaceModel);
-          return abstractGameCharacterListItem1;
-        });
-      }
-    });
   }
 
   @Override public Observable<Void> chooseCharacter(GameModel gameModel,

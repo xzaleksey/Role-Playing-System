@@ -18,8 +18,6 @@ import java.util.List;
 public class GameCharacterListItemWithUser extends
     AbstractGameCharacterListItem<GameCharacterListItemWithUser.GameCharacterListItemWithUserViewHolder> {
 
-  private User user;
-
   @Override public GameCharacterListItemWithUserViewHolder createViewHolder(FlexibleAdapter adapter,
       LayoutInflater inflater, ViewGroup parent) {
     return new GameCharacterListItemWithUserViewHolder(
@@ -45,7 +43,7 @@ public class GameCharacterListItemWithUser extends
     public void bind(GameCharacterListItemWithUser gameCharacterListItemWithUser,
         GamesCharactersPresenter gamesCharactersPresenter) {
       super.bind(gameCharacterListItemWithUser, gamesCharactersPresenter);
-      User user = gameCharacterListItemWithUser.getUser();
+      User user = gameCharacterListItemWithUser.getGameCharacterModel().user;
       userName.setText(user.getName());
       userDescription.setText(getUserDescription(user));
       ImageUtils.loadAvatar(userAvatar, user);
@@ -66,6 +64,7 @@ public class GameCharacterListItemWithUser extends
   }
 
   public GameCharacterListItemWithUser() {
+    type = GamesCharactersViewModel.OCCUPIED_TAB;
   }
 
   protected GameCharacterListItemWithUser(Parcel in) {
@@ -105,14 +104,6 @@ public class GameCharacterListItemWithUser extends
 
   @Override public void setSelectable(boolean selectable) {
 
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
   }
 
   @Override public boolean isDraggable() {

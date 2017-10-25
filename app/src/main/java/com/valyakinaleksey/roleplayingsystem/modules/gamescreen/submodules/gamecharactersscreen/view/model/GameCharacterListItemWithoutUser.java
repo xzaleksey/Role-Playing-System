@@ -81,6 +81,7 @@ public class GameCharacterListItemWithoutUser extends
   }
 
   public GameCharacterListItemWithoutUser() {
+    type = GamesCharactersViewModel.FREE_TAB;
   }
 
   @Override public boolean isEnabled() {

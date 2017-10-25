@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di;
 
+import android.content.Context;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.qualifiers.GameId;
@@ -11,9 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameClasses
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameClassesRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRacesRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRacesRepositoryImpl;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.communication.ParentViewCommunicationBus;
@@ -61,8 +60,10 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
     return gameId;
   }
 
-  @Provides @PerFragmentScope CharactersRepository charactersRepository() {
-    return new CharactersRepositoryImpl(gameId);
+  @Provides @PerFragmentScope CharactersRepository charactersRepository(
+      UserRepository userRepository, GameClassesRepository classesRepo,
+      GameRacesRepository racesRepo, Context context) {
+    return new CharactersRepositoryImpl(gameId, userRepository, classesRepo, racesRepo, context);
   }
 
   @Provides @PerFragmentScope GameClassesRepository gameClassesRepository() {
@@ -73,10 +74,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
     return new GameRacesRepositoryImpl(gameId);
   }
 
-  @Provides @PerFragmentScope GameCharactersInteractor provideGameCharactersInteractor(
-      GameClassesInteractor gameClassesInteractor, GameRacesInteractor gameRacesInteractor,
-      UserRepository userRepository, CharactersRepository charactersRepository) {
-    return new GameCharactersUseCase(gameClassesInteractor, gameRacesInteractor, userRepository,
-        charactersRepository);
+  @Provides @PerFragmentScope GameCharactersInteractor provideGameCharactersInteractor(CharactersRepository charactersRepository) {
+    return new GameCharactersUseCase(charactersRepository);
   }
 }

@@ -37,8 +37,8 @@ public class AbstractGameCharacterItemViewHolder extends FlexibleViewHolder {
       Glide.with(itemView.getContext()).load(gameCharacterModel.photoUrl).into(avatar);
     }
     characterName.setText(gameCharacterModel.getName());
-    GameRaceModel gameRaceModel = abstractGameCharacterListItem.getGameRaceModel();
-    GameClassModel gameClassModel = abstractGameCharacterListItem.getGameClassModel();
+    GameRaceModel gameRaceModel = gameCharacterModel.gameRaceModel;
+    GameClassModel gameClassModel = gameCharacterModel.gameClassModel;
 
     String name = gameRaceModel.getName();
     if (!TextUtils.isEmpty(gameClassModel.getName())) {

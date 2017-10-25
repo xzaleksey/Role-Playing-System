@@ -9,6 +9,7 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.CharactersFilterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
@@ -18,6 +19,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel.FREE_TAB;
@@ -32,6 +34,8 @@ public class GamesCharactersPresenterImpl
 
   private GameCharactersInteractor gameCharactersInteractor;
   private List<IFlexible<?>> itemsAll = new ArrayList<>();
+  private BehaviorSubject<CharactersFilterModel> subject =
+      BehaviorSubject.create(new CharactersFilterModel(GamesCharactersViewModel.OCCUPIED_TAB));
 
   public GamesCharactersPresenterImpl(GameCharactersInteractor gameCharactersInteractor) {
     this.gameCharactersInteractor = gameCharactersInteractor;
@@ -53,6 +57,7 @@ public class GamesCharactersPresenterImpl
     viewModel.setiFlexibles(new ArrayList<>(itemsAll));
     view.preFillModel(viewModel);
     view.showLoading();
+    view.setData(viewModel);
     compositeSubscription.add(FireBaseUtils.checkReferenceExistsAndNotEmpty(
         FireBaseUtils.getTableReference(GAME_CHARACTERS).child(viewModel.getGameModel().getId()))
         .subscribe(aBoolean -> {
@@ -60,17 +65,19 @@ public class GamesCharactersPresenterImpl
             view.hideLoading();
           }
         }, this::handleThrowable));
-    initSubscriptions();
-  }
 
-  private void initSubscriptions() {
-    GameModel gameModel = viewModel.getGameModel();
-  }
-
-  private void updateView() {
-    //viewModel.setiFlexibles(iFlexibles);
-    view.setData(viewModel);
-    view.showContent();
+    compositeSubscription.add(
+        gameCharactersInteractor.observeCharacters(viewModel.getGameModel(), subject)
+            .compose(RxTransformers.applySchedulers())
+            .subscribe(items -> {
+              for (IFlexible<?> item : items) {
+                if (item instanceof AbstractGameCharacterListItem) {
+                  ((AbstractGameCharacterListItem) item).setGamesCharactersPresenter(this);
+                }
+              }
+              viewModel.setiFlexibles(items);
+              view.showContent();
+            }, this::handleThrowable));
   }
 
   @Override public void createCharacter() {
@@ -126,7 +133,7 @@ public class GamesCharactersPresenterImpl
     titleModel.setTitle(title);
     titleModel.setOnClickListener(v -> {
       viewModel.setNavigationTab(index);
-      updateView();
+      subject.onNext(new CharactersFilterModel(index));
     });
     return titleModel;
   }
