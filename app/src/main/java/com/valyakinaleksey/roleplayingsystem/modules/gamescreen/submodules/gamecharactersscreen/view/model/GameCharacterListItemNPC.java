@@ -92,6 +92,7 @@ public class GameCharacterListItemNPC extends
 
     @BindView(R.id.character_description) TextView tvCharacterDescription;
     @BindView(R.id.switcher) SwitchCompat switcher;
+    @BindView(R.id.master_controls) View masterControls;
 
     public GameCharacterListItemNPCViewHolder(View view, FlexibleAdapter adapter) {
       super(view, adapter);
@@ -102,11 +103,16 @@ public class GameCharacterListItemNPC extends
 
       super.bind(gameCharacterListItemNPC, gamesCharactersPresenter);
       GameCharacterModel gameCharacterModel = gameCharacterListItemNPC.getGameCharacterModel();
-      switcher.setChecked(gameCharacterModel.visible);
-      switcher.setOnCheckedChangeListener((buttonView, isChecked) -> {
-        gamesCharactersPresenter.changeNpcVisibility(
-            gameCharacterListItemNPC.getGameCharacterModel(), isChecked);
-      });
+      if (gameCharacterListItemNPC.isMaster()) {
+        masterControls.setVisibility(View.VISIBLE);
+        switcher.setChecked(gameCharacterModel.visible);
+        switcher.setOnCheckedChangeListener((buttonView, isChecked) -> {
+          gamesCharactersPresenter.changeNpcVisibility(
+              gameCharacterListItemNPC.getGameCharacterModel(), isChecked);
+        });
+      } else {
+        masterControls.setVisibility(View.GONE);
+      }
       tvCharacterDescription.setMaxLines(3);
     }
   }
