@@ -79,13 +79,13 @@ public class GamesCharactersFragment extends
       recyclerView.setAdapter(flexibleAdapter);
     }
     updateView();
-    if (data.hasCharacter()) { // if has character - no creation
-      recyclerView.removeOnScrollListener(listener);
-      fab.hide();
-    } else {
+    if (data.canCreateNewCharacter()) {
       recyclerView.clearOnScrollListeners();
       recyclerView.addOnScrollListener(listener);
       recyclerView.post(() -> RecyclerViewUtils.checkFabShow(recyclerView, fab));
+    } else { // if has character - no creation
+      recyclerView.removeOnScrollListener(listener);
+      fab.hide();
     }
   }
 

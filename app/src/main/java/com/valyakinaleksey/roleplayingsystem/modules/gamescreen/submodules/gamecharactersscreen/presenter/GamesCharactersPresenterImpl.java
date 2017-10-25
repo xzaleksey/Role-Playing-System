@@ -54,7 +54,6 @@ public class GamesCharactersPresenterImpl
 
   @SuppressWarnings("unchecked") @Override public void getData() {
     viewModel.setNeedUpdate(false);
-    viewModel.setiFlexibles(new ArrayList<>(itemsAll));
     view.preFillModel(viewModel);
     view.showLoading();
     view.setData(viewModel);
@@ -69,13 +68,13 @@ public class GamesCharactersPresenterImpl
     compositeSubscription.add(
         gameCharactersInteractor.observeCharacters(viewModel.getGameModel(), subject)
             .compose(RxTransformers.applySchedulers())
-            .subscribe(items -> {
-              for (IFlexible<?> item : items) {
+            .subscribe(model -> {
+              for (IFlexible<?> item : model.getIFlexibles()) {
                 if (item instanceof AbstractGameCharacterListItem) {
                   ((AbstractGameCharacterListItem) item).setGamesCharactersPresenter(this);
                 }
               }
-              viewModel.setiFlexibles(items);
+              viewModel.setGameCharactersItemsModel(model);
               view.showContent();
             }, this::handleThrowable));
   }

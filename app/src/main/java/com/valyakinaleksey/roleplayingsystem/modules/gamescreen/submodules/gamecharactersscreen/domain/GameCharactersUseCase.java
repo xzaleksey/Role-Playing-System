@@ -11,6 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamec
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemNPC;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithUser;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharacterListItemWithoutUser;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GameCharactersItemsModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -37,10 +38,14 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
     return getTableReference(GAME_CHARACTERS).child(gameModel.getId());
   }
 
-  @Override public Observable<List<IFlexible<?>>> observeCharacters(GameModel gameModel,
+  @Override public Observable<GameCharactersItemsModel> observeCharacters(GameModel gameModel,
       Observable<CharactersFilterModel> charactersFilterModelObservable) {
+    String currentUserId = getCurrentUserId();
+    String masterId = gameModel.getMasterId();
+    final boolean isMaster = masterId.equals(currentUserId);
     return Observable.combineLatest(getMappedModels(gameModel), charactersFilterModelObservable,
         (models, charactersFilterModel) -> {
+          boolean hasCharacter = isMaster;
           List<IFlexible<?>> filteredModels = new ArrayList<>();
           for (AbstractGameCharacterListItem model : models) {
             switch (charactersFilterModel.getType()) {
@@ -61,8 +66,11 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
                 }
                 break;
             }
+            if (currentUserId.equals(model.getGameCharacterModel().getUid())) {
+              hasCharacter = true;
+            }
           }
-          return filteredModels;
+          return new GameCharactersItemsModel(filteredModels, hasCharacter);
         });
   }
 
