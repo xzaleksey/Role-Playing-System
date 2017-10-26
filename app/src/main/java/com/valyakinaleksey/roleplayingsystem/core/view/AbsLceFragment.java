@@ -202,7 +202,7 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends RequestUp
 
   @Override public void showError(BaseError e) {
     getActivity().runOnUiThread(() -> {
-      switch (e) {
+      switch (e.getBaseError()) {
         case NO_CONNECTION:
           handleNoConnection();
           break;

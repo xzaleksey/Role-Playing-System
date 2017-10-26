@@ -4,13 +4,13 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.error_de
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.error_declaration.ErrorTypes;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 
-public enum BaseError {
+public enum BaseErrorType {
   @ErrorType(type = ErrorTypes.ONE_SHOT_OR_DEFAULT)
   NO_CONNECTION, NO_DATA, @ErrorType(type = ErrorTypes.ONE_SHOT)
   SNACK, @ErrorType(type = ErrorTypes.ONE_SHOT)
   TOAST;
 
-  BaseError() {
+  BaseErrorType() {
   }
 
   protected String error = StringUtils.EMPTY_STRING;

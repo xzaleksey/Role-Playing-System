@@ -109,7 +109,7 @@ public abstract class AbsLceViewStateImpl<D extends RequestUpdateViewModel, V ex
     boolean hasAnnotation = false;
     try {
       ErrorType type =
-          error.getDeclaringClass().getField(error.name()).getAnnotation(ErrorType.class);
+          error.getBaseError().getDeclaringClass().getField(error.getBaseError().name()).getAnnotation(ErrorType.class);
       if (type != null) {
         ErrorTypes type1 = type.type();
         hasAnnotation =

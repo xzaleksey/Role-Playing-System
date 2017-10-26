@@ -6,6 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.adapter.MapFlexibleViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.interactor.MapsInteractor
@@ -57,8 +58,7 @@ class MapsPresenterImpl(private val mapsInteractor: MapsInteractor,
         .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
         .subscribe({ mapModel -> Timber.d("success map create") }) { throwable ->
           if (view != null) {
-            val snack = BaseError.SNACK
-            snack.setValue(StringUtils.getStringById(R.string.error))
+            val snack = BaseError(BaseErrorType.SNACK, StringUtils.getStringById(R.string.error))
             view.showError(snack)
           }
         }

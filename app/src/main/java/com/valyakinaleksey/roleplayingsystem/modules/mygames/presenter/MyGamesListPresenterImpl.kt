@@ -8,6 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
@@ -101,8 +102,8 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
           if (isValid) {
             navigateToGameDescriptionScreen(gameModel, parentPresenter)
           } else {
-            val snack = BaseError.SNACK
-            snack.setValue(RpsApp.app().getString(R.string.error_incorrect_password))
+            val snack = BaseError(BaseErrorType.SNACK,
+                RpsApp.app().getString(R.string.error_incorrect_password))
             view.showError(snack)
           }
         }))

@@ -9,6 +9,7 @@ import com.valyakinaleksey.roleplayingsystem.core.interfaces.CreateGameView
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
@@ -36,8 +37,7 @@ fun <T : RequestUpdateViewModel> checkInternetConnection(view: LceView<T>,
       .take(1)
       .filter { aBoolean -> !aBoolean }
       .subscribe { _ ->
-        val snack = BaseError.SNACK
-        snack.setValue(error)
+        val snack = BaseError(BaseErrorType.SNACK, error)
         view.showError(snack)
       }
 }

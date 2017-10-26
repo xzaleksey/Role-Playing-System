@@ -17,7 +17,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamec
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
@@ -33,9 +32,7 @@ public class GamesCharactersPresenterImpl
     implements GamesCharactersPresenter {
 
   private GameCharactersInteractor gameCharactersInteractor;
-  private List<IFlexible<?>> itemsAll = new ArrayList<>();
-  private BehaviorSubject<CharactersFilterModel> subject =
-      BehaviorSubject.create(new CharactersFilterModel(GamesCharactersViewModel.OCCUPIED_TAB));
+  private BehaviorSubject<CharactersFilterModel> subject = BehaviorSubject.create();
 
   public GamesCharactersPresenterImpl(GameCharactersInteractor gameCharactersInteractor) {
     this.gameCharactersInteractor = gameCharactersInteractor;
@@ -57,6 +54,7 @@ public class GamesCharactersPresenterImpl
     view.preFillModel(viewModel);
     view.showLoading();
     view.setData(viewModel);
+    subject.onNext(new CharactersFilterModel(viewModel.getNavigationTab()));
     compositeSubscription.add(FireBaseUtils.checkReferenceExistsAndNotEmpty(
         FireBaseUtils.getTableReference(GAME_CHARACTERS).child(viewModel.getGameModel().getId()))
         .subscribe(aBoolean -> {

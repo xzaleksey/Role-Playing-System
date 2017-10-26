@@ -27,6 +27,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
@@ -222,8 +223,7 @@ import timber.log.Timber;
   }
 
   private void showError(Throwable throwable) {
-    BaseError general = BaseError.SNACK;
-    general.setValue(throwable.getMessage());
+    BaseError general = new BaseError(BaseErrorType.SNACK, throwable.getMessage());
     showError(general);
   }
 

@@ -8,6 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.core.model.FilterModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType.SNACK
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
@@ -39,7 +40,7 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
     private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
     private val parentPresenter: ParentPresenter) : BasePresenter<GamesListView, GamesListViewModel>(), GamesListPresenter, RestorablePresenter<GamesListViewModel> {
 
-  private val filterSubject: BehaviorSubject<FilterModel> = BehaviorSubject.create(FilterModel())
+  private val filterSubject: BehaviorSubject<FilterModel> = BehaviorSubject.create()
 
   override fun initNewViewModel(arguments: Bundle?): GamesListViewModel {
     val gamesListViewModel = GamesListViewModel()
@@ -99,8 +100,7 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
             navigateToGameDescriptionScreen(gameModel,
                 parentPresenter)
           } else {
-            val snack = BaseError.SNACK
-            snack.setValue(RpsApp.app().getString(R.string.error_incorrect_password))
+            val snack = BaseError(SNACK, RpsApp.app().getString(R.string.error_incorrect_password))
             view.showError(snack)
           }
         }, { Crashlytics.logException(it) }))
@@ -111,6 +111,7 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
     viewModel.setNeedUpdate(false)
     view.showContent()
     view.showLoading()
+    filterSubject.onNext(viewModel.filterModel)
     compositeSubscription.add(
         FireBaseUtils.checkReferenceExistsAndNotEmpty(FireBaseUtils.getTableReference(GAMES))
             .compose(RxTransformers.applySchedulers())

@@ -16,6 +16,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.adapter.MapViewHolder;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.DaggerMapsFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.MapsFragmentComponent;
@@ -118,8 +119,7 @@ public class MapsFragment
       }
 
       @Override public void onError(String s) {
-        BaseError.SNACK.setValue(s);
-        showError(BaseError.SNACK);
+        showError(new BaseError(BaseErrorType.SNACK, s));
       }
     };
   }
