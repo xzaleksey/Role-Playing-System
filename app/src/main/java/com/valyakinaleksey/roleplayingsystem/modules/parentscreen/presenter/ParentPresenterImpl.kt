@@ -62,9 +62,10 @@ class ParentPresenterImpl(
     val transaction = fragment.childFragmentManager
         .beginTransaction()
         .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+        .setAllowOptimization(true)
         .replace(R.id.parent_fragment_container, navFragment)
     if (addToBackStack) {
-      transaction.addToBackStack(navFragment.javaClass.simpleName)
+      transaction.addToBackStack(null)
     }
     transaction.commit()
   }
@@ -141,7 +142,15 @@ class ParentPresenterImpl(
 
   private fun handlePopBackStack(args: Bundle?, parentFragment: Fragment) {
     if (args != null && args.getBoolean(POP_BACK_STACK, false)) {
-      parentFragment.childFragmentManager.popBackStack()
+      val childFragmentManager = parentFragment.childFragmentManager
+      val fragment = childFragmentManager.findFragmentById(R.id.parent_fragment_container)
+      if (fragment != null) {
+        childFragmentManager.beginTransaction()
+            .remove(fragment)
+            .commit()
+      }
+      childFragmentManager.popBackStack()
+      parentFragment.childFragmentManager.executePendingTransactions()
     }
   }
 
