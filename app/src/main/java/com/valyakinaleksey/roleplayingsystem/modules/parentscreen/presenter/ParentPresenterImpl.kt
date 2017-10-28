@@ -119,8 +119,14 @@ class ParentPresenterImpl(
   }
 
   override fun navigateTo(parentFragment: Fragment, args: Bundle?) {
-    handlePopBackStack(args, parentFragment)
-    navigationHandler[viewModel.navigationId]!!.invoke(parentFragment, args)
+    val fragment = parentFragment.childFragmentManager.findFragmentById(
+        R.id.parent_fragment_container)
+    val arguments = args ?: Bundle()
+    if (fragment is ParentGameFragment) {
+      arguments.putBoolean(ADD_BACK_STACK, true)
+    }
+    handlePopBackStack(arguments, parentFragment)
+    navigationHandler[viewModel.navigationId]!!.invoke(parentFragment, arguments)
   }
 
   override fun navigateToFragment(navId: Int, args: Bundle?) {
@@ -135,7 +141,7 @@ class ParentPresenterImpl(
 
   private fun handlePopBackStack(args: Bundle?, parentFragment: Fragment) {
     if (args != null && args.getBoolean(POP_BACK_STACK, false)) {
-      parentFragment.childFragmentManager.popBackStackImmediate()
+      parentFragment.childFragmentManager.popBackStack()
     }
   }
 
