@@ -13,6 +13,7 @@ public class PathManager {
 
     private static final String LOG_DIR = "log/";
     public static final String CACHE_DIR = "cache/";
+    public static final String IMAGE_DIR = "images/";
     private String resourcesDirectory;
 
     public PathManager(final Context context) {
@@ -26,6 +27,10 @@ public class PathManager {
 
     public String getCachePath() {
         return getDir(CACHE_DIR);
+    }
+
+    public String getImagesCachePath() {
+        return getDir(IMAGE_DIR);
     }
 
     public String getLogPath() {

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment;
+import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils;
 
 public class ParentActivity extends AbsSingleFragmentActivity {
 
@@ -27,6 +28,12 @@ public class ParentActivity extends AbsSingleFragmentActivity {
       return;
     }
     super.onBackPressed();
+  }
+
+  @Override
+  public void finish() {
+    StorageUtils.deleteCacheFolder();
+    super.finish();
   }
 
   @Override protected void fillToolbarItems() {
