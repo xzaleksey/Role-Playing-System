@@ -3,18 +3,17 @@ package com.valyakinaleksey.roleplayingsystem.core.view.adapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SerializableTuple;
-
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.MasterGameEditFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.MasterLogFragment;
-import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
-import java.util.List;
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen;
 import timber.log.Timber;
+
+import java.util.List;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -30,13 +29,13 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
   @Override public Fragment getItem(int position) {
     switch (fragmentTitlePairs.get(position).first) {
-      case NavigationUtils.GAME_MASTER_EDIT_FRAGMENT:
+      case NavigationScreen.GAME_MASTER_EDIT_FRAGMENT:
         return MasterGameEditFragment.newInstance(bundle);
-      case NavigationUtils.GAME_MASTER_LOG_FRAGMENT:
+      case NavigationScreen.GAME_MASTER_LOG_FRAGMENT:
         return MasterLogFragment.newInstance(bundle);
-      case NavigationUtils.GAME_MAPS_FRAGMENT:
+      case NavigationScreen.GAME_MAPS_FRAGMENT:
         return MapsFragment.newInstance(bundle);
-      case NavigationUtils.GAME_CHARACTERS_FRAGMENT:
+      case NavigationScreen.GAME_CHARACTERS_FRAGMENT:
         return GamesCharactersFragment.newInstance(bundle);
     }
     return null;

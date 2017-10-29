@@ -1,7 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamedescription.presenter;
 
 import android.os.Bundle;
-
 import android.text.TextUtils;
 import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -12,45 +11,36 @@ import com.valyakinaleksey.roleplayingsystem.core.model.DataEvent;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.DefaultExpandableSectionImpl;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticFieldsSection;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.StaticItem;
-import com.valyakinaleksey.roleplayingsystem.core.view.adapter.TwoLineTextWithAvatarExpandableSectionImpl;
+import com.valyakinaleksey.roleplayingsystem.core.view.adapter.*;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.AvatarWithTwoLineTextModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.model.TwoOrThreeLineTextModel;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.interactor.UserGetInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.characterisitics.GameCharacteristicsInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveGameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveUsersInGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.domain.interactor.JoinGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.GamesDescriptionView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.model.GamesDescriptionModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.characterisitics.GameCharacteristicsInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveUsersInGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacteristicModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants;
-import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
-
-import java.util.ArrayList;
-
-import java.util.List;
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen;
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils;
 import rx.Observable;
 import timber.log.Timber;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.ELEMENT_TYPE_USERS_EXPANDABLE;
-import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_DESCRIPTION;
-import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TITLE;
-import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_TWO_LINE_WITH_AVATAR;
-import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.formatWithCount;
-import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getPluralById;
-import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringById;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.*;
+import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.*;
 
 @PerFragmentScope public class GamesDescriptionPresenterImpl
     extends BasePresenter<GamesDescriptionView, GamesDescriptionModel>
@@ -189,7 +179,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.StringUtils.getStringB
           bundle.putParcelable(GameModel.KEY, gameModel);
           bundle.putBoolean(NavigationUtils.POP_BACK_STACK, true);
           bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
-          parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle);
+          parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle);
         }, throwable -> {
           Timber.d(throwable);
           Crashlytics.logException(throwable);

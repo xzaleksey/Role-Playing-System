@@ -6,7 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthActivity
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity
 import com.valyakinaleksey.roleplayingsystem.utils.DeepLinksUtils
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
 
 const val SCREEN = "screen"
 const val GAME = "game"
@@ -31,7 +31,7 @@ class DeepLinksParserImpl constructor(private val context: Context) : DeepLinksP
             DeepLinksUtils.DEEPLINK_TYPE_TAG,
             DeepLinksUtils.DEEPLINK_TYPE_SCREEN)
         intent.putExtra(
-            DeepLinksUtils.DEEPLINK_SCREEN_TAG, NavigationUtils.GAME_FRAGMENT)
+            DeepLinksUtils.DEEPLINK_SCREEN_TAG, NavigationScreen.GAME_FRAGMENT)
         intent.putExtra(DeepLinksUtils.DEEPLINK_GAME_ID_TAG, segments.last())
       }
       intent

@@ -12,15 +12,14 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.interactor.MapsInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsView
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsListFlexibleModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.SUCCESS
-import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils
-import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.IMAGE_FRAGMENT
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils
 import eu.davidea.flexibleadapter.items.IFlexible
 import timber.log.Timber
 
@@ -36,10 +35,7 @@ class MapsPresenterImpl(private val mapsInteractor: MapsInteractor,
   }
 
   override fun getData() {
-    viewModel.mapModel = MapsListFlexibleModel(emptyList())
-    view.setData(viewModel)
-    view.showContent()
-    view.showLoading()
+    super.getData()
     compositeSubscription.add(mapsInteractor.observeMaps(viewModel.gameModel, this)
         .compose(RxTransformers.applySchedulers())
         .subscribe({ model ->
@@ -81,7 +77,7 @@ class MapsPresenterImpl(private val mapsInteractor: MapsInteractor,
     args.putString(ImageFragment.IMAGE_URL, path)
     args.putString(ImageFragment.NAME, fileName)
     args.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
-    parentPresenter.navigateToFragment(IMAGE_FRAGMENT, args)
+    parentPresenter.navigateToFragment(NavigationScreen.IMAGE_FRAGMENT, args)
   }
 
   override fun onItemClick(item: IFlexible<*>?): Boolean {

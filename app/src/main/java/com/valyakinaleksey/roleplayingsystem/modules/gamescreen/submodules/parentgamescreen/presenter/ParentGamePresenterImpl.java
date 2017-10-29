@@ -13,13 +13,10 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.paren
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
-import java.util.ArrayList;
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen;
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_CHARACTERS_FRAGMENT;
-import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MAPS_FRAGMENT;
-import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MASTER_EDIT_FRAGMENT;
-import static com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils.GAME_MASTER_LOG_FRAGMENT;
+import java.util.ArrayList;
 
 public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGameModel>
     implements ParentGamePresenter {
@@ -68,21 +65,21 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
             if (aBoolean) {
               if (viewModel.isMaster()) {
                 viewModel.setNavigationTag(ParentGameModel.MASTER_SCREEN);
-                fragmentsInfo.add(new SerializableTuple<>(GAME_MASTER_EDIT_FRAGMENT,
+                fragmentsInfo.add(new SerializableTuple<>(NavigationScreen.GAME_MASTER_EDIT_FRAGMENT,
                     RpsApp.app().getString(R.string.info)));
-                fragmentsInfo.add(new SerializableTuple<>(GAME_MASTER_LOG_FRAGMENT,
+                fragmentsInfo.add(new SerializableTuple<>(NavigationScreen.GAME_MASTER_LOG_FRAGMENT,
                     RpsApp.app().getString(R.string.log)));
               }
-              fragmentsInfo.add(new SerializableTuple<>(GAME_CHARACTERS_FRAGMENT,
+              fragmentsInfo.add(new SerializableTuple<>(NavigationScreen.GAME_CHARACTERS_FRAGMENT,
                   RpsApp.app().getString(R.string.characters)));
-              fragmentsInfo.add(new SerializableTuple<>(GAME_MAPS_FRAGMENT,
+              fragmentsInfo.add(new SerializableTuple<>(NavigationScreen.GAME_MAPS_FRAGMENT,
                   RpsApp.app().getString(R.string.maps)));
             } else {
               Bundle bundle = new Bundle();
               bundle.putParcelable(GameModel.KEY, viewModel.getGameModel());
               bundle.putBoolean(NavigationUtils.POP_BACK_STACK, true);
               bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
-              parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle);
+              parentPresenter.navigateToFragment(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, bundle);
             }
             if (view != null) {
               view.setData(viewModel);

@@ -2,7 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.core.presenter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
 import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.core.exceptions.NetworkConnectionException;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.AccessFirebaseException;
@@ -11,11 +10,10 @@ import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
-
-import java.util.concurrent.TimeoutException;
-
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
+
+import java.util.concurrent.TimeoutException;
 
 public abstract class BasePresenter<V extends LceView<DATA>, DATA extends RequestUpdateViewModel>
     implements Presenter<V>, RestorablePresenter<DATA> {
@@ -54,6 +52,14 @@ public abstract class BasePresenter<V extends LceView<DATA>, DATA extends Reques
 
   @Override public void onSaveInstanceState(Bundle bundle) {
 
+  }
+
+  @Override
+  public void getData() {
+    viewModel.setNeedUpdate(false);
+    view.preFillModel(viewModel);
+    view.showLoading();
+    view.setData(viewModel);
   }
 
   @Override public void onDestroy() {

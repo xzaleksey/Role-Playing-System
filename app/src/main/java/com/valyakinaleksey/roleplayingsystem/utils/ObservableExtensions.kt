@@ -18,6 +18,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils
 import rx.Observable
 import rx.Subscription
 
@@ -54,9 +56,9 @@ fun <V : LceView<D>, D : RequestUpdateViewModel> BasePresenter<V, D>.navigateToG
   return getCheckUserInGameObservable(model, currentUserId,
       checkUserJoinedGameInteractor).subscribe({ userInGame ->
     if (userInGame) {
-      parentPresenter.navigateToFragment(NavigationUtils.GAME_FRAGMENT, bundle)
+      parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle)
     } else {
-      parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle)
+      parentPresenter.navigateToFragment(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, bundle)
     }
   }, { this.handleThrowable(it) })
 }
@@ -89,5 +91,5 @@ fun navigateToGameDescriptionScreen(model: GameModel,
   val bundle = Bundle()
   bundle.putParcelable(GameModel.KEY, model)
   bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
-  parentPresenter.navigateToFragment(NavigationUtils.GAME_DESCRIPTION_FRAGMENT, bundle)
+  parentPresenter.navigateToFragment(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, bundle)
 }

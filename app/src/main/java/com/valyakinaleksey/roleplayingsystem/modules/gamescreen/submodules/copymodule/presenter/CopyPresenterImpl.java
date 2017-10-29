@@ -7,23 +7,26 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copym
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.view.model.CopyViewModel;
 
 public class CopyPresenterImpl
-    extends BasePresenter<CopyView, CopyViewModel>
-    implements CopyPresenter {
+        extends BasePresenter<CopyView, CopyViewModel>
+        implements CopyPresenter {
 
-  public CopyPresenterImpl() {
-  }
+    public CopyPresenterImpl() {
+    }
 
-  @SuppressWarnings("unchecked") @Override
-  protected CopyViewModel initNewViewModel(Bundle arguments) {
-    final CopyViewModel copyViewModel = new CopyViewModel();
-    GameModel gameModel = arguments.getParcelable(GameModel.KEY);
-    copyViewModel.setToolbarTitle(gameModel.getName());
-    copyViewModel.setGameModel(gameModel);
+    @SuppressWarnings("unchecked")
+    @Override
+    protected CopyViewModel initNewViewModel(Bundle arguments) {
+        final CopyViewModel copyViewModel = new CopyViewModel();
+        GameModel gameModel = arguments.getParcelable(GameModel.KEY);
+        copyViewModel.setToolbarTitle(gameModel.getName());
+        copyViewModel.setGameModel(gameModel);
 
-    return copyViewModel;
-  }
+        return copyViewModel;
+    }
 
-  @SuppressWarnings("unchecked") @Override public void getData() {
-
-  }
+    @SuppressWarnings("unchecked")
+    @Override
+    public void getData() {
+        super.getData();
+    }
 }
