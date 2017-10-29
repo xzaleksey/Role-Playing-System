@@ -1,20 +1,31 @@
 package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di;
 
 import com.valyakinaleksey.roleplayingsystem.core.view.ParentScope;
-import com.valyakinaleksey.roleplayingsystem.di.app.AppComponent;
-import com.valyakinaleksey.roleplayingsystem.di.app.GlobalComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.GamesDescriptionComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.GamesDescriptionModule;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameModule;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListModule;
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.MyGamesListComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.MyGamesListModule;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment;
-import dagger.Component;
+import dagger.Subcomponent;
 
-@Component(
-    dependencies = AppComponent.class,
-    modules = ParentModule.class
-)
+@Subcomponent(modules = ParentFragmentModule.class)
 @ParentScope
-public interface ParentFragmentComponent extends HasParentPresenter, GlobalComponent {
-  void inject(ParentFragment parentFragment);
+public interface ParentFragmentComponent extends HasParentPresenter {
+    void inject(ParentFragment parentFragment);
 
-  ParentPresenter communicationBus();
+    ParentPresenter communicationBus();
+
+    ParentGameComponent getParentGameComponent(ParentGameModule parentGameModule);
+
+    GamesListComponent getGamesListComponent(GamesListModule gamesListModule);
+
+    MyGamesListComponent getMyGamesListComponent(MyGamesListModule myGamesListModule);
+
+    GamesDescriptionComponent getGamesDescriptionComponent(GamesDescriptionModule gamesDescriptionModule);
 }
 

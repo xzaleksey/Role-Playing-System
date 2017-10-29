@@ -1,6 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gameslist.di;
 
-
+import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
@@ -20,34 +20,36 @@ import javax.inject.Named;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
-@Module
-public class GamesListModule {
+@Module public class GamesListModule extends BaseFragmentModule {
 
-    private final static String VIEW_STATE_FILE_NAME = GamesListModule.class.getSimpleName();
+  private final static String VIEW_STATE_FILE_NAME = "GamesListModule";
 
+  public GamesListModule(String fragmentId) {
+    super(fragmentId);
+  }
 
-    @Provides
-    GamesListViewState provideViewState(ViewStateStorage storage) {
-        return new GamesListViewState(storage);
-    }
+  @Provides GamesListViewState provideViewState(
+      @Named(VIEW_STATE_FILE_NAME) ViewStateStorage storage) {
+    return new GamesListViewState(storage);
+  }
 
-    @Provides
-    @PerFragmentScope
-    GamesListPresenter provideCommunicationBus(@Named(PRESENTER) GamesListPresenter presenter, GamesListViewState viewState) {
-        return new GamesListCommunicationBus(presenter, viewState);
-    }
+  @Provides @PerFragmentScope GamesListPresenter provideCommunicationBus(
+      @Named(PRESENTER) GamesListPresenter presenter, GamesListViewState viewState) {
+    return new GamesListCommunicationBus(presenter, viewState);
+  }
 
-    @Provides
-    @Named(PRESENTER)
-    @PerFragmentScope
-    GamesListPresenter providePresenter(CreateNewGameInteractor createNewGameInteractor, GameListInteractor gameListInteractor, ValidatePasswordInteractor validatePasswordInteractor, CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter) {
-        return new GamesListPresenterImpl(createNewGameInteractor, gameListInteractor, validatePasswordInteractor, checkUserJoinedGameInteractor, parentPresenter);
-    }
+  @Provides @Named(PRESENTER) @PerFragmentScope GamesListPresenter providePresenter(
+      CreateNewGameInteractor createNewGameInteractor, GameListInteractor gameListInteractor,
+      ValidatePasswordInteractor validatePasswordInteractor,
+      CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
+      ParentPresenter parentPresenter) {
+    return new GamesListPresenterImpl(createNewGameInteractor, gameListInteractor,
+        validatePasswordInteractor, checkUserJoinedGameInteractor, parentPresenter);
+  }
 
-
-    @Provides
-    ViewStateStorage provideViewStateStorage(PathManager manager) {
-        String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
-        return new FileViewStateStorage(fullPath);
-    }
+  @Named(VIEW_STATE_FILE_NAME) @Provides ViewStateStorage provideViewStateStorage(
+      PathManager manager) {
+    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME + getFragmentId();
+    return new FileViewStateStorage(fullPath);
+  }
 }

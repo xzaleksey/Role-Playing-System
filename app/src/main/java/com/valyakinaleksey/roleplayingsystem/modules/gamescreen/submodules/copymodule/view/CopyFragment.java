@@ -10,13 +10,13 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFr
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyFragmentComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.DaggerCopyFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.view.model.CopyViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import javax.inject.Inject;
 
-public class CopyFragment extends
-    AbsButterLceFragment<CopyFragmentComponent, CopyViewModel, CopyView>
+public class CopyFragment
+    extends AbsButterLceFragment<CopyFragmentComponent, CopyViewModel, CopyView>
     implements CopyView {
 
   public static final String TAG = CopyFragment.class.getSimpleName();
@@ -31,12 +31,10 @@ public class CopyFragment extends
     return gamesDescriptionFragment;
   }
 
-  @Override @SuppressWarnings("unchecked")
-  protected CopyFragmentComponent createComponent() {
-    return DaggerCopyFragmentComponent.builder()
-        .parentGameComponent(
-            ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent())
-        .build();
+  @Override @SuppressWarnings("unchecked") protected CopyFragmentComponent createComponent(
+      String fragmentId) {
+    return ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent()
+        .getCopyFragmentComponent(new CopyModule(fragmentId));
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {

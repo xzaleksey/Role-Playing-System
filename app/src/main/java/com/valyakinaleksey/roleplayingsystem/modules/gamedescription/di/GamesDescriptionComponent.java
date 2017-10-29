@@ -1,19 +1,13 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di;
 
-
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.presenter.GamesDescriptionPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.GamesDescriptionFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
-import dagger.Component;
+import dagger.Subcomponent;
 
-@Component(
-        dependencies = ParentFragmentComponent.class,
-        modules = GamesDescriptionModule.class
-)
-@PerFragmentScope
+@Subcomponent(modules = GamesDescriptionModule.class) @PerFragmentScope
 public interface GamesDescriptionComponent extends HasPresenter<GamesDescriptionPresenter> {
 
-    void inject(GamesDescriptionFragment gamesListFragment);
+  void inject(GamesDescriptionFragment gamesListFragment);
 }

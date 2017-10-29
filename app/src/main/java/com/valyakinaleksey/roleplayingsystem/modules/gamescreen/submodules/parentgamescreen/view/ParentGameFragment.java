@@ -22,7 +22,6 @@ import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseDialogFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ViewPagerAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.DaggerParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
@@ -53,12 +52,10 @@ public class ParentGameFragment
     return gamesDescriptionFragment;
   }
 
-  @Override @SuppressWarnings("unchecked") protected ParentGameComponent createComponent() {
-    return DaggerParentGameComponent.builder()
-        .parentGameModule(new ParentGameModule(gameId))
-        .parentFragmentComponent(
-            ((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
-        .build();
+  @Override @SuppressWarnings("unchecked")
+  protected ParentGameComponent createComponent(String fragmentId) {
+    return ((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent()
+        .getParentGameComponent(new ParentGameModule(gameId, fragmentId));
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {

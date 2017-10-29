@@ -81,8 +81,9 @@ public abstract class ComponentManagerFragment<C extends HasPresenter, V extends
    * Create an instance of object graph for fragment
    *
    * @return instance of object graph
+   * @param fragmentId
    */
-  protected abstract C createComponent();
+  protected abstract C createComponent(String fragmentId);
 
   public void setOnPresenterReadyListener(ComponentHelper.OnPresenterReady listener) {
     presenterReadyListener = listener;

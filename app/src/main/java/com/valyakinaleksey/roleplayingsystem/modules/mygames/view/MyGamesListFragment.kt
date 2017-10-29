@@ -10,7 +10,6 @@ import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity
-import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.DaggerMyGamesListComponent
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.MyGamesListComponent
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.MyGamesListModule
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel
@@ -22,19 +21,17 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 
 class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesListViewViewModel, MyGamesListView>(), MyGamesListView {
-  override fun createComponent(): MyGamesListComponent {
-    return DaggerMyGamesListComponent.builder()
-        .parentFragmentComponent(
-            (parentFragment as ComponentManagerFragment<*, *>).component as ParentFragmentComponent)
-        .myGamesListModule(MyGamesListModule())
-        .build()
+
+  override fun createComponent(fragmentId: String): MyGamesListComponent {
+    return ((parentFragment as ComponentManagerFragment<*, *>).component as ParentFragmentComponent).getMyGamesListComponent(
+        MyGamesListModule(fragmentId))
   }
 
   @BindView(R.id.recycler_view)
   lateinit var recyclerView: RecyclerView
   @BindView(R.id.fab) lateinit var fab: FloatingActionButton
   private var dialog: MaterialDialog? = null
-  lateinit var flexibleAdapter: FlexibleAdapter<IFlexible<*>>
+  private lateinit var flexibleAdapter: FlexibleAdapter<IFlexible<*>>
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -75,9 +72,7 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
 
   private fun dialogIsNotShowing() = dialog?.isShowing != true
 
-  override fun getContentResId(): Int {
-    return R.layout.fragment_my_games_list
-  }
+  override fun getContentResId(): Int = R.layout.fragment_my_games_list
 
   override fun onGameCreated() {
     recyclerView.smoothScrollToPosition(recyclerView.adapter.itemCount)
@@ -102,10 +97,8 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
 
   companion object {
 
-    val TAG = MyGamesListFragment::class.java.simpleName
+    val TAG = MyGamesListFragment::class.java.simpleName!!
 
-    fun newInstance(): MyGamesListFragment {
-      return MyGamesListFragment()
-    }
+    fun newInstance(): MyGamesListFragment = MyGamesListFragment()
   }
 }

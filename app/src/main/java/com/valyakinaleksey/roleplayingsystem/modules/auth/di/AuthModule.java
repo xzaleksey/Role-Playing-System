@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.auth.di;
 import android.content.Context;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.communication.AuthCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
@@ -27,9 +28,13 @@ import dagger.Provides;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
-@Module public class AuthModule {
+@Module public class AuthModule extends BaseFragmentModule {
 
-  private final static String VIEW_STATE_FILE_NAME = AuthModule.class.getSimpleName();
+  private final static String VIEW_STATE_FILE_NAME = "AuthModule";
+
+  public AuthModule(String fragmentId) {
+    super(fragmentId);
+  }
 
   @Provides @PerFragmentScope LoginInteractor provideLoginInteractor(FirebaseAuth firebaseAuth) {
     return new LoginUseCase(firebaseAuth);
@@ -45,7 +50,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
     return new ResetPasswordUseCase(firebaseAuth);
   }
 
-  @Provides AuthViewState provideViewState(ViewStateStorage storage) {
+  @Provides AuthViewState provideViewState(@Named(VIEW_STATE_FILE_NAME) ViewStateStorage storage) {
     return new AuthViewState(storage);
   }
 
@@ -63,8 +68,9 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
     return new AuthCommunicationBus(presenter, viewState);
   }
 
-  @Provides ViewStateStorage provideAuthStateStorage(PathManager manager) {
-    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
+  @Named(VIEW_STATE_FILE_NAME) @Provides ViewStateStorage provideAuthStateStorage(
+      PathManager manager) {
+    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME + getFragmentId();
     return new FileViewStateStorage(fullPath);
   }
 }

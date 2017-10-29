@@ -13,8 +13,8 @@ import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.DaggerGamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.GamesDescriptionComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.GamesDescriptionModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.model.GamesDescriptionModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
 import javax.inject.Inject;
@@ -37,11 +37,10 @@ public class GamesDescriptionFragment extends
     return gamesDescriptionFragment;
   }
 
-  @Override @SuppressWarnings("unchecked") protected GamesDescriptionComponent createComponent() {
-    return DaggerGamesDescriptionComponent.builder()
-        .parentFragmentComponent(
-            ((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
-        .build();
+  @Override @SuppressWarnings("unchecked") protected GamesDescriptionComponent createComponent(
+      String fragmentId) {
+    return ((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent()
+        .getGamesDescriptionComponent(new GamesDescriptionModule(fragmentId));
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {

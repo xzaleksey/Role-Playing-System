@@ -14,8 +14,8 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.adapter.MasterLogAdapter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.DaggerMasterLogFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.MasterLogFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.MasterLogModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.model.MasterLogModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
@@ -41,11 +41,10 @@ public class MasterLogFragment
     return gamesDescriptionFragment;
   }
 
-  @Override @SuppressWarnings("unchecked") protected MasterLogFragmentComponent createComponent() {
-    return DaggerMasterLogFragmentComponent.builder()
-        .parentGameComponent(
-            ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent())
-        .build();
+  @Override @SuppressWarnings("unchecked") protected MasterLogFragmentComponent createComponent(
+      String fragmentId) {
+    return ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent()
+        .getMasterLogFragmentComponent(new MasterLogModule(fragmentId));
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {

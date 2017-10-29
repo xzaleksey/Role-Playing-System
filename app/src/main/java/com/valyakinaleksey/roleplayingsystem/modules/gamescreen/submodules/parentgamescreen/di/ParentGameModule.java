@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di;
 
 import android.content.Context;
+import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.qualifiers.GameId;
@@ -23,58 +24,79 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.Pare
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import dagger.Module;
 import dagger.Provides;
+
 import javax.inject.Named;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
-@Module public class ParentGameModule {
+@Module
+public class ParentGameModule extends BaseFragmentModule {
 
-  private String gameId;
+    private final static String VIEW_STATE_FILE_NAME = "ParentGameModule";
+    private String gameId;
 
-  public ParentGameModule(String gameId) {
-    this.gameId = gameId;
-  }
+    public ParentGameModule(String gameId, String fragmentId) {
+        super(fragmentId);
+        this.gameId = gameId;
+    }
 
-  private final static String VIEW_STATE_FILE_NAME = ParentGameModule.class.getSimpleName();
+    @Provides
+    ParentGameViewState provideViewState(@Named(VIEW_STATE_FILE_NAME) ViewStateStorage storage) {
+        return new ParentGameViewState(storage);
+    }
 
-  @Provides ParentGameViewState provideViewState(ViewStateStorage storage) {
-    return new ParentGameViewState(storage);
-  }
+    @Provides
+    @PerFragmentScope
+    ParentGamePresenter provideCommunicationBus(@Named(PRESENTER) ParentGamePresenter presenter, ParentGameViewState viewState) {
+        return new ParentViewCommunicationBus(presenter, viewState);
+    }
 
-  @Provides @PerFragmentScope ParentGamePresenter provideCommunicationBus(
-      @Named(PRESENTER) ParentGamePresenter presenter, ParentGameViewState viewState) {
-    return new ParentViewCommunicationBus(presenter, viewState);
-  }
+    @Provides
+    @Named(PRESENTER)
+    @PerFragmentScope
+    ParentGamePresenter providePresenter(ParentPresenter parentPresenter, GameInteractor gameInteractor) {
+        return new ParentGamePresenterImpl(parentPresenter, gameInteractor);
+    }
 
-  @Provides @Named(PRESENTER) @PerFragmentScope ParentGamePresenter providePresenter(
-      ParentPresenter parentPresenter, GameInteractor gameInteractor) {
-    return new ParentGamePresenterImpl(parentPresenter, gameInteractor);
-  }
+    @Named(VIEW_STATE_FILE_NAME)
+    @Provides
+    ViewStateStorage provideViewStateStorage(
+            PathManager manager) {
+        String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME + getFragmentId();
+        return new FileViewStateStorage(fullPath);
+    }
 
-  @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {
-    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
-    return new FileViewStateStorage(fullPath);
-  }
+    @Provides
+    @PerFragmentScope
+    @GameId
+    String getGameId() {
+        return gameId;
+    }
 
-  @Provides @PerFragmentScope @GameId String getGameId() {
-    return gameId;
-  }
+    @Provides
+    @PerFragmentScope
+    CharactersRepository charactersRepository(
+            UserRepository userRepository, GameClassesRepository classesRepo,
+            GameRacesRepository racesRepo, Context context) {
+        return new CharactersRepositoryImpl(gameId, userRepository, classesRepo, racesRepo, context);
+    }
 
-  @Provides @PerFragmentScope CharactersRepository charactersRepository(
-      UserRepository userRepository, GameClassesRepository classesRepo,
-      GameRacesRepository racesRepo, Context context) {
-    return new CharactersRepositoryImpl(gameId, userRepository, classesRepo, racesRepo, context);
-  }
+    @Provides
+    @PerFragmentScope
+    GameClassesRepository gameClassesRepository() {
+        return new GameClassesRepositoryImpl(gameId);
+    }
 
-  @Provides @PerFragmentScope GameClassesRepository gameClassesRepository() {
-    return new GameClassesRepositoryImpl(gameId);
-  }
+    @Provides
+    @PerFragmentScope
+    GameRacesRepository gameRacesRepository() {
+        return new GameRacesRepositoryImpl(gameId);
+    }
 
-  @Provides @PerFragmentScope GameRacesRepository gameRacesRepository() {
-    return new GameRacesRepositoryImpl(gameId);
-  }
-
-  @Provides @PerFragmentScope GameCharactersInteractor provideGameCharactersInteractor(CharactersRepository charactersRepository) {
-    return new GameCharactersUseCase(charactersRepository);
-  }
+    @Provides
+    @PerFragmentScope
+    GameCharactersInteractor provideGameCharactersInteractor(
+            CharactersRepository charactersRepository) {
+        return new GameCharactersUseCase(charactersRepository);
+    }
 }

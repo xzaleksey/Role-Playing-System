@@ -18,8 +18,8 @@ import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.adapter.MapViewHolder;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.DaggerMapsFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.MapsFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di.MapsModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.ScreenUtils;
@@ -49,11 +49,10 @@ public class MapsFragment
     return gamesDescriptionFragment;
   }
 
-  @Override @SuppressWarnings("unchecked") protected MapsFragmentComponent createComponent() {
-    return DaggerMapsFragmentComponent.builder()
-        .parentGameComponent(
-            ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent())
-        .build();
+  @Override @SuppressWarnings("unchecked") protected MapsFragmentComponent createComponent(
+      String fragmentId) {
+    return ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent()
+        .getMapsFragmentComponent(new MapsModule(fragmentId));
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {

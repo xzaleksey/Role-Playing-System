@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import java.io.Serializable;
 
 public class User implements Serializable, Parcelable {
@@ -15,6 +16,7 @@ public class User implements Serializable, Parcelable {
   private String uid;
   private int countOfGamesPlayed;
   private int countOfGamesMastered;
+  private String displayName;
 
   public User(String uid, String name, String email) {
     this.uid = uid;
@@ -58,6 +60,9 @@ public class User implements Serializable, Parcelable {
   }
 
   public String getName() {
+    if (!StringUtils.isEmpty(displayName)) {
+      return displayName;
+    }
     return name;
   }
 
@@ -71,6 +76,14 @@ public class User implements Serializable, Parcelable {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
   }
 
   @Override public int describeContents() {

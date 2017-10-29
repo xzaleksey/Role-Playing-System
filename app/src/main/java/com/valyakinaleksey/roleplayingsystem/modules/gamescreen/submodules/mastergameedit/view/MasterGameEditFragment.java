@@ -10,8 +10,8 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.di.DaggerMasterGameEditFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.di.MasterGameEditFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.di.MasterGameEditModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.view.model.MasterGameEditModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import javax.inject.Inject;
@@ -33,11 +33,9 @@ import javax.inject.Inject;
   }
 
   @Override @SuppressWarnings("unchecked")
-  protected MasterGameEditFragmentComponent createComponent() {
-    return DaggerMasterGameEditFragmentComponent.builder()
-        .parentGameComponent(
-            ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent())
-        .build();
+  protected MasterGameEditFragmentComponent createComponent(String fragmentId) {
+    return ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent()
+        .getMasterGameEditFragmentComponent(new MasterGameEditModule(fragmentId));
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {

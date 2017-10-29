@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.di;
 
 import autodagger.AutoExpose;
+import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
@@ -18,11 +19,15 @@ import javax.inject.Named;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
-@Module public class MapsModule {
+@Module public class MapsModule extends BaseFragmentModule {
 
-  private final static String VIEW_STATE_FILE_NAME = MapsModule.class.getSimpleName();
+  private final static String VIEW_STATE_FILE_NAME = "MapsModule";
 
-  @Provides MapsViewState provideViewState(ViewStateStorage storage) {
+  public MapsModule(String fragmentId) {
+    super(fragmentId);
+  }
+
+  @Provides MapsViewState provideViewState(@Named(VIEW_STATE_FILE_NAME) ViewStateStorage storage) {
     return new MapsViewState(storage);
   }
 
@@ -36,8 +41,9 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
     return new MapsPresenterImpl(mapsInteractor, parentPresenter);
   }
 
-  @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {
-    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
+  @Named(VIEW_STATE_FILE_NAME) @Provides ViewStateStorage provideViewStateStorage(
+      PathManager manager) {
+    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME + getFragmentId();
     return new FileViewStateStorage(fullPath);
   }
 }

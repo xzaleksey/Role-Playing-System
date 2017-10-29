@@ -21,7 +21,6 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.DaggerGamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
@@ -59,12 +58,10 @@ public class GamesListFragment
     return new GamesListFragment();
   }
 
-  @SuppressWarnings("unchecked") @Override protected GamesListComponent createComponent() {
-    return DaggerGamesListComponent.builder()
-        .parentFragmentComponent(
-            ((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent())
-        .gamesListModule(new GamesListModule())
-        .build();
+  @SuppressWarnings("unchecked") @Override protected GamesListComponent createComponent(
+      String fragmentId) {
+    return ((ComponentManagerFragment<ParentFragmentComponent, ?>) getParentFragment()).getComponent()
+        .getGamesListComponent(new GamesListModule(fragmentId));
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {

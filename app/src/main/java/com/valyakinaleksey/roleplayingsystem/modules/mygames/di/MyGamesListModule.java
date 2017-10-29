@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.mygames.di;
 
+import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
@@ -20,11 +21,16 @@ import javax.inject.Named;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
-@Module public class MyGamesListModule {
+@Module public class MyGamesListModule extends BaseFragmentModule {
 
-  private final static String VIEW_STATE_FILE_NAME = MyGamesListModule.class.getSimpleName();
+  private final static String VIEW_STATE_FILE_NAME = "MyGamesListModule";
 
-  @Provides MyGamesListViewState provideViewState(ViewStateStorage storage) {
+  public MyGamesListModule(String fragmentId) {
+    super(fragmentId);
+  }
+
+  @Provides MyGamesListViewState provideViewState(
+      @Named(VIEW_STATE_FILE_NAME) ViewStateStorage storage) {
     return new MyGamesListViewState(storage);
   }
 
@@ -34,16 +40,17 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
   }
 
   @Provides @Named(PRESENTER) @PerFragmentScope MyGamesListPresenter providePresenter(
-      CreateNewGameInteractor createNewGameInteractor, ValidatePasswordInteractor validatePasswordInteractor,
+      CreateNewGameInteractor createNewGameInteractor,
+      ValidatePasswordInteractor validatePasswordInteractor,
       CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter,
       MyGamesInteractor myGamesInteractor, GameRepository gamesRepository) {
-    return new MyGamesListPresenterImpl(createNewGameInteractor,
-        validatePasswordInteractor, checkUserJoinedGameInteractor, parentPresenter,
-        myGamesInteractor, gamesRepository);
+    return new MyGamesListPresenterImpl(createNewGameInteractor, validatePasswordInteractor,
+        checkUserJoinedGameInteractor, parentPresenter, myGamesInteractor, gamesRepository);
   }
 
-  @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {
-    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
+  @Named(VIEW_STATE_FILE_NAME) @Provides ViewStateStorage provideViewStateStorage(
+      PathManager manager) {
+    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME + getFragmentId();
     return new FileViewStateStorage(fullPath);
   }
 }

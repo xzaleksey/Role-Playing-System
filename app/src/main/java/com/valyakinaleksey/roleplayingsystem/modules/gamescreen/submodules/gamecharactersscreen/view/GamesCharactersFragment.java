@@ -10,8 +10,8 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.DaggerGamesCharactersFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.GamesCharactersFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.GamesCharactersModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.RecyclerViewUtils;
@@ -40,11 +40,9 @@ public class GamesCharactersFragment extends
   }
 
   @Override @SuppressWarnings("unchecked")
-  protected GamesCharactersFragmentComponent createComponent() {
-    return DaggerGamesCharactersFragmentComponent.builder()
-        .parentGameComponent(
-            ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent())
-        .build();
+  protected GamesCharactersFragmentComponent createComponent(String fragmentId) {
+    return ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent()
+        .getGamesCharactersFragmentComponent(new GamesCharactersModule(fragmentId));
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {

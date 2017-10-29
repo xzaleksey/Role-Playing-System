@@ -1,6 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di;
 
-
+import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
@@ -20,35 +20,33 @@ import dagger.Provides;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
-@Module
-public class MasterLogModule {
+@Module public class MasterLogModule extends BaseFragmentModule {
 
-    private final static String VIEW_STATE_FILE_NAME = MasterLogModule.class.getSimpleName();
+  private final static String VIEW_STATE_FILE_NAME = "MasterLogModule";
 
+  public MasterLogModule(String fragmentId) {
+    super(fragmentId);
+  }
 
-    @Provides
-    MasterLogViewState provideViewState(ViewStateStorage storage) {
-        return new MasterLogViewState(storage);
-    }
+  @Provides MasterLogViewState provideViewState(
+      @Named(VIEW_STATE_FILE_NAME) ViewStateStorage storage) {
+    return new MasterLogViewState(storage);
+  }
 
-    @Provides
-    @GameScope
-    @AutoExpose(MasterLogFragment.class)
-    MasterLogPresenter provideCommunicationBus(@Named(PRESENTER) MasterLogPresenter presenter, MasterLogViewState viewState) {
-        return new MasterLogViewCommunicationBus(presenter, viewState);
-    }
+  @Provides @GameScope @AutoExpose(MasterLogFragment.class)
+  MasterLogPresenter provideCommunicationBus(@Named(PRESENTER) MasterLogPresenter presenter,
+      MasterLogViewState viewState) {
+    return new MasterLogViewCommunicationBus(presenter, viewState);
+  }
 
-    @Provides
-    @Named(PRESENTER)
-    @GameScope
-    MasterLogPresenter providePresenter(MasterLogInteractor masterLogInteractor) {
-        return new MasterLogPresenterImpl(masterLogInteractor);
-    }
+  @Provides @Named(PRESENTER) @GameScope MasterLogPresenter providePresenter(
+      MasterLogInteractor masterLogInteractor) {
+    return new MasterLogPresenterImpl(masterLogInteractor);
+  }
 
-
-    @Provides
-    ViewStateStorage provideViewStateStorage(PathManager manager) {
-        String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
-        return new FileViewStateStorage(fullPath);
-    }
+  @Named(VIEW_STATE_FILE_NAME) @Provides ViewStateStorage provideViewStateStorage(
+      PathManager manager) {
+    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME + getFragmentId();
+    return new FileViewStateStorage(fullPath);
+  }
 }

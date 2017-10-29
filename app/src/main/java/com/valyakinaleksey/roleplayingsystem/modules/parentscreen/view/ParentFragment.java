@@ -27,8 +27,7 @@ import com.valyakinaleksey.roleplayingsystem.core.interfaces.OnToolbarChangedLis
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.*;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.DaggerParentFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.DrawerInfoModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
 import com.valyakinaleksey.roleplayingsystem.utils.NavigationUtils;
@@ -54,11 +53,9 @@ public class ParentFragment extends
   }
 
   @Override
-  protected com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent createComponent() {
-    return DaggerParentFragmentComponent.builder()
-        .appComponent(RpsApp.getAppComponent())
-        .parentModule(new ParentModule())
-        .build();
+  protected com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent createComponent(
+      String fragmentId) {
+    return RpsApp.getAppComponent().getParentFragmentComponent(new ParentFragmentModule(fragmentId));
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {

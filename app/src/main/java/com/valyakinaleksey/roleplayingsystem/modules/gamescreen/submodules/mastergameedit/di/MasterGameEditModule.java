@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mastergameedit.di;
 
+import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.GameScope;
@@ -22,11 +23,16 @@ import dagger.Provides;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
-@Module public class MasterGameEditModule {
+@Module public class MasterGameEditModule extends BaseFragmentModule {
 
-  private final static String VIEW_STATE_FILE_NAME = MasterGameEditModule.class.getSimpleName();
+  private final static String VIEW_STATE_FILE_NAME = "MasterGameEditModule";
 
-  @Provides MasterGameEditViewState provideViewState(ViewStateStorage storage) {
+  public MasterGameEditModule(String fragmentId) {
+    super(fragmentId);
+  }
+
+  @Provides MasterGameEditViewState provideViewState(
+      @Named(VIEW_STATE_FILE_NAME) ViewStateStorage storage) {
     return new MasterGameEditViewState(storage);
   }
 
@@ -44,8 +50,9 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
         gameClassesInteractor, gameRacesInteractorInteractor);
   }
 
-  @Provides ViewStateStorage provideViewStateStorage(PathManager manager) {
-    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME;
+  @Named(VIEW_STATE_FILE_NAME) @Provides ViewStateStorage provideViewStateStorage(
+      PathManager manager) {
+    String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME + getFragmentId();
     return new FileViewStateStorage(fullPath);
   }
 }

@@ -8,12 +8,12 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.presenter.AuthPresente
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthFragment;
 
 import dagger.Component;
+import dagger.Subcomponent;
 
 /**
  * Component for Auth screen
  */
-@Component(
-        dependencies = AppComponent.class,
+@Subcomponent(
         modules = AuthModule.class
 )
 @PerFragmentScope
