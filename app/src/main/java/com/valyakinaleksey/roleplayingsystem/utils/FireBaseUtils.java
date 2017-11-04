@@ -2,22 +2,16 @@ package com.valyakinaleksey.roleplayingsystem.utils;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.kelvinapps.rxfirebase.RxHandler;
 import com.kelvinapps.rxfirebase.exceptions.RxFirebaseDataException;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Executor;
-import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.functions.Func1;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeChildEvent;
 
@@ -43,6 +37,7 @@ public class FireBaseUtils {
   public static final String USERS = "users";
   public static final String USERS_IN_GAME = "users_in_game";
   public static final String GAMES_IN_USERS = "games_in_user";
+  public static final String CHARACTERS_IN_USER = "characters_in_user";
   public static final String GAMES = "games";
   public static final String GAME_LOG = "game_log";
   public static final String GAME_MAPS = "game_maps";

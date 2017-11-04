@@ -54,8 +54,8 @@ public class ParentGameModule extends BaseFragmentModule {
     @Provides
     @Named(PRESENTER)
     @PerFragmentScope
-    ParentGamePresenter providePresenter(ParentPresenter parentPresenter, GameInteractor gameInteractor) {
-        return new ParentGamePresenterImpl(parentPresenter, gameInteractor);
+    ParentGamePresenter providePresenter(ParentPresenter parentPresenter, GameInteractor gameInteractor, CharactersRepository charactersRepository) {
+        return new ParentGamePresenterImpl(parentPresenter, gameInteractor,charactersRepository);
     }
 
     @Named(VIEW_STATE_FILE_NAME)
