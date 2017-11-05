@@ -6,7 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import rx.Observable;
 
-public interface GameGameRepository extends FirebaseRepository<GameModel> {
+public interface GameRepository extends FirebaseRepository<GameModel> {
 
   GameModel getGameModelById(String id);
 
@@ -17,5 +17,7 @@ public interface GameGameRepository extends FirebaseRepository<GameModel> {
   Observable<Boolean> observeGameRemovedById(String id);
 
   Observable<Boolean> deleteGame(String id);
+
+  Observable<Void> updateLastVisit(String id);
 }
       

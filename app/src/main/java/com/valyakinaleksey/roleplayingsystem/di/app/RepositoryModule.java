@@ -1,6 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepositoryImpl;
@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 @Module public class RepositoryModule {
 
   @Provides @Singleton
-  GameGameRepository provideGameRepository() {
+  GameRepository provideGameRepository() {
     return new GameRepositoryImpl();
   }
 

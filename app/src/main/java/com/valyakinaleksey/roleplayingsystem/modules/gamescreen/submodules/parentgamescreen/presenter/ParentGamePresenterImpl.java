@@ -6,6 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SerializableTuple;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersGameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameInteractor;
@@ -25,11 +26,14 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
     private ParentPresenter parentPresenter;
     private GameInteractor gameInteractor;
     private CharactersGameRepository charactersRepository;
+    private GameRepository gameRepository;
 
-    public ParentGamePresenterImpl(ParentPresenter parentPresenter, GameInteractor gameInteractor, CharactersGameRepository charactersRepository) {
+    public ParentGamePresenterImpl(ParentPresenter parentPresenter, GameInteractor gameInteractor, CharactersGameRepository charactersRepository,
+                                   GameRepository gameRepository) {
         this.parentPresenter = parentPresenter;
         this.gameInteractor = gameInteractor;
         this.charactersRepository = charactersRepository;
+        this.gameRepository = gameRepository;
     }
 
     @SuppressWarnings("unchecked")
@@ -41,7 +45,9 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         boolean isMaster = gameModel.getMasterId().equals(FireBaseUtils.getCurrentUserId());
         parentGameModel.setMaster(isMaster);
         if (!isMaster) {
-            charactersRepository.updateLastPlayedGameCharacters(gameModel.getId())
+            String id = gameModel.getId();
+            charactersRepository.updateLastPlayedGameCharacters(id)
+                    .switchMap(stringGameCharacterModelMap -> gameRepository.updateLastVisit(id))
                     .compose(RxTransformers.applyIoSchedulers())
                     .subscribe();
         }

@@ -4,5 +4,6 @@ public interface GameInteractor
     extends CheckUserJoinedGameInteractor, DeleteGameInteractor, FinishGameInteractor,
     ObserveGameInteractor, ObserveUsersInGameInteractor, LeaveGameInteractor, OpenGameInteractor {
 
+
 }
       

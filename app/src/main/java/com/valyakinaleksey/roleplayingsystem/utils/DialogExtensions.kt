@@ -17,11 +17,12 @@ import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.CreateGamePresenter
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasCreateGameViewModel
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasPasswordViewModel
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.PasswordPresenter
 import rx.subscriptions.CompositeSubscription
 
 
 fun Context.showPasswordDialog(data: HasPasswordViewModel,
-    createGamePresenter: CreateGamePresenter): MaterialDialog {
+    createGamePresenter: PasswordPresenter): MaterialDialog {
   val passwordDialogViewModel = data.passwordDialogViewModel
   val compositeSubscription = CompositeSubscription()
   val dialog = MaterialDialog.Builder(this).title(R.string.input_password)

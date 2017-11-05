@@ -2,7 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.modules.mygames.presenter
 
 import android.content.Context
 import android.os.Bundle
-import com.crashlytics.android.Crashlytics
 import com.google.firebase.auth.FirebaseAuth
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
@@ -13,57 +12,35 @@ import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePrese
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
-import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView
-import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenter
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileView
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
 import com.valyakinaleksey.roleplayingsystem.utils.*
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils
 import eu.davidea.flexibleadapter.items.IFlexible
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 
-class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameInteractor,
+class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
                                private val validatePasswordInteractor: ValidatePasswordInteractor,
-                               private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
                                private val parentPresenter: ParentPresenter,
-                               private val myGamesInteractor: MyGamesInteractor,
-                               private val gameRepository: GameRepository) : BasePresenter<MyGamesListView, MyGamesListViewViewModel>(), MyGamesListPresenter, RestorablePresenter<MyGamesListViewViewModel> {
+                               private val gameRepository: GameRepository) : BasePresenter<UserProfileView, UserProfileViewModel>(), RestorablePresenter<UserProfileViewModel>, UserProfilePresenter {
 
-    override fun initNewViewModel(arguments: Bundle?): MyGamesListViewViewModel {
-        val gamesListViewModel = MyGamesListViewViewModel()
+    override fun initNewViewModel(arguments: Bundle?): UserProfileViewModel {
+        val gamesListViewModel = UserProfileViewModel()
         gamesListViewModel.toolbarTitle = RpsApp.app().getString(R.string.my_games)
         return gamesListViewModel
     }
 
     override fun restoreViewModel(
-            viewModelMy: MyGamesListViewViewModel) {
-        super.restoreViewModel(viewModelMy)
-        viewModelMy.setNeedUpdate(true)
+            viewViewModelMy: UserProfileViewModel) {
+        super.restoreViewModel(viewViewModelMy)
+        viewViewModelMy.setNeedUpdate(true)
     }
 
-    override fun createGame(gameModel: GameModel) {
-        compositeSubscription.add(createNewGame(gameModel, view, createNewGameInteractor))
-    }
-
-    override fun loadComplete() {
-        view.hideLoading()
-    }
-
-    override fun onFabPressed() {
-        val createGameDialogViewModel = CreateGameDialogViewModel()
-        createGameDialogViewModel.title = RpsApp.app().getString(R.string.create_game)
-        createGameDialogViewModel.gameModel = GameModel(StringUtils.EMPTY_STRING,
-                StringUtils.EMPTY_STRING)
-        viewModel.createGameDialogViewModel = createGameDialogViewModel
-        view.showCreateGameDialog()
-    }
 
     override fun navigateToGameScreen(
             model: GameModel) {
@@ -107,14 +84,6 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
 
     override fun getData() {
         super.getData()
-        compositeSubscription.add(
-                myGamesInteractor.getMyGamesObservable()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ data ->
-                            this.viewModel.items = data
-                            view.showContent()
-                        }, { Crashlytics.logException(it) }))
     }
 
     override fun onItemClicked(item: IFlexible<*>): Boolean {

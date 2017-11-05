@@ -11,6 +11,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.MyGamesListCompo
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.MyGamesListModule;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileModule;
 import dagger.Subcomponent;
 
 @Subcomponent(modules = ParentFragmentModule.class)
@@ -27,5 +29,7 @@ public interface ParentFragmentComponent extends HasParentPresenter {
     MyGamesListComponent getMyGamesListComponent(MyGamesListModule myGamesListModule);
 
     GamesDescriptionComponent getGamesDescriptionComponent(GamesDescriptionModule gamesDescriptionModule);
+
+    UserProfileComponent getUserProfileComponent(UserProfileModule userProfileModule);
 }
 

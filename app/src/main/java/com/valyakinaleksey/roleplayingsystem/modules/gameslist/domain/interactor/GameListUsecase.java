@@ -1,7 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor;
 
 import com.valyakinaleksey.roleplayingsystem.core.model.FilterModel;
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -17,9 +17,9 @@ public class GameListUsecase implements GameListInteractor {
 
   public static final int INTERVAL_DURATION = 100;
   private UserRepository userRepository;
-  private GameGameRepository gameRepository;
+  private GameRepository gameRepository;
 
-  public GameListUsecase(UserRepository userRepository, GameGameRepository gameRepository) {
+  public GameListUsecase(UserRepository userRepository, GameRepository gameRepository) {
     this.userRepository = userRepository;
     this.gameRepository = gameRepository;
   }

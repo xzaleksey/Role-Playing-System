@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.AbstractFirebaseRepositoryImpl;
@@ -26,10 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameInUserModel.FIELD_LAST_VISITED_DATE;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.*;
 
 public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel>
-        implements GameGameRepository {
+        implements GameRepository {
 
     private Subscription subscription = Subscriptions.unsubscribed();
     private Map<String, GameModel> gamesMap = Collections.emptyMap();
@@ -108,11 +110,12 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
                 .subscribe(dataSnapshot -> {
                     for (DataSnapshot data : dataSnapshot.getChildren()) {
                         UserInGameModel userInGameModel = data.getValue(UserInGameModel.class);
+                        String uid = userInGameModel.getUid();
                         childUpdates.put(
-                                String.format(FORMAT_SLASHES, GAMES_IN_USERS) + userInGameModel.getUid() + "/" + id,
+                                String.format(FORMAT_SLASHES, GAMES_IN_USERS) + uid + "/" + id,
                                 null);
                         childUpdates.put(
-                                String.format(FORMAT_SLASHES, CHARACTERS_IN_USER) + userInGameModel.getUid() + "/" + id,
+                                String.format(FORMAT_SLASHES, CHARACTERS_IN_USER) + uid + "/" + id,
                                 null);
                     }
                     childUpdates.put(String.format(FORMAT_SLASHES, USERS_IN_GAME) + id, null);
@@ -129,6 +132,14 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
                 });
 
         return booleanPublishSubject;
+    }
+
+    @Override
+    public Observable<Void> updateLastVisit(String id) {
+        return FireBaseUtils.setData(ServerValue.TIMESTAMP, FireBaseUtils.getTableReference(GAMES_IN_USERS)
+                .child(id)
+                .child(FireBaseUtils.getCurrentUserId())
+                .child(FIELD_LAST_VISITED_DATE));
     }
 
     @NotNull

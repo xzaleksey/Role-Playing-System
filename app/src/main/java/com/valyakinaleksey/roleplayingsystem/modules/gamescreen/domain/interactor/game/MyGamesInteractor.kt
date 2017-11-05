@@ -8,7 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.core.flexible.CommonDividerViewMode
 import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.utils.DateFormats
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
@@ -18,7 +18,7 @@ import org.joda.time.DateTime
 import rx.Observable
 import rx.functions.Func2
 
-class MyGamesUsecase(private val gamesRepository: GameGameRepository) : MyGamesInteractor {
+class MyGamesUsecase(private val gamesRepository: GameRepository) : MyGamesInteractor {
   private val gamesInUsersQuery: Query = FireBaseUtils.getTableReference(
       FireBaseUtils.GAMES_IN_USERS)
       .child(FireBaseUtils.getCurrentUserId())

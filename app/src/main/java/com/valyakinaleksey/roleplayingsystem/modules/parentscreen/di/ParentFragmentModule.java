@@ -4,7 +4,7 @@ import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.ParentScope;
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.communication.ParentViewCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
@@ -40,7 +40,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
   }
 
   @Provides @Named(PRESENTER) @ParentScope ParentPresenter providePresenter(
-          GameGameRepository gameRepository, CheckUserJoinedGameInteractor checkUserInteractor) {
+          GameRepository gameRepository, CheckUserJoinedGameInteractor checkUserInteractor) {
     return new ParentPresenterImpl(gameRepository, checkUserInteractor);
   }
 
