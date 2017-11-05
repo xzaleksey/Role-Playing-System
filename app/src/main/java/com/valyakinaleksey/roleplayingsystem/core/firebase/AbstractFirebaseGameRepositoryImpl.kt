@@ -9,15 +9,15 @@ import rx.Observable
 import rx.functions.Func1
 import timber.log.Timber
 
-abstract class AbstractFirebaseRepositoryImpl<T : HasId>(
-    private val clazz: Class<T>) : FirebaseRepository<T> {
+abstract class AbstractFirebaseGameRepositoryImpl<T : HasId>(
+    private val clazz: Class<T>) : FirebaseGameRepository<T> {
 
-  override fun observeData(): Observable<MutableMap<String, T>> {
-    return RxFirebaseDatabase.observeValueEvent(getDataBaseReference(), getDataFunc())
+  override fun observeData(gameId: String): Observable<MutableMap<String, T>> {
+    return RxFirebaseDatabase.observeValueEvent(getDataBaseReference(gameId), getDataFunc())
   }
 
-  override fun getData(): Observable<MutableMap<String, T>> {
-    return RxFirebaseDatabase.observeSingleValueEvent(getDataBaseReference(), getDataFunc())
+  override fun getData(gameId: String): Observable<MutableMap<String, T>> {
+    return RxFirebaseDatabase.observeSingleValueEvent(getDataBaseReference(gameId), getDataFunc())
   }
 
   private fun getDataFunc(): Func1<DataSnapshot, MutableMap<String, T>> {
@@ -33,7 +33,7 @@ abstract class AbstractFirebaseRepositoryImpl<T : HasId>(
               try {
                 result.put(it.id, it)
               } catch (e: Exception) {
-                  Timber.e(e)
+                Timber.e(e)
               }
             }
       }
@@ -41,5 +41,5 @@ abstract class AbstractFirebaseRepositoryImpl<T : HasId>(
     }
   }
 
-  abstract fun getDataBaseReference(): DatabaseReference
+  abstract fun getDataBaseReference(gameId: String): DatabaseReference
 }

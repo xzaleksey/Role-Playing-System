@@ -4,7 +4,7 @@ import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
@@ -43,7 +43,7 @@ import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
       CreateNewGameInteractor createNewGameInteractor,
       ValidatePasswordInteractor validatePasswordInteractor,
       CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter,
-      MyGamesInteractor myGamesInteractor, GameRepository gamesRepository) {
+      MyGamesInteractor myGamesInteractor, GameGameRepository gamesRepository) {
     return new MyGamesListPresenterImpl(createNewGameInteractor, validatePasswordInteractor,
         checkUserJoinedGameInteractor, parentPresenter, myGamesInteractor, gamesRepository);
   }

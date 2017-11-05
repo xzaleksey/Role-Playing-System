@@ -1,15 +1,15 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game;
 
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import rx.Observable;
 
 public class DeleteGameUsecase implements DeleteGameInteractor {
 
-    private GameRepository gameRepository;
+    private GameGameRepository gameRepository;
 
-    public DeleteGameUsecase(GameRepository gameRepository) {
+    public DeleteGameUsecase(GameGameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 

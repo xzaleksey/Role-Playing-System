@@ -1,7 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game;
 
 import com.google.firebase.database.DataSnapshot;
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 
 import rx.Observable;
@@ -11,9 +11,9 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_NA
 
 public class ObserveGameUseCase implements ObserveGameInteractor {
 
-    private GameRepository gameRepository;
+    private GameGameRepository gameRepository;
 
-    public ObserveGameUseCase(GameRepository gameRepository) {
+    public ObserveGameUseCase(GameGameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 

@@ -2,7 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.game
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Transaction;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersGameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions.BaseGameTEditInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -22,9 +22,9 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.*;
 public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameCharacterModel>
         implements GameCharactersInteractor {
 
-    private CharactersRepository charactersRepository;
+    private CharactersGameRepository charactersRepository;
 
-    public GameCharactersUseCase(CharactersRepository charactersRepository) {
+    public GameCharactersUseCase(CharactersGameRepository charactersRepository) {
         super(GameCharacterModel.class);
         this.charactersRepository = charactersRepository;
     }
@@ -75,7 +75,7 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
         String currentUserId = getCurrentUserId();
         String masterId = gameModel.getMasterId();
         boolean isMaster = masterId.equals(currentUserId);
-        return charactersRepository.observeData()
+        return charactersRepository.observeData(gameModel.getId())
                 .throttleLast(50, TimeUnit.MILLISECONDS)
                 .map(stringGameCharacterModelMap -> {
                     ArrayList<AbstractGameCharacterListItem> abstractGameCharacterListItems =
@@ -123,7 +123,7 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
                         return Transaction.success(data);
                     }
                     String currentUserId = FireBaseUtils.getCurrentUserId();
-                    characterModel.setId(currentUserId);
+                    characterModel.setUid(currentUserId);
                     data.setValue(characterModel);
                     FireBaseUtils.getTableReference(CHARACTERS_IN_USER)
                             .child(currentUserId)

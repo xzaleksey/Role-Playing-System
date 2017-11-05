@@ -4,8 +4,8 @@ import android.content.Context
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ServerValue
 import com.valyakinaleksey.roleplayingsystem.R
-import com.valyakinaleksey.roleplayingsystem.core.firebase.AbstractFirebaseRepositoryImpl
-import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseRepository
+import com.valyakinaleksey.roleplayingsystem.core.firebase.AbstractFirebaseGameRepositoryImpl
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseGameRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel
@@ -17,24 +17,23 @@ import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.CHARACTERS_IN_U
 import rx.Observable
 import rx.functions.Func3
 
-class CharactersRepositoryImpl(
-        private val gameId: String,
+class CharactersGameRepositoryImpl(
         private val userRepository: UserRepository,
-        private val gameClassesRepository: GameClassesRepository,
-        private val gameRacesRepository: GameRacesRepository,
+        private val classesRepository: GameClassesRepository,
+        private val racesRepository: GameRacesRepository,
         private val context: Context
-) : AbstractFirebaseRepositoryImpl<GameCharacterModel>(GameCharacterModel::class.java), CharactersRepository {
+) : AbstractFirebaseGameRepositoryImpl<GameCharacterModel>(GameCharacterModel::class.java), CharactersGameRepository {
 
     private val undefined = context.getString(R.string.undefined)
 
-    override fun getDataBaseReference(): DatabaseReference {
+    override fun getDataBaseReference(gameId: String): DatabaseReference {
         return FireBaseUtils.getTableReference(FireBaseUtils.GAME_CHARACTERS).child(gameId)
     }
 
-    override fun observeData(): Observable<MutableMap<String, GameCharacterModel>> {
-        return super.observeData().concatMap { characters ->
-            return@concatMap Observable.zip(userRepository.usersMap, gameClassesRepository.getData(),
-                    gameRacesRepository.getData(),
+    override fun observeData(gameId: String): Observable<MutableMap<String, GameCharacterModel>> {
+        return super.observeData(gameId).concatMap { characters ->
+            return@concatMap Observable.zip(userRepository.usersMap, classesRepository.getData(gameId),
+                    racesRepository.getData(gameId),
                     Func3 { users: Map<String, User>, classes: Map<String, GameClassModel>, races: Map<String, GameRaceModel> ->
                         return@Func3 characters.onEach { characterEntry ->
                             val characterModel = characterEntry.value
@@ -60,34 +59,35 @@ class CharactersRepositoryImpl(
         }
     }
 
-    override fun getMyCharacters(): Observable<MutableMap<String, GameCharacterModel>> {
+    override fun getMyCharacters(gameId: String): Observable<MutableMap<String, GameCharacterModel>> {
         val currentUserId = FireBaseUtils.getCurrentUserId()
-        return observeData()
-                .take(1)
+        return getData(gameId)
                 .map {
                     val myCharacters = linkedMapOf<String, GameCharacterModel>()
                     it.values
+                            .asSequence()
                             .filter { it.uid == currentUserId }
                             .forEach { myCharacters.put(it.id, it) }
                     return@map myCharacters
                 }
     }
 
-    override fun updateLastPlayedGameCharacters(): Observable<MutableMap<String, GameCharacterModel>> {
+    override fun updateLastPlayedGameCharacters(gameId: String): Observable<MutableMap<String, GameCharacterModel>> {
         val currentUserId = FireBaseUtils.getCurrentUserId()
-        return getMyCharacters()
+        return getMyCharacters(gameId)
                 .doOnNext {
                     for (gameCharacterModel in it.values) {
                         FireBaseUtils.getTableReference(CHARACTERS_IN_USER)
                                 .child(currentUserId)
-                                .child(gameId).child(gameCharacterModel.id).child(IdDateModel.DATE_VISITED).setValue(ServerValue.TIMESTAMP)
+                                .child(gameId).child(IdDateModel.DATE_VISITED)
+                                .setValue(ServerValue.TIMESTAMP)
                     }
                 }
     }
 
 }
 
-interface CharactersRepository : FirebaseRepository<GameCharacterModel> {
-    fun getMyCharacters(): Observable<MutableMap<String, GameCharacterModel>>
-    fun updateLastPlayedGameCharacters(): Observable<MutableMap<String, GameCharacterModel>>
+interface CharactersGameRepository : FirebaseGameRepository<GameCharacterModel> {
+    fun getMyCharacters(gameId: String): Observable<MutableMap<String, GameCharacterModel>>
+    fun updateLastPlayedGameCharacters(gameId: String): Observable<MutableMap<String, GameCharacterModel>>
 }

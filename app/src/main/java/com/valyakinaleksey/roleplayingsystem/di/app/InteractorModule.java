@@ -1,6 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
@@ -51,7 +51,7 @@ import javax.inject.Singleton;
 
 @Module public class InteractorModule {
   @Provides @Singleton ObserveGameInteractor provideObserveGameInteractor(
-      GameRepository gameRepository) {
+      GameGameRepository gameRepository) {
     return new ObserveGameUseCase(gameRepository);
   }
 
@@ -87,7 +87,7 @@ import javax.inject.Singleton;
   }
 
   @Provides @Singleton DeleteGameInteractor provideDeleteGameInteractor(
-      GameRepository gameRepository) {
+      GameGameRepository gameRepository) {
     return new DeleteGameUsecase(gameRepository);
   }
 
@@ -135,11 +135,11 @@ import javax.inject.Singleton;
     return new LeaveGameUseCase();
   }
 
-  @Provides @Singleton MyGamesInteractor provideMyGamesInteractor(GameRepository gamesRepository) {
+  @Provides @Singleton MyGamesInteractor provideMyGamesInteractor(GameGameRepository gamesRepository) {
     return new MyGamesUsecase(gamesRepository);
   }
 
-  @Provides @Singleton GameListInteractor provideGamesListInteractor(GameRepository gamesRepository,
+  @Provides @Singleton GameListInteractor provideGamesListInteractor(GameGameRepository gamesRepository,
       UserRepository userRepostiory) {
     return new GameListUsecase(userRepostiory, gamesRepository);
   }

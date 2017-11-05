@@ -3,7 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.pare
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.qualifiers.GameId;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersGameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameClassesRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRacesRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyFragmentComponent;
@@ -31,7 +31,7 @@ public interface ParentGameComponent extends HasPresenter<ParentGamePresenter> {
 
   @GameId String getGameId();
 
-  CharactersRepository getCharactersRepository();
+  CharactersGameRepository getCharactersRepository();
 
   GameClassesRepository getGameClassesRepository();
 

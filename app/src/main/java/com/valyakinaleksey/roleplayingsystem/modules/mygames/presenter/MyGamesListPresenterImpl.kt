@@ -10,7 +10,7 @@ import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor
@@ -34,7 +34,7 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
                                private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
                                private val parentPresenter: ParentPresenter,
                                private val myGamesInteractor: MyGamesInteractor,
-                               private val gameRepository: GameRepository) : BasePresenter<MyGamesListView, MyGamesListViewViewModel>(), MyGamesListPresenter, RestorablePresenter<MyGamesListViewViewModel> {
+                               private val gameRepository: GameGameRepository) : BasePresenter<MyGamesListView, MyGamesListViewViewModel>(), MyGamesListPresenter, RestorablePresenter<MyGamesListViewViewModel> {
 
     override fun initNewViewModel(arguments: Bundle?): MyGamesListViewViewModel {
         val gamesListViewModel = MyGamesListViewViewModel()

@@ -1,14 +1,12 @@
 package com.valyakinaleksey.roleplayingsystem.data.repository.game;
 
 import com.google.firebase.database.DataSnapshot;
-
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import java.util.Map;
 import rx.Observable;
 
-public interface GameRepository extends FirebaseRepository<GameModel> {
+public interface GameGameRepository extends FirebaseRepository<GameModel> {
 
   GameModel getGameModelById(String id);
 

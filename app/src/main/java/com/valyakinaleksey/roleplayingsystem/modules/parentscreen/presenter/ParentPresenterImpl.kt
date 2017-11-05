@@ -6,7 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
-import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameGameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.GamesDescriptionFragment
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
@@ -23,7 +23,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils.PO
 import rx.Subscription
 
 class ParentPresenterImpl(
-        private val gameRepository: GameRepository,
+        private val gameRepository: GameGameRepository,
         private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor
 ) : BasePresenter<ParentView, ParentModel>(), ParentPresenter {
 

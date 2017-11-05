@@ -4,13 +4,11 @@ import android.os.Bundle;
 import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
-import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SerializableTuple;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersRepository;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersGameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
@@ -20,16 +18,15 @@ import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen;
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGameModel>
         implements ParentGamePresenter {
 
     private ParentPresenter parentPresenter;
     private GameInteractor gameInteractor;
-    private CharactersRepository charactersRepository;
+    private CharactersGameRepository charactersRepository;
 
-    public ParentGamePresenterImpl(ParentPresenter parentPresenter, GameInteractor gameInteractor, CharactersRepository charactersRepository) {
+    public ParentGamePresenterImpl(ParentPresenter parentPresenter, GameInteractor gameInteractor, CharactersGameRepository charactersRepository) {
         this.parentPresenter = parentPresenter;
         this.gameInteractor = gameInteractor;
         this.charactersRepository = charactersRepository;
@@ -44,16 +41,9 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         boolean isMaster = gameModel.getMasterId().equals(FireBaseUtils.getCurrentUserId());
         parentGameModel.setMaster(isMaster);
         if (!isMaster) {
-            charactersRepository.getMyCharacters().
-                    compose(RxTransformers.applyIoSchedulers())
-                    .subscribe(new DataObserver<Map<String, GameCharacterModel>>() {
-                        @Override
-                        public void onData(Map<String, GameCharacterModel> data) {
-                            for (GameCharacterModel gameCharacterModel : data.values()) {
-
-                            }
-                        }
-                    });
+            charactersRepository.updateLastPlayedGameCharacters(gameModel.getId())
+                    .compose(RxTransformers.applyIoSchedulers())
+                    .subscribe();
         }
         return parentGameModel;
     }
