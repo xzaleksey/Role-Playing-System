@@ -28,14 +28,14 @@ import java.util.concurrent.TimeUnit;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.*;
 
-public class GameGameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel>
+public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel>
         implements GameGameRepository {
 
     private Subscription subscription = Subscriptions.unsubscribed();
     private Map<String, GameModel> gamesMap = Collections.emptyMap();
     private BehaviorSubject<Map<String, GameModel>> subject = BehaviorSubject.create(gamesMap);
 
-    public GameGameRepositoryImpl() {
+    public GameRepositoryImpl() {
         super(GameModel.class);
         FirebaseAuth.getInstance().addAuthStateListener(firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -110,6 +110,9 @@ public class GameGameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameM
                         UserInGameModel userInGameModel = data.getValue(UserInGameModel.class);
                         childUpdates.put(
                                 String.format(FORMAT_SLASHES, GAMES_IN_USERS) + userInGameModel.getUid() + "/" + id,
+                                null);
+                        childUpdates.put(
+                                String.format(FORMAT_SLASHES, CHARACTERS_IN_USER) + userInGameModel.getUid() + "/" + id,
                                 null);
                     }
                     childUpdates.put(String.format(FORMAT_SLASHES, USERS_IN_GAME) + id, null);
