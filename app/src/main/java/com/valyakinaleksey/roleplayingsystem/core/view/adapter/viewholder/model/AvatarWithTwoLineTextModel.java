@@ -85,7 +85,7 @@ public class AvatarWithTwoLineTextModel implements Serializable, Parcelable {
         this.secondaryText = in.readString();
         this.placeHolderAndErrorDrawableProvider = (DrawableProvider) in.readSerializable();
         this.photoUrl = in.readString();
-        this.model = (Serializable) in.readSerializable();
+        this.model = in.readSerializable();
     }
 
     public static final Creator<AvatarWithTwoLineTextModel> CREATOR = new Creator<AvatarWithTwoLineTextModel>() {

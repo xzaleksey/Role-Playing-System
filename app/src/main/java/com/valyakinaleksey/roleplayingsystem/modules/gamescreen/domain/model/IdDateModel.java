@@ -46,7 +46,7 @@ public class IdDateModel implements HasId, HasDate, Serializable {
     }
 
     @Exclude
-    public long getDateCreateLong() {
+    public long getDateVisitedLong() {
         if (dateVisited == null || dateVisited == ServerValue.TIMESTAMP) {
             return date;
         }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +46,8 @@ public class ParentFragment extends
     private GoogleApiClient googleApiClient;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.appbar_layout)
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_progress_bar)
     ProgressBar progressBar;
     @BindString(R.string.connecting)
@@ -102,7 +105,7 @@ public class ParentFragment extends
         List<DrawerInfoModel> result = new ArrayList<>();
         result.add(new DrawerInfoModel(getString(R.string.my_games), NavigationScreen.MY_GAMES));
         result.add(new DrawerInfoModel(getString(R.string.list_of_games), NavigationScreen.GAMES_LIST));
-        result.add(new DrawerInfoModel(getString(R.string.settings), NavigationScreen.SETTINGS));
+        result.add(new DrawerInfoModel(getString(R.string.profile), NavigationScreen.PROFILE));
         drawerItems = result;
     }
 
@@ -159,7 +162,7 @@ public class ParentFragment extends
     public void updateToolbar() {
         boolean visible = data.isDisconnected();
         progressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
-        ActionBar supportActionBar = ((AbsActivity) getActivity()).getSupportActionBar();
+        ActionBar supportActionBar = getAbsActivity().getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setTitle(visible ? connectionString : data.getToolbarTitle());
         }
@@ -189,6 +192,20 @@ public class ParentFragment extends
     @Override
     public void getNavigationFragment(Bundle args) {
         getComponent().getPresenter().navigateTo(this, args);
+    }
+
+    @Override
+    public void hideAppBar() {
+        getAbsActivity().getSupportActionBar().hide();
+    }
+
+    @Override
+    public void showAppBar() {
+        getAbsActivity().getSupportActionBar().show();
+    }
+
+    private AbsActivity getAbsActivity() {
+        return (AbsActivity) getActivity();
     }
 
     @Override

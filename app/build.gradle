@@ -109,6 +109,8 @@ dependencies {
   compile "com.amulyakhare:com.amulyakhare.textdrawable:1.0.1"
   compile "com.android.support.constraint:constraint-layout:1.0.0-beta4"
   compile "eu.davidea:flexible-adapter:5.0.0-rc1"
+  compile 'com.daimajia.easing:library:2.0@aar'
+  compile 'com.daimajia.androidanimations:library:2.3@aar'
 
   // View
   compile group: 'com.github.chrisbanes.photoview', name: 'library', version: '1.2.4'

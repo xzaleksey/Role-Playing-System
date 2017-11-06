@@ -85,5 +85,6 @@
   <string name="completed_games">Completed games</string>
   <string name="open_game">Open game</string>
   <string name="undefined">Undefined</string>
+    <string name="profile">Profile</string>
 
 </resources>

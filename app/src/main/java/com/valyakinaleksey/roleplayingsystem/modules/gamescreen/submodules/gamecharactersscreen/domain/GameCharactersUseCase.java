@@ -117,7 +117,9 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
     @Override
     public Observable<Void> chooseCharacter(GameModel gameModel,
                                             GameCharacterModel gameCharacterModel) {
-        return FireBaseUtils.startTransaction(getDatabaseReference(gameModel).child(gameCharacterModel.getId()), data -> {
+        DatabaseReference reference = getDatabaseReference(gameModel).child(gameCharacterModel.getId());
+
+        return FireBaseUtils.startTransaction(reference, data -> {
                     GameCharacterModel characterModel = data.getValue(GameCharacterModel.class);
                     if (characterModel == null || !StringUtils.isEmpty(characterModel.getUid())) {
                         return Transaction.success(data);

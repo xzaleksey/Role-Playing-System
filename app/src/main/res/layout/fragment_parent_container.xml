@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+>
+    <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar_layout"
+            android:animateLayoutChanges="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     >
-  <android.support.design.widget.AppBarLayout
-      android:id="@+id/appbar_layout"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-      >
 
-    <include layout="@layout/toolbar" />
+        <include layout="@layout/toolbar"/>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:tabGravity="fill"
-        app:tabMode="scrollable"
+        <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:tabGravity="fill"
+                app:tabMode="scrollable"
         />
-  </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>
 
-  <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      android:id="@+id/parent_fragment_container"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="@color/backgroundColor"
-      app:layout_behavior="com.valyakinaleksey.roleplayingsystem.utils.ScrollViewBehaviorFix"
-      />
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:id="@+id/parent_fragment_container"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:background="@color/backgroundColor"
+                 app:layout_behavior="com.valyakinaleksey.roleplayingsystem.utils.ScrollViewBehaviorFix"
+    />
 </android.support.design.widget.CoordinatorLayout>

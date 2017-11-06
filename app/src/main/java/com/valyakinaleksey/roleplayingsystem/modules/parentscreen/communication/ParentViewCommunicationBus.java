@@ -12,44 +12,63 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.sta
 
 import javax.inject.Inject;
 
-@PerFragmentScope public class ParentViewCommunicationBus extends
-    SelfRestorableNavigationLceCommunicationBus<ParentModel, ParentView, ParentPresenter, ParentGameViewState>
-    implements ParentPresenter, ParentView {
+@PerFragmentScope
+public class ParentViewCommunicationBus extends
+        SelfRestorableNavigationLceCommunicationBus<ParentModel, ParentView, ParentPresenter, ParentGameViewState>
+        implements ParentPresenter, ParentView {
 
-  @Override public void attachView(ParentView view) {
-    super.attachView(view);
-  }
+    @Override
+    public void attachView(ParentView view) {
+        super.attachView(view);
+    }
 
-  @Inject
-  public ParentViewCommunicationBus(ParentPresenter presenter, ParentGameViewState viewState) {
-    super(presenter, viewState);
-  }
+    @Inject
+    public ParentViewCommunicationBus(ParentPresenter presenter, ParentGameViewState viewState) {
+        super(presenter, viewState);
+    }
 
-  @Override public void navigateTo(Fragment fragment, Bundle args) {
-    presenter.navigateTo(fragment, args);
-  }
+    @Override
+    public void navigateTo(Fragment fragment, Bundle args) {
+        presenter.navigateTo(fragment, args);
+    }
 
-  @Override public void navigateToFragment(int navId, Bundle args) {
-    presenter.navigateToFragment(navId, args);
-  }
+    @Override
+    public void navigateToFragment(int navId, Bundle args) {
+        presenter.navigateToFragment(navId, args);
+    }
 
-  @Override public void navigateToFragment(int navId) {
-    presenter.navigateToFragment(navId);
-  }
+    @Override
+    public void navigateToFragment(int navId) {
+        presenter.navigateToFragment(navId);
+    }
 
-  @Override public void navigateBack() {
-    presenter.navigateBack();
-  }
+    @Override
+    public void navigateBack() {
+        presenter.navigateBack();
+    }
 
-  @Override public void tryOpenDeepLink(Bundle args) {
-    presenter.tryOpenDeepLink(args);
-  }
+    @Override
+    public void tryOpenDeepLink(Bundle args) {
+        presenter.tryOpenDeepLink(args);
+    }
 
-  @Override public void updateToolbar() {
-    getNavigationResolver().resolveNavigation(ParentView::updateToolbar);
-  }
+    @Override
+    public void updateToolbar() {
+        getNavigationResolver().resolveNavigation(ParentView::updateToolbar);
+    }
 
-  @Override public void getNavigationFragment(Bundle args) {
-    getNavigationResolver().resolveNavigation(parentView -> parentView.getNavigationFragment(args));
-  }
+    @Override
+    public void getNavigationFragment(Bundle args) {
+        getNavigationResolver().resolveNavigation(parentView -> parentView.getNavigationFragment(args));
+    }
+
+    @Override
+    public void hideAppBar() {
+        getNavigationResolver().resolveNavigation(ParentView::hideAppBar);
+    }
+
+    @Override
+    public void showAppBar() {
+        getNavigationResolver().resolveNavigation(ParentView::showAppBar);
+    }
 }

@@ -6,6 +6,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
+import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver
+import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter
@@ -16,6 +18,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProfileInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenter
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileView
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
@@ -27,12 +30,16 @@ import eu.davidea.flexibleadapter.items.IFlexible
 class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
                                private val validatePasswordInteractor: ValidatePasswordInteractor,
                                private val parentPresenter: ParentPresenter,
+                               private val userProfileInteractor: UserProfileInteractor,
                                private val gameRepository: GameRepository) : BasePresenter<UserProfileView, UserProfileViewModel>(), RestorablePresenter<UserProfileViewModel>, UserProfilePresenter {
 
     override fun initNewViewModel(arguments: Bundle?): UserProfileViewModel {
-        val gamesListViewModel = UserProfileViewModel()
-        gamesListViewModel.toolbarTitle = RpsApp.app().getString(R.string.my_games)
-        return gamesListViewModel
+        val userProfileViewModel = UserProfileViewModel()
+        userProfileViewModel.toolbarTitle = RpsApp.app().getString(R.string.profile)
+        val userId = arguments?.getString(UserProfileViewModel.USER_ID) ?: FireBaseUtils.getCurrentUserId()
+        userProfileViewModel.userId = userId
+        userProfileViewModel.isCurrentUser = FireBaseUtils.getCurrentUserId() == userId
+        return userProfileViewModel
     }
 
     override fun restoreViewModel(
@@ -84,6 +91,14 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
 
     override fun getData() {
         super.getData()
+        compositeSubscription.add(userProfileInteractor.observeUserProfile(viewModel.userId)
+                .compose(RxTransformers.applySchedulers()).subscribe(object : DataObserver<List<IFlexible<*>>>() {
+            override fun onData(data: List<IFlexible<*>>) {
+                viewModel.items = data
+                view.showContent()
+            }
+        })
+        )
     }
 
     override fun onItemClicked(item: IFlexible<*>): Boolean {

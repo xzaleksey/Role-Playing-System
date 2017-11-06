@@ -13,6 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListFragment
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.UserProfileFragment
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment
@@ -35,7 +36,7 @@ class ParentPresenterImpl(
         navigationHandler.put(NavigationScreen.GAME_FRAGMENT, navigateToFragment<ParentGameFragment>())
         navigationHandler.put(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, navigateToFragment<GamesDescriptionFragment>())
         navigationHandler.put(NavigationScreen.IMAGE_FRAGMENT, navigateToFragment<ImageFragment>())
-        navigationHandler.put(NavigationScreen.SETTINGS, { _, _ -> })
+        navigationHandler.put(NavigationScreen.PROFILE, navigateToFragment<UserProfileFragment>())
         navigationHandler.put(NavigationScreen.BACK, { _, _ -> })
     }
 

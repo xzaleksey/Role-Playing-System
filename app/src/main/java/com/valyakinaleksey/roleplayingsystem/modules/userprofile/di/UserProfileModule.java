@@ -10,6 +10,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.presenter.UserProfilePresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.communication.UserProfileCommunicationBus;
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProfileInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.state.UserProfileViewState;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
@@ -48,9 +49,11 @@ public class UserProfileModule extends BaseFragmentModule {
     UserProfilePresenter providePresenter(
             ValidatePasswordInteractor validatePasswordInteractor,
             CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter,
-            GameRepository gamesRepository) {
-        return new UserProfilePresenterImpl(checkUserJoinedGameInteractor,validatePasswordInteractor,
-                parentPresenter, gamesRepository);
+            GameRepository gamesRepository, UserProfileInteractor userProfileInteractor) {
+        return new UserProfilePresenterImpl(checkUserJoinedGameInteractor, validatePasswordInteractor,
+                parentPresenter,
+                userProfileInteractor,
+                gamesRepository);
     }
 
     @Named(VIEW_STATE_FILE_NAME)

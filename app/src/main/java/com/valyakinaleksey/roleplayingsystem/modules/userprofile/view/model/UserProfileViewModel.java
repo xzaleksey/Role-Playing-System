@@ -15,6 +15,8 @@ import java.util.List;
 public class UserProfileViewModel extends BaseRequestUpdateViewModel
         implements RequestUpdateViewModel, Parcelable, Serializable, HasPasswordViewModel {
 
+    public static final String USER_ID = "user_id";
+
     private String toolbarTitle;
     private String userId;
     private boolean isCurrentUser = false;
@@ -41,6 +43,22 @@ public class UserProfileViewModel extends BaseRequestUpdateViewModel
         this.items = items;
     }
 
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public boolean isCurrentUser() {
+        return isCurrentUser;
+    }
+
+    public void setCurrentUser(boolean currentUser) {
+        isCurrentUser = currentUser;
+    }
 
     @Override
     public PasswordDialogViewModel getPasswordDialogViewModel() {

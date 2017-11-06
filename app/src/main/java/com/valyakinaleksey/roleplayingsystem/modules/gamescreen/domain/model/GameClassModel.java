@@ -78,5 +78,6 @@ public class GameClassModel implements Serializable, Parcelable, HasId, HasName,
   @Override public int hashCode() {
     return getId() != null ? getId().hashCode() : 0;
   }
+
 }
       
