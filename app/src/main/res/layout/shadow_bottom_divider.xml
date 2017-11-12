@@ -9,6 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:id="@+id/divider"
-        android:background="@drawable/shadow_divider" />
+        android:background="@drawable/shadow_bottom_divider" />
 </FrameLayout>
 

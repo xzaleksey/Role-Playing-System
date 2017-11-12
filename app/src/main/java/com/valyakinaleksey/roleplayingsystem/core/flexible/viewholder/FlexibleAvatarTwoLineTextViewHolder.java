@@ -1,6 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.core.flexible.viewholder;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -9,10 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.flexible.FlexibleAvatarWithTwoLineTextModel;
+import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.glide.CircleTransform;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import rx.Subscription;
@@ -39,21 +40,18 @@ public class FlexibleAvatarTwoLineTextViewHolder extends FlexibleViewHolder {
             subscription.unsubscribe();
         }
         Drawable drawable = avatarWithTwoLineTextModel.getPlaceHolderAndErrorDrawableProvider().getDrawable();
+        if (!(drawable instanceof RoundedBitmapDrawable) && !(drawable instanceof TextDrawable)) {
+            RoundedBitmapDrawable circularBitmapDrawable =
+                    RoundedBitmapDrawableFactory.create(ivAvatar.getContext().getResources(), ImageUtils.drawableToBitmap(drawable));
+            circularBitmapDrawable.setCircular(true);
+            drawable = circularBitmapDrawable;
+        }
         ivAvatar.setImageDrawable(drawable);
         Glide.with(ivAvatar.getContext()).load(avatarWithTwoLineTextModel.getPhotoUrl())
-                .asBitmap()
-                .centerCrop()
-                .placeholder(drawable)
                 .error(drawable)
-                .into(new BitmapImageViewTarget(ivAvatar) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(ivAvatar.getContext().getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        ivAvatar.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
+                .transform(new CircleTransform(itemView.getContext()))
+                .centerCrop()
+                .into(ivAvatar);
     }
 }
       

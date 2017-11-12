@@ -44,13 +44,15 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         parentGameModel.setGameModel(gameModel);
         boolean isMaster = gameModel.getMasterId().equals(FireBaseUtils.getCurrentUserId());
         parentGameModel.setMaster(isMaster);
+        String id = gameModel.getId();
         if (!isMaster) {
-            String id = gameModel.getId();
             charactersRepository.updateLastPlayedGameCharacters(id)
-                    .switchMap(stringGameCharacterModelMap -> gameRepository.updateLastVisit(id))
                     .compose(RxTransformers.applyIoSchedulers())
                     .subscribe();
         }
+        gameRepository.updateLastVisit(id)
+                .compose(RxTransformers.applyIoSchedulers())
+                .subscribe();
         return parentGameModel;
     }
 

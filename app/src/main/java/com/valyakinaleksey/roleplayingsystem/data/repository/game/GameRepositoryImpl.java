@@ -11,6 +11,7 @@ import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.firebase.AbstractFirebaseRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameInUserModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
@@ -22,9 +23,7 @@ import rx.subjects.PublishSubject;
 import rx.subscriptions.Subscriptions;
 import timber.log.Timber;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameInUserModel.FIELD_LAST_VISITED_DATE;
@@ -64,7 +63,7 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
 
     @Override
     public Observable<Map<String, GameModel>> observeData() {
-        return subject;
+        return subject.distinctUntilChanged();
     }
 
     @Override
@@ -102,22 +101,20 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         PublishSubject<Boolean> booleanPublishSubject = PublishSubject.create();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference childReference = getChildReference(id);
         DatabaseReference usersInGame = reference.child(USERS_IN_GAME).child(id);
-        Map<String, Object> childUpdates = new HashMap<>();
-        childReference.removeValue();
         com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(usersInGame)
                 .subscribe(dataSnapshot -> {
+                    Map<String, Object> childUpdates = new HashMap<>();
                     for (DataSnapshot data : dataSnapshot.getChildren()) {
                         UserInGameModel userInGameModel = data.getValue(UserInGameModel.class);
                         String uid = userInGameModel.getUid();
                         childUpdates.put(
-                                String.format(FORMAT_SLASHES, GAMES_IN_USERS) + uid + "/" + id,
-                                null);
+                                String.format(FORMAT_SLASHES, GAMES_IN_USERS) + uid + "/" + id, null);
                         childUpdates.put(
-                                String.format(FORMAT_SLASHES, CHARACTERS_IN_USER) + uid + "/" + id,
-                                null);
+                                String.format(FORMAT_SLASHES, CHARACTERS_IN_USER) + uid + "/" + id, null);
                     }
+                    childUpdates.put(String.format(FORMAT_SLASHES, GAMES) + id, null);
+                    childUpdates.put(String.format(FORMAT_SLASHES, GAMES_IN_USERS) + getCurrentUserId() + "/" + id, null);
                     childUpdates.put(String.format(FORMAT_SLASHES, USERS_IN_GAME) + id, null);
                     childUpdates.put(String.format(FORMAT_SLASHES, GAME_CHARACTERISTICS) + id, null);
                     childUpdates.put(String.format(FORMAT_SLASHES, GAME_CLASSES) + id, null);
@@ -135,10 +132,44 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
     }
 
     @Override
+    public Observable<Map<String, GameModel>> getLastGamesModelByUserId(String userId, int lastGamesCount) {
+        DatabaseReference databaseReference = FireBaseUtils.getTableReference(GAMES_IN_USERS).child(userId);
+        return RxFirebaseDatabase.observeValueEvent(databaseReference)
+                .map(dataSnapshot -> {
+                    Map<Long, String> gameInUserModelsIds = new TreeMap<>();
+                    LinkedHashMap<String, GameModel> gameModels = new LinkedHashMap<>();
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            GameInUserModel gameInUserModel = snapshot.getValue(GameInUserModel.class);
+                            String key = snapshot.getKey();
+                            gameInUserModelsIds.put(gameInUserModel.getLastVisitedLong(), key);
+                        }
+                    }
+                    if (!gameInUserModelsIds.isEmpty()) {
+                        int counter = 0;
+                        int index = 0;
+                        ArrayList<String> ids = new ArrayList<>(gameInUserModelsIds.values());
+                        while (counter != lastGamesCount && (index = (ids.size() - 1 - counter)) >= 0) {
+                            synchronized (this) {
+                                String key = ids.get(index);
+                                GameModel value = gamesMap.get(key);
+                                if (value != null) {
+                                    gameModels.put(key, value);
+                                }
+                                counter++;
+                            }
+                        }
+                    }
+
+                    return gameModels;
+                });
+    }
+
+    @Override
     public Observable<Void> updateLastVisit(String id) {
         return FireBaseUtils.setData(ServerValue.TIMESTAMP, FireBaseUtils.getTableReference(GAMES_IN_USERS)
-                .child(id)
                 .child(FireBaseUtils.getCurrentUserId())
+                .child(id)
                 .child(FIELD_LAST_VISITED_DATE));
     }
 

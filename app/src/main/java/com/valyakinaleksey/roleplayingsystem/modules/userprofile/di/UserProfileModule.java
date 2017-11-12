@@ -7,7 +7,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.mygames.presenter.UserProfilePresenterImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.communication.UserProfileCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProfileInteractor;

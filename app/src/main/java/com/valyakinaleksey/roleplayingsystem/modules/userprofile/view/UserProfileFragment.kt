@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.mygames.view
+package com.valyakinaleksey.roleplayingsystem.modules.userprofile.view
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
@@ -13,7 +13,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragm
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileComponent
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileModule
-import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileView
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
 import com.valyakinaleksey.roleplayingsystem.utils.showPasswordDialog
 import eu.davidea.flexibleadapter.FlexibleAdapter

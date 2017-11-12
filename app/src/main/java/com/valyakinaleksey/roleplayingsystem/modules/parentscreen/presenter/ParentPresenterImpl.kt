@@ -13,7 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListFragment
-import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.UserProfileFragment
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileFragment
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment

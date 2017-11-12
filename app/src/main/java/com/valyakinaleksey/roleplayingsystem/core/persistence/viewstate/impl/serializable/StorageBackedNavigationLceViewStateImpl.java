@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable;
 
+import android.os.Looper;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.AbsSelfRestorableNavigationLceViewStateImpl;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.base.PendingStateChange;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
@@ -8,16 +9,17 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action2;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError;
 import com.valyakinaleksey.roleplayingsystem.core.view.LceView;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
+import rx.Observable;
+import rx.Scheduler;
+import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
-
-import rx.Observable;
-import rx.schedulers.Schedulers;
-import timber.log.Timber;
+import java.util.concurrent.Executors;
 
 /**
  * Implementation of ViewState for LceView with view-based navigation and ability to auto-save
@@ -30,90 +32,101 @@ import timber.log.Timber;
  * - onDestroy() for example
  */
 public class StorageBackedNavigationLceViewStateImpl<D extends Serializable & RequestUpdateViewModel, V extends LceView<D>>
-    extends AbsSelfRestorableNavigationLceViewStateImpl<D, V, Serializable> {
+        extends AbsSelfRestorableNavigationLceViewStateImpl<D, V, Serializable> {
 
-  private final ViewStateStorage storage;
+    private final ViewStateStorage storage;
 
-  public StorageBackedNavigationLceViewStateImpl(ViewStateStorage storage) {
-    this.storage = storage;
-  }
+    public StorageBackedNavigationLceViewStateImpl(ViewStateStorage storage) {
+        this.storage = storage;
+    }
 
-  @Override public void setStateShowContent() {
-    super.setStateShowContent();
-    save();
-  }
+    private Scheduler scheduler = Schedulers.from(Executors.newSingleThreadExecutor());
 
-  @Override public void setStateShowError(BaseError error, boolean isShown) {
-    super.setStateShowError(error, isShown);
-    save();
-  }
+    @Override
+    public void setStateShowContent() {
+        super.setStateShowContent();
+        save();
+    }
 
-  @Override public <S extends Serializable> void addToPending(Action2<V, S> op, S data) {
-    SerializablePendingStateChangeWithDataImpl<V, S> dto =
-        new SerializablePendingStateChangeWithDataImpl<>();
-    dto.setData(data);
-    dto.setOperation(op::invoke);
-    addPendingStateChange(dto);
-  }
+    @Override
+    public void setStateShowError(BaseError error, boolean isShown) {
+        super.setStateShowError(error, isShown);
+        save();
+    }
 
-  @Override public void addToPending(Action1<V> op) {
-    SerializablePendingStateChangeImpl<V> dto = new SerializablePendingStateChangeImpl<>();
-    dto.setOperation(op::apply);
-    addPendingStateChange(dto);
-  }
+    @Override
+    public <S extends Serializable> void addToPending(Action2<V, S> op, S data) {
+        SerializablePendingStateChangeWithDataImpl<V, S> dto =
+                new SerializablePendingStateChangeWithDataImpl<>();
+        dto.setData(data);
+        dto.setOperation(op::invoke);
+        addPendingStateChange(dto);
+    }
 
-  protected void onPendingStateChangesListAdded() {
-    save();
-  }
+    @Override
+    public void addToPending(Action1<V> op) {
+        SerializablePendingStateChangeImpl<V> dto = new SerializablePendingStateChangeImpl<>();
+        dto.setOperation(op::apply);
+        addPendingStateChange(dto);
+    }
 
-  @Override public void save() {
-    Observable.fromCallable(() -> {
-      storage.save(objectOutputStream -> {
-        try {
-          save(objectOutputStream);
-        } catch (IOException e) {
-          Timber.d(e);
+    protected void onPendingStateChangesListAdded() {
+        save();
+    }
+
+    @Override
+    public void save() {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            Timber.e("Should be called from main thread");
         }
-      });
-      return null;
-    }).subscribeOn(Schedulers.io()).subscribe();
-  }
+        Observable.fromCallable(() -> {
+            storage.save(objectOutputStream -> {
+                try {
+                    save(objectOutputStream);
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
+            });
+            return null;
+        }).subscribeOn(scheduler).subscribe();
+    }
 
-  @Override
-  /**
-   * Executes synchronously now for ease of use
-   * It is supposed to be executed when app is recreated after low-memory
-   */ public void restore() {
-    Observable.fromCallable(() -> {
-      storage.restore(objectInputStream -> {
-        try {
-          restoreFromBackUp(objectInputStream);
-        } catch (IOException | ClassNotFoundException e) {
-          Timber.d(e);
-        }
-      });
-      return null;
-    }).subscribe();
-  }
+    @Override
+    /**
+     * Executes synchronously now for ease of use
+     * It is supposed to be executed when app is recreated after low-memory
+     */ public void restore() {
+        Observable.fromCallable(() -> {
+            storage.restore(objectInputStream -> {
+                try {
+                    restoreFromBackUp(objectInputStream);
+                } catch (IOException | ClassNotFoundException e) {
+                    Timber.e(e);
+                }
+            });
+            return null;
+        }).subscribe();
+    }
 
-  @Override public void clean() {
-    storage.cleanUp();
-  }
+    @Override
+    public void clean() {
+        storage.cleanUp();
+    }
 
-  private void save(ObjectOutputStream stream) throws IOException {
-    stream.writeObject(currentState);
-    stream.writeObject(error);
-    stream.writeObject(data);
-    stream.writeObject(pendingStateChangesList);
-  }
+    private void save(ObjectOutputStream stream) throws IOException {
+        stream.writeObject(currentState);
+        stream.writeObject(error);
+        stream.writeObject(data);
+        stream.writeObject(pendingStateChangesList);
+    }
 
-  public void restoreFromBackUp(ObjectInputStream stream)
-      throws IOException, ClassNotFoundException {
-    currentState = (int) stream.readObject();
-    error = (BaseError) stream.readObject();
-    data = (D) stream.readObject();
-    List<PendingStateChange<V>> pendingStateChangeList =
-        (List<PendingStateChange<V>>) stream.readObject();
-    setPendingStateChangeList(pendingStateChangeList);
-  }
+    public void restoreFromBackUp(ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+        currentState = (int) stream.readObject();
+        error = (BaseError) stream.readObject();
+        data = (D) stream.readObject();
+        List<PendingStateChange<V>> pendingStateChangeList =
+                (List<PendingStateChange<V>>) stream.readObject();
+        setPendingStateChangeList(pendingStateChangeList);
+    }
 }

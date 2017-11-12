@@ -17,6 +17,10 @@ import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
 public class GameModel implements Serializable, Parcelable, HasId {
     public static final String FIELD_FINISHED = "finished";
     public static final String FIELD_MASTER_ID = "masterId";
+    public static final String FIELD_MASTER_NAME = "masterName";
+    public static final String FIELD_PASSWORD = "password";
+    public static final String FIELD_DATE_CREATE = "dateCreate";
+    public static final String FIELD_TEMP_DATE_CREATE = "tempDateCreate";
 
     public static final String KEY = GameModel.class.getSimpleName();
     private String id;
@@ -55,12 +59,26 @@ public class GameModel implements Serializable, Parcelable, HasId {
     }
 
     @Exclude
-    public Map<String, Object> toMap() {
+    public Map<String, Object> toGameInUserMap() {
+        HashMap<String, Object> result = new LinkedHashMap<>();
+        result.put(GameInUserModel.FIELD_LAST_VISITED_DATE, ServerValue.TIMESTAMP);
+        return result;
+    }
+
+    @Exclude
+    public Map<String, Object> toGameModelMap() {
         HashMap<String, Object> result = new LinkedHashMap<>();
         result.put(ID, id);
         result.put(FIELD_NAME, name);
+        result.put(FIELD_MASTER_ID, masterId);
+        result.put(FIELD_MASTER_NAME, masterName);
+        result.put(FIELD_PASSWORD, password);
+        result.put(FIELD_DATE_CREATE, dateCreate);
+        result.put(FIELD_TEMP_DATE_CREATE, tempDateCreate);
+        result.put(FIELD_FINISHED, finished);
         return result;
     }
+
 
     public String getMasterName() {
         return masterName;
@@ -152,6 +170,39 @@ public class GameModel implements Serializable, Parcelable, HasId {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GameModel gameModel = (GameModel) o;
+
+        if (finished != gameModel.finished) return false;
+        if (id != null ? !id.equals(gameModel.id) : gameModel.id != null) return false;
+        if (masterId != null ? !masterId.equals(gameModel.masterId) : gameModel.masterId != null) return false;
+        if (masterName != null ? !masterName.equals(gameModel.masterName) : gameModel.masterName != null) return false;
+        if (name != null ? !name.equals(gameModel.name) : gameModel.name != null) return false;
+        if (description != null ? !description.equals(gameModel.description) : gameModel.description != null)
+            return false;
+        if (password != null ? !password.equals(gameModel.password) : gameModel.password != null) return false;
+        if (dateCreate != null ? !dateCreate.equals(gameModel.dateCreate) : gameModel.dateCreate != null) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (masterId != null ? masterId.hashCode() : 0);
+        result = 31 * result + (masterName != null ? masterName.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (dateCreate != null ? dateCreate.hashCode() : 0);
+        result = 31 * result + (tempDateCreate != null ? tempDateCreate.hashCode() : 0);
+        result = 31 * result + (finished ? 1 : 0);
+        return result;
     }
 
     @Override

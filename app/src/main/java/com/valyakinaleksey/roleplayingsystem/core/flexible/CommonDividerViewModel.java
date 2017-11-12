@@ -39,12 +39,7 @@ public class CommonDividerViewModel extends AbstractFlexibleItem<DividerViewHold
   }
 
   @Override public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    CommonDividerViewModel that = (CommonDividerViewModel) o;
-
-    return id == that.id;
+    return this == o;
   }
 
   @Override public int hashCode() {

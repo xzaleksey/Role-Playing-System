@@ -1,10 +1,9 @@
-package com.valyakinaleksey.roleplayingsystem.modules.mygames.presenter
+package com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter
 
 import android.content.Context
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
 import com.valyakinaleksey.roleplayingsystem.R
-import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
@@ -18,13 +17,11 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.UserProfileGameViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProfileInteractor
-import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenter
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileView
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
 import com.valyakinaleksey.roleplayingsystem.utils.*
-import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
-import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils
 import eu.davidea.flexibleadapter.items.IFlexible
 
 class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,
@@ -102,13 +99,10 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
     }
 
     override fun onItemClicked(item: IFlexible<*>): Boolean {
-        if (item is TwoLineWithIdViewModel) {
+        if (item is UserProfileGameViewModel) {
             val gameModel = gameRepository.getGameModelById(item.id)
             if (gameModel != null) {
-                val bundle = Bundle()
-                bundle.putParcelable(GameModel.KEY, gameModel)
-                bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
-                parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle)
+                navigateToGameScreen(gameModel)
             }
         }
         return true

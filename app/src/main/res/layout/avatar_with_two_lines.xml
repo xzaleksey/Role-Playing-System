@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/material_component_text_fields_floating_label_height"
-    android:background="?attr/selectableItemBackground"
-    android:paddingEnd="@dimen/material_component_lists_right_padding"
-    android:paddingRight="@dimen/material_component_lists_right_padding"
-    android:paddingTop="@dimen/material_component_text_fields_floating_label_padding_above_label_text"
-    >
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/material_component_text_fields_floating_label_height"
+                android:background="@color/md_white_1000"
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingEnd="@dimen/material_component_lists_right_padding"
+                android:paddingRight="@dimen/material_component_lists_right_padding"
+                android:paddingTop="@dimen/material_component_text_fields_floating_label_padding_above_label_text"
+>
 
 
     <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/avatar"
-        android:layout_width="@dimen/material_layout_avatar"
-        android:layout_height="@dimen/material_layout_avatar"
-        android:layout_marginLeft="@dimen/material_component_lists_icon_left_padding"
-        android:layout_marginStart="@dimen/material_component_lists_icon_left_padding"
-        tools:src="@drawable/ic_add_black_24dp" />
+            android:id="@+id/avatar"
+            android:layout_width="@dimen/material_layout_avatar"
+            android:layout_height="@dimen/material_layout_avatar"
+            android:layout_marginLeft="@dimen/material_component_lists_icon_left_padding"
+            android:layout_marginStart="@dimen/material_component_lists_icon_left_padding"
+            tools:src="@drawable/ic_add_black_24dp"/>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/material_component_lists_text_left_padding"
-        android:layout_marginStart="@dimen/material_component_lists_text_left_padding"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/primary_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="@dimen/material_component_lists_two_line_text_size"
-            tools:text="line1" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/material_component_lists_text_left_padding"
+            android:layout_marginStart="@dimen/material_component_lists_text_left_padding"
+            android:orientation="vertical">
 
         <TextView
-            android:id="@+id/secondary_line"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/primary_line"
-            android:maxLines="1"
-            android:textColor="@color/colorTextSecondary"
-            android:textSize="@dimen/material_component_lists_two_line_secondary_text_size"
-            tools:text="line2" />
+                android:id="@+id/primary_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/material_component_lists_two_line_text_size"
+                tools:text="line1"/>
+
+        <TextView
+                android:id="@+id/secondary_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/primary_line"
+                android:maxLines="1"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="@dimen/material_component_lists_two_line_secondary_text_size"
+                tools:text="line2"/>
     </RelativeLayout>
 
 </RelativeLayout>

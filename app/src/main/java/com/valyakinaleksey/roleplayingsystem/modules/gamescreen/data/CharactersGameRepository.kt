@@ -73,7 +73,7 @@ class CharactersRepositoryImpl(
                 }
     }
 
-    override fun observeCharactersLastNCharacters(userId: String, count: Int): Observable<MutableMap<String, GameCharacterModel>> {
+    override fun observeCharactersLastCharacters(userId: String, count: Int): Observable<MutableMap<String, GameCharacterModel>> {
         val reference = FireBaseUtils.getTableReference(CHARACTERS_IN_USER).child(userId)
         return RxFirebaseDatabase.observeValueEvent(reference).map { t ->
             val charsIds = mutableMapOf<String, IdDateModel>()
@@ -84,15 +84,15 @@ class CharactersRepositoryImpl(
                     charsIds.put(child.key, idDateModel)
                 }
                 val sortedMap = mutableMapOf<Long, String>()
-                for ((id, charId) in charsIds) {
-                    sortedMap.put(charId.dateVisitedLong, id)
+                for ((gameId, charId) in charsIds) {
+                    sortedMap.put(charId.dateVisitedLong, gameId)
                 }
                 var valuesCounter = 0
-                for (id in sortedMap.values.reversed()) {
+                for (gameId in sortedMap.values.reversed()) {
                     if (valuesCounter == count) {
                         break
                     }
-                    charsIdsList.add(GameIdDateModel(id, charsIds[id]!!))
+                    charsIdsList.add(GameIdDateModel(gameId, charsIds[gameId]!!))
                     valuesCounter++
                 }
             }
@@ -143,5 +143,5 @@ class CharactersRepositoryImpl(
 interface CharactersGameRepository : FirebaseGameRepository<GameCharacterModel> {
     fun getMyCharacters(gameId: String): Observable<MutableMap<String, GameCharacterModel>>
     fun updateLastPlayedGameCharacters(gameId: String): Observable<MutableMap<String, GameCharacterModel>>
-    fun observeCharactersLastNCharacters(userId: String, count: Int): Observable<MutableMap<String, GameCharacterModel>>
+    fun observeCharactersLastCharacters(userId: String, count: Int): Observable<MutableMap<String, GameCharacterModel>>
 }

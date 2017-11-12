@@ -35,16 +35,11 @@ public class ShadowDividerViewModel extends AbstractFlexibleItem<DividerViewHold
   }
 
   @Override public int getLayoutRes() {
-    return R.layout.shadow_divider;
+    return R.layout.shadow_bottom_divider;
   }
 
   @Override public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    ShadowDividerViewModel that = (ShadowDividerViewModel) o;
-
-    return id == that.id;
+    return this == o;
   }
 
   @Override public int hashCode() {

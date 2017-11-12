@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
+import android.content.Context;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
@@ -169,8 +170,8 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    UserProfileInteractor provideUserProfileInteractor(CharactersGameRepository charactersRepo) {
-        return new UserProfileInteractorImpl(charactersRepo);
+    UserProfileInteractor provideUserProfileInteractor(CharactersGameRepository charactersRepo, Context context, GameRepository gameRepository) {
+        return new UserProfileInteractorImpl(charactersRepo, gameRepository, context);
     }
 
     @Provides
