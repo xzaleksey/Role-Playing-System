@@ -87,5 +87,7 @@
     <string name="undefined">Undefined</string>
     <string name="profile">Profile</string>
     <string name="games">Games</string>
+    <string name="total_games">total games</string>
+    <string name="master_games">master games</string>
 
 </resources>

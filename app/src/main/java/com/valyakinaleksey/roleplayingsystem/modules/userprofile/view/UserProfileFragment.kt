@@ -1,8 +1,10 @@
 package com.valyakinaleksey.roleplayingsystem.modules.userprofile.view
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.view.WindowManager
 import butterknife.BindView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.valyakinaleksey.roleplayingsystem.R
@@ -69,7 +71,22 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
 
     override fun onDestroyView() {
         (parentFragment as? ParentView)?.showAppBar()
+        if (Build.VERSION.SDK_INT >= 21) {
+            val window = activity.window
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        }
         super.onDestroyView()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 21) {
+            val window = activity.window
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+
+        }
     }
 
     private fun dialogIsNotShowing() = dialog?.isShowing != true

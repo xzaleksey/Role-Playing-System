@@ -75,4 +75,6 @@
     <string name="undefined">Не задано</string>
     <string name="profile">Профиль</string>
     <string name="games">Игры</string>
+    <string name="total_games">всего игр</string>
+    <string name="master_games">мастер игр</string>
 </resources>
