@@ -12,19 +12,25 @@ import java.util.List;
 
 public class SubHeaderViewModel extends AbstractFlexibleItem<SubheaderViewHolder> implements
         Serializable {
-    private CharSequence title;
+    private String title;
+    private int color;
     private boolean drawTopDivider;
 
     public SubHeaderViewModel() {
     }
 
-    public SubHeaderViewModel(CharSequence title) {
+    public SubHeaderViewModel(String title) {
         this.title = title;
     }
 
-    public SubHeaderViewModel(CharSequence title, boolean drawTopDivider) {
-        this.title = title;
+    public SubHeaderViewModel(String title, boolean drawTopDivider) {
+        this(title);
         this.drawTopDivider = drawTopDivider;
+    }
+
+    public SubHeaderViewModel(String title, boolean drawTopDivider, int color) {
+        this(title, drawTopDivider);
+        this.color = color;
     }
 
     public boolean isDrawTopDivider() {
@@ -51,6 +57,10 @@ public class SubHeaderViewModel extends AbstractFlexibleItem<SubheaderViewHolder
         holder.bind(this);
     }
 
+    public int getColor() {
+        return color;
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.simple_header;
@@ -63,14 +73,15 @@ public class SubHeaderViewModel extends AbstractFlexibleItem<SubheaderViewHolder
 
         SubHeaderViewModel that = (SubHeaderViewModel) o;
 
+        if (color != that.color) return false;
         if (drawTopDivider != that.drawTopDivider) return false;
         return title != null ? title.equals(that.title) : that.title == null;
-
     }
 
     @Override
     public int hashCode() {
         int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + color;
         result = 31 * result + (drawTopDivider ? 1 : 0);
         return result;
     }

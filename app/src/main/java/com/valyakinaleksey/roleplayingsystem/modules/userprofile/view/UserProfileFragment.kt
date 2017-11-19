@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import butterknife.BindView
 import com.afollestad.materialdialogs.MaterialDialog
-import com.bumptech.glide.Glide
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment
@@ -17,8 +16,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentVie
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileComponent
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileModule
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
+import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils
-import com.valyakinaleksey.roleplayingsystem.utils.glide.CircleTransformWithTwoBorders
 import com.valyakinaleksey.roleplayingsystem.utils.showPasswordDialog
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -117,13 +116,8 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
         if (avatar.drawable != null) {
             return
         }
-        Glide.with(context)
-                .load(uri)
-                .error(R.drawable.profile_icon)
-                .transform(CircleTransformWithTwoBorders(context,
-                        ContextCompat.getColor(context, android.R.color.white),
-                        ContextCompat.getColor(context, R.color.accent)))
-                .into(avatar)
+
+        ImageUtils.loadAvatarWihtErrorDrawable(avatar, uri, ContextCompat.getDrawable(context, R.drawable.profile_icon))
     }
 
     companion object {

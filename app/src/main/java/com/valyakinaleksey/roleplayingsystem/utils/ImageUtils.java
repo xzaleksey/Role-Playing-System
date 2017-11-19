@@ -45,6 +45,24 @@ public class ImageUtils {
                 });
     }
 
+    public static void loadAvatarWihtErrorDrawable(ImageView ivAvatar, Uri uri, Drawable errorDrawable) {
+        ivAvatar.setImageDrawable(errorDrawable);
+        Glide.with(ivAvatar.getContext())
+                .load(uri)
+                .asBitmap()
+                .centerCrop()
+                .error(errorDrawable)
+                .into(new BitmapImageViewTarget(ivAvatar) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(ivAvatar.getContext().getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        ivAvatar.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
+    }
+
     public static void loadAvatar(ImageView ivAvatar, User user) {
         Uri uri = null;
         try {

@@ -2,8 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.flexible.FlexibleAvatarWithTwoLineTextModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewModel
@@ -24,6 +22,7 @@ class UserProfileInteractorImpl(
 ) : UserProfileInteractor {
 
     private val lastItemsCount = 2
+    private val subHeaderColor = ContextCompat.getColor(context, R.color.accent)
 
     override fun observeUserProfile(userId: String): Observable<List<IFlexible<*>>> {
         val currentUserId = FireBaseUtils.getCurrentUserId()
@@ -32,7 +31,7 @@ class UserProfileInteractorImpl(
                 Func2 { gameModels, characters ->
                     val result = mutableListOf<IFlexible<*>>()
                     if (!gameModels.isEmpty()) {
-                        result.add(SubHeaderViewModel(getHeader(StringUtils.getStringById(R.string.games)), true))
+                        result.add(getSubHeaderViewModel(StringUtils.getStringById(R.string.games)))
                         gameModels.values.forEach { gameModel ->
                             result.add(UserProfileGameViewModel(gameModel.id,
                                     gameModel.name,
@@ -43,7 +42,7 @@ class UserProfileInteractorImpl(
                         result.add(ShadowDividerViewModel(result.lastIndex))
                     }
                     if (characters.isNotEmpty()) {
-                        result.add(SubHeaderViewModel(getHeader(StringUtils.getStringById(R.string.characters)), true))
+                        result.add(getSubHeaderViewModel(StringUtils.getStringById(R.string.characters)))
                         characters.values.forEach { value ->
                             result.add(FlexibleAvatarWithTwoLineTextModel(value.name,
                                     value.gameClassModel.name + ", " + value.gameRaceModel.name,
@@ -59,11 +58,10 @@ class UserProfileInteractorImpl(
                 })
     }
 
-    private fun getHeader(headerText: String): CharSequence {
-        val spannableString = SpannableString(headerText)
-        spannableString.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorAccent)), 0, headerText.length, 0)
-        return spannableString
+    fun getSubHeaderViewModel(text: String): SubHeaderViewModel {
+        return SubHeaderViewModel(text, true, subHeaderColor)
     }
+
 }
 
 
