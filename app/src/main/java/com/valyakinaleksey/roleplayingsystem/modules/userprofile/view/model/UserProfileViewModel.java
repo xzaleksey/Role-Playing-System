@@ -17,8 +17,12 @@ public class UserProfileViewModel extends BaseRequestUpdateViewModel
 
     public static final String USER_ID = "user_id";
 
-    private String toolbarTitle;
+    private String displayName;
+    private String email;
     private String userId;
+    private String totalGamesCount;
+    private String masterGamesCount;
+    private String avatarUrl;
     private boolean isCurrentUser = false;
     private PasswordDialogViewModel passwordDialogViewModel;
     private transient List<IFlexible> items = Collections.emptyList();
@@ -27,12 +31,12 @@ public class UserProfileViewModel extends BaseRequestUpdateViewModel
         setNeedUpdate(true);
     }
 
-    public String getToolbarTitle() {
-        return toolbarTitle;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setToolbarTitle(String toolbarTitle) {
-        this.toolbarTitle = toolbarTitle;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public List<IFlexible> getItems() {
@@ -60,6 +64,32 @@ public class UserProfileViewModel extends BaseRequestUpdateViewModel
         isCurrentUser = currentUser;
     }
 
+    public String getTotalGamesCount() {
+        return totalGamesCount;
+    }
+
+    public void setTotalGamesCount(String totalGamesCount) {
+        this.totalGamesCount = totalGamesCount;
+    }
+
+    public String getMasterGamesCount() {
+        return masterGamesCount;
+    }
+
+    public void setMasterGamesCount(String masterGamesCount) {
+        this.masterGamesCount = masterGamesCount;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+
+
     @Override
     public PasswordDialogViewModel getPasswordDialogViewModel() {
         return passwordDialogViewModel;
@@ -70,6 +100,15 @@ public class UserProfileViewModel extends BaseRequestUpdateViewModel
         this.passwordDialogViewModel = passwordDialogViewModel;
     }
 
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -78,16 +117,24 @@ public class UserProfileViewModel extends BaseRequestUpdateViewModel
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeString(this.toolbarTitle);
+        dest.writeString(this.displayName);
+        dest.writeString(this.email);
         dest.writeString(this.userId);
+        dest.writeString(this.totalGamesCount);
+        dest.writeString(this.masterGamesCount);
+        dest.writeString(this.avatarUrl);
         dest.writeByte(this.isCurrentUser ? (byte) 1 : (byte) 0);
         dest.writeParcelable(this.passwordDialogViewModel, flags);
     }
 
     protected UserProfileViewModel(Parcel in) {
         super(in);
-        this.toolbarTitle = in.readString();
+        this.displayName = in.readString();
+        this.email = in.readString();
         this.userId = in.readString();
+        this.totalGamesCount = in.readString();
+        this.masterGamesCount = in.readString();
+        this.avatarUrl = in.readString();
         this.isCurrentUser = in.readByte() != 0;
         this.passwordDialogViewModel = in.readParcelable(PasswordDialogViewModel.class.getClassLoader());
     }

@@ -11,4 +11,6 @@ public interface UserProfilePresenter extends Presenter<UserProfileView>, Passwo
     void navigateToGameScreen(GameModel model);
 
     boolean onItemClicked(IFlexible<?> item);
+
+    void editProfile();
 }

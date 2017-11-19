@@ -13,40 +13,54 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import javax.inject.Inject;
 import java.util.List;
 
-@PerFragmentScope public class UserProfileCommunicationBus extends
-    SelfRestorableNavigationLceCommunicationBus<UserProfileViewModel, UserProfileView, UserProfilePresenter, UserProfileViewState>
-    implements UserProfilePresenter, UserProfileView {
+@PerFragmentScope
+public class UserProfileCommunicationBus extends
+        SelfRestorableNavigationLceCommunicationBus<UserProfileViewModel, UserProfileView, UserProfilePresenter, UserProfileViewState>
+        implements UserProfilePresenter, UserProfileView {
 
-  @Override public void attachView(UserProfileView view) {
-    super.attachView(view);
-  }
+    @Override
+    public void attachView(UserProfileView view) {
+        super.attachView(view);
+    }
 
-  @Inject public UserProfileCommunicationBus(UserProfilePresenter presenter,
-                                             UserProfileViewState viewState) {
-    super(presenter, viewState);
-  }
+    @Inject
+    public UserProfileCommunicationBus(UserProfilePresenter presenter,
+                                       UserProfileViewState viewState) {
+        super(presenter, viewState);
+    }
 
-  @Override public void navigateToGameScreen(GameModel model) {
-    presenter.navigateToGameScreen(model);
-  }
+    @Override
+    public void navigateToGameScreen(GameModel model) {
+        presenter.navigateToGameScreen(model);
+    }
 
-  @Override public boolean onItemClicked(IFlexible<?> item) {
-    return presenter.onItemClicked(item);
-  }
+    @Override
+    public boolean onItemClicked(IFlexible<?> item) {
+        return presenter.onItemClicked(item);
+    }
 
-  @Override public void checkPassword(GameModel model) {
-    presenter.checkPassword(model);
-  }
+    @Override
+    public void checkPassword(GameModel model) {
+        presenter.checkPassword(model);
+    }
 
-  @Override public void validatePassword(Context context, String s, GameModel gameModel) {
-    presenter.validatePassword(context, s, gameModel);
-  }
+    @Override
+    public void validatePassword(Context context, String s, GameModel gameModel) {
+        presenter.validatePassword(context, s, gameModel);
+    }
 
-  @Override public void showPasswordDialog() {
-    getNavigationResolver().resolveNavigation(UserProfileView::showPasswordDialog);
-  }
+    @Override
+    public void showPasswordDialog() {
+        getNavigationResolver().resolveNavigation(UserProfileView::showPasswordDialog);
+    }
 
-  @Override public void updateList(List<IFlexible> iFlexibles) {
-    getNavigationResolver().resolveNavigation((view) -> view.updateList(iFlexibles));
-  }
+    @Override
+    public void updateList(List<IFlexible> iFlexibles) {
+        getNavigationResolver().resolveNavigation((view) -> view.updateList(iFlexibles));
+    }
+
+    @Override
+    public void editProfile() {
+        presenter.editProfile();
+    }
 }

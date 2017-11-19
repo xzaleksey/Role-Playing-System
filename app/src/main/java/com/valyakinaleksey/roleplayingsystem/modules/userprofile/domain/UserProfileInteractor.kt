@@ -15,6 +15,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import eu.davidea.flexibleadapter.items.IFlexible
 import rx.Observable
+import rx.functions.Func2
 
 class UserProfileInteractorImpl(
         private val charactersGameRepository: CharactersGameRepository,
@@ -26,9 +27,9 @@ class UserProfileInteractorImpl(
 
     override fun observeUserProfile(userId: String): Observable<List<IFlexible<*>>> {
         val currentUserId = FireBaseUtils.getCurrentUserId()
-        return gameRepository.getLastGamesModelByUserId(userId, lastItemsCount)
-                .take(1)
-                .map { gameModels ->
+        return Observable.combineLatest(gameRepository.getLastGamesModelByUserId(userId, lastItemsCount),
+                charactersGameRepository.observeCharactersLastCharacters(userId, lastItemsCount),
+                Func2 { gameModels, characters ->
                     val result = mutableListOf<IFlexible<*>>()
                     if (!gameModels.isEmpty()) {
                         result.add(SubHeaderViewModel(getHeader(StringUtils.getStringById(R.string.games)), true))
@@ -41,27 +42,21 @@ class UserProfileInteractorImpl(
                         }
                         result.add(ShadowDividerViewModel(result.lastIndex))
                     }
-                    return@map result
-                }.concatMap { result ->
-            return@concatMap charactersGameRepository.observeCharactersLastCharacters(userId, lastItemsCount)
-                    .take(1)
-                    .map { characters ->
-                        if (characters.isNotEmpty()) {
-                            result.add(SubHeaderViewModel(getHeader(StringUtils.getStringById(R.string.characters)), true))
-                            characters.values.forEach { value ->
-                                result.add(FlexibleAvatarWithTwoLineTextModel(value.name,
-                                        value.gameClassModel.name + ", " + value.gameRaceModel.name,
-                                        { ContextCompat.getDrawable(context, R.drawable.mage) },
-                                        value.photoUrl,
-                                        value.uid
-                                ))
-                            }
-                            result.add(ShadowDividerViewModel(result.lastIndex))
-
+                    if (characters.isNotEmpty()) {
+                        result.add(SubHeaderViewModel(getHeader(StringUtils.getStringById(R.string.characters)), true))
+                        characters.values.forEach { value ->
+                            result.add(FlexibleAvatarWithTwoLineTextModel(value.name,
+                                    value.gameClassModel.name + ", " + value.gameRaceModel.name,
+                                    { ContextCompat.getDrawable(context, R.drawable.mage) },
+                                    value.photoUrl,
+                                    value.uid
+                            ))
                         }
-                        return@map result
+                        result.add(ShadowDividerViewModel(result.lastIndex))
+
                     }
-        }
+                    return@Func2 result
+                })
     }
 
     private fun getHeader(headerText: String): CharSequence {

@@ -5,6 +5,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenterImpl;
@@ -49,10 +50,11 @@ public class UserProfileModule extends BaseFragmentModule {
     UserProfilePresenter providePresenter(
             ValidatePasswordInteractor validatePasswordInteractor,
             CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter,
-            GameRepository gamesRepository, UserProfileInteractor userProfileInteractor) {
+            GameRepository gamesRepository, UserProfileInteractor userProfileInteractor, UserRepository userRepository) {
         return new UserProfilePresenterImpl(checkUserJoinedGameInteractor, validatePasswordInteractor,
                 parentPresenter,
                 userProfileInteractor,
+                userRepository,
                 gamesRepository);
     }
 

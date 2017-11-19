@@ -7,7 +7,7 @@
 >
     <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar_layout"
-            android:animateLayoutChanges="true"
+            android:fitsSystemWindows="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -29,6 +29,7 @@
                  android:id="@+id/parent_fragment_container"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
+                 android:fitsSystemWindows="true"
                  android:background="@color/backgroundColor"
                  app:layout_behavior="com.valyakinaleksey.roleplayingsystem.utils.ScrollViewBehaviorFix"
     />

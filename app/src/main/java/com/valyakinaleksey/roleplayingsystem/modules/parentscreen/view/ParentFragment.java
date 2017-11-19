@@ -8,10 +8,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.ProgressBar;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -52,6 +49,7 @@ public class ParentFragment extends
     ProgressBar progressBar;
     @BindString(R.string.connecting)
     protected String connectionString;
+    private int appBarHeight;
 
     public static ParentFragment newInstance(Bundle arguments) {
         ParentFragment gamesDescriptionFragment = new ParentFragment();
@@ -196,12 +194,17 @@ public class ParentFragment extends
 
     @Override
     public void hideAppBar() {
-        getAbsActivity().getSupportActionBar().hide();
+        ViewGroup.LayoutParams layoutParams = appBarLayout.getLayoutParams();
+        appBarHeight = layoutParams.height;
+        layoutParams.height = 0;
+        appBarLayout.setLayoutParams(layoutParams);
     }
 
     @Override
     public void showAppBar() {
-        getAbsActivity().getSupportActionBar().show();
+        ViewGroup.LayoutParams layoutParams = appBarLayout.getLayoutParams();
+        layoutParams.height = appBarHeight;
+        appBarLayout.setLayoutParams(layoutParams);
     }
 
     private AbsActivity getAbsActivity() {

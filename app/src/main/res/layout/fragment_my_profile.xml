@@ -10,6 +10,7 @@
               tools:appContext="com.valyakinaleksey.roleplayingsystem.modules.mainscreen.view.MainActivity"
 >
     <RelativeLayout android:layout_width="match_parent"
+                    android:background="@color/primary"
                     android:layout_height="232dp">
 
         <ImageView
@@ -26,6 +27,9 @@
                 android:layout_height="@dimen/icon_minimum_size"
                 android:layout_marginLeft="@dimen/material_layout_keylines_screen_edge_margin"
                 android:layout_marginStart="@dimen/material_layout_keylines_screen_edge_margin"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:srcCompat="@drawable/ic_arrow_back"
         />
 
@@ -39,9 +43,18 @@
                 android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
                 android:layout_marginEnd="@dimen/material_layout_keylines_screen_edge_margin"
                 android:tint="@android:color/white"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:visibility="gone"
+                tools:visibility="visible"
                 app:srcCompat="@drawable/ic_mode_edit_black_24dp"
         />
 
+        <View android:layout_width="match_parent"
+              android:background="@android:color/white"
+              android:layout_below="@+id/iv_background"
+              android:layout_height="match_parent"/>
 
         <TextView
                 android:id="@+id/display_name"
@@ -80,7 +93,7 @@
                 android:scaleType="centerCrop"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="98dp"
-                android:src="@drawable/profile_icon"
+                tools:src="@drawable/profile_icon"
         />
 
         <TextView android:id="@+id/tv_total_games_count"
@@ -141,7 +154,6 @@
                 android:background="@drawable/shadow_bottom_divider"/>
 
     </RelativeLayout>
-
 
     <include layout="@layout/recycler_view"/>
 </LinearLayout>
