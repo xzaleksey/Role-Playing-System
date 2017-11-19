@@ -11,12 +11,12 @@
 >
     <RelativeLayout android:layout_width="match_parent"
                     android:background="@color/primary"
-                    android:layout_height="232dp">
+                    android:layout_height="@dimen/profile_top_content_height">
 
         <ImageView
                 android:id="@+id/iv_background"
                 android:layout_width="match_parent"
-                android:layout_height="152dp"
+                android:layout_height="@dimen/profile_background_height"
                 android:scaleType="centerCrop"
                 android:src="@drawable/mask"
         />
@@ -94,7 +94,7 @@
                 android:scaleType="centerCrop"
                 android:background="@drawable/profile_border"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="98dp"
+                android:layout_marginTop="@dimen/profile_avatar_top_margin"
                 tools:src="@drawable/profile_icon"
         />
 

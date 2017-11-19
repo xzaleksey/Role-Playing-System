@@ -28,4 +28,7 @@
   <dimen name="dp_10">10dp</dimen>
   <dimen name="dp_16">16dp</dimen>
   <dimen name="dp_24">24dp</dimen>
+  <dimen name="profile_background_height">152dp</dimen>
+  <dimen name="profile_top_content_height">232dp</dimen>
+  <dimen name="profile_avatar_top_margin">98dp</dimen>
 </resources>
