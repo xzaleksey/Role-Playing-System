@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class UserProfileGameViewModel extends AbstractFlexibleItem<UserProfileGameViewHolder> implements Serializable {
+    public static final String CHANGE_USER_NAME = "CHANGE_USER_NAME";
+
     private String id;
     private String title;
     private String description;

@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.userprofile.view
 
+import android.app.Dialog
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,11 +14,13 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFr
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.UserProfileGameViewModel.CHANGE_USER_NAME
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileComponent
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileModule
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
 import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils
+import com.valyakinaleksey.roleplayingsystem.utils.changeUserData
 import com.valyakinaleksey.roleplayingsystem.utils.showPasswordDialog
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -70,15 +73,7 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
         if (data.isCurrentUser) {
             iv_edit.visibility = View.VISIBLE
         }
-        display_name.text = data.displayName
-        tv_email.text = data.email
-        tv_master_games_count.text = data.masterGamesCount
-        tv_total_games_count.text = data.totalGamesCount
-        if (data.avatarUrl.isNullOrBlank()) {
-            loadImage(StorageUtils.resourceToUri(R.drawable.profile_icon))
-        } else {
-            loadImage(Uri.parse(data.avatarUrl))
-        }
+        preFillModel(data)
         flexibleAdapter.updateDataSet(data.items, true)
         if (data.passwordDialogViewModel != null && dialogIsNotShowing()) {
             showPasswordDialog()
@@ -117,11 +112,36 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
             return
         }
 
-        ImageUtils.loadAvatarWihtErrorDrawable(avatar, uri, ContextCompat.getDrawable(context, R.drawable.profile_icon))
+        ImageUtils.loadAvatarWithErrorDrawable(avatar, uri, ContextCompat.getDrawable(context, R.drawable.profile_icon))
+    }
+
+    override fun getDialog(tag: String): Dialog {
+        when {
+            tag == CHANGE_USER_NAME -> {
+                return context.changeUserData(data, component.presenter)
+            }
+        }
+        throw IllegalArgumentException("Not implemented tag")
+    }
+
+    override fun preFillModel(data: UserProfileViewModel?) {
+        data?.let {
+            display_name.text = data.displayName
+            tv_email.text = data.email
+            tv_master_games_count.text = data.masterGamesCount
+            tv_total_games_count.text = data.totalGamesCount
+
+            if (data.avatarUrl.isNullOrBlank()) {
+                loadImage(StorageUtils.resourceToUri(R.drawable.profile_icon))
+            } else {
+                loadImage(Uri.parse(data.avatarUrl))
+            }
+        }
     }
 
     companion object {
         val TAG = UserProfileFragment::class.java.simpleName!!
+
         fun newInstance(): UserProfileFragment = UserProfileFragment()
     }
 }

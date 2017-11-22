@@ -5,14 +5,15 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.ser
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.CurrentUserRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
-import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.communication.UserProfileCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProfileInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenter;
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.state.UserProfileViewState;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import dagger.Module;
@@ -49,13 +50,18 @@ public class UserProfileModule extends BaseFragmentModule {
     @PerFragmentScope
     UserProfilePresenter providePresenter(
             ValidatePasswordInteractor validatePasswordInteractor,
-            CheckUserJoinedGameInteractor checkUserJoinedGameInteractor, ParentPresenter parentPresenter,
-            GameRepository gamesRepository, UserProfileInteractor userProfileInteractor, UserRepository userRepository) {
+            CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
+            ParentPresenter parentPresenter,
+            GameRepository gamesRepository,
+            UserProfileInteractor userProfileInteractor,
+            UserRepository userRepository,
+            CurrentUserRepository currentUserRepo) {
         return new UserProfilePresenterImpl(checkUserJoinedGameInteractor, validatePasswordInteractor,
                 parentPresenter,
                 userProfileInteractor,
                 userRepository,
-                gamesRepository);
+                gamesRepository,
+                currentUserRepo);
     }
 
     @Named(VIEW_STATE_FILE_NAME)

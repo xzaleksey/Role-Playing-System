@@ -45,7 +45,7 @@ public class ImageUtils {
                 });
     }
 
-    public static void loadAvatarWihtErrorDrawable(ImageView ivAvatar, Uri uri, Drawable errorDrawable) {
+    public static void loadAvatarWithErrorDrawable(ImageView ivAvatar, Uri uri, Drawable errorDrawable) {
         ivAvatar.setImageDrawable(errorDrawable);
         Glide.with(ivAvatar.getContext())
                 .load(uri)

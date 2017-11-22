@@ -80,4 +80,10 @@ public abstract class LceCommunicationBus<D extends RequestUpdateViewModel, V ex
         }
     }
 
+    @Override
+    public void openDialog(String tag) {
+        if (view != null) {
+            view.openDialog(tag);
+        }
+    }
 }

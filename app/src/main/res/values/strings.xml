@@ -89,5 +89,8 @@
     <string name="games">Games</string>
     <string name="total_games">total games</string>
     <string name="master_games">master games</string>
+    <string name="nick_name">Nickname</string>
+    <string name="email_translatable">Email</string>
+    <string name="edit">Edit</string>
 
 </resources>

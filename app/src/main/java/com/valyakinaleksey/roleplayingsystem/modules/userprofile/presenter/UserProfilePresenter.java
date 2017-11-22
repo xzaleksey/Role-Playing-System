@@ -13,4 +13,6 @@ public interface UserProfilePresenter extends Presenter<UserProfileView>, Passwo
     boolean onItemClicked(IFlexible<?> item);
 
     void editProfile();
+
+    void onEditSuccess();
 }

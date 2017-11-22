@@ -10,4 +10,5 @@ public interface UserProfileView extends LceView<UserProfileViewModel> {
     void updateList(List<IFlexible> iFlexibles);
 
     void showPasswordDialog();
+
 }

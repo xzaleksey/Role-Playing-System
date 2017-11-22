@@ -11,6 +11,7 @@ import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
 import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePresenter
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.CurrentUserRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User
@@ -31,7 +32,8 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
                                private val parentPresenter: ParentPresenter,
                                private val userProfileInteractor: UserProfileInteractor,
                                private val userRepository: UserRepository,
-                               private val gameRepository: GameRepository) : BasePresenter<UserProfileView, UserProfileViewModel>(), RestorablePresenter<UserProfileViewModel>, UserProfilePresenter {
+                               private val gameRepository: GameRepository,
+                               private val currentUserRepository: CurrentUserRepository) : BasePresenter<UserProfileView, UserProfileViewModel>(), RestorablePresenter<UserProfileViewModel>, UserProfilePresenter {
 
     override fun initNewViewModel(arguments: Bundle?): UserProfileViewModel {
         val userProfileViewModel = UserProfileViewModel()
@@ -128,7 +130,18 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
     }
 
     override fun editProfile() {
+        view.openDialog(UserProfileGameViewModel.CHANGE_USER_NAME)
+    }
 
+    override fun onEditSuccess() {
+        view.preFillModel(viewModel)
+        compositeSubscription.add(currentUserRepository.updateDisplayNameAndEmail(viewModel.displayName, viewModel.email)
+                .compose(RxTransformers.applyIoSchedulers())
+                .subscribe(object : DataObserver<Boolean>() {
+                    override fun onData(data: Boolean) {
+
+                    }
+                }))
     }
 
 }

@@ -31,6 +31,8 @@ public interface LceView<D extends RequestUpdateViewModel> extends View {
 
     void setData(D data);
 
+    void openDialog(String tag);
+
     void preFillModel(D data);
 
     void showContent();

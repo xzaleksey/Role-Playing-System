@@ -9,6 +9,8 @@ import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRe
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseFirebaseMapRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.CurrentUserRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.CurrentUserRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.*;
@@ -73,5 +75,11 @@ public class RepositoryModule {
     @Singleton
     DefaultModelProvider defaultModelProvider(Context context) {
         return new DefaultModelProviderImpl(context);
+    }
+
+    @Provides
+    @Singleton
+    CurrentUserRepository currentUserRepository() {
+        return new CurrentUserRepositoryImpl();
     }
 }

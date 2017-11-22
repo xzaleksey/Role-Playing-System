@@ -63,4 +63,9 @@ public class UserProfileCommunicationBus extends
     public void editProfile() {
         presenter.editProfile();
     }
+
+    @Override
+    public void onEditSuccess() {
+        presenter.onEditSuccess();
+    }
 }
