@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.userprofile.communication;
 
 import android.content.Context;
+import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -9,6 +10,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfil
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.state.UserProfileViewState;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -55,6 +57,13 @@ public class UserProfileCommunicationBus extends
     }
 
     @Override
+    public void pickImage() {
+        if (view != null) {
+            view.pickImage();
+        }
+    }
+
+    @Override
     public void updateList(List<IFlexible> iFlexibles) {
         getNavigationResolver().resolveNavigation((view) -> view.updateList(iFlexibles));
     }
@@ -67,5 +76,15 @@ public class UserProfileCommunicationBus extends
     @Override
     public void onEditName(String name) {
         presenter.onEditName(name);
+    }
+
+    @Override
+    public void onSelectAvatar() {
+        presenter.onSelectAvatar();
+    }
+
+    @Override
+    public void avatarImageChosen(@NotNull ChosenImage chosenImage) {
+        presenter.avatarImageChosen(chosenImage);
     }
 }

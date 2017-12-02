@@ -1,10 +1,12 @@
 package com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter;
 
+import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.PasswordPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileView;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import org.jetbrains.annotations.NotNull;
 
 public interface UserProfilePresenter extends Presenter<UserProfileView>, PasswordPresenter {
 
@@ -15,4 +17,8 @@ public interface UserProfilePresenter extends Presenter<UserProfileView>, Passwo
     void editProfile();
 
     void onEditName(String name);
+
+    void onSelectAvatar();
+
+    void avatarImageChosen(@NotNull ChosenImage chosenImage);
 }

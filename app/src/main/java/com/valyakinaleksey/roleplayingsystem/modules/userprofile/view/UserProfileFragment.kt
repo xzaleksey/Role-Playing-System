@@ -1,6 +1,8 @@
 package com.valyakinaleksey.roleplayingsystem.modules.userprofile.view
 
+import android.app.Activity.RESULT_OK
 import android.app.Dialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -9,9 +11,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import butterknife.BindView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.kbeanie.multipicker.api.ImagePicker
+import com.kbeanie.multipicker.api.Picker.PICK_IMAGE_DEVICE
+import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback
+import com.kbeanie.multipicker.api.entity.ChosenImage
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
+import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.UserProfileGameViewModel.CHANGE_USER_NAME
@@ -37,16 +45,20 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
     lateinit var recyclerView: RecyclerView
     private var dialog: MaterialDialog? = null
     private lateinit var flexibleAdapter: FlexibleAdapter<IFlexible<*>>
+    private var imagePicker: ImagePicker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
+        imagePicker = ImagePicker(this)
+        imagePicker!!.setImagePickerCallback(getImagePickerCallback())
     }
 
     public override fun setupViews(view: View) {
         super.setupViews(view)
         iv_back.setOnClickListener { activity?.onBackPressed() }
         iv_edit.setOnClickListener { component.presenter.editProfile() }
+        fab_image.setOnClickListener { component.presenter.onSelectAvatar() }
         setupRecyclerView()
     }
 
@@ -72,6 +84,7 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
         super.showContent()
         if (data.isCurrentUser) {
             iv_edit.visibility = View.VISIBLE
+            fab_image.visibility = View.VISIBLE
         }
         preFillModel(data)
         flexibleAdapter.updateDataSet(data.items, true)
@@ -131,6 +144,34 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
                 loadImage(StorageUtils.resourceToUri(R.drawable.profile_icon))
             } else {
                 loadImage(Uri.parse(data.avatarUrl))
+            }
+        }
+    }
+
+    override fun pickImage() {
+        imagePicker!!.pickImage()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_IMAGE_DEVICE) {
+                if (imagePicker == null) {
+                    imagePicker = ImagePicker(this)
+                    imagePicker!!.setImagePickerCallback(getImagePickerCallback())
+                }
+                imagePicker!!.submit(data)
+            }
+        }
+    }
+
+    private fun getImagePickerCallback(): ImagePickerCallback {
+        return object : ImagePickerCallback {
+            override fun onImagesChosen(list: List<ChosenImage>) {
+                component.presenter.avatarImageChosen(list[0])
+            }
+
+            override fun onError(s: String) {
+                showError(BaseError(BaseErrorType.SNACK, s))
             }
         }
     }

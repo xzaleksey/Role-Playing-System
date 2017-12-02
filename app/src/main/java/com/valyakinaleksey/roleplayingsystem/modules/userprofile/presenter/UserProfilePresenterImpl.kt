@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter
 import android.content.Context
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
+import com.kbeanie.multipicker.api.entity.ChosenImage
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.model.ResponseModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
@@ -151,4 +152,10 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
                 }))
     }
 
+    override fun onSelectAvatar() {
+        view.pickImage()
+    }
+
+    override fun avatarImageChosen(chosenImage: ChosenImage) {
+    }
 }

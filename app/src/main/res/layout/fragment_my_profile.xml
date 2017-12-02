@@ -100,6 +100,23 @@
                 tools:src="@drawable/profile_icon"
         />
 
+        <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/fab_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:layout_toRightOf="@+id/avatar"
+                android:layout_toEndOf="@+id/avatar"
+                android:layout_below="@+id/avatar"
+                android:layout_marginTop="-30dp"
+                android:layout_marginLeft="-30dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:scaleType="centerInside"
+                android:layout_marginStart="-40dp"
+                app:srcCompat="@drawable/ic_profile_edit"
+        />
+
         <TextView android:id="@+id/tv_total_games_count"
                   fontPath="fonts/rufina_regular.ttf"
                   android:layout_width="match_parent"

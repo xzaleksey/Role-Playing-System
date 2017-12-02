@@ -11,4 +11,5 @@ public interface UserProfileView extends LceView<UserProfileViewModel> {
 
     void showPasswordDialog();
 
+    void pickImage();
 }
