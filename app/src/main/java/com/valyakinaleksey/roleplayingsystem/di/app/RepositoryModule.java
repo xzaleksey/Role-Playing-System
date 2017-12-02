@@ -79,7 +79,7 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    CurrentUserRepository currentUserRepository() {
-        return new CurrentUserRepositoryImpl();
+    CurrentUserRepository currentUserRepository(GameRepository gameRepository) {
+        return new CurrentUserRepositoryImpl(gameRepository);
     }
 }

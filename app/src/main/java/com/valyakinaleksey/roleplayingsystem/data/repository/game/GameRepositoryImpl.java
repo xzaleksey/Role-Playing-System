@@ -134,35 +134,58 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
     @Override
     public Observable<Map<String, GameModel>> getLastGamesModelByUserId(String userId, int lastGamesCount) {
         DatabaseReference databaseReference = FireBaseUtils.getTableReference(GAMES_IN_USERS).child(userId);
-        return RxFirebaseDatabase.observeValueEvent(databaseReference)
-                .map(dataSnapshot -> {
-                    Map<Long, String> gameInUserModelsIds = new TreeMap<>();
-                    LinkedHashMap<String, GameModel> gameModels = new LinkedHashMap<>();
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            GameInUserModel gameInUserModel = snapshot.getValue(GameInUserModel.class);
-                            String key = snapshot.getKey();
-                            gameInUserModelsIds.put(gameInUserModel.getLastVisitedLong(), key);
-                        }
+        return Observable.combineLatest(observeData(), RxFirebaseDatabase.observeValueEvent(databaseReference), (stringGameModelMap, dataSnapshot) -> {
+            Map<Long, String> gameInUserModelsIds = new TreeMap<>();
+            LinkedHashMap<String, GameModel> gameModels = new LinkedHashMap<>();
+            if (dataSnapshot.exists()) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    GameInUserModel gameInUserModel = snapshot.getValue(GameInUserModel.class);
+                    String key = snapshot.getKey();
+                    gameInUserModelsIds.put(gameInUserModel.getLastVisitedLong(), key);
+                }
+            }
+            if (!gameInUserModelsIds.isEmpty()) {
+                int counter = 0;
+                int index;
+                ArrayList<String> ids = new ArrayList<>(gameInUserModelsIds.values());
+                while (counter != lastGamesCount && (index = (ids.size() - 1 - counter)) >= 0) {
+                    String key = ids.get(index);
+                    GameModel value = stringGameModelMap.get(key);
+                    if (value != null) {
+                        gameModels.put(key, value);
                     }
-                    if (!gameInUserModelsIds.isEmpty()) {
-                        int counter = 0;
-                        int index = 0;
-                        ArrayList<String> ids = new ArrayList<>(gameInUserModelsIds.values());
-                        while (counter != lastGamesCount && (index = (ids.size() - 1 - counter)) >= 0) {
-                            synchronized (this) {
-                                String key = ids.get(index);
-                                GameModel value = gamesMap.get(key);
-                                if (value != null) {
-                                    gameModels.put(key, value);
-                                }
-                                counter++;
-                            }
-                        }
-                    }
+                    counter++;
+                }
+            }
 
-                    return gameModels;
-                });
+            return gameModels;
+        });
+    }
+
+    @Override
+    public Observable<Map<String, GameModel>> getGamesByUserId(String userId) {
+        DatabaseReference databaseReference = FireBaseUtils.getTableReference(GAMES_IN_USERS).child(userId);
+        return Observable.combineLatest(observeData(), RxFirebaseDatabase.observeValueEvent(databaseReference), (stringGameModelMap, dataSnapshot) -> {
+            Map<Long, String> gameInUserModelsIds = new TreeMap<>();
+            LinkedHashMap<String, GameModel> gameModels = new LinkedHashMap<>();
+            if (dataSnapshot.exists()) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    GameInUserModel gameInUserModel = snapshot.getValue(GameInUserModel.class);
+                    String key = snapshot.getKey();
+                    gameInUserModelsIds.put(gameInUserModel.getLastVisitedLong(), key);
+                }
+            }
+            if (!gameInUserModelsIds.isEmpty()) {
+                ArrayList<String> ids = new ArrayList<>(gameInUserModelsIds.values());
+                for (String id : ids) {
+                    GameModel value = stringGameModelMap.get(id);
+                    if (value != null) {
+                        gameModels.put(id, value);
+                    }
+                }
+            }
+            return gameModels;
+        });
     }
 
     @Override

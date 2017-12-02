@@ -108,10 +108,6 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
     }
 
     private fun loadImage(uri: Uri) {
-        if (avatar.drawable != null) {
-            return
-        }
-
         ImageUtils.loadAvatarWithErrorDrawable(avatar, uri, ContextCompat.getDrawable(context, R.drawable.profile_icon))
     }
 

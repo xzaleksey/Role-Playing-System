@@ -123,11 +123,8 @@ fun Context.changeUserData(userProfileGameViewModel: UserProfileViewModel,
                            userProfilePresenter: UserProfilePresenter): MaterialDialog {
     val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_change_user_name_content, null)
     val etName = dialogView.findViewById<MaterialEditText>(R.id.name)
-    val etEmail = dialogView.findViewById<MaterialEditText>(R.id.email)
 
     etName.setText(userProfileGameViewModel.displayName)
-    etEmail.setText(userProfileGameViewModel.email)
-    val errorInvalidEmail = StringUtils.getStringById(R.string.error_invalid_email)
     val errorEmptyField = StringUtils.getStringById(R.string.error_empty_field)
     val compositeSubscription = CompositeSubscription()
 
@@ -137,29 +134,17 @@ fun Context.changeUserData(userProfileGameViewModel: UserProfileViewModel,
             .positiveText(android.R.string.ok)
             .negativeText(android.R.string.cancel)
             .onPositive({ dialog, _ ->
-                userProfileGameViewModel.displayName = etName.text.toString().trim({ it <= ' ' })
-                userProfileGameViewModel.email = etEmail.text.toString().trim({ it <= ' ' })
-                userProfilePresenter.onEditSuccess()
+                val name = etName.text.toString().trim({ it <= ' ' })
+                userProfilePresenter.onEditName(name)
                 dialog.dismiss()
             })
             .dismissListener { compositeSubscription.unsubscribe() }
             .onNegative({ dialog, _ -> dialog.dismiss() })
             .build()
     val actionButton = dialog.getActionButton(DialogAction.POSITIVE)
-    if (!TextUtils.isEmpty(etEmail.error) || TextUtils.isEmpty(etName.text)) {
+    if (TextUtils.isEmpty(etName.text)) {
         actionButton.isEnabled = false
     }
-    compositeSubscription.add(RxTextView.textChanges(etEmail)
-            .skip(1)
-            .subscribe { charSequence ->
-                when {
-                    TextUtils.isEmpty(charSequence) -> etEmail.error = String.format(errorEmptyField, getString(R.string.email))
-                    ValidationUtils.isValidEmail(charSequence) -> etEmail.error = null
-                    else -> etEmail.error = errorInvalidEmail
-                }
-
-                actionButton.isEnabled = TextUtils.isEmpty(etEmail.error) && !TextUtils.isEmpty(etName.text)
-            })
     compositeSubscription.add(RxTextView.textChanges(etName)
             .skip(1)
             .subscribe { charSequence ->
@@ -168,7 +153,7 @@ fun Context.changeUserData(userProfileGameViewModel: UserProfileViewModel,
                     else -> etName.error = null
                 }
 
-                actionButton.isEnabled = TextUtils.isEmpty(etEmail.error) && !TextUtils.isEmpty(charSequence)
+                actionButton.isEnabled = !TextUtils.isEmpty(charSequence)
             })
     etName.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {

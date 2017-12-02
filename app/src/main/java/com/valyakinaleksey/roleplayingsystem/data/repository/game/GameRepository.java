@@ -22,6 +22,8 @@ public interface GameRepository extends FirebaseRepository<GameModel> {
 
     Observable<Map<String, GameModel>> getLastGamesModelByUserId(String userId, int lastGamesCount);
 
+    Observable<Map<String, GameModel>> getGamesByUserId(String userId);
+
     Observable<Void> updateLastVisit(String id);
 }
       

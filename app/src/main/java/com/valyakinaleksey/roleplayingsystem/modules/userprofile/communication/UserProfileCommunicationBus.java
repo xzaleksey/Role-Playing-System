@@ -65,7 +65,7 @@ public class UserProfileCommunicationBus extends
     }
 
     @Override
-    public void onEditSuccess() {
-        presenter.onEditSuccess();
+    public void onEditName(String name) {
+        presenter.onEditName(name);
     }
 }

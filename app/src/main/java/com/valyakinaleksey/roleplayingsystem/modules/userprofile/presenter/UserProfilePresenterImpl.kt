@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
 import com.valyakinaleksey.roleplayingsystem.R
+import com.valyakinaleksey.roleplayingsystem.core.model.ResponseModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
@@ -133,13 +134,19 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
         view.openDialog(UserProfileGameViewModel.CHANGE_USER_NAME)
     }
 
-    override fun onEditSuccess() {
-        view.preFillModel(viewModel)
-        compositeSubscription.add(currentUserRepository.updateDisplayNameAndEmail(viewModel.displayName, viewModel.email)
-                .compose(RxTransformers.applyIoSchedulers())
-                .subscribe(object : DataObserver<Boolean>() {
-                    override fun onData(data: Boolean) {
+    override fun onEditName(name: String) {
+        compositeSubscription.add(currentUserRepository.updateDisplayName(name)
+                .compose(RxTransformers.applySchedulers())
+                .compose(RxTransformers.applyOpBeforeAndAfter({ view.showLoading() }, { view.hideLoading() }))
+                .subscribe(object : DataObserver<ResponseModel>() {
+                    override fun onData(data: ResponseModel) {
+                        viewModel.displayName = name
+                        view.preFillModel(viewModel)
+                    }
 
+                    override fun onError(e: Throwable) {
+                        super.onError(e)
+                        view.showError(BaseError(BaseErrorType.SNACK, StringUtils.getStringById(R.string.error_network_connection)))
                     }
                 }))
     }

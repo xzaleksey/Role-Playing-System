@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/nick_name"
-        android:inputType="textCapSentences"
-        app:met_floatingLabel="normal"
-        app:met_singleLineEllipsis="true"
-        app:met_autoValidate="true"
-        app:met_typeface="fonts/Roboto-Regular.ttf"
-        tools:text="Name" />
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nick_name"
+            android:inputType="textCapSentences"
+            app:met_floatingLabel="normal"
+            app:met_singleLineEllipsis="true"
+            app:met_autoValidate="true"
+            app:met_typeface="fonts/Roboto-Regular.ttf"
+            tools:text="Name"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/email_translatable"
-        android:inputType="textCapSentences|textMultiLine"
-        android:maxLines="@integer/edit_text_max_lines_common"
-        app:met_autoValidate="true"
-        app:met_floatingLabel="normal"
-        app:met_typeface="fonts/Roboto-Regular.ttf"
-        tools:text="dsdfsf sfsfdsfdsfsfdsfdsfdsfdsfdsfds  sdfsfsfdsfs dsfdsfs sfdsfds fdsfsf sdfsfsf dsfsf sdfsfsfdsfdsfs sdfsfdsfssfdfsfs sdfs dsfsf" />
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email_translatable"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="@integer/edit_text_max_lines_common"
+            app:met_autoValidate="true"
+            android:visibility="gone"
+            app:met_floatingLabel="normal"
+            app:met_typeface="fonts/Roboto-Regular.ttf"
+            tools:text="dsdfsf sfsfdsfdsfsfdsfdsfdsfdsfdsfds  sdfsfsfdsfs dsfdsfs sfdsfds fdsfsf sdfsfsf dsfsf sdfsfsfdsfdsfs sdfsfdsfssfdfsfs sdfs dsfsf"/>
 </LinearLayout>

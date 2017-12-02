@@ -14,5 +14,5 @@ public interface UserProfilePresenter extends Presenter<UserProfileView>, Passwo
 
     void editProfile();
 
-    void onEditSuccess();
+    void onEditName(String name);
 }

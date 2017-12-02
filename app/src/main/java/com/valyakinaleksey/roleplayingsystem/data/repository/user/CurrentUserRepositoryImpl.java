@@ -4,44 +4,48 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.kelvinapps.rxfirebase.RxFirebaseUser;
+import com.valyakinaleksey.roleplayingsystem.core.model.ResponseModel;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import rx.Observable;
 
 public class CurrentUserRepositoryImpl implements CurrentUserRepository {
 
+    private GameRepository gameRepository;
+
+    public CurrentUserRepositoryImpl(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
+    }
+
     @Override
-    public Observable<Boolean> updateDisplayNameAndEmail(String displayName, String email) {
+    public Observable<ResponseModel> updateDisplayName(String displayName) {
         FirebaseUser currentUser = FireBaseUtils.getCurrentUser();
-
+        String uid = currentUser.getUid();
         UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
-        boolean updatedProfile = false;
-
-        if (!displayName.equals(currentUser.getDisplayName())) {
-            builder.setDisplayName(displayName);
-            updatedProfile = true;
-        }
+        builder.setDisplayName(displayName);
 
 //        if (!StringUtils.areEqual(user.getPhotoUrl(), currentUser.getDisplayName())) {
 //            builder.setPhotoUri(Uri.parse(user.getPhotoUrl()));
 //            updatedProfile = true;
+//                    .concatMap(aVoid -> FireBaseUtils.setData(user.getPhotoUrl(), getDatabaseReference(currentUser)));
 //        }
 
-        Observable<?> observable = Observable.just(true);
 
-        if (updatedProfile) {
-            observable = RxFirebaseUser.updateProfile(currentUser, builder.build())
-                    .concatMap(aVoid -> FireBaseUtils.setData(displayName, getDatabaseReference(currentUser).child(User.FIELD_DISPLAY_NAME)));
-//                    .concatMap(aVoid -> FireBaseUtils.setData(user.getPhotoUrl(), getDatabaseReference(currentUser)));
-        }
+        return RxFirebaseUser.updateProfile(currentUser, builder.build())
+                .concatMap(aVoid -> FireBaseUtils.setData(displayName, getDatabaseReference(currentUser).child(User.FIELD_DISPLAY_NAME))
+                        .concatMap(aVoid1 -> gameRepository.getGamesByUserId(uid)
+                                .take(1)
+                                .doOnNext(stringGameModelMap -> {
+                                    for (GameModel gameModel : stringGameModelMap.values()) {
+                                        if (gameModel.isMaster(uid)) {
+                                            FireBaseUtils.getTableReference(FireBaseUtils.GAMES)
+                                                    .child(gameModel.getId()).child(GameModel.FIELD_MASTER_NAME).setValue(displayName);
+                                        }
+                                    }
+                                }))).map(stringGameModelMap -> new ResponseModel());
 
-        if (!StringUtils.areEqual(email, currentUser.getEmail())) {
-            observable = observable.concatMap(o -> RxFirebaseUser.updateEmail(currentUser, email))
-                    .concatMap(aVoid -> FireBaseUtils.setData(email, getDatabaseReference(currentUser).child(User.FIELD_EMAIL)));
-        }
-
-        return observable.map(o -> true);
     }
 
     private DatabaseReference getDatabaseReference(FirebaseUser currentUser) {
