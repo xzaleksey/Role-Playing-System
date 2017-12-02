@@ -9,10 +9,7 @@ import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRe
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseFirebaseMapRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
-import com.valyakinaleksey.roleplayingsystem.data.repository.user.CurrentUserRepository;
-import com.valyakinaleksey.roleplayingsystem.data.repository.user.CurrentUserRepositoryImpl;
-import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
-import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.*;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.*;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import dagger.Module;
@@ -79,7 +76,13 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    CurrentUserRepository currentUserRepository(GameRepository gameRepository) {
-        return new CurrentUserRepositoryImpl(gameRepository);
+    CurrentUserRepository currentUserRepository(GameRepository gameRepository, AvatarUploadRepository avatarUploadRepository) {
+        return new CurrentUserRepositoryImpl(gameRepository, avatarUploadRepository);
+    }
+
+    @Provides
+    @Singleton
+    AvatarUploadRepository avatarUploadRepository(PathManager pathManager) {
+        return new AvatarUploadRepositoryImpl(pathManager);
     }
 }

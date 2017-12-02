@@ -299,7 +299,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
                 Uri photoUrl = currentUser.getPhotoUrl();
                 String displayName = currentUser.getDisplayName();
                 if (photoUrl != null) {
-                    map.put(User.FIELD_PHOTO, photoUrl.toString());
+                    map.put(User.FIELD_PHOTO_URL, photoUrl.toString());
                 }
                 if (displayName != null) {
                     map.put(User.FIELD_DISPLAY_NAME, currentUser.getDisplayName());

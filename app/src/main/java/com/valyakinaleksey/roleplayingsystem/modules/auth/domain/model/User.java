@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class User implements Serializable, Parcelable {
     public static final String FIELD_COUNT_OF_GAMES_PLAYED = "countOfGamesPlayed";
     public static final String FIELD_COUNT_OF_GAMES_MASTERED = "countOfGamesMastered";
-    public static final String FIELD_PHOTO = "photo";
+    public static final String FIELD_PHOTO_URL = "photoUrl";
     public static final String FIELD_DISPLAY_NAME = "displayName";
     public static final String FIELD_EMAIL = "email";
 

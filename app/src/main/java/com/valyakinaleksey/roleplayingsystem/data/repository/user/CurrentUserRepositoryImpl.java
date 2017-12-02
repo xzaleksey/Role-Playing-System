@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.data.repository.user;
 
+import android.net.Uri;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
@@ -14,9 +15,11 @@ import rx.Observable;
 public class CurrentUserRepositoryImpl implements CurrentUserRepository {
 
     private GameRepository gameRepository;
+    private AvatarUploadRepository avatarUploadRepository;
 
-    public CurrentUserRepositoryImpl(GameRepository gameRepository) {
+    public CurrentUserRepositoryImpl(GameRepository gameRepository, AvatarUploadRepository avatarUploadRepository) {
         this.gameRepository = gameRepository;
+        this.avatarUploadRepository = avatarUploadRepository;
     }
 
     @Override
@@ -46,6 +49,20 @@ public class CurrentUserRepositoryImpl implements CurrentUserRepository {
                                     }
                                 }))).map(stringGameModelMap -> new ResponseModel());
 
+    }
+
+
+    @Override
+    public Observable<String> updatePhoto(Uri uri) {
+        FirebaseUser currentUser = FireBaseUtils.getCurrentUser();
+        return avatarUploadRepository.uploadAvatar(uri)
+                .concatMap(photoUrl -> {
+                    UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+                    builder.setPhotoUri(Uri.parse(photoUrl));
+                    return RxFirebaseUser.updateProfile(currentUser, builder.build())
+                            .concatMap(aVoid -> FireBaseUtils.setData(photoUrl, FireBaseUtils.getTableReference(FireBaseUtils.USERS)
+                                    .child(currentUser.getUid()).child(User.FIELD_PHOTO_URL))).map(aVoid -> photoUrl);
+                });
     }
 
     private DatabaseReference getDatabaseReference(FirebaseUser currentUser) {

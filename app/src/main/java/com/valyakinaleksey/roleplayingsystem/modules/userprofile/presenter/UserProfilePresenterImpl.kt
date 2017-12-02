@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
 import com.kbeanie.multipicker.api.entity.ChosenImage
@@ -157,5 +158,14 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
     }
 
     override fun avatarImageChosen(chosenImage: ChosenImage) {
+        currentUserRepository.updatePhoto(Uri.parse(chosenImage.originalPath))
+                .compose(RxTransformers.applySchedulers())
+                .compose(RxTransformers.applyOpBeforeAndAfter({ view.showLoading() }, { view.hideLoading() }))
+                .subscribe(object : DataObserver<String>() {
+                    override fun onData(data: String) {
+                        viewModel.avatarUrl = data
+                        view.preFillModel(viewModel)
+                    }
+                })
     }
 }
