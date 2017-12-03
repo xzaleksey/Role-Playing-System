@@ -10,6 +10,9 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 import rx.Observable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.*;
 
 public class LeaveGameUseCase implements LeaveGameInteractor {
@@ -19,14 +22,20 @@ public class LeaveGameUseCase implements LeaveGameInteractor {
         DatabaseReference gameCharactersReference =
                 FireBaseUtils.getTableReference(GAME_CHARACTERS).child(gameModel.getId());
         return RxFirebaseDatabase.observeSingleValueEvent(gameCharactersReference)
-                .doOnNext(dataSnapshot -> {
+                .switchMap(dataSnapshot -> {
+                    List<GameCharacterModel> gameCharacterModels = new ArrayList<>();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         GameCharacterModel value = snapshot.getValue(GameCharacterModel.class);
-                        if (currentUserId.equals(value.getUid())) {
-                            gameCharactersReference.child(value.getId()).child(FireBaseUtils.UID).setValue(null);
+                        if (value != null && currentUserId.equals(value.getUid())) {
+                            gameCharacterModels.add(value);
                         }
                     }
+                    return Observable.from(gameCharacterModels);
                 })
+                .flatMap(gameCharacterModel -> FireBaseUtils.startTransaction(gameCharactersReference.child(gameCharacterModel.getId()),
+                        GameCharacterModel.class,
+                        gameCharacterModel1 -> gameCharacterModel1.setUid(null)))
+                .toList()
                 .switchMap(dataSnapshot -> FireBaseUtils.setData(null,
                         FireBaseUtils.getTableReference(USERS_IN_GAME)
                                 .child(gameModel.getId())

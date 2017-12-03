@@ -9,6 +9,7 @@ import com.kelvinapps.rxfirebase.RxHandler;
 import com.kelvinapps.rxfirebase.exceptions.RxFirebaseDataException;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Executor;
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 import java.util.concurrent.TimeUnit;
@@ -65,8 +66,8 @@ public class FireBaseUtils {
     }
 
     public static Observable<Boolean> checkTableReferenceExists(String tableName) {
-        return RxFirebaseDatabase.
-                observeSingleValueEvent(getTableReference(tableName)).map(DataSnapshot::exists);
+        return RxFirebaseDatabase.observeSingleValueEvent(getTableReference(tableName))
+                .map(DataSnapshot::exists);
     }
 
     public static Observable<Boolean> checkReferenceExistsAndNotEmpty(Query query) {
@@ -86,9 +87,8 @@ public class FireBaseUtils {
     }
 
     public static Observable<Boolean> getConnectionObservableWithTimeInterval() {
-
-        return getConnectionObservable().switchMap(
-                aBoolean -> Observable.timer(aBoolean ? 0 : 5, TimeUnit.SECONDS).map(aLong -> aBoolean));
+        return getConnectionObservable().switchMap(aBoolean -> Observable.timer(aBoolean ? 0 : 5, TimeUnit.SECONDS)
+                .map(aLong -> aBoolean));
     }
 
     public static String getCurrentUserId() {
@@ -108,13 +108,11 @@ public class FireBaseUtils {
     }
 
     public static Observable<Void> deleteValue(DatabaseReference databaseReference) {
-        return Observable.create(
-                subscriber -> RxHandler.assignOnTask(subscriber, databaseReference.removeValue()));
+        return Observable.create(subscriber -> RxHandler.assignOnTask(subscriber, databaseReference.removeValue()));
     }
 
     public static Observable<Void> setData(Object o, DatabaseReference databaseReference) {
-        return Observable.create(
-                subscriber -> RxHandler.assignOnTask(subscriber, databaseReference.setValue(o)));
+        return Observable.create(subscriber -> RxHandler.assignOnTask(subscriber, databaseReference.setValue(o)));
     }
 
     public static Observable<Void> startTransaction(DatabaseReference databaseReference,
@@ -140,6 +138,34 @@ public class FireBaseUtils {
             });
         });
     }
+
+    public static <T> Observable<Void> startTransaction(DatabaseReference databaseReference, Class<T> tClass, Action1<T> action) {
+        return Observable.create(subscriber -> databaseReference.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                T model = mutableData.getValue(tClass);
+                if (model == null) {
+                    return Transaction.success(mutableData);
+                }
+                action.call(model);
+                mutableData.setValue(model);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                if (!subscriber.isUnsubscribed()) {
+                    if (databaseError == null) {
+                        subscriber.onNext(null);
+                        subscriber.onCompleted();
+                    } else {
+                        subscriber.onError(databaseError.toException());
+                    }
+                }
+            }
+        }));
+    }
+
 
     public static Observable<RxFirebaseChildEvent<DataSnapshot>> observeChildAdded(
             final Query firebaseRef) {

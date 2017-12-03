@@ -34,9 +34,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.kbeanie.multipicker.api.Picker.PICK_IMAGE_DEVICE;
 
-public class MapsFragment
-        extends AbsButterLceFragment<MapsFragmentComponent, MapsViewModel, MapsView>
-        implements MapsView {
+public class MapsFragment extends AbsButterLceFragment<MapsFragmentComponent, MapsViewModel, MapsView> implements MapsView {
 
     public static final String TAG = MapsFragment.class.getSimpleName();
 

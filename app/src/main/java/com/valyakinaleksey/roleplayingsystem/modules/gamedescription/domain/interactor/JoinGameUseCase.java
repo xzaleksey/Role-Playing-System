@@ -4,7 +4,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Transaction;
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameInUserModel;
@@ -29,16 +28,9 @@ public class JoinGameUseCase implements JoinGameInteractor {
         return RxFirebaseDatabase.observeSingleValueEvent(
                 databaseReference.child(FireBaseUtils.USERS_IN_GAME).child(gameModel.getId()))
                 .switchMap(dataSnapshot -> FireBaseUtils.startTransaction(
-                        FireBaseUtils.getTableReference(FireBaseUtils.USERS)
-                                .child(FireBaseUtils.getCurrentUserId()), data -> {
-                            User user = data.getValue(User.class);
-                            if (user == null) {
-                                return Transaction.success(data);
-                            }
-                            user.setCountOfGamesPlayed(user.getCountOfGamesPlayed() + 1);
-                            data.setValue(user);
-                            return Transaction.success(data);
-                        }));
+                        FireBaseUtils.getTableReference(FireBaseUtils.USERS).child(FireBaseUtils.getCurrentUserId()),
+                        User.class,
+                        user -> user.setCountOfGamesPlayed(user.getCountOfGamesPlayed() + 1)));
     }
 
     private void putGameInUsers(GameModel gameModel, String uid, Map<String, Object> childUpdates) {

@@ -4,6 +4,7 @@ import android.net.Uri;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Transaction;
 import com.kelvinapps.rxfirebase.RxFirebaseUser;
 import com.valyakinaleksey.roleplayingsystem.core.model.ResponseModel;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
@@ -29,26 +30,30 @@ public class CurrentUserRepositoryImpl implements CurrentUserRepository {
         UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
         builder.setDisplayName(displayName);
 
-//        if (!StringUtils.areEqual(user.getPhotoUrl(), currentUser.getDisplayName())) {
-//            builder.setPhotoUri(Uri.parse(user.getPhotoUrl()));
-//            updatedProfile = true;
-//                    .concatMap(aVoid -> FireBaseUtils.setData(user.getPhotoUrl(), getDatabaseReference(currentUser)));
-//        }
-
-
         return RxFirebaseUser.updateProfile(currentUser, builder.build())
                 .concatMap(aVoid -> FireBaseUtils.setData(displayName, getDatabaseReference(currentUser).child(User.FIELD_DISPLAY_NAME))
                         .concatMap(aVoid1 -> gameRepository.getGamesByUserId(uid)
                                 .take(1)
-                                .doOnNext(stringGameModelMap -> {
-                                    for (GameModel gameModel : stringGameModelMap.values()) {
-                                        if (gameModel.isMaster(uid)) {
-                                            FireBaseUtils.getTableReference(FireBaseUtils.GAMES)
-                                                    .child(gameModel.getId()).child(GameModel.FIELD_MASTER_NAME).setValue(displayName);
-                                        }
+                                .switchMap(stringGameModelMap -> Observable.from(stringGameModelMap.values()))
+                                .flatMap(gameModel -> FireBaseUtils.startTransaction(getGameReference(gameModel.getId()), data -> {
+                                    GameModel gameModelInTransaction = data.getValue(GameModel.class);
+                                    if (gameModelInTransaction == null) {
+                                        return Transaction.success(data);
                                     }
-                                }))).map(stringGameModelMap -> new ResponseModel());
+                                    if (gameModelInTransaction.isMaster(uid)) {
+                                        gameModelInTransaction.setMasterName(displayName);
+                                        data.setValue(gameModelInTransaction);
+                                    }
+                                    return Transaction.success(data);
+                                }))
+                        ))
+                .toList()
+                .map(stringGameModelMap -> new ResponseModel());
 
+    }
+
+    private DatabaseReference getGameReference(String gameId) {
+        return FireBaseUtils.getTableReference(FireBaseUtils.GAMES).child(gameId);
     }
 
 
