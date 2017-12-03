@@ -92,5 +92,6 @@
     <string name="nick_name">Nickname</string>
     <string name="email_translatable">Email</string>
     <string name="edit">Edit</string>
+    <string name="denied_external">Rights to external memory are required to upload picture</string>
 
 </resources>

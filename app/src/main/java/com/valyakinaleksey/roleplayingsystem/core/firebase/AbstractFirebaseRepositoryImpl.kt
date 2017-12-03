@@ -4,7 +4,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId
-import com.valyakinaleksey.roleplayingsystem.utils.makeList
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.makeList
 import rx.Observable
 import rx.functions.Func1
 import timber.log.Timber

@@ -58,9 +58,7 @@ public class UserProfileCommunicationBus extends
 
     @Override
     public void pickImage() {
-        if (view != null) {
-            view.pickImage();
-        }
+        getNavigationResolver().resolveNavigation(UserProfileView::pickImage);
     }
 
     @Override

@@ -15,8 +15,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.MyGamesListModul
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener
-import com.valyakinaleksey.roleplayingsystem.utils.showCreateGameDialog
-import com.valyakinaleksey.roleplayingsystem.utils.showPasswordDialog
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.showCreateGameDialog
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.showPasswordDialog
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 

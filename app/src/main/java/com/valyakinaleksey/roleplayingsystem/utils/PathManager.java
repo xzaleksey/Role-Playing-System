@@ -47,7 +47,7 @@ public class PathManager {
         final String dir = resourcesDirectory + "/" + path;
         try {
             createDirectory(dir);
-        } catch(IOException e) {
+        } catch (IOException e) {
         }
         return dir;
     }

@@ -25,8 +25,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListCompo
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
-import com.valyakinaleksey.roleplayingsystem.utils.DialogExtensionsKt;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.DialogExtensionsKt;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;

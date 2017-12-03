@@ -18,6 +18,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentVie
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment
 import com.valyakinaleksey.roleplayingsystem.utils.*
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.createFragment
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils.ADD_BACK_STACK
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils.POP_BACK_STACK

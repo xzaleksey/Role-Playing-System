@@ -149,6 +149,7 @@ dependencies {
   compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.1'
   compile 'com.kelvinapps:rxfirebase:0.0.15'
   compile 'com.github.pwittchen:reactivenetwork:0.9.1'
+  compile 'com.karumi:dexter:4.2.0'
 
   //Logger
   compile 'com.jakewharton.timber:timber:4.5.1'

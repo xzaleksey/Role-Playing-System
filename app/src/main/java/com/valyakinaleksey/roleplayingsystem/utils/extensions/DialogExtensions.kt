@@ -1,6 +1,6 @@
 @file:JvmName("DialogExtensionsKt")
 
-package com.valyakinaleksey.roleplayingsystem.utils
+package com.valyakinaleksey.roleplayingsystem.utils.extensions
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -20,6 +20,8 @@ import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasPasswordViewMode
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.PasswordPresenter
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenter
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
+import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import rx.subscriptions.CompositeSubscription
 
 

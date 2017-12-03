@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.utils
+package com.valyakinaleksey.roleplayingsystem.utils.extensions
 
 import android.os.Bundle
 import com.crashlytics.android.Crashlytics
@@ -76,7 +76,7 @@ fun <T : RequestUpdateViewModel, V> BasePresenter<V, T>.createNewGame(gameModel:
     view: V,
     createNewGameInteractor: CreateNewGameInteractor): Subscription where V : LceView<T>, V : CreateGameView {
   val subscription = checkInternetConnection(view,
-      RpsApp.app().getString(R.string.game_will_be_synched))
+          RpsApp.app().getString(R.string.game_will_be_synched))
   return createNewGameInteractor.createNewGame(gameModel)
       .compose(RxTransformers.applySchedulers())
       .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))

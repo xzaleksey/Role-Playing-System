@@ -28,8 +28,9 @@ import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileM
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
 import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils
-import com.valyakinaleksey.roleplayingsystem.utils.changeUserData
-import com.valyakinaleksey.roleplayingsystem.utils.showPasswordDialog
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.changeUserData
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.showExternalReadWritePermission
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.showPasswordDialog
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import kotlinx.android.synthetic.main.fragment_my_profile.*
@@ -58,7 +59,7 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
         super.setupViews(view)
         iv_back.setOnClickListener { activity?.onBackPressed() }
         iv_edit.setOnClickListener { component.presenter.editProfile() }
-        fab_image.setOnClickListener { component.presenter.onSelectAvatar() }
+        fab_image.setOnClickListener { showExternalReadWritePermission { component.presenter.onSelectAvatar() } }
         setupRecyclerView()
     }
 

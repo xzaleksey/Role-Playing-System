@@ -24,6 +24,9 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesL
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
 import com.valyakinaleksey.roleplayingsystem.utils.*
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.createNewGame
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameDescriptionScreen
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameScreen
 import eu.davidea.flexibleadapter.items.IFlexible
 import rx.Observable
 import rx.subjects.BehaviorSubject

@@ -27,7 +27,12 @@ import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.UserPro
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProfileInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileView
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
-import com.valyakinaleksey.roleplayingsystem.utils.*
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.getCheckUserInGameObservable
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.getValidatePasswordSubscription
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameDescriptionScreen
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameScreen
 import eu.davidea.flexibleadapter.items.IFlexible
 
 class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor,

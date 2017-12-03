@@ -1,5 +1,5 @@
 @file:JvmName("CollectionExtensions")
-package com.valyakinaleksey.roleplayingsystem.utils
+package com.valyakinaleksey.roleplayingsystem.utils.extensions
 
 
 fun <E> Iterable<E>.makeList(): MutableList<E> {
