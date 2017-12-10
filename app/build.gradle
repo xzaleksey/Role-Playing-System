@@ -121,7 +121,7 @@ dependencies {
 
 
     compile 'com.jakewharton:butterknife:8.8.1'
-    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.google.code.gson:gson:2.8.0'
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Dagger 2
@@ -147,18 +147,18 @@ dependencies {
 
     //Crashlyticis
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true;
+        transitive = true
     }
     //Other
-    compile 'com.android.support:multidex:1.0.1'
-    androidTestCompile 'com.android.support:multidex-instrumentation:1.0.1'
+    compile 'com.android.support:multidex:1.0.2'
+    androidTestCompile 'com.android.support:multidex-instrumentation:1.0.2'
     compile 'net.danlew:android.joda:2.9.9'
     compile 'com.kbeanie:multipicker:1.1.31@aar'
     compile 'id.zelory:compressor:1.0.4'
     //Unit test
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.8.9'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.1.2"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 
