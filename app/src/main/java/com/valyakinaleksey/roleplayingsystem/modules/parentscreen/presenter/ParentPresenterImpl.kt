@@ -13,11 +13,13 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListFragment
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListFragment
-import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileFragment
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment
-import com.valyakinaleksey.roleplayingsystem.utils.*
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileFragment
+import com.valyakinaleksey.roleplayingsystem.utils.DeepLinksUtils
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.createFragment
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen

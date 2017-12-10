@@ -22,13 +22,14 @@ repositories {
     maven { url "https://maven.google.com" }
 }
 
-def globalConfiguration = rootProject.ext;
+def globalConfiguration = rootProject.ext
 
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
     configurations.all {
         resolutionStrategy.force "com.android.support:support-v4:$support_version"
+        resolutionStrategy.force "com.android.support:appcompat-v7:$support_version"
     }
     dexOptions {
         javaMaxHeapSize "4g"

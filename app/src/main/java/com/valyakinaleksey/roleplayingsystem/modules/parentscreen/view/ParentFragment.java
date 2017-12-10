@@ -8,10 +8,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import butterknife.BindString;
-import butterknife.BindView;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,9 +32,13 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragm
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.DrawerInfoModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen;
+import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindString;
+import butterknife.BindView;
 
 public class ParentFragment extends
         AbsButterLceFragment<com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent, ParentModel, ParentView>
@@ -101,9 +108,11 @@ public class ParentFragment extends
 
     private void initDrawerItems() {
         List<DrawerInfoModel> result = new ArrayList<>();
-        result.add(new DrawerInfoModel(getString(R.string.my_games), NavigationScreen.MY_GAMES));
-        result.add(new DrawerInfoModel(getString(R.string.list_of_games), NavigationScreen.GAMES_LIST));
-        result.add(new DrawerInfoModel(getString(R.string.profile), NavigationScreen.PROFILE));
+        result.add(new DrawerInfoModel(getString(R.string.my_games), NavigationScreen.MY_GAMES, new Bundle()));
+        result.add(new DrawerInfoModel(getString(R.string.list_of_games), NavigationScreen.GAMES_LIST, new Bundle()));
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
+        result.add(new DrawerInfoModel(getString(R.string.profile), NavigationScreen.PROFILE, bundle));
         drawerItems = result;
     }
 
@@ -111,7 +120,8 @@ public class ParentFragment extends
         DrawerBuilder drawerBuilder = new DrawerBuilder().withActivity(getActivity())
                 .withToolbar(((AbsActivity) getActivity()).getToolbar())
                 .withOnDrawerItemClickListener((view1, position, drawerItem) -> {
-                    getComponent().getPresenter().navigateToFragment(drawerItems.get(position).getNavId());
+                    DrawerInfoModel drawerInfoModel = drawerItems.get(position);
+                    getComponent().getPresenter().navigateToFragment(drawerInfoModel.getNavId(), drawerInfoModel.getBundle());
                     drawer.closeDrawer();
                     return true;
                 });
