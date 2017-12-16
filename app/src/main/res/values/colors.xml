@@ -13,6 +13,7 @@
   <color name="defaultGrayTintColor">#737373</color>
   <color name="backgroundColor">#FAFAFA</color>
   <color name="grey12Color">#0c000000</color>
+  <color name="blackColor54">#8a000000</color>
 
 
 </resources>

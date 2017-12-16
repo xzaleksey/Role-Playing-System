@@ -11,14 +11,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.BindView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.DialogProvider;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SerializableTuple;
-import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseDialogFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.ViewPagerAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -29,6 +28,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragm
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
 
 public class ParentGameFragment
         extends AbsButterLceFragment<ParentGameComponent, ParentGameModel, ParentView>
@@ -87,7 +88,6 @@ public class ParentGameFragment
             fragmentTitlePairs = data.getFragmentsInfo();
         }
         adapter = new ViewPagerAdapter(getChildFragmentManager(), fragmentTitlePairs, getArguments());
-        tabLayout = getActivity().findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -156,7 +156,6 @@ public class ParentGameFragment
     @Override
     public void preFillModel(ParentGameModel data) {
         super.preFillModel(data);
-        ((AbsActivity) getActivity()).setToolbarTitle(data.getGameModel().getName());
     }
 
     @Override

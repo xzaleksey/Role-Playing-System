@@ -19,7 +19,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileFragment
 import com.valyakinaleksey.roleplayingsystem.utils.DeepLinksUtils
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.createFragment
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
@@ -36,7 +35,7 @@ class ParentPresenterImpl(
 
     init {
         navigationHandler.put(NavigationScreen.GAMES_LIST, navigateToFragment<GamesListFragment>())
-        navigationHandler.put(NavigationScreen.MY_GAMES, navigateToFragment<MyGamesListFragment>())
+        navigationHandler.put(NavigationScreen.MAIN_SCREEN, navigateToFragment<MyGamesListFragment>())
         navigationHandler.put(NavigationScreen.GAME_FRAGMENT, navigateToFragment<ParentGameFragment>())
         navigationHandler.put(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, navigateToFragment<GamesDescriptionFragment>())
         navigationHandler.put(NavigationScreen.IMAGE_FRAGMENT, navigateToFragment<ImageFragment>())
@@ -56,7 +55,7 @@ class ParentPresenterImpl(
         val transaction = fragment.childFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                .setAllowOptimization(true)
+                .setReorderingAllowed(true)
                 .replace(R.id.parent_fragment_container, navFragment)
         if (addToBackStack) {
             transaction.addToBackStack(null)
@@ -66,9 +65,8 @@ class ParentPresenterImpl(
 
     override fun initNewViewModel(arguments: Bundle?): ParentModel {
         val parentModel = ParentModel()
-        parentModel.navigationId = NavigationScreen.MY_GAMES
+        parentModel.navigationId = NavigationScreen.MAIN_SCREEN
         tryOpenDeepLink(arguments)
-        parentModel.toolbarTitle = StringUtils.getStringById(R.string.app_name)
         return parentModel
     }
 
@@ -109,13 +107,11 @@ class ParentPresenterImpl(
                 .compose(RxTransformers.applySchedulers())
                 .subscribe { connected ->
                     viewModel.isDisconnected = !connected
-                    view.updateToolbar()
                 })
     }
 
     override fun navigateTo(parentFragment: Fragment, args: Bundle?) {
-        val fragment = parentFragment.childFragmentManager.findFragmentById(
-                R.id.parent_fragment_container)
+        val fragment = parentFragment.childFragmentManager.findFragmentById(R.id.parent_fragment_container)
         val arguments = args ?: Bundle()
         if (fragment is ParentGameFragment) {
             arguments.putBoolean(ADD_BACK_STACK, true)

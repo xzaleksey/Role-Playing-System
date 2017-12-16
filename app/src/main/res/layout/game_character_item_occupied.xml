@@ -108,7 +108,7 @@
           android:layout_marginLeft="@dimen/activity_vertical_margin"
           android:layout_marginStart="@dimen/activity_vertical_margin"
           android:text="@string/player"
-          android:textColor="@color/accent"
+          android:textColor="@color/colorAccent"
           android:textSize="12sp"
           />
 

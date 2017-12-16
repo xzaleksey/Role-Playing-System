@@ -16,7 +16,7 @@ import java.lang.annotation.RetentionPolicy;
         NavigationScreen.GAME_MAPS_FRAGMENT,
         NavigationScreen.GAME_CHARACTERS_FRAGMENT,
         NavigationScreen.IMAGE_FRAGMENT,
-        NavigationScreen.MY_GAMES,
+        NavigationScreen.MAIN_SCREEN,
         NavigationScreen.PROFILE,
         NavigationScreen.BACK})
 
@@ -29,7 +29,7 @@ public @interface NavigationScreen {
     int GAME_MAPS_FRAGMENT = 6;
     int GAME_CHARACTERS_FRAGMENT = 7;
     int IMAGE_FRAGMENT = 8;
-    int MY_GAMES = 9;
+    int MAIN_SCREEN = 9;
     int PROFILE = 10;
     int BACK = -1;
 }

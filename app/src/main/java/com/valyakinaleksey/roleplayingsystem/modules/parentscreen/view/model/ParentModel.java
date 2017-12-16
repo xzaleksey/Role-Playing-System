@@ -6,17 +6,16 @@ import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpd
 
 public class ParentModel extends BaseRequestUpdateViewModel {
 
-  private int navigationTag;
+  private int navigationId;
   private boolean firstNavigation = true;
   private boolean isDisconnected;
-  private String toolbarTitle;
 
   public int getNavigationId() {
-    return navigationTag;
+    return navigationId;
   }
 
   public void setNavigationId(int navigationId) {
-    this.navigationTag = navigationId;
+    this.navigationId = navigationId;
   }
 
   public boolean isFirstNavigation() {
@@ -25,14 +24,6 @@ public class ParentModel extends BaseRequestUpdateViewModel {
 
   public void setFirstNavigation(boolean firstNavigation) {
     this.firstNavigation = firstNavigation;
-  }
-
-  public String getToolbarTitle() {
-    return toolbarTitle;
-  }
-
-  public void setToolbarTitle(String toolbarTitle) {
-    this.toolbarTitle = toolbarTitle;
   }
 
   public boolean isDisconnected() {
@@ -56,18 +47,16 @@ public class ParentModel extends BaseRequestUpdateViewModel {
 
   @Override public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
-    dest.writeInt(this.navigationTag);
+    dest.writeInt(this.navigationId);
     dest.writeByte(this.firstNavigation ? (byte) 1 : (byte) 0);
     dest.writeByte(this.isDisconnected ? (byte) 1 : (byte) 0);
-    dest.writeString(this.toolbarTitle);
   }
 
   protected ParentModel(Parcel in) {
     super(in);
-    this.navigationTag = in.readInt();
+    this.navigationId = in.readInt();
     this.firstNavigation = in.readByte() != 0;
     this.isDisconnected = in.readByte() != 0;
-    this.toolbarTitle = in.readString();
   }
 
   public static final Creator<ParentModel> CREATOR = new Creator<ParentModel>() {

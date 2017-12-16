@@ -2,7 +2,7 @@
 <resources>
 
   <style name="BrandButtonStyle" parent="Widget.AppCompat.Button.Colored">
-    <item name="android:backgroundTint">@color/md_white_1000</item>
+    <item name="android:backgroundTint">@android:color/white</item>
     <item name="android:textColor">@color/material_blue_500</item>
   </style>
 </resources>

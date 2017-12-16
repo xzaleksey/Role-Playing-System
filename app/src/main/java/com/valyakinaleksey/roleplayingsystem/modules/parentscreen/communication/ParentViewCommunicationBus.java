@@ -53,22 +53,8 @@ public class ParentViewCommunicationBus extends
     }
 
     @Override
-    public void updateToolbar() {
-        getNavigationResolver().resolveNavigation(ParentView::updateToolbar);
-    }
-
-    @Override
     public void getNavigationFragment(Bundle args) {
         getNavigationResolver().resolveNavigation(parentView -> parentView.getNavigationFragment(args));
     }
 
-    @Override
-    public void hideAppBar() {
-        getNavigationResolver().resolveNavigation(ParentView::hideAppBar);
-    }
-
-    @Override
-    public void showAppBar() {
-        getNavigationResolver().resolveNavigation(ParentView::showAppBar);
-    }
 }

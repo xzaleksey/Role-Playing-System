@@ -60,7 +60,7 @@
           android:layout_alignParentRight="true"
           android:background="?attr/selectableItemBackgroundBorderless"
           android:text="@string/play"
-          android:textColor="@color/accent"
+          android:textColor="@color/colorAccent"
           />
       <TextView
           android:id="@+id/character_description"

@@ -81,4 +81,5 @@
     <string name="email_translatable">Почта</string>
     <string name="edit">Редактировать</string>
     <string name="denied_external">Права на запись внешней памяти необходимы для загрузки изображения</string>
+    <string name="search">Поиск</string>
 </resources>

@@ -21,7 +21,6 @@ import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentView
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.UserProfileGameViewModel.CHANGE_USER_NAME
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileComponent
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileModule
@@ -72,11 +71,6 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
         recyclerView.adapter = flexibleAdapter
     }
 
-    override fun onStart() {
-        super.onStart()
-        (parentFragment as? ParentView)?.hideAppBar()
-    }
-
     override fun loadData() {
         component.presenter.getData()
     }
@@ -102,9 +96,8 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
     }
 
     override fun onDestroyView() {
-        (parentFragment as? ParentView)?.showAppBar()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity?.window?.statusBarColor = ContextCompat.getColor(activity, R.color.primary_dark)
+            activity?.window?.statusBarColor = ContextCompat.getColor(activity, R.color.colorPrimaryDark)
         }
         super.onDestroyView()
     }

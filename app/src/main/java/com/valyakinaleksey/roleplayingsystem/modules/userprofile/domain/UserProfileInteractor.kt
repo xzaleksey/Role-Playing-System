@@ -22,7 +22,7 @@ class UserProfileInteractorImpl(
 ) : UserProfileInteractor {
 
     private val lastItemsCount = 2
-    private val subHeaderColor = ContextCompat.getColor(context, R.color.accent)
+    private val subHeaderColor = ContextCompat.getColor(context, R.color.colorAccent)
 
     override fun observeUserProfile(userId: String): Observable<List<IFlexible<*>>> {
         val currentUserId = FireBaseUtils.getCurrentUserId()

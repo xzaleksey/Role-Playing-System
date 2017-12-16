@@ -1,62 +1,63 @@
 <resources>
 
-  <!-- Base application theme. -->
-  <style name="AppThemeBase" parent="Theme.AppCompat.Light.DarkActionBar">
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
-    <item name="windowNoTitle">true</item>
-    <item name="windowActionBar">false</item>
-    <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
-    <item name="android:buttonStyle">@style/AppThemeBase.Widget.Button</item>
-    <item name="android:textColorPrimary">@color/colorTextPrimary</item>
-    <item name="android:textColorSecondary">@color/colorTextSecondary</item>
-    <item name="android:autoCompleteTextViewStyle">
-      @style/AppThemeBase.Widget.AutoCompleteTextView
-    </item>
-    <item name="colorControlNormal">@color/colorControlNormal</item>
-    <item name="android:editTextStyle">@style/AppThemeBase.Widget.EditText</item>
-  </style>
+    <!-- Base application theme. -->
+    <style name="AppThemeBase" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
+        <item name="android:buttonStyle">@style/AppThemeBase.Widget.Button</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+        <item name="android:autoCompleteTextViewStyle">
+            @style/AppThemeBase.Widget.AutoCompleteTextView
+        </item>
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="android:editTextStyle">@style/AppThemeBase.Widget.EditText</item>
+    </style>
 
 
-  <style name="AppTheme" parent="AppThemeBase" />
+    <style name="AppTheme" parent="AppThemeBase" />
 
-  <style name="ImageAppTheme" parent="AppTheme">
-    <item name="colorPrimaryDark">@color/md_dark_appbar</item>
-    <item name="colorAccent">@color/md_white_1000</item>
-  </style>
+    <style name="ImageAppTheme" parent="AppTheme">
+        <item name="colorPrimaryDark">@color/material_light_black</item>
+        <item name="colorAccent">@android:color/white</item>
+    </style>
 
-  <style name="AppThemeBase.TextWhite">
-    <item name="colorAccent">@android:color/white</item>
-    <item name="android:textColorPrimary">@android:color/white</item>
-    <item name="colorPrimaryDark">@android:color/black</item>
-    <item name="android:textColorHint">@color/white7</item>
-    <item name="android:textColorSecondary">@color/white7</item>
-  </style>
+    <style name="AppThemeBase.TextWhite">
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="android:textColorHint">@color/white7</item>
+        <item name="android:textColorSecondary">@color/white7</item>
+    </style>
 
-  <style name="AppThemeBase.Widget" />
+    <style name="AppThemeBase.Widget" />
 
-  <style name="AppTheme.Widget.TextView" parent="android:Widget.TextView">
-    <item name="fontPath">fonts/Roboto-Regular.ttf</item>
-    <item name="android:ellipsize">end</item>
-  </style>
+    <style name="AppTheme.Widget.TextView" parent="android:Widget.TextView">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 
-  <style name="AppThemeBase.Widget.EditText" parent="Base.Widget.AppCompat.EditText">
-    <item name="fontPath">fonts/Roboto-Regular.ttf</item>
-  </style>
+    <style name="AppThemeBase.Widget.EditText" parent="Base.Widget.AppCompat.EditText">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
 
-  <style name="AppThemeBase.Widget.AutoCompleteTextView" parent="Base.Widget.AppCompat.AutoCompleteTextView">
-    <item name="fontPath">fonts/Roboto-Regular.ttf</item>
-  </style>
+    <style name="AppThemeBase.Widget.AutoCompleteTextView" parent="Base.Widget.AppCompat.AutoCompleteTextView">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
 
-  <style name="AppThemeBase.Widget.Button" parent="Base.Widget.AppCompat.Button">
-    <item name="fontPath">fonts/Roboto-Medium.ttf</item>
-  </style>
+    <style name="AppThemeBase.Widget.Button" parent="Base.Widget.AppCompat.Button">
+        <item name="fontPath">fonts/Roboto-Medium.ttf</item>
+    </style>
 
-  <style name="AppThemeTransparent" parent="AppTheme">
-    <item name="android:windowIsTranslucent">true</item>
-    <item name="android:windowBackground">@android:color/transparent</item>
-    <item name="android:windowContentOverlay">@null</item>
-    <item name="android:backgroundDimEnabled">false</item>
-  </style>
+    <style name="AppThemeTransparent" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 </resources>

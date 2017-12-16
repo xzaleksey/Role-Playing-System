@@ -5,19 +5,21 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import butterknife.BindView;
+
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.model.DataEvent;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.InfoSection;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.SectionsAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.GamesDescriptionComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.di.GamesDescriptionModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamedescription.view.model.GamesDescriptionModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
+
 import javax.inject.Inject;
+
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class GamesDescriptionFragment extends
@@ -79,12 +81,11 @@ public class GamesDescriptionFragment extends
   }
 
   @Override public void updateView() {
-    ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
     sectionsAdapter.notifyDataSetChanged();
   }
 
   @Override public void preFillModel(GamesDescriptionModel data) {
-    ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
+
   }
 
   @Override public void updateView(InfoSection userInfosection, DataEvent dataEvent) {

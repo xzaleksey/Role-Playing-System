@@ -11,10 +11,8 @@ public abstract class AbsSingleFragmentActivity extends AbsActivity {
 
     protected ViewGroup container;
 
-    @Override
     protected void setupViews() {
-        super.setupViews();
-        container = (ViewGroup) findViewById(R.id.container);
+        container = findViewById(R.id.container);
     }
 
     protected int getLayoutId() {

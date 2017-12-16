@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar_container"
+    android:layout_width="match_parent"
+    android:layout_height="56dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/top_background" />
+
+    <RelativeLayout
+        android:id="@+id/top_toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top"
+        android:layout_marginBottom="@dimen/common_margin_between_elements"
+        android:layout_marginLeft="@dimen/common_margin_between_elements"
+        android:layout_marginRight="@dimen/common_margin_between_elements"
+        android:layout_marginTop="@dimen/common_margin_between_elements"
+        android:background="@drawable/toolbar_search_background"
+        android:clipChildren="false">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/more"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_alignParentEnd="true"
+            android:padding="@dimen/common_margin_between_elements"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/blackColor54"
+            app:srcCompat="@drawable/ic_more_vert_black_24dp" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/action_icon"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:padding="@dimen/common_margin_between_elements"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/common_margin_between_elements"
+            android:layout_marginStart="@dimen/common_margin_between_elements"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_search_black_24dp" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/clear_icon"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:padding="@dimen/common_margin_between_elements"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/more"
+            android:layout_toStartOf="@+id/more"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="#4F4F4F"
+            android:layout_marginLeft="@dimen/common_margin_between_elements"
+            android:layout_marginStart="@dimen/common_margin_between_elements"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:srcCompat="@drawable/ic_close_black_24dp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_toEndOf="@+id/action_icon"
+            android:layout_toLeftOf="@+id/more"
+            android:layout_toRightOf="@+id/action_icon"
+            android:layout_toStartOf="@+id/more"
+            android:text="@string/app_name"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/dp_16"
+            tools:ignore="SpUsage" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_toEndOf="@+id/action_icon"
+            android:layout_toRightOf="@+id/action_icon"
+            android:layout_toLeftOf="@+id/clear_icon"
+            android:layout_toStartOf="@+id/clear_icon"
+            android:background="@android:color/transparent"
+            android:hint="@string/search"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/dp_16"
+            android:visibility="gone"
+            tools:ignore="SpUsage" />
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -1,62 +1,34 @@
 package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.valyakinaleksey.roleplayingsystem.R;
-import com.valyakinaleksey.roleplayingsystem.core.interfaces.OnToolbarChangedListener;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentModule;
-import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.DrawerInfoModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.ParentModel;
-import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen;
-import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindString;
-import butterknife.BindView;
 
-public class ParentFragment extends
-        AbsButterLceFragment<com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent, ParentModel, ParentView>
-        implements ParentView, OnToolbarChangedListener {
+public class ParentFragment extends AbsButterLceFragment<ParentFragmentComponent, ParentModel, ParentView>
+        implements ParentView {
 
     public static final String TAG = ParentFragment.class.getSimpleName();
-    private List<DrawerInfoModel> drawerItems;
-    private Drawer drawer;
     private GoogleApiClient googleApiClient;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.appbar_layout)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_progress_bar)
-    ProgressBar progressBar;
     @BindString(R.string.connecting)
     protected String connectionString;
-    private int appBarHeight;
 
     public static ParentFragment newInstance(Bundle arguments) {
         ParentFragment gamesDescriptionFragment = new ParentFragment();
@@ -80,60 +52,16 @@ public class ParentFragment extends
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        GoogleSignInOptions gso =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(
-                        this.getString(R.string.default_web_client_id)).requestEmail().build();
-        googleApiClient = new GoogleApiClient.Builder(getContext()).enableAutoManage(getActivity(),
-                connectionResult -> {
-
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(this.getString(R.string.default_web_client_id)).requestEmail().build();
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .enableAutoManage(getActivity(), connectionResult -> {
                 }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
     }
 
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
-        AbsActivity activity = (AbsActivity) getActivity();
-        activity.setupToolbar();
-        activity.addOnToolBarChangedListener(this);
-        initProgressBar();
-        initDrawerItems();
-        initDrawer();
-    }
-
-    private void initProgressBar() {
-        progressBar.getIndeterminateDrawable()
-                .setColorFilter(ContextCompat.getColor(getActivity(), R.color.md_white_1000),
-                        PorterDuff.Mode.MULTIPLY);
-    }
-
-    private void initDrawerItems() {
-        List<DrawerInfoModel> result = new ArrayList<>();
-        result.add(new DrawerInfoModel(getString(R.string.my_games), NavigationScreen.MY_GAMES, new Bundle()));
-        result.add(new DrawerInfoModel(getString(R.string.list_of_games), NavigationScreen.GAMES_LIST, new Bundle()));
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true);
-        result.add(new DrawerInfoModel(getString(R.string.profile), NavigationScreen.PROFILE, bundle));
-        drawerItems = result;
-    }
-
-    private void initDrawer() {
-        DrawerBuilder drawerBuilder = new DrawerBuilder().withActivity(getActivity())
-                .withToolbar(((AbsActivity) getActivity()).getToolbar())
-                .withOnDrawerItemClickListener((view1, position, drawerItem) -> {
-                    DrawerInfoModel drawerInfoModel = drawerItems.get(position);
-                    getComponent().getPresenter().navigateToFragment(drawerInfoModel.getNavId(), drawerInfoModel.getBundle());
-                    drawer.closeDrawer();
-                    return true;
-                });
-
-        for (DrawerInfoModel drawerInfoModel : drawerItems) {
-            drawerBuilder.addDrawerItems(getDrawerItem(drawerInfoModel));
-        }
-        drawer = drawerBuilder.build();
-    }
-
-    private IDrawerItem getDrawerItem(DrawerInfoModel drawerInfoModel) {
-        return new PrimaryDrawerItem().withName(drawerInfoModel.getName());
     }
 
     @Override
@@ -167,16 +95,6 @@ public class ParentFragment extends
     }
 
     @Override
-    public void updateToolbar() {
-        boolean visible = data.isDisconnected();
-        progressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
-        ActionBar supportActionBar = getAbsActivity().getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(visible ? connectionString : data.getToolbarTitle());
-        }
-    }
-
-    @Override
     public void loadData() {
         getComponent().getPresenter().getData();
     }
@@ -184,7 +102,6 @@ public class ParentFragment extends
     @Override
     public void showContent() {
         super.showContent();
-        updateToolbar();
     }
 
     @Override
@@ -202,29 +119,8 @@ public class ParentFragment extends
         getComponent().getPresenter().navigateTo(this, args);
     }
 
-    @Override
-    public void hideAppBar() {
-        ViewGroup.LayoutParams layoutParams = appBarLayout.getLayoutParams();
-        appBarHeight = layoutParams.height;
-        layoutParams.height = 0;
-        appBarLayout.setLayoutParams(layoutParams);
-    }
-
-    @Override
-    public void showAppBar() {
-        ViewGroup.LayoutParams layoutParams = appBarLayout.getLayoutParams();
-        layoutParams.height = appBarHeight;
-        appBarLayout.setLayoutParams(layoutParams);
-    }
-
     private AbsActivity getAbsActivity() {
         return (AbsActivity) getActivity();
-    }
-
-    @Override
-    public void onTitleChanged(String title) {
-        data.setToolbarTitle(title);
-        updateToolbar();
     }
 
     public void handleNewIntent(Intent intent) {

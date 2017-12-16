@@ -13,14 +13,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import butterknife.BindString;
-import butterknife.BindView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.core.view.AbsActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.di.GamesListModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
@@ -28,11 +26,15 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragm
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.DialogExtensionsKt;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.items.IFlexible;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import butterknife.BindString;
+import butterknife.BindView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
@@ -136,7 +138,6 @@ public class GamesListFragment
 
   @Override public void showContent() {
     super.showContent();
-    ((AbsActivity) getActivity()).setToolbarTitle(data.getToolbarTitle());
     restoreDialogs();
     updateGamesCount();
     List<IFlexible<?>> items = data.getItems();
