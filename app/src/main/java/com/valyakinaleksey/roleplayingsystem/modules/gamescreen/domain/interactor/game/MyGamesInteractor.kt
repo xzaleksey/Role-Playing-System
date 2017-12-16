@@ -1,14 +1,15 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game
 
+import android.support.v7.content.res.AppCompatResources
 import com.google.firebase.database.Query
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.R.string
-import com.valyakinaleksey.roleplayingsystem.core.flexible.CommonDividerViewModel
-import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewModel
-import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
-import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
+import com.valyakinaleksey.roleplayingsystem.core.flexible.*
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
+import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository
+import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
+import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.utils.DateFormats
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
@@ -16,20 +17,22 @@ import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import eu.davidea.flexibleadapter.items.IFlexible
 import org.joda.time.DateTime
 import rx.Observable
-import rx.functions.Func2
+import rx.functions.Func3
 
-class MyGamesUsecase(private val gamesRepository: GameRepository) : MyGamesInteractor {
+class MyGamesUsecase(private val gamesRepository: GameRepository,
+                     private val userRepository: UserRepository) : MyGamesInteractor {
     private val gamesInUsersQuery: Query = FireBaseUtils.getTableReference(
             FireBaseUtils.GAMES_IN_USERS)
             .child(FireBaseUtils.getCurrentUserId())
 
     override fun getMyGamesObservable(): Observable<MutableList<IFlexible<*>>> {
-        return Observable.combineLatest(getMyGameIds(), getMyGames(),
-                Func2 { ids: List<String>, gameModels: Map<String, GameModel> ->
-                    val currentUserId = FireBaseUtils.getCurrentUserId()
+        val currentUserId = FireBaseUtils.getCurrentUserId()
+        return Observable.combineLatest(userRepository.observeUser(currentUserId), getMyGameIds(), getMyGames(),
+                Func3 { user: User, ids: List<String>, gameModels: Map<String, GameModel> ->
                     val myGames: MutableList<GameModel> = mutableListOf()
                     val myMasterGames: MutableList<GameModel> = mutableListOf()
                     val finishedGames: MutableList<GameModel> = mutableListOf()
+
                     for (id in ids) {
                         gameModels[id]?.let { gameModel ->
                             if (gameModel.isFinished) {
@@ -43,19 +46,34 @@ class MyGamesUsecase(private val gamesRepository: GameRepository) : MyGamesInter
                     }
 
 
-                    return@Func2 getFilledModel(myMasterGames, myGames, finishedGames)
+                    return@Func3 getFilledModel(user, myMasterGames, myGames, finishedGames)
                 }).onBackpressureLatest()
     }
 
     private fun getFilledModel(
+            user: User,
             myMasterGames: MutableList<GameModel>,
             myGames: MutableList<GameModel>,
             finishedGames: MutableList<GameModel>): MutableList<IFlexible<*>> {
         val result = mutableListOf<IFlexible<*>>()
+        fillUser(user, result)
         fillMasterGames(myMasterGames, result)
         fillMyGames(myGames, result)
         fillFinishedGames(finishedGames, result)
         return result
+    }
+
+    private fun fillUser(user: User, result: MutableList<IFlexible<*>>) {
+        result.add(SubHeaderViewModel(StringUtils.getStringById(R.string.my_profile)))
+        result.add(FlexibleAvatarWithTwoLineTextModel(user.displayName,
+                user.email,
+                {
+                    return@FlexibleAvatarWithTwoLineTextModel AppCompatResources.getDrawable(RpsApp.app(), R.drawable.profile_icon)
+                },
+                user.photoUrl,
+                user.uid,
+                true))
+        result.add(ShadowDividerViewModel(result.lastIndex))
     }
 
     private fun fillMasterGames(

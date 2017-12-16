@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.auth.FirebaseAuth
 import com.valyakinaleksey.roleplayingsystem.R
+import com.valyakinaleksey.roleplayingsystem.core.flexible.FlexibleAvatarWithTwoLineTextModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
@@ -22,7 +23,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Passwo
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
-import com.valyakinaleksey.roleplayingsystem.utils.*
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.*
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils
@@ -127,6 +128,8 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
                 bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
                 parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle)
             }
+        } else if (item is FlexibleAvatarWithTwoLineTextModel) {
+            parentPresenter.navigateToMyProfile()
         }
         return true
     }

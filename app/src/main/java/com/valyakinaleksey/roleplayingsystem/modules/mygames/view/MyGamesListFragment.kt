@@ -152,6 +152,11 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
         flexibleAdapter.updateDataSet(iFlexibles, true)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        KeyboardUtils.hideKeyboard(activity)
+    }
+
     companion object {
 
         val TAG = MyGamesListFragment::class.java.simpleName!!

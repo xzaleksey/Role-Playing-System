@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
 import android.content.Context;
+
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
@@ -14,7 +15,26 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.characterisitics.GameCharacteristicsUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.classes.GameClassesUsecase;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.*;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractorImpl;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.DeleteGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.DeleteGameUsecase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.EditGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.EditGameUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.FinishGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.FinishGameUsecase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.GameUsecase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.LeaveGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.LeaveGameUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.MyGamesUsecase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveGameUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveUsersInGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.ObserveUsersInGameUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.OpenGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.OpenGameUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
@@ -23,14 +43,20 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.interactor.MapsInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.interactor.MasterLogInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.interactor.MasterLogUseCase;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.*;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.CreateNewGameUseCase;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.GameListInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.GameListUsecase;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProfileInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProfileInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
-import dagger.Module;
-import dagger.Provides;
 
 import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 
 @Module
 public class InteractorModule {
@@ -157,8 +183,8 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    MyGamesInteractor provideMyGamesInteractor(GameRepository gamesRepository) {
-        return new MyGamesUsecase(gamesRepository);
+    MyGamesInteractor provideMyGamesInteractor(GameRepository gamesRepository, UserRepository userRepository) {
+        return new MyGamesUsecase(gamesRepository, userRepository);
     }
 
     @Provides

@@ -3,6 +3,7 @@
 package com.valyakinaleksey.roleplayingsystem.utils.extensions
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.InputType
@@ -140,7 +141,10 @@ fun Context.changeUserData(userProfileGameViewModel: UserProfileViewModel,
                 userProfilePresenter.onEditName(name)
                 dialog.dismiss()
             })
-            .dismissListener { compositeSubscription.unsubscribe() }
+            .dismissListener {
+                compositeSubscription.unsubscribe()
+                KeyboardUtils.forceHideKeyboard(this as? Activity)
+            }
             .onNegative({ dialog, _ -> dialog.dismiss() })
             .build()
     val actionButton = dialog.getActionButton(DialogAction.POSITIVE)

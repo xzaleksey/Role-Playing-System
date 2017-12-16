@@ -12,6 +12,8 @@ import rx.Observable;
 public interface UserRepository {
     Observable<Map<String, User>> getUsersMap();
 
+    Observable<User> observeUser(String uid);
+
     Observable<User> getUserByUid(String uid);
 
     Observable<List<User>> getUserByGameId(String id);

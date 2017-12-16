@@ -24,72 +24,78 @@ import rx.Observable
 import rx.Subscription
 
 fun getValidatePasswordSubscription(validatePasswordInteractor: ValidatePasswordInteractor,
-    password: String,
-    correctPassword: String,
-    block: (isValid: Boolean) -> Unit): Subscription {
-  return validatePasswordInteractor.isPasswordValid(password, correctPassword)
-      .subscribe({ aBoolean ->
-        block.invoke(aBoolean)
-      }, { Crashlytics.logException(it) })
+                                    password: String,
+                                    correctPassword: String,
+                                    block: (isValid: Boolean) -> Unit): Subscription {
+    return validatePasswordInteractor.isPasswordValid(password, correctPassword)
+            .subscribe({ aBoolean ->
+                block.invoke(aBoolean)
+            }, { Crashlytics.logException(it) })
 }
 
 fun <T : RequestUpdateViewModel> checkInternetConnection(view: LceView<T>,
-    error: String): Subscription {
-  return ReactiveNetwork.observeInternetConnectivity()
-      .take(1)
-      .filter { aBoolean -> !aBoolean }
-      .subscribe { _ ->
-        val snack = BaseError(BaseErrorType.SNACK, error)
-        view.showError(snack)
-      }
+                                                         error: String): Subscription {
+    return ReactiveNetwork.observeInternetConnectivity()
+            .take(1)
+            .filter { aBoolean -> !aBoolean }
+            .subscribe { _ ->
+                val snack = BaseError(BaseErrorType.SNACK, error)
+                view.showError(snack)
+            }
 }
 
 fun <V : LceView<D>, D : RequestUpdateViewModel> BasePresenter<V, D>.navigateToGameScreen(
-    model: GameModel,
-    parentPresenter: ParentPresenter,
-    checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor): Subscription {
-  val bundle = Bundle()
-  bundle.putParcelable(GameModel.KEY, model)
-  val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
-  bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
+        model: GameModel,
+        parentPresenter: ParentPresenter,
+        checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor): Subscription {
+    val bundle = Bundle()
+    bundle.putParcelable(GameModel.KEY, model)
+    val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+    bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
 
-  return getCheckUserInGameObservable(model, currentUserId,
-      checkUserJoinedGameInteractor).subscribe({ userInGame ->
-    if (userInGame) {
-      parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle)
-    } else {
-      parentPresenter.navigateToFragment(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, bundle)
-    }
-  }, { this.handleThrowable(it) })
+    return getCheckUserInGameObservable(model, currentUserId,
+            checkUserJoinedGameInteractor).subscribe({ userInGame ->
+        if (userInGame) {
+            parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle)
+        } else {
+            parentPresenter.navigateToFragment(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, bundle)
+        }
+    }, { this.handleThrowable(it) })
 }
 
 fun <V : LceView<D>, D : RequestUpdateViewModel> BasePresenter<V, D>.getCheckUserInGameObservable(
-    model: GameModel,
-    currentUserId: String,
-    checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor): Observable<Boolean> {
-  return checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
-      .compose(RxTransformers.applySchedulers())
-      .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+        model: GameModel,
+        currentUserId: String,
+        checkUserJoinedGameInteractor: CheckUserJoinedGameInteractor): Observable<Boolean> {
+    return checkUserJoinedGameInteractor.checkUserInGame(currentUserId, model)
+            .compose(RxTransformers.applySchedulers())
+            .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
 }
 
 fun <T : RequestUpdateViewModel, V> BasePresenter<V, T>.createNewGame(gameModel: GameModel,
-    view: V,
-    createNewGameInteractor: CreateNewGameInteractor): Subscription where V : LceView<T>, V : CreateGameView {
-  val subscription = checkInternetConnection(view,
-          RpsApp.app().getString(R.string.game_will_be_synched))
-  return createNewGameInteractor.createNewGame(gameModel)
-      .compose(RxTransformers.applySchedulers())
-      .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
-      .doOnTerminate { subscription.unsubscribe() }
-      .subscribe({ id ->
-        view.onGameCreated()
-      }, { Crashlytics.logException(it) })
+                                                                      view: V,
+                                                                      createNewGameInteractor: CreateNewGameInteractor): Subscription where V : LceView<T>, V : CreateGameView {
+    val subscription = checkInternetConnection(view,
+            RpsApp.app().getString(R.string.game_will_be_synched))
+    return createNewGameInteractor.createNewGame(gameModel)
+            .compose(RxTransformers.applySchedulers())
+            .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
+            .doOnTerminate { subscription.unsubscribe() }
+            .subscribe({ id ->
+                view.onGameCreated()
+            }, { Crashlytics.logException(it) })
 }
 
 fun navigateToGameDescriptionScreen(model: GameModel,
-    parentPresenter: ParentPresenter) {
-  val bundle = Bundle()
-  bundle.putParcelable(GameModel.KEY, model)
-  bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
-  parentPresenter.navigateToFragment(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, bundle)
+                                    parentPresenter: ParentPresenter) {
+    val bundle = Bundle()
+    bundle.putParcelable(GameModel.KEY, model)
+    bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
+    parentPresenter.navigateToFragment(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, bundle)
+}
+
+fun ParentPresenter.navigateToMyProfile() {
+    val bundle = Bundle()
+    bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
+    navigateToFragment(NavigationScreen.PROFILE, bundle)
 }

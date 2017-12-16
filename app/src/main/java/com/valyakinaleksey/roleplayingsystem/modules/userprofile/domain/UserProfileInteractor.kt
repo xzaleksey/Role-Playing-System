@@ -22,7 +22,6 @@ class UserProfileInteractorImpl(
 ) : UserProfileInteractor {
 
     private val lastItemsCount = 2
-    private val subHeaderColor = ContextCompat.getColor(context, R.color.colorAccent)
 
     override fun observeUserProfile(userId: String): Observable<List<IFlexible<*>>> {
         val currentUserId = FireBaseUtils.getCurrentUserId()
@@ -59,7 +58,7 @@ class UserProfileInteractorImpl(
     }
 
     fun getSubHeaderViewModel(text: String): SubHeaderViewModel {
-        return SubHeaderViewModel(text, true, subHeaderColor)
+        return SubHeaderViewModel(text, true)
     }
 
 }

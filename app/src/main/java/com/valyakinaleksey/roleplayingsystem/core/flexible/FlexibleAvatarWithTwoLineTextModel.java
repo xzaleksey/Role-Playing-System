@@ -4,14 +4,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.flexible.viewholder.FlexibleAvatarTwoLineTextViewHolder;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.DrawableProvider;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 import java.io.Serializable;
 import java.util.List;
+
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 public class FlexibleAvatarWithTwoLineTextModel extends AbstractFlexibleItem<FlexibleAvatarTwoLineTextViewHolder> implements Serializable, Parcelable {
     private String primaryText;
@@ -19,6 +21,7 @@ public class FlexibleAvatarWithTwoLineTextModel extends AbstractFlexibleItem<Fle
     private DrawableProvider placeHolderAndErrorDrawableProvider;
     private String photoUrl;
     private String id;
+    private boolean showArrowRight = false;
 
     public String getPrimaryText() {
         return primaryText;
@@ -52,6 +55,13 @@ public class FlexibleAvatarWithTwoLineTextModel extends AbstractFlexibleItem<Fle
         this.photoUrl = photoUrl;
     }
 
+    public boolean isShowArrowRight() {
+        return showArrowRight;
+    }
+
+    public void setShowArrowRight(boolean showArrowRight) {
+        this.showArrowRight = showArrowRight;
+    }
 
     public FlexibleAvatarWithTwoLineTextModel() {
     }
@@ -73,10 +83,12 @@ public class FlexibleAvatarWithTwoLineTextModel extends AbstractFlexibleItem<Fle
 
         FlexibleAvatarWithTwoLineTextModel that = (FlexibleAvatarWithTwoLineTextModel) o;
 
-        if (primaryText != null ? !primaryText.equals(that.primaryText) : that.primaryText != null) return false;
+        if (primaryText != null ? !primaryText.equals(that.primaryText) : that.primaryText != null)
+            return false;
         if (secondaryText != null ? !secondaryText.equals(that.secondaryText) : that.secondaryText != null)
             return false;
-        if (photoUrl != null ? !photoUrl.equals(that.photoUrl) : that.photoUrl != null) return false;
+        if (photoUrl != null ? !photoUrl.equals(that.photoUrl) : that.photoUrl != null)
+            return false;
         return id != null ? id.equals(that.id) : that.id == null;
 
     }
@@ -96,6 +108,11 @@ public class FlexibleAvatarWithTwoLineTextModel extends AbstractFlexibleItem<Fle
         this.placeHolderAndErrorDrawableProvider = placeHolderAndErrorDrawableProvider;
         this.photoUrl = photoUrl;
         this.id = id;
+    }
+
+    public FlexibleAvatarWithTwoLineTextModel(String primaryText, String secondaryText, DrawableProvider placeHolderAndErrorDrawableProvider, String photoUrl, String id, boolean showArrowRight) {
+        this(primaryText, secondaryText, placeHolderAndErrorDrawableProvider, photoUrl, id);
+        this.showArrowRight = showArrowRight;
     }
 
     public String getId() {
@@ -123,6 +140,7 @@ public class FlexibleAvatarWithTwoLineTextModel extends AbstractFlexibleItem<Fle
         dest.writeSerializable(this.placeHolderAndErrorDrawableProvider);
         dest.writeString(this.photoUrl);
         dest.writeString(this.id);
+        dest.writeInt(showArrowRight ? 1 : 0);
     }
 
     protected FlexibleAvatarWithTwoLineTextModel(Parcel in) {
@@ -131,6 +149,7 @@ public class FlexibleAvatarWithTwoLineTextModel extends AbstractFlexibleItem<Fle
         this.placeHolderAndErrorDrawableProvider = (DrawableProvider) in.readSerializable();
         this.photoUrl = in.readString();
         this.id = in.readString();
+        this.showArrowRight = in.readInt() == 1;
     }
 
     public static final Creator<FlexibleAvatarWithTwoLineTextModel> CREATOR = new Creator<FlexibleAvatarWithTwoLineTextModel>() {

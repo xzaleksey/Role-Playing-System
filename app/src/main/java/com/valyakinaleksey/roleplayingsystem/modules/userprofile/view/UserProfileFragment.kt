@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -86,20 +85,6 @@ class UserProfileFragment : AbsButterLceFragment<UserProfileComponent, UserProfi
         if (data.passwordDialogViewModel != null && dialogIsNotShowing()) {
             showPasswordDialog()
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity?.window?.statusBarColor = ContextCompat.getColor(activity, R.color.colorStatusBarProfile)
-        }
-    }
-
-    override fun onDestroyView() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity?.window?.statusBarColor = ContextCompat.getColor(activity, R.color.colorPrimaryDark)
-        }
-        super.onDestroyView()
     }
 
     private fun dialogIsNotShowing() = dialog?.isShowing != true

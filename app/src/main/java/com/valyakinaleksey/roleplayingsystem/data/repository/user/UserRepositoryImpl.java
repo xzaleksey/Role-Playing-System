@@ -7,19 +7,21 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kelvinapps.rxfirebase.RxFirebaseChildEvent;
+import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import rx.Observable;
-import rx.Subscription;
-import rx.subscriptions.Subscriptions;
-import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.subscriptions.Subscriptions;
+import timber.log.Timber;
 
 import static com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeChildEvent;
 
@@ -74,6 +76,11 @@ public class UserRepositoryImpl implements UserRepository {
                         return Observable.just(stringUserConcurrentHashMap1);
                     }
                 }));
+    }
+
+    @Override
+    public Observable<User> observeUser(String uid) {
+        return RxFirebaseDatabase.observeValueEvent(FireBaseUtils.getTableReference(FireBaseUtils.USERS).child(uid), User.class);
     }
 
     public Observable<Map<String, User>> getUsersMapFromServer() {
