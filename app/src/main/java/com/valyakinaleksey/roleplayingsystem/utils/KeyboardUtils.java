@@ -7,7 +7,7 @@ import android.view.inputmethod.InputMethodManager;
 
 public class KeyboardUtils {
 
-    public static void hideKeyboard(Activity activity, int delay) {
+    public static void hideKeyboard(Activity activity, long delay) {
         if (activity != null) {
             View view = activity.getCurrentFocus();
             if (view != null) {
@@ -21,15 +21,15 @@ public class KeyboardUtils {
     }
 
     public static void hideKeyboard(Activity activity) {
-        hideKeyboard(activity, 10);
+        hideKeyboard(activity, 10L);
     }
 
     public static void forceHideKeyboard(Activity activity) {
-        hideKeyboard(activity, 0);
+        hideKeyboard(activity, 0L);
     }
 
     public static void showSoftKeyboard(View view) {
-        showSoftKeyboard(view, 10);
+        showSoftKeyboard(view, 10L);
     }
 
     public static void showSoftKeyboard(View view, long delay) {
@@ -40,7 +40,7 @@ public class KeyboardUtils {
                     InputMethodManager imm =
                             (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm != null) {
-                        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+                        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
                     }
                 }, delay);
             }

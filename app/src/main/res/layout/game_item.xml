@@ -21,17 +21,23 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/iv_right"
-            android:layout_width="@dimen/icon_minimum_size"
-            android:layout_height="@dimen/icon_minimum_size"
+            android:layout_width="@dimen/material_layout_icon"
+            android:layout_height="@dimen/material_layout_icon"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_keyboard_arrow_right" />
+            android:layout_marginLeft="@dimen/common_margin_between_elements"
+            android:layout_marginStart="@dimen/common_margin_between_elements"
+            app:srcCompat="@drawable/ic_keyboard_arrow_right"
+            tools:src="@drawable/ic_lock_outline_black_24px"/>
 
         <TextView
             android:id="@+id/primary_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/iv_right"
+            android:layout_toStartOf="@+id/iv_right"
+            android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/material_component_lists_two_line_text_size"
@@ -52,11 +58,14 @@
 
         <TextView
             android:id="@+id/secondary_line"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/primary_line"
             android:layout_toEndOf="@+id/icon"
+            android:layout_toLeftOf="@+id/iv_right"
             android:layout_toRightOf="@+id/icon"
+            android:layout_toStartOf="@+id/iv_right"
+            android:ellipsize="end"
             android:maxLines="2"
             android:textColor="@color/colorTextSecondary"
             android:textSize="@dimen/material_component_lists_two_line_secondary_text_size"

@@ -25,6 +25,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import rx.subscriptions.CompositeSubscription
 
+private const val KEYBOARD_DELAY = 100L
 
 fun Context.showPasswordDialog(data: HasPasswordViewModel,
                                createGamePresenter: PasswordPresenter): MaterialDialog {
@@ -38,6 +39,7 @@ fun Context.showPasswordDialog(data: HasPasswordViewModel,
                         .validatePassword(this, input.toString(),
                                 passwordDialogViewModel.gameModel)
             }
+            .onNegative({ dialog, _ -> dialog.dismiss() })
             .dismissListener({
                 data.passwordDialogViewModel = null
                 compositeSubscription.unsubscribe()
@@ -51,7 +53,6 @@ fun Context.showPasswordDialog(data: HasPasswordViewModel,
                     })
     return dialog
 }
-
 
 @SuppressLint("InflateParams")
 fun Context.showCreateGameDialog(data: HasCreateGameViewModel,
@@ -82,6 +83,7 @@ fun Context.showCreateGameDialog(data: HasCreateGameViewModel,
             .dismissListener({
                 data.createGameDialogViewModel = null
                 compositeSubscription.unsubscribe()
+                KeyboardUtils.hideKeyboard(this as? Activity, KEYBOARD_DELAY)
             })
             .build()
     val actionButton = dialog.getActionButton(DialogAction.POSITIVE)
@@ -130,22 +132,39 @@ fun Context.changeUserData(userProfileGameViewModel: UserProfileViewModel,
     etName.setText(userProfileGameViewModel.displayName)
     val errorEmptyField = StringUtils.getStringById(R.string.error_empty_field)
     val compositeSubscription = CompositeSubscription()
+    val textWatcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+        }
+
+        override fun afterTextChanged(s: Editable) {
+            if (s.toString().startsWith(" ")) {
+                s.delete(0, 1)
+            }
+        }
+    }
 
     val dialog = MaterialDialog.Builder(this).title(StringUtils.getStringById(R.string.edit))
             .customView(dialogView, true)
             .autoDismiss(false)
             .positiveText(android.R.string.ok)
             .negativeText(android.R.string.cancel)
+            .onNegative({ dialog, _ -> dialog.dismiss() })
+            .cancelListener { dialogInterface -> dialogInterface.dismiss() }
             .onPositive({ dialog, _ ->
                 val name = etName.text.toString().trim({ it <= ' ' })
                 userProfilePresenter.onEditName(name)
                 dialog.dismiss()
             })
             .dismissListener {
+                etName.removeTextChangedListener(textWatcher)
                 compositeSubscription.unsubscribe()
-                KeyboardUtils.forceHideKeyboard(this as? Activity)
+                KeyboardUtils.hideKeyboard(this as? Activity, KEYBOARD_DELAY)
             }
-            .onNegative({ dialog, _ -> dialog.dismiss() })
             .build()
     val actionButton = dialog.getActionButton(DialogAction.POSITIVE)
     if (TextUtils.isEmpty(etName.text)) {
@@ -161,25 +180,11 @@ fun Context.changeUserData(userProfileGameViewModel: UserProfileViewModel,
 
                 actionButton.isEnabled = !TextUtils.isEmpty(charSequence)
             })
-    etName.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-        }
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-        }
-
-        override fun afterTextChanged(s: Editable) {
-            if (s.toString().startsWith(" ")) {
-                s.delete(0, 1)
-            }
-        }
-    })
+    etName.addTextChangedListener(textWatcher)
     dialog.show()
     etName.post {
         etName.setSelection(etName.length())
-        KeyboardUtils.showSoftKeyboard(etName)
+        KeyboardUtils.showSoftKeyboard(etName, KEYBOARD_DELAY)
     }
     return dialog
 }
