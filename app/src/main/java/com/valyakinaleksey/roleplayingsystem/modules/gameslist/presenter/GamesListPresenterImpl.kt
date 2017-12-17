@@ -23,7 +23,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Create
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
-import com.valyakinaleksey.roleplayingsystem.utils.*
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.createNewGame
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameDescriptionScreen
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameScreen
@@ -143,7 +144,7 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
 
     override fun onSearchQueryChanged(queryText: String) {
         viewModel.filterModel.setQuery(queryText)
-        filterSubject.onNext(viewModel.filterModel.copy())
+        filterSubject.onNext(FilterModel(viewModel.filterModel))
     }
 
 }

@@ -6,7 +6,6 @@ import com.crashlytics.android.Crashlytics
 import com.google.firebase.auth.FirebaseAuth
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.flexible.FlexibleAvatarWithTwoLineTextModel
-import com.valyakinaleksey.roleplayingsystem.core.flexible.TwoLineWithIdViewModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
@@ -21,15 +20,17 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.CreateGameDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.MyGamesListView
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.GamesFilterModel
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.FlexibleGameViewModel
+import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.*
-import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
-import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils
 import eu.davidea.flexibleadapter.items.IFlexible
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import rx.subjects.BehaviorSubject
 
 class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameInteractor,
                                private val validatePasswordInteractor: ValidatePasswordInteractor,
@@ -37,6 +38,8 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
                                private val parentPresenter: ParentPresenter,
                                private val myGamesInteractor: MyGamesInteractor,
                                private val gameRepository: GameRepository) : BasePresenter<MyGamesListView, MyGamesListViewViewModel>(), MyGamesListPresenter, RestorablePresenter<MyGamesListViewViewModel> {
+
+    private val filterSubject: BehaviorSubject<GamesFilterModel> = BehaviorSubject.create()
 
     override fun initNewViewModel(arguments: Bundle?): MyGamesListViewViewModel {
         val gamesListViewModel = MyGamesListViewViewModel()
@@ -67,29 +70,28 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
         view.showCreateGameDialog()
     }
 
-    override fun navigateToGameScreen(
-            model: GameModel) {
-        compositeSubscription.add(
-                navigateToGameScreen(model, parentPresenter, checkUserJoinedGameInteractor))
+    override fun navigateToGameScreen(model: GameModel) {
+        if (model.isMaster(FireBaseUtils.getCurrentUserId())) {
+            parentPresenter.navigateToGame(gameModel = model)
+            return
+        }
+        compositeSubscription.add(navigateToGameScreen(model, parentPresenter, checkUserJoinedGameInteractor))
     }
 
-    override fun checkPassword(
-            model: GameModel) {
+    override fun checkPassword(model: GameModel) {
         val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
-        compositeSubscription.add(
-                getCheckUserInGameObservable(model, currentUserId, checkUserJoinedGameInteractor)
-                        .subscribe(
-                                { userInGame ->
-                                    if (userInGame!!) {
-                                        navigateToGameScreen(model)
-                                    } else {
-                                        val passwordDialogViewModel = PasswordDialogViewModel()
-                                        passwordDialogViewModel.title = StringUtils.getStringById(R.string.create_game)
-                                        passwordDialogViewModel.gameModel = model
-                                        viewModel.passwordDialogViewModel = passwordDialogViewModel
-                                        view.showPasswordDialog()
-                                    }
-                                }, { this.handleThrowable(it) }))
+        compositeSubscription.add(getCheckUserInGameObservable(model, currentUserId, checkUserJoinedGameInteractor)
+                .subscribe({ userInGame ->
+                    if (userInGame!!) {
+                        parentPresenter.navigateToGame(gameModel = model)
+                    } else {
+                        val passwordDialogViewModel = PasswordDialogViewModel()
+                        passwordDialogViewModel.title = StringUtils.getStringById(R.string.create_game)
+                        passwordDialogViewModel.gameModel = model
+                        viewModel.passwordDialogViewModel = passwordDialogViewModel
+                        view.showPasswordDialog()
+                    }
+                }, { this.handleThrowable(it) }))
     }
 
     override fun validatePassword(context: Context, userInput: String, gameModel: GameModel) {
@@ -110,7 +112,7 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
     override fun getData() {
         super.getData()
         compositeSubscription.add(
-                myGamesInteractor.getMyGamesObservable()
+                myGamesInteractor.getMyGamesObservable(filterSubject)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ data ->
@@ -120,17 +122,24 @@ class MyGamesListPresenterImpl(private val createNewGameInteractor: CreateNewGam
     }
 
     override fun onItemClicked(item: IFlexible<*>): Boolean {
-        if (item is TwoLineWithIdViewModel) {
-            val gameModel = gameRepository.getGameModelById(item.id)
-            if (gameModel != null) {
-                val bundle = Bundle()
-                bundle.putParcelable(GameModel.KEY, gameModel)
-                bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
-                parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle)
+        when (item) {
+            is FlexibleGameViewModel -> {
+                val gameModel = gameRepository.getGameModelById(item.id)
+                if (gameModel != null) {
+                    if (gameModel.password.isNullOrBlank()) {
+                        navigateToGameScreen(gameModel)
+                    } else {
+                        checkPassword(gameModel)
+                    }
+                }
             }
-        } else if (item is FlexibleAvatarWithTwoLineTextModel) {
-            parentPresenter.navigateToMyProfile()
+            is FlexibleAvatarWithTwoLineTextModel -> parentPresenter.navigateToMyProfile()
         }
         return true
+    }
+
+    override fun onSearchQueryChanged(queryText: String) {
+        viewModel.filterModel.setQuery(queryText)
+        filterSubject.onNext(GamesFilterModel(viewModel.filterModel))
     }
 }

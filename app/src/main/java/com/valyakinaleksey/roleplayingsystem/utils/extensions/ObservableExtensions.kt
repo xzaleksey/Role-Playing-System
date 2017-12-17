@@ -53,8 +53,8 @@ fun <V : LceView<D>, D : RequestUpdateViewModel> BasePresenter<V, D>.navigateToG
     val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
     bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
 
-    return getCheckUserInGameObservable(model, currentUserId,
-            checkUserJoinedGameInteractor).subscribe({ userInGame ->
+    return getCheckUserInGameObservable(model, currentUserId, checkUserJoinedGameInteractor)
+            .subscribe({ userInGame ->
         if (userInGame) {
             parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle)
         } else {

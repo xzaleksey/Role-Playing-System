@@ -8,7 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewMode
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersGameRepository
-import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.UserProfileGameViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.FlexibleGameViewModel
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -32,7 +32,7 @@ class UserProfileInteractorImpl(
                     if (!gameModels.isEmpty()) {
                         result.add(getSubHeaderViewModel(StringUtils.getStringById(R.string.games)))
                         gameModels.values.forEach { gameModel ->
-                            result.add(UserProfileGameViewModel(gameModel.id,
+                            result.add(FlexibleGameViewModel(gameModel.id,
                                     gameModel.name,
                                     "${StringUtils.getStringById(R.string.master)} ${gameModel.masterName}",
                                     StringUtils.areEqual(currentUserId, gameModel.masterId)

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import butterknife.BindView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.jakewharton.rxbinding.widget.RxTextView
 import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment
@@ -15,6 +16,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.MyGamesListCompo
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.di.MyGamesListModule
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.MyGamesListViewViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent
+import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment
+import com.valyakinaleksey.roleplayingsystem.utils.HideKeyBoardOnScrollListener
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.getStatusBarHeight
@@ -25,9 +28,12 @@ import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablL
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import kotlinx.android.synthetic.main.toolbar_with_background.*
+import rx.android.schedulers.AndroidSchedulers
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
-
-
+private const val DEBOUNCE_TIMEOUT = 200
+private const val THROTTLE_INTERVAL = 100
 
 class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesListViewViewModel, MyGamesListView>(), MyGamesListView {
 
@@ -72,17 +78,19 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
             }
         }
         clear_icon.setOnClickListener {
-            if (search_view.text.isEmpty()) {
-                closeSearch()
-            } else {
-                search_view.setText(StringUtils.EMPTY_STRING)
-            }
+            search_view.setText(StringUtils.EMPTY_STRING)
         }
         more.setOnClickListener {
             val popup = PopupMenu(context, more)
             val inflater = popup.menuInflater
             inflater.inflate(R.menu.main_menu, popup.menu)
+            popup.setOnMenuItemClickListener { item ->
+                (parentFragment as ParentFragment).onOptionsItemSelected(item)
+            }
             popup.show()
+        }
+        if (data != null && !data.filterModel.isEmpty()) {
+            initSearch()
         }
     }
 
@@ -90,16 +98,18 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
         KeyboardUtils.hideKeyboard(activity)
         tv_title.visibility = View.VISIBLE
         search_view.visibility = View.GONE
-        clear_icon.visibility = View.GONE
+        search_view.setText(StringUtils.EMPTY_STRING)
         action_icon.setImageResource(R.drawable.ic_search_black_24dp)
     }
 
     private fun initSearch() {
         tv_title.visibility = View.GONE
-        clear_icon.visibility = View.VISIBLE
         search_view.visibility = View.VISIBLE
         action_icon.setImageResource(R.drawable.ic_arrow_back)
+        val query = data.filterModel.getQuery()
+        search_view.setText(query)
         KeyboardUtils.showSoftKeyboard(search_view, 50)
+        clear_icon.visibility = if (query.isBlank()) View.GONE else View.VISIBLE
     }
 
     private fun setupRecyclerView() {
@@ -109,6 +119,7 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
             component.presenter.onItemClicked(item)
         }
         recyclerView.addOnScrollListener(HideFablListener(fab))
+        recyclerView.addOnScrollListener(HideKeyBoardOnScrollListener())
         recyclerView.adapter = flexibleAdapter
     }
 
@@ -150,6 +161,21 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
 
     override fun updateList(iFlexibles: MutableList<IFlexible<*>>) {
         flexibleAdapter.updateDataSet(iFlexibles, true)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        compositeSubscription.add(RxTextView.afterTextChangeEvents(search_view)
+                .doOnNext {
+                    clear_icon.visibility = if (it.editable().toString().isBlank()) View.GONE else View.VISIBLE
+                }
+                .debounce(DEBOUNCE_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
+                .throttleLast(THROTTLE_INTERVAL.toLong(), TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { text ->
+                    Timber.d("new query " + text.editable().toString())
+                    component.presenter.onSearchQueryChanged(text.editable().toString())
+                })
     }
 
     override fun onDestroyView() {

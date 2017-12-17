@@ -3,7 +3,6 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.pare
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,7 +44,6 @@ public class ParentGameFragment
     @BindView(R.id.viewpager)
     ViewPager viewPager;
 
-    private TabLayout tabLayout;
     private ViewPagerAdapter adapter;
     private String gameId;
 
@@ -88,7 +86,6 @@ public class ParentGameFragment
             fragmentTitlePairs = data.getFragmentsInfo();
         }
         adapter = new ViewPagerAdapter(getChildFragmentManager(), fragmentTitlePairs, getArguments());
-        tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -133,9 +130,6 @@ public class ParentGameFragment
     public void showContent() {
         super.showContent();
         preFillModel(data);
-        if (!data.getFragmentsInfo().isEmpty()) {
-            tabLayout.setVisibility(View.VISIBLE);
-        }
         invalidateOptionsMenu();
         if (viewPager.getAdapter() == null) {
             if (data.isFirstNavigation() || adapter.getCount() == 0) {
@@ -185,8 +179,6 @@ public class ParentGameFragment
 
     @Override
     public void onDestroyView() {
-        tabLayout.setupWithViewPager(null);
-        tabLayout.setVisibility(View.GONE);
         super.onDestroyView();
     }
 

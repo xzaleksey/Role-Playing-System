@@ -2,22 +2,24 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interact
 
 import android.support.v7.content.res.AppCompatResources
 import com.google.firebase.database.Query
-import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.valyakinaleksey.roleplayingsystem.R
-import com.valyakinaleksey.roleplayingsystem.R.string
-import com.valyakinaleksey.roleplayingsystem.core.flexible.*
+import com.valyakinaleksey.roleplayingsystem.core.flexible.CommonDividerViewModel
+import com.valyakinaleksey.roleplayingsystem.core.flexible.FlexibleAvatarWithTwoLineTextModel
+import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewModel
+import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
+import com.valyakinaleksey.roleplayingsystem.core.model.FilterModel
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
-import com.valyakinaleksey.roleplayingsystem.utils.DateFormats
+import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.GamesFilterModel
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.FlexibleGameViewModel
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import eu.davidea.flexibleadapter.items.IFlexible
-import org.joda.time.DateTime
 import rx.Observable
-import rx.functions.Func3
+import rx.functions.Func4
 
 class MyGamesUsecase(private val gamesRepository: GameRepository,
                      private val userRepository: UserRepository) : MyGamesInteractor {
@@ -25,57 +27,52 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
             FireBaseUtils.GAMES_IN_USERS)
             .child(FireBaseUtils.getCurrentUserId())
 
-    override fun getMyGamesObservable(): Observable<MutableList<IFlexible<*>>> {
+    override fun getMyGamesObservable(filter: Observable<GamesFilterModel>): Observable<MutableList<IFlexible<*>>> {
         val currentUserId = FireBaseUtils.getCurrentUserId()
-        return Observable.combineLatest(userRepository.observeUser(currentUserId), getMyGameIds(), getMyGames(),
-                Func3 { user: User, ids: List<String>, gameModels: Map<String, GameModel> ->
-                    val myGames: MutableList<GameModel> = mutableListOf()
-                    val myMasterGames: MutableList<GameModel> = mutableListOf()
-                    val finishedGames: MutableList<GameModel> = mutableListOf()
-
-                    for (id in ids) {
-                        gameModels[id]?.let { gameModel ->
-                            if (gameModel.isFinished) {
-                                finishedGames.add(gameModel)
-                            } else if (gameModel.masterId == currentUserId) {
-                                myMasterGames.add(gameModel)
-                            } else {
-                                myGames.add(gameModel)
-                            }
-                        }
-                    }
-
-
-                    return@Func3 getFilledModel(user, myMasterGames, myGames, finishedGames, ArrayList(gameModels.values))
+        return Observable.combineLatest(filter, userRepository.observeUser(currentUserId),
+                gamesRepository.getLastGamesModelByUserId(FireBaseUtils.getCurrentUserId(), 100),
+                getAllGames(),
+                Func4 { filterModel: FilterModel, user: User, myGames: Map<String, GameModel>, gameModels: Map<String, GameModel> ->
+                    return@Func4 getFilledModel(filterModel, user, ArrayList(myGames.values), ArrayList(gameModels.values))
                 }).onBackpressureLatest()
     }
 
     private fun getFilledModel(
+            filerModel: FilterModel,
             user: User,
-            myMasterGames: MutableList<GameModel>,
             myGames: MutableList<GameModel>,
-            finishedGames: MutableList<GameModel>,
             values: MutableList<GameModel>): MutableList<IFlexible<*>> {
         val result = mutableListOf<IFlexible<*>>()
-        fillUser(user, result)
-        fillMasterGames(myMasterGames, result)
-        fillMyGames(myGames, result)
-        fillFinishedGames(finishedGames, result)
-        fillAllGames(values, result)
+        if (filerModel.getQuery().isBlank()) {
+            fillUser(user, result)
+            fillMyGames(myGames, result)
+        }
+        fillAllGames(filerModel, values, result)
         return result
     }
 
-    private fun fillAllGames(values: MutableList<GameModel>, result: MutableList<IFlexible<*>>) {
-        if (values.isNotEmpty()) {
+    private fun fillAllGames(filterModel: FilterModel, games: MutableList<GameModel>, result: MutableList<IFlexible<*>>) {
+        if (games.isNotEmpty()) {
             val title = StringUtils.getStringById(R.string.games)
+            val currentUserId = FireBaseUtils.getCurrentUserId()
             val subHeaderViewModel = SubHeaderViewModel(title)
             result.add(subHeaderViewModel)
             var itemCount = 0
-            for ((index, myGame) in values.withIndex()) {
-                if (!myGame.isFinished) {
-                    itemCount++
-                    result.add(TwoLineWithIdViewModel(myGame.id, myGame.name, getSecondaryText(myGame)))
-                    addDivider(index, values, result)
+            for ((index, game) in games.withIndex()) {
+                if (!game.isFinished) {
+                    if (filterModel.isEmpty() || game.masterName.contains(filterModel.getQuery()) || game.name.contains(filterModel.getQuery())) {
+                        itemCount++
+                        val model = FlexibleGameViewModel.Builder()
+                                .id(game.id)
+                                .title(game.name)
+                                .description(getSecondaryText(game))
+                                .payLoad(title)
+                                .showMasterIcon(game.isMaster(currentUserId))
+                                .isGameLocked(!game.password.isNullOrBlank())
+                                .build()
+                        result.add(model)
+                        addDivider(index, games, result)
+                    }
                 }
             }
             subHeaderViewModel.setTitle("$title ($itemCount)")
@@ -95,40 +92,24 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
         result.add(ShadowDividerViewModel(result.lastIndex))
     }
 
-    private fun fillMasterGames(
-            myMasterGames: MutableList<GameModel>,
-            result: MutableList<IFlexible<*>>) {
-        if (myMasterGames.isNotEmpty()) {
-            result.add(SubHeaderViewModel(StringUtils.getStringById(string.continue_lead_the_game)))
-            for ((index, myMasterGame) in myMasterGames.withIndex()) {
-                result.add(TwoLineWithIdViewModel(myMasterGame.id, myMasterGame.name,
-                        getMasterSecondaryText(myMasterGame)))
-                addDivider(index, myMasterGames, result)
-            }
-        }
-    }
-
     private fun fillMyGames(
             myGames: MutableList<GameModel>,
             result: MutableList<IFlexible<*>>) {
         if (myGames.isNotEmpty()) {
-            result.add(SubHeaderViewModel(StringUtils.getStringById(string.continue_play_the_game)))
-            for ((index, myGame) in myGames.withIndex()) {
-                result.add(TwoLineWithIdViewModel(myGame.id, myGame.name,
-                        getSecondaryText(myGame)))
+            val currentUserId = FireBaseUtils.getCurrentUserId()
+            val lastGames = StringUtils.getStringById(R.string.my_last_games)
+            result.add(SubHeaderViewModel(lastGames))
+            for ((index, game) in myGames.withIndex()) {
+                val model = FlexibleGameViewModel.Builder()
+                        .id(game.id)
+                        .title(game.name)
+                        .description(getSecondaryText(game))
+                        .payLoad(lastGames)
+                        .showMasterIcon(game.isMaster(currentUserId))
+                        .isGameLocked(!game.password.isNullOrBlank())
+                        .build()
+                result.add(model)
                 addDivider(index, myGames, result)
-            }
-        }
-    }
-
-    private fun fillFinishedGames(finishedGames: MutableList<GameModel>,
-                                  result: MutableList<IFlexible<*>>) {
-        if (finishedGames.isNotEmpty()) {
-            result.add(SubHeaderViewModel(StringUtils.getStringById(string.completed_games)))
-            for ((index, myMasterGame) in finishedGames.withIndex()) {
-                result.add(TwoLineWithIdViewModel(myMasterGame.id, myMasterGame.name,
-                        getFinishedSecondaryText(myMasterGame)))
-                addDivider(index, finishedGames, result)
             }
         }
     }
@@ -148,34 +129,11 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
         return "${StringUtils.getStringById(R.string.master)} ${gameModel.masterName}"
     }
 
-    private fun getMasterSecondaryText(
-            myMasterGame: GameModel): String {
-        return StringUtils.getStringById(R.string.started) + " " + DateTime(
-                myMasterGame.dateCreateLong).toString(DateFormats.dayMonthFull)
-    }
-
-    private fun getFinishedSecondaryText(
-            gameModel: GameModel): String {
-        return getMasterSecondaryText(gameModel)
-    }
-
-    private fun getMyGameIds(): Observable<MutableList<String>> {
-        return RxFirebaseDatabase.observeValueEvent(gamesInUsersQuery).map { dataSnaptshot ->
-            val ids = mutableListOf<String>()
-            if (dataSnaptshot.exists()) {
-                for (child in dataSnaptshot.children) {
-                    ids.add(child.key)
-                }
-            }
-            return@map ids
-        }.distinctUntilChanged()
-    }
-
-    private fun getMyGames(): Observable<MutableMap<String, GameModel>> =
+    private fun getAllGames(): Observable<MutableMap<String, GameModel>> =
             gamesRepository.observeData().distinctUntilChanged()
 }
 
 
 interface MyGamesInteractor {
-    fun getMyGamesObservable(): Observable<MutableList<IFlexible<*>>>
+    fun getMyGamesObservable(filter: Observable<GamesFilterModel>): Observable<MutableList<IFlexible<*>>>
 }

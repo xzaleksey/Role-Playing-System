@@ -83,4 +83,5 @@
     <string name="denied_external">Права на запись внешней памяти необходимы для загрузки изображения</string>
     <string name="search">Поиск</string>
     <string name="my_profile">Мой профиль</string>
+    <string name="my_last_games">Мои последние игры</string>
 </resources>

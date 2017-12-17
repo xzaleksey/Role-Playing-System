@@ -2,23 +2,20 @@ package com.valyakinaleksey.roleplayingsystem.core.model
 
 import java.io.Serializable
 
-class FilterModel @JvmOverloads constructor(private var query: String = "",
-    private var previousQuery: String = query) : Serializable {
+open class FilterModel @JvmOverloads constructor(private var query: String = "",
+                                                 protected var previousQuery: String = query) : Serializable {
 
-  fun setQuery(query: String) {
-    previousQuery = this.query
-    this.query = query
-  }
+    constructor(filterModel: FilterModel) : this(filterModel.getQuery(), filterModel.previousQuery)
 
-  fun getQuery(): String {
-    return query
-  }
+    fun setQuery(query: String) {
+        previousQuery = this.query
+        this.query = query
+    }
 
-  fun isCleared(): Boolean {
-    return previousQuery.isNotEmpty() && query.isEmpty()
-  }
+    fun getQuery(): String = query
 
-  fun copy(): FilterModel {
-    return FilterModel(query, previousQuery)
-  }
+    fun isEmpty(): Boolean = query.isBlank()
+
+    fun isCleared(): Boolean = previousQuery.isNotEmpty() && query.isEmpty()
+
 }

@@ -20,10 +20,10 @@ import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseErrorType
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.di.ParentFragmentComponent
-import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.UserProfileGameViewModel.CHANGE_USER_NAME
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileComponent
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.di.UserProfileModule
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel.CHANGE_USER_NAME
 import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.changeUserData

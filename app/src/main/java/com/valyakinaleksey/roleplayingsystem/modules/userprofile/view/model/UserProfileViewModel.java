@@ -2,19 +2,21 @@ package com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasPasswordViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.BaseRequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel;
-import eu.davidea.flexibleadapter.items.IFlexible;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+import eu.davidea.flexibleadapter.items.IFlexible;
+
 public class UserProfileViewModel extends BaseRequestUpdateViewModel
         implements RequestUpdateViewModel, Parcelable, Serializable, HasPasswordViewModel {
-
+    public static final String CHANGE_USER_NAME = "CHANGE_USER_NAME";
     public static final String USER_ID = "user_id";
 
     private String displayName;

@@ -95,5 +95,6 @@
     <string name="denied_external">Rights to external memory are required to upload picture</string>
     <string name="search">Search</string>
     <string name="my_profile">My profile</string>
+    <string name="my_last_games">My last games</string>
 
 </resources>

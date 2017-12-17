@@ -23,10 +23,11 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.domain.interactor.ValidatePasswordInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
-import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.UserProfileGameViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.FlexibleGameViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProfileInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileView
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel.CHANGE_USER_NAME
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.getCheckUserInGameObservable
@@ -128,7 +129,7 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
     }
 
     override fun onItemClicked(item: IFlexible<*>): Boolean {
-        if (item is UserProfileGameViewModel) {
+        if (item is FlexibleGameViewModel) {
             val gameModel = gameRepository.getGameModelById(item.id)
             if (gameModel != null) {
                 navigateToGameScreen(gameModel)
@@ -138,7 +139,7 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
     }
 
     override fun editProfile() {
-        view.openDialog(UserProfileGameViewModel.CHANGE_USER_NAME)
+        view.openDialog(CHANGE_USER_NAME)
     }
 
     override fun onEditName(name: String) {
