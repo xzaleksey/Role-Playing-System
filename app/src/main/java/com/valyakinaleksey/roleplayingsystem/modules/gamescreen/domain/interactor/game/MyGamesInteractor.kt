@@ -46,7 +46,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
                     }
 
 
-                    return@Func3 getFilledModel(user, myMasterGames, myGames, finishedGames)
+                    return@Func3 getFilledModel(user, myMasterGames, myGames, finishedGames, ArrayList(gameModels.values))
                 }).onBackpressureLatest()
     }
 
@@ -54,13 +54,32 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
             user: User,
             myMasterGames: MutableList<GameModel>,
             myGames: MutableList<GameModel>,
-            finishedGames: MutableList<GameModel>): MutableList<IFlexible<*>> {
+            finishedGames: MutableList<GameModel>,
+            values: MutableList<GameModel>): MutableList<IFlexible<*>> {
         val result = mutableListOf<IFlexible<*>>()
         fillUser(user, result)
         fillMasterGames(myMasterGames, result)
         fillMyGames(myGames, result)
         fillFinishedGames(finishedGames, result)
+        fillAllGames(values, result)
         return result
+    }
+
+    private fun fillAllGames(values: MutableList<GameModel>, result: MutableList<IFlexible<*>>) {
+        if (values.isNotEmpty()) {
+            val title = StringUtils.getStringById(R.string.games)
+            val subHeaderViewModel = SubHeaderViewModel(title)
+            result.add(subHeaderViewModel)
+            var itemCount = 0
+            for ((index, myGame) in values.withIndex()) {
+                if (!myGame.isFinished) {
+                    itemCount++
+                    result.add(TwoLineWithIdViewModel(myGame.id, myGame.name, getSecondaryText(myGame)))
+                    addDivider(index, values, result)
+                }
+            }
+            subHeaderViewModel.setTitle("$title ($itemCount)")
+        }
     }
 
     private fun fillUser(user: User, result: MutableList<IFlexible<*>>) {
