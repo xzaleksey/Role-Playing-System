@@ -102,6 +102,7 @@ dependencies {
     compile "eu.davidea:flexible-adapter:5.0.0-rc1"
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'com.daimajia.androidanimations:library:2.3@aar'
+    compile 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:2.0.1-rc1'
 
     // View
     compile group: 'com.github.chrisbanes.photoview', name: 'library', version: '1.2.4'

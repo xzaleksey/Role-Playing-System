@@ -55,7 +55,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
             var itemCount = 0
             for ((index, game) in games.withIndex()) {
                 if (!game.isFinished) {
-                    if (filterModel.isEmpty() || game.masterName.contains(filterModel.getQuery()) || game.name.contains(filterModel.getQuery())) {
+                    if (filterModel.isEmpty() || game.masterName.contains(filterModel.getQuery(), true) || game.name.contains(filterModel.getQuery(), true)) {
                         itemCount++
                         val model = FlexibleGameViewModel.Builder()
                                 .id(game.id)

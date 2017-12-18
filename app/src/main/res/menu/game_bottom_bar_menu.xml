@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/black"
+    app:bbn_badgeColor="@color/material_red_500"
+    app:bbn_rippleColor="#33ffffff">
+    <item
+        android:id="@+id/bbn_item1"
+        android:color="@color/colorPrimary"
+        android:icon="@drawable/ic_lock_outline_black_24px"
+        android:title="Cloud Sync" />
+    <item
+        android:id="@+id/bbn_item2"
+        android:color="@color/colorAccent"
+        android:icon="@drawable/ic_close_black_24dp"
+        android:title="Chromecast" />
+
+    <item
+        android:id="@+id/bbn_item3"
+        android:color="@color/material_green_500"
+        android:icon="@drawable/ic_keyboard_arrow_right"
+        android:title="Chromecast" />
+</menu>

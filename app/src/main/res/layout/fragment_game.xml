@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-  <android.support.v4.view.ViewPager
-      android:id="@+id/viewpager"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      />
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
+    <it.sephiroth.android.library.bottomnavigation.BottomNavigation
+        android:id="@+id/BottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:bbn_badgeProvider="@string/bbn_badgeProvider"
+        app:bbn_entries="@menu/game_bottom_bar_menu"
+        app:bbn_scrollEnabled="true"
+        app:layout_behavior="@string/bbn_phone_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>
