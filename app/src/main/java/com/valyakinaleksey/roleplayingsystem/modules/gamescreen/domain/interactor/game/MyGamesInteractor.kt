@@ -1,9 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game
 
 import android.support.v7.content.res.AppCompatResources
-import com.google.firebase.database.Query
 import com.valyakinaleksey.roleplayingsystem.R
-import com.valyakinaleksey.roleplayingsystem.core.flexible.CommonDividerViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.FlexibleAvatarWithTwoLineTextModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
@@ -23,9 +21,6 @@ import rx.functions.Func4
 
 class MyGamesUsecase(private val gamesRepository: GameRepository,
                      private val userRepository: UserRepository) : MyGamesInteractor {
-    private val gamesInUsersQuery: Query = FireBaseUtils.getTableReference(
-            FireBaseUtils.GAMES_IN_USERS)
-            .child(FireBaseUtils.getCurrentUserId())
 
     override fun getMyGamesObservable(filter: Observable<GamesFilterModel>): Observable<MutableList<IFlexible<*>>> {
         val currentUserId = FireBaseUtils.getCurrentUserId()
@@ -55,7 +50,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
         if (games.isNotEmpty()) {
             val title = StringUtils.getStringById(R.string.games)
             val currentUserId = FireBaseUtils.getCurrentUserId()
-            val subHeaderViewModel = SubHeaderViewModel(title)
+            val subHeaderViewModel = subHeaderViewModel(title)
             result.add(subHeaderViewModel)
             var itemCount = 0
             for ((index, game) in games.withIndex()) {
@@ -80,7 +75,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
     }
 
     private fun fillUser(user: User, result: MutableList<IFlexible<*>>) {
-        result.add(SubHeaderViewModel(StringUtils.getStringById(R.string.my_profile)))
+        result.add(subHeaderViewModel(StringUtils.getStringById(R.string.my_profile)))
         result.add(FlexibleAvatarWithTwoLineTextModel(user.displayName,
                 user.email,
                 {
@@ -92,13 +87,16 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
         result.add(ShadowDividerViewModel(result.lastIndex))
     }
 
+    private fun subHeaderViewModel(title: String) =
+            SubHeaderViewModel(title, true)
+
     private fun fillMyGames(
             myGames: MutableList<GameModel>,
             result: MutableList<IFlexible<*>>) {
         if (myGames.isNotEmpty()) {
             val currentUserId = FireBaseUtils.getCurrentUserId()
             val lastGames = StringUtils.getStringById(R.string.my_last_games)
-            result.add(SubHeaderViewModel(lastGames))
+            result.add(subHeaderViewModel(lastGames))
             for ((index, game) in myGames.withIndex()) {
                 val model = FlexibleGameViewModel.Builder()
                         .id(game.id)
@@ -117,12 +115,9 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
     private fun addDivider(index: Int,
                            games: MutableList<GameModel>,
                            result: MutableList<IFlexible<*>>) {
-        val divider: IFlexible<*> = if (index != games.lastIndex) {
-            CommonDividerViewModel(result.lastIndex)
-        } else {
-            ShadowDividerViewModel(result.lastIndex)
+        if (index == games.lastIndex) {
+            result.add(ShadowDividerViewModel(result.lastIndex))
         }
-        result.add(divider)
     }
 
     private fun getSecondaryText(gameModel: GameModel): String {

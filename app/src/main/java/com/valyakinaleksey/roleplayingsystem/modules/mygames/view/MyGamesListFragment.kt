@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.mygames.view
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -20,7 +21,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFra
 import com.valyakinaleksey.roleplayingsystem.utils.HideKeyBoardOnScrollListener
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
-import com.valyakinaleksey.roleplayingsystem.utils.extensions.getStatusBarHeight
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.getStatusBarMargin
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.getToolBarHeight
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.showCreateGameDialog
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.showPasswordDialog
@@ -57,7 +58,7 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
         super.setupViews(view)
         setupFabButton()
         setupRecyclerView()
-        val statusBarHeight = context.getStatusBarHeight()
+        val statusBarHeight = context.getStatusBarMargin()
         val topMargin = resources.getDimensionPixelOffset(R.dimen.common_margin_between_elements)
         toolbar_container.layoutParams?.let {
             it.height = statusBarHeight + context.getToolBarHeight() + topMargin
@@ -67,6 +68,7 @@ class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesLi
             it.topMargin = statusBarHeight + topMargin
             top_toolbar_container.layoutParams = it
         }
+        ViewCompat.setElevation(toolbar_container, topMargin.toFloat())
         top_toolbar_container.setOnClickListener {
             initSearch()
         }

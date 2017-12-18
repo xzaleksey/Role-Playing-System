@@ -1,9 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Rect;
-import android.os.Build;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -26,17 +24,6 @@ public class ActivityUtils {
         if (current != null) {
             current.clearFocus();
         }
-    }
-
-    public static int getStatusBarHeight(Context context) {
-        int result = 0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if (resourceId > 0) {
-                result = context.getResources().getDimensionPixelSize(resourceId);
-            }
-        }
-        return result;
     }
 
     public static Rect locateView(View v) {

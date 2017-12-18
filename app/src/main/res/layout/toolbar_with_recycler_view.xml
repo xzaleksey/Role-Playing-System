@@ -9,6 +9,6 @@
 
     <include layout="@layout/toolbar_with_background" />
 
-    <include layout="@layout/recycler_view_white" />
+    <include layout="@layout/recycler_view" />
 
 </LinearLayout>

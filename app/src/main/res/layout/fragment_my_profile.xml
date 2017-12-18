@@ -26,7 +26,7 @@
             android:id="@+id/top_actions_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_24">
+            android:layout_marginTop="@dimen/status_bar_height">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/iv_back"

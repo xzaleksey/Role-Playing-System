@@ -42,15 +42,15 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="AppThemeBase.Widget.EditText" parent="Base.Widget.AppCompat.EditText">
+    <style name="AppThemeBase.Widget.EditText" parent="Widget.AppCompat.EditText">
         <item name="fontPath">fonts/Roboto-Regular.ttf</item>
     </style>
 
-    <style name="AppThemeBase.Widget.AutoCompleteTextView" parent="Base.Widget.AppCompat.AutoCompleteTextView">
+    <style name="AppThemeBase.Widget.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="fontPath">fonts/Roboto-Regular.ttf</item>
     </style>
 
-    <style name="AppThemeBase.Widget.Button" parent="Base.Widget.AppCompat.Button">
+    <style name="AppThemeBase.Widget.Button" parent="Widget.AppCompat.Button">
         <item name="fontPath">fonts/Roboto-Medium.ttf</item>
     </style>
 

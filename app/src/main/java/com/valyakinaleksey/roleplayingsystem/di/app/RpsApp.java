@@ -2,14 +2,18 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 
 import android.graphics.Typeface;
 import android.support.multidex.MultiDexApplication;
-import butterknife.ButterKnife;
+import android.support.v7.app.AppCompatDelegate;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.valyakinaleksey.roleplayingsystem.BuildConfig;
 import com.valyakinaleksey.roleplayingsystem.R;
-import io.fabric.sdk.android.Fabric;
+
 import net.danlew.android.joda.JodaTimeAndroid;
+
+import butterknife.ButterKnife;
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -33,6 +37,7 @@ public class RpsApp extends MultiDexApplication {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         instance = this;
         font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
         ButterKnife.setDebug(true);

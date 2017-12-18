@@ -11,7 +11,14 @@ private const val DEFAULT_TOOLBAR_HEIGHT = 56f
 private const val DEFAULT_STATUS_BAR_HEIGHT_NEW = 24
 private const val DEFAULT_STATUS_BAR_HEIGHT_OLD = 25
 
-fun Context.getStatusBarHeight(): Int {
+fun Context.getStatusBarMargin(): Int {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        return 0
+    }
+    return getStatusBarHeight()
+}
+
+private fun Context.getStatusBarHeight(): Int {
     val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
     if (resourceId > 0) {
         return resources.getDimensionPixelSize(resourceId)
