@@ -1,35 +1,41 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game
 
-import android.support.v7.content.res.AppCompatResources
-import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.flexible.FlexibleAvatarWithTwoLineTextModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
 import com.valyakinaleksey.roleplayingsystem.core.model.FilterModel
+import com.valyakinaleksey.roleplayingsystem.core.repository.DrawableRepository
+import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository
-import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.modules.mygames.view.model.GamesFilterModel
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.FlexibleGameViewModel
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import eu.davidea.flexibleadapter.items.IFlexible
 import rx.Observable
 import rx.functions.Func4
 
 class MyGamesUsecase(private val gamesRepository: GameRepository,
-                     private val userRepository: UserRepository) : MyGamesInteractor {
+                     private val userRepository: UserRepository,
+                     private val stringRepository: StringRepository,
+                     private val drawableRepository: DrawableRepository) : MyGamesInteractor {
 
     override fun getMyGamesObservable(filter: Observable<GamesFilterModel>): Observable<MutableList<IFlexible<*>>> {
         val currentUserId = FireBaseUtils.getCurrentUserId()
-        return Observable.combineLatest(filter, userRepository.observeUser(currentUserId),
+        return Observable.combineLatest(filter,
+                userRepository.observeUser(currentUserId),
                 gamesRepository.getLastGamesModelByUserId(FireBaseUtils.getCurrentUserId(), 100),
                 getAllGames(),
-                Func4 { filterModel: FilterModel, user: User, myGames: Map<String, GameModel>, gameModels: Map<String, GameModel> ->
-                    return@Func4 getFilledModel(filterModel, user, ArrayList(myGames.values), ArrayList(gameModels.values))
-                }).onBackpressureLatest()
+                getCombineFunction())
+                .onBackpressureLatest()
+    }
+
+    private fun getCombineFunction(): Func4<GamesFilterModel, User, MutableMap<String, GameModel>, MutableMap<String, GameModel>, MutableList<IFlexible<*>>> {
+        return Func4 { filterModel: FilterModel, user: User, myGames: Map<String, GameModel>, gameModels: Map<String, GameModel> ->
+            return@Func4 getFilledModel(filterModel, user, ArrayList(myGames.values), ArrayList(gameModels.values))
+        }
     }
 
     private fun getFilledModel(
@@ -49,7 +55,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
 
     private fun fillAllGames(filterModel: FilterModel, games: MutableList<GameModel>, result: MutableList<IFlexible<*>>) {
         if (games.isNotEmpty()) {
-            val title = StringUtils.getStringById(R.string.all_games)
+            val title = stringRepository.getAllGames()
             val currentUserId = FireBaseUtils.getCurrentUserId()
             val subHeaderViewModel = subHeaderViewModel(title)
             result.add(subHeaderViewModel)
@@ -81,7 +87,8 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
     }
 
     private fun fillUser(user: User, result: MutableList<IFlexible<*>>) {
-        result.add(subHeaderViewModel(StringUtils.getStringById(R.string.my_profile)))
+
+        result.add(subHeaderViewModel(stringRepository.getMyProfile()))
         result.add(FlexibleAvatarWithTwoLineTextModel(user.displayName,
                 user.email,
                 defaultPhotoProvider(),
@@ -90,7 +97,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
                 true))
     }
 
-    private fun defaultPhotoProvider() = { AppCompatResources.getDrawable(RpsApp.app(), R.drawable.profile_icon) }
+    private fun defaultPhotoProvider() = { drawableRepository.getProfileIcon() }
 
     private fun subHeaderViewModel(title: String): SubHeaderViewModel {
         return SubHeaderViewModel.Builder()
@@ -103,7 +110,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
     private fun fillMyGames(myGames: MutableList<GameModel>, result: MutableList<IFlexible<*>>) {
         if (myGames.isNotEmpty()) {
             val currentUserId = FireBaseUtils.getCurrentUserId()
-            val lastGames = StringUtils.getStringById(R.string.my_last_games)
+            val lastGames = stringRepository.getMyLastGames()
             result.add(subHeaderViewModel(lastGames))
             for (game in myGames) {
                 val model = FlexibleGameViewModel.Builder()
@@ -127,12 +134,9 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
         }
     }
 
-    private fun getSecondaryText(gameModel: GameModel): String {
-        return "${StringUtils.getStringById(R.string.master)} ${gameModel.masterName}"
-    }
+    private fun getSecondaryText(gameModel: GameModel): String = "${stringRepository.getMaster()} ${gameModel.masterName}"
 
-    private fun getAllGames(): Observable<MutableMap<String, GameModel>> =
-            gamesRepository.observeData().distinctUntilChanged()
+    private fun getAllGames(): Observable<MutableMap<String, GameModel>> = gamesRepository.observeData().distinctUntilChanged()
 }
 
 

@@ -2,6 +2,8 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 
 import android.content.Context;
 
+import com.valyakinaleksey.roleplayingsystem.core.repository.DrawableRepository;
+import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
@@ -169,7 +171,8 @@ public class InteractorModule {
             ObserveGameInteractor observeGameInteractor,
             ObserveUsersInGameInteractor observeUsersInGameInteractor,
             CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
-            LeaveGameInteractor leaveGameInteractor, OpenGameInteractor openGameInteractor) {
+            LeaveGameInteractor leaveGameInteractor,
+            OpenGameInteractor openGameInteractor) {
         return new GameUsecase(finishGameInteractor, deleteGameInteractor, observeGameInteractor,
                 observeUsersInGameInteractor, checkUserJoinedGameInteractor, leaveGameInteractor,
                 openGameInteractor);
@@ -183,8 +186,8 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    MyGamesInteractor provideMyGamesInteractor(GameRepository gamesRepository, UserRepository userRepository) {
-        return new MyGamesUsecase(gamesRepository, userRepository);
+    MyGamesInteractor provideMyGamesInteractor(GameRepository gamesRepository, UserRepository userRepository, StringRepository stringRepository, DrawableRepository drawableRepository) {
+        return new MyGamesUsecase(gamesRepository, userRepository, stringRepository, drawableRepository);
     }
 
     @Provides
