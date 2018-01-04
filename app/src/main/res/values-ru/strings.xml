@@ -84,4 +84,10 @@
     <string name="search">Поиск</string>
     <string name="my_profile">Мой профиль</string>
     <string name="my_last_games">Мои последние игры</string>
+    <string name="all_games">Все игры</string>
+    <string name="error_subtitle_no_loaded">Попробуйте снова</string>
+    <string name="pictures">Картинки</string>
+    <string name="dices">Кубы</string>
+    <string name="menu">Меню</string>
+
 </resources>

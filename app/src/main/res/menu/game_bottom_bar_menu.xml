@@ -8,22 +8,22 @@
     <item
         android:id="@+id/bbn_item1"
         android:color="@color/colorPrimary"
-        android:icon="@drawable/ic_lock_outline_black_24px"
-        android:title="Cloud Sync" />
+        android:icon="@drawable/bottom_bar_characters"
+        android:title="@string/characters" />
     <item
         android:id="@+id/bbn_item2"
         android:color="@color/colorAccent"
-        android:icon="@drawable/ic_close_black_24dp"
-        android:title="Chromecast" />
+        android:icon="@drawable/bottom_bar_dice"
+        android:title="@string/dices" />
 
     <item
-        android:id="@+id/bbn_item3"
+        android:id="@+id/action_pictures"
         android:color="@color/material_green_500"
-        android:icon="@drawable/ic_keyboard_arrow_right"
-        android:title="Chromecast" />
+        android:icon="@drawable/bottom_bar_pictures"
+        android:title="@string/pictures" />
     <item
-        android:id="@+id/action4"
-        android:color="#FF5252"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="List" />
+        android:id="@+id/action_menu"
+        android:color="@color/material_red_500"
+        android:icon="@drawable/bottom_bar_menu"
+        android:title="@string/menu" />
 </menu>

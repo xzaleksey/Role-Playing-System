@@ -39,8 +39,8 @@ private const val THROTTLE_INTERVAL = 100
 class MyGamesListFragment : AbsButterLceFragment<MyGamesListComponent, MyGamesListViewViewModel, MyGamesListView>(), MyGamesListView {
 
     override fun createComponent(fragmentId: String): MyGamesListComponent {
-        return ((parentFragment as ComponentManagerFragment<*, *>).component as ParentFragmentComponent).getMyGamesListComponent(
-                MyGamesListModule(fragmentId))
+        return ((parentFragment as ComponentManagerFragment<*, *>)
+                .component as ParentFragmentComponent).getMyGamesListComponent(MyGamesListModule(fragmentId))
     }
 
     @BindView(R.id.recycler_view)

@@ -49,7 +49,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
 
     private fun fillAllGames(filterModel: FilterModel, games: MutableList<GameModel>, result: MutableList<IFlexible<*>>) {
         if (games.isNotEmpty()) {
-            val title = StringUtils.getStringById(R.string.games)
+            val title = StringUtils.getStringById(R.string.all_games)
             val currentUserId = FireBaseUtils.getCurrentUserId()
             val subHeaderViewModel = subHeaderViewModel(title)
             result.add(subHeaderViewModel)

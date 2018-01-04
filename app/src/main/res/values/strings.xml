@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Role Playing System</string>
     <string name="error_title_no_loaded">troubles while loading</string>
-    <string name="error_subtitle_no_loaded">try again if you wish</string>
+    <string name="error_subtitle_no_loaded">Try again if you wish</string>
     <string name="retry_error_button">try again</string>
     <string name="error_title_no_connection">Troubles with connection</string>
     <string name="error_subtitle_no_connection">try again if you wish</string>
@@ -16,9 +16,6 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
     <string name="error_empty_field">%s shouldn\'t be empty</string>
     <string name="error_min_symbols">%s should contain at least 6 symbols</string>
     <string name="forgot_password">Forgot Password?</string>
@@ -87,6 +84,7 @@
     <string name="undefined">Undefined</string>
     <string name="profile">Profile</string>
     <string name="games">Games</string>
+    <string name="all_games">All games</string>
     <string name="total_games">total games</string>
     <string name="master_games">master games</string>
     <string name="nick_name">Nickname</string>
@@ -96,5 +94,8 @@
     <string name="search">Search</string>
     <string name="my_profile">My profile</string>
     <string name="my_last_games">My last games</string>
+    <string name="pictures">Pictures</string>
+    <string name="dices">Dices</string>
+    <string name="menu">Menu</string>
 
 </resources>

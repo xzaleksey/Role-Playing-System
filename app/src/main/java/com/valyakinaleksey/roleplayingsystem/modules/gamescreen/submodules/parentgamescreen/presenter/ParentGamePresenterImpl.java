@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter;
 
 import android.os.Bundle;
+
 import com.crashlytics.android.Crashlytics;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
@@ -36,13 +37,13 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
         this.gameRepository = gameRepository;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
     @Override
     protected ParentGameModel initNewViewModel(Bundle arguments) {
         final ParentGameModel parentGameModel = new ParentGameModel();
         GameModel gameModel = arguments.getParcelable(GameModel.KEY);
         parentGameModel.setGameModel(gameModel);
-        boolean isMaster = gameModel.getMasterId().equals(FireBaseUtils.getCurrentUserId());
+        boolean isMaster = gameModel.isMaster(FireBaseUtils.getCurrentUserId());
         parentGameModel.setMaster(isMaster);
         String id = gameModel.getId();
         if (!isMaster) {
@@ -117,9 +118,9 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
     }
 
     private void initSubscriptions(GameModel gameModel) {
-        compositeSubscription.add(
-                gameInteractor.observeGameModelChanged(gameModel).subscribe(gameModel1 -> {
-                    viewModel.setGameModel(gameModel1);
+        compositeSubscription.add(gameInteractor.observeGameModelChanged(gameModel)
+                .subscribe(updatedGameModel -> {
+                    viewModel.setGameModel(updatedGameModel);
                     view.preFillModel(viewModel);
                 }, Crashlytics::logException));
         compositeSubscription.add(gameInteractor.observeGameModelRemoved(gameModel)
