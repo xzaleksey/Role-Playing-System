@@ -6,12 +6,12 @@
     app:bbn_badgeColor="@color/material_red_500"
     app:bbn_rippleColor="#33ffffff">
     <item
-        android:id="@+id/bbn_item1"
+        android:id="@+id/action_characters"
         android:color="@color/colorPrimary"
         android:icon="@drawable/bottom_bar_characters"
         android:title="@string/characters" />
     <item
-        android:id="@+id/bbn_item2"
+        android:id="@+id/action_dices"
         android:color="@color/colorAccent"
         android:icon="@drawable/bottom_bar_dice"
         android:title="@string/dices" />

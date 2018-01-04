@@ -1,6 +1,7 @@
 package com.valyakinaleksey.roleplayingsystem.core.view;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -8,17 +9,20 @@ import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import butterknife.BindView;
+
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.DialogProvider;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
 import com.valyakinaleksey.roleplayingsystem.core.utils.SnackbarHelper;
+import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Action1;
 import com.valyakinaleksey.roleplayingsystem.core.view.view_model.RequestUpdateViewModel;
-import rx.subscriptions.CompositeSubscription;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Base load - content - error view
@@ -299,5 +303,9 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends RequestUp
     @Override
     public void preFillModel(M data) {
 
+    }
+
+    @Override public void performAction(Action1<Context> contextAction) {
+        contextAction.apply(getActivity());
     }
 }
