@@ -6,8 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.BindColor;
-import butterknife.BindView;
+
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.ButterKnifeViewHolder;
@@ -16,6 +15,9 @@ import com.valyakinaleksey.roleplayingsystem.utils.ActivityUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ImageUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ViewUtils;
+
+import butterknife.BindColor;
+import butterknife.BindView;
 import rx.Subscription;
 
 public class SingleValueEditViewHolder extends ButterKnifeViewHolder {
