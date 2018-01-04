@@ -38,6 +38,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
             myGames: MutableList<GameModel>,
             values: MutableList<GameModel>): MutableList<IFlexible<*>> {
         val result = mutableListOf<IFlexible<*>>()
+
         if (filerModel.getQuery().isBlank()) {
             fillUser(user, result)
             fillMyGames(myGames, result)
@@ -55,7 +56,7 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
             var itemCount = 0
             for ((index, game) in games.withIndex()) {
                 if (!game.isFinished) {
-                    if (filterModel.isEmpty() || game.masterName.contains(filterModel.getQuery(), true) || game.name.contains(filterModel.getQuery(), true)) {
+                    if (isFiltered(filterModel, game)) {
                         itemCount++
                         val model = FlexibleGameViewModel.Builder()
                                 .id(game.id)
@@ -74,30 +75,37 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
         }
     }
 
+    private fun isFiltered(filterModel: FilterModel, game: GameModel): Boolean {
+        return filterModel.isEmpty() || game.masterName.contains(filterModel.getQuery(), true)
+                || game.name.contains(filterModel.getQuery(), true)
+    }
+
     private fun fillUser(user: User, result: MutableList<IFlexible<*>>) {
         result.add(subHeaderViewModel(StringUtils.getStringById(R.string.my_profile)))
         result.add(FlexibleAvatarWithTwoLineTextModel(user.displayName,
                 user.email,
-                {
-                    return@FlexibleAvatarWithTwoLineTextModel AppCompatResources.getDrawable(RpsApp.app(), R.drawable.profile_icon)
-                },
+                defaultPhotoProvider(),
                 user.photoUrl,
                 user.uid,
                 true))
-        result.add(ShadowDividerViewModel(result.lastIndex))
     }
 
-    private fun subHeaderViewModel(title: String) =
-            SubHeaderViewModel(title, true)
+    private fun defaultPhotoProvider() = { AppCompatResources.getDrawable(RpsApp.app(), R.drawable.profile_icon) }
 
-    private fun fillMyGames(
-            myGames: MutableList<GameModel>,
-            result: MutableList<IFlexible<*>>) {
+    private fun subHeaderViewModel(title: String): SubHeaderViewModel {
+        return SubHeaderViewModel.Builder()
+                .title(title)
+                .drawBottomDivider(true)
+                .drawTopDivider(true)
+                .build()
+    }
+
+    private fun fillMyGames(myGames: MutableList<GameModel>, result: MutableList<IFlexible<*>>) {
         if (myGames.isNotEmpty()) {
             val currentUserId = FireBaseUtils.getCurrentUserId()
             val lastGames = StringUtils.getStringById(R.string.my_last_games)
             result.add(subHeaderViewModel(lastGames))
-            for ((index, game) in myGames.withIndex()) {
+            for (game in myGames) {
                 val model = FlexibleGameViewModel.Builder()
                         .id(game.id)
                         .title(game.name)
@@ -107,7 +115,6 @@ class MyGamesUsecase(private val gamesRepository: GameRepository,
                         .isGameLocked(!game.password.isNullOrBlank())
                         .build()
                 result.add(model)
-                addDivider(index, myGames, result)
             }
         }
     }

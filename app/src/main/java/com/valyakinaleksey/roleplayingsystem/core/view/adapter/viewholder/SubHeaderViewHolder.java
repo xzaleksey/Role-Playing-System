@@ -9,14 +9,15 @@ import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel;
 
 import butterknife.BindView;
 
-public class
-SubheaderViewHolder extends ButterKnifeViewHolder {
+public class SubHeaderViewHolder extends ButterKnifeViewHolder {
     @BindView(R.id.text)
     TextView tvTitle;
     @BindView(R.id.divider)
     View divider;
+    @BindView(R.id.top_divider)
+    View topDivider;
 
-    public SubheaderViewHolder(View itemView) {
+    public SubHeaderViewHolder(View itemView) {
         super(itemView);
     }
 
@@ -27,10 +28,16 @@ SubheaderViewHolder extends ButterKnifeViewHolder {
         } else {
             tvTitle.setTextColor(subHeaderViewModel.getColor());
         }
-        if (subHeaderViewModel.isDrawTopDivider()) {
+        if (subHeaderViewModel.isDrawBottomDivider()) {
             divider.setVisibility(View.VISIBLE);
         } else {
             divider.setVisibility(View.GONE);
+        }
+
+        if (subHeaderViewModel.isDrawTopDivider()) {
+            topDivider.setVisibility(View.VISIBLE);
+        } else {
+            topDivider.setVisibility(View.GONE);
         }
     }
 }

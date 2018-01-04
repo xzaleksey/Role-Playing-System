@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/black"
+    app:bbn_alwaysShowLabels="false"
     app:bbn_badgeColor="@color/material_red_500"
     app:bbn_rippleColor="#33ffffff">
     <item
@@ -20,4 +21,9 @@
         android:color="@color/material_green_500"
         android:icon="@drawable/ic_keyboard_arrow_right"
         android:title="Chromecast" />
+    <item
+        android:id="@+id/action4"
+        android:color="#FF5252"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="List" />
 </menu>
