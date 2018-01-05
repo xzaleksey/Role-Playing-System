@@ -3,6 +3,8 @@ package com.valyakinaleksey.roleplayingsystem.modules.userprofile.di;
 import com.valyakinaleksey.roleplayingsystem.core.di.BaseFragmentModule;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.FileViewStateStorage;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.viewstate.impl.serializable.storage.ViewStateStorage;
+import com.valyakinaleksey.roleplayingsystem.core.repository.FirebaseInfoRepository;
+import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.CurrentUserRepository;
@@ -16,10 +18,11 @@ import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserP
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserProfilePresenterImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.state.UserProfileViewState;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
-import dagger.Module;
-import dagger.Provides;
 
 import javax.inject.Named;
+
+import dagger.Module;
+import dagger.Provides;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.DiConstants.PRESENTER;
 
@@ -33,41 +36,41 @@ public class UserProfileModule extends BaseFragmentModule {
     }
 
     @Provides
-    UserProfileViewState provideViewState(
-            @Named(VIEW_STATE_FILE_NAME) ViewStateStorage storage) {
+    UserProfileViewState provideViewState(@Named(VIEW_STATE_FILE_NAME) ViewStateStorage storage) {
         return new UserProfileViewState(storage);
     }
 
     @Provides
     @PerFragmentScope
-    UserProfilePresenter provideCommunicationBus(
-            @Named(PRESENTER) UserProfilePresenter presenter, UserProfileViewState viewState) {
+    UserProfilePresenter provideCommunicationBus(@Named(PRESENTER) UserProfilePresenter presenter, UserProfileViewState viewState) {
         return new UserProfileCommunicationBus(presenter, viewState);
     }
 
     @Provides
     @Named(PRESENTER)
     @PerFragmentScope
-    UserProfilePresenter providePresenter(
-            ValidatePasswordInteractor validatePasswordInteractor,
-            CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
-            ParentPresenter parentPresenter,
-            GameRepository gamesRepository,
-            UserProfileInteractor userProfileInteractor,
-            UserRepository userRepository,
-            CurrentUserRepository currentUserRepo) {
+    UserProfilePresenter providePresenter(ValidatePasswordInteractor validatePasswordInteractor,
+                                          CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
+                                          ParentPresenter parentPresenter,
+                                          GameRepository gamesRepository,
+                                          UserProfileInteractor userProfileInteractor,
+                                          UserRepository userRepository,
+                                          CurrentUserRepository currentUserRepo,
+                                          StringRepository stringRepository,
+                                          FirebaseInfoRepository firebaseRepository) {
         return new UserProfilePresenterImpl(checkUserJoinedGameInteractor, validatePasswordInteractor,
                 parentPresenter,
                 userProfileInteractor,
                 userRepository,
                 gamesRepository,
-                currentUserRepo);
+                currentUserRepo,
+                stringRepository,
+                firebaseRepository);
     }
 
     @Named(VIEW_STATE_FILE_NAME)
     @Provides
-    ViewStateStorage provideViewStateStorage(
-            PathManager manager) {
+    ViewStateStorage provideViewStateStorage(PathManager manager) {
         String fullPath = manager.getCachePath() + VIEW_STATE_FILE_NAME + getFragmentId();
         return new FileViewStateStorage(fullPath);
     }

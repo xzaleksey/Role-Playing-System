@@ -100,8 +100,7 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
 
     @Override
     public void deleteGame() {
-        compositeSubscription.add(gameInteractor.
-                deleteGame(viewModel.getGameModel())
+        compositeSubscription.add(gameInteractor.deleteGame(viewModel.getGameModel())
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(aBoolean -> {
@@ -110,8 +109,7 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
 
     @Override
     public void finishGame() {
-        compositeSubscription.add(gameInteractor.
-                finishGame(viewModel.getGameModel())
+        compositeSubscription.add(gameInteractor.finishGame(viewModel.getGameModel())
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(aVoid -> parentPresenter.navigateBack(), Crashlytics::logException));
@@ -119,8 +117,7 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
 
     @Override
     public void leaveGame() {
-        compositeSubscription.add(gameInteractor.
-                leaveGame(viewModel.getGameModel())
+        compositeSubscription.add(gameInteractor.leaveGame(viewModel.getGameModel())
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(aVoid -> parentPresenter.navigateBack(), Crashlytics::logException));
@@ -128,8 +125,7 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
 
     @Override
     public void openGame() {
-        compositeSubscription.add(gameInteractor.
-                openGame(viewModel.getGameModel())
+        compositeSubscription.add(gameInteractor.openGame(viewModel.getGameModel())
                 .compose(RxTransformers.applySchedulers())
                 .compose(RxTransformers.applyOpBeforeAndAfter(showLoading, hideLoading))
                 .subscribe(result -> {

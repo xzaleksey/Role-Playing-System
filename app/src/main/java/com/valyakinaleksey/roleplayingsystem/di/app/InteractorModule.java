@@ -1,7 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.di.app;
 
-import android.content.Context;
-
 import com.valyakinaleksey.roleplayingsystem.core.repository.DrawableRepository;
 import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
@@ -64,15 +62,13 @@ import dagger.Provides;
 public class InteractorModule {
     @Provides
     @Singleton
-    ObserveGameInteractor provideObserveGameInteractor(
-            GameRepository gameRepository) {
+    ObserveGameInteractor provideObserveGameInteractor(GameRepository gameRepository) {
         return new ObserveGameUseCase(gameRepository);
     }
 
     @Provides
     @Singleton
-    ObserveUsersInGameInteractor provideObserveUsersInGameInteractor(
-            UserRepository userRepository) {
+    ObserveUsersInGameInteractor provideObserveUsersInGameInteractor(UserRepository userRepository) {
         return new ObserveUsersInGameUseCase(userRepository);
     }
 
@@ -90,8 +86,7 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    ValidatePasswordInteractor provideValidatePasswordInteractor(
-            SimpleCrypto simpleCrypto) {
+    ValidatePasswordInteractor provideValidatePasswordInteractor(SimpleCrypto simpleCrypto) {
         return new ValidatePasswordInteractorImpl(simpleCrypto);
     }
 
@@ -116,8 +111,7 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    DeleteGameInteractor provideDeleteGameInteractor(
-            GameRepository gameRepository) {
+    DeleteGameInteractor provideDeleteGameInteractor(GameRepository gameRepository) {
         return new DeleteGameUsecase(gameRepository);
     }
 
@@ -147,8 +141,7 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    MapsInteractor provideMapsInteractor(FileMapsRepository fileMapsRepository,
-                                         FirebaseMapRepository firebaseMapRepository) {
+    MapsInteractor provideMapsInteractor(FileMapsRepository fileMapsRepository, FirebaseMapRepository firebaseMapRepository) {
         return new MapUseCase(fileMapsRepository, firebaseMapRepository);
     }
 
@@ -167,7 +160,8 @@ public class InteractorModule {
     @Provides
     @Singleton
     GameInteractor provideGameInteractor(
-            FinishGameInteractor finishGameInteractor, DeleteGameInteractor deleteGameInteractor,
+            FinishGameInteractor finishGameInteractor,
+            DeleteGameInteractor deleteGameInteractor,
             ObserveGameInteractor observeGameInteractor,
             ObserveUsersInGameInteractor observeUsersInGameInteractor,
             CheckUserJoinedGameInteractor checkUserJoinedGameInteractor,
@@ -199,14 +193,13 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    UserProfileInteractor provideUserProfileInteractor(CharactersGameRepository charactersRepo, Context context, GameRepository gameRepository) {
-        return new UserProfileInteractorImpl(charactersRepo, gameRepository, context);
+    UserProfileInteractor provideUserProfileInteractor(CharactersGameRepository charactersRepo, GameRepository gameRepository, DrawableRepository drawableRepository, StringRepository stringRepository) {
+        return new UserProfileInteractorImpl(charactersRepo, gameRepository, drawableRepository, stringRepository);
     }
 
     @Provides
     @Singleton
-    GameCharactersInteractor provideGameCharactersInteractor(
-            CharactersGameRepository charactersRepository) {
+    GameCharactersInteractor provideGameCharactersInteractor(CharactersGameRepository charactersRepository) {
         return new GameCharactersUseCase(charactersRepository);
     }
 }

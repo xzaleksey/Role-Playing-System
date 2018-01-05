@@ -1,11 +1,10 @@
 package com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain
 
-import android.content.Context
-import android.support.v4.content.ContextCompat
-import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.flexible.FlexibleAvatarWithTwoLineTextModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.ShadowDividerViewModel
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
+import com.valyakinaleksey.roleplayingsystem.core.repository.DrawableRepository
+import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.CharactersGameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.adapter.FlexibleGameViewModel
@@ -18,7 +17,8 @@ import rx.functions.Func2
 class UserProfileInteractorImpl(
         private val charactersGameRepository: CharactersGameRepository,
         private val gameRepository: GameRepository,
-        private val context: Context
+        private val drawableRepository: DrawableRepository,
+        private val stringRepository: StringRepository
 ) : UserProfileInteractor {
 
     private val lastItemsCount = 2
@@ -30,22 +30,22 @@ class UserProfileInteractorImpl(
                 Func2 { gameModels, characters ->
                     val result = mutableListOf<IFlexible<*>>()
                     if (!gameModels.isEmpty()) {
-                        result.add(getSubHeaderViewModel(StringUtils.getStringById(R.string.games)))
+                        result.add(getSubHeaderViewModel(stringRepository.getGames()))
                         gameModels.values.forEach { gameModel ->
                             result.add(FlexibleGameViewModel(gameModel.id,
                                     gameModel.name,
-                                    "${StringUtils.getStringById(R.string.master)} ${gameModel.masterName}",
+                                    "${stringRepository.getMaster()} ${gameModel.masterName}",
                                     StringUtils.areEqual(currentUserId, gameModel.masterId)
                             ))
                         }
                         result.add(ShadowDividerViewModel(result.lastIndex))
                     }
                     if (characters.isNotEmpty()) {
-                        result.add(getSubHeaderViewModel(StringUtils.getStringById(R.string.characters)))
+                        result.add(getSubHeaderViewModel(stringRepository.getCharacters()))
                         characters.values.forEach { value ->
                             result.add(FlexibleAvatarWithTwoLineTextModel(value.name,
                                     value.gameClassModel.name + ", " + value.gameRaceModel.name,
-                                    { ContextCompat.getDrawable(context, R.drawable.mage) },
+                                    { drawableRepository.getMageIcon() },
                                     value.photoUrl,
                                     value.uid
                             ))
@@ -57,9 +57,7 @@ class UserProfileInteractorImpl(
                 })
     }
 
-    fun getSubHeaderViewModel(text: String): SubHeaderViewModel {
-        return SubHeaderViewModel(text, true)
-    }
+    private fun getSubHeaderViewModel(text: String): SubHeaderViewModel = SubHeaderViewModel(text, true)
 
 }
 

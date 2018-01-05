@@ -2,11 +2,11 @@ package com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter
 
 import android.net.Uri
 import android.os.Bundle
-import com.google.firebase.auth.FirebaseAuth
 import com.kbeanie.multipicker.api.entity.ChosenImage
-import com.valyakinaleksey.roleplayingsystem.R
 import com.valyakinaleksey.roleplayingsystem.core.model.ResponseModel
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
+import com.valyakinaleksey.roleplayingsystem.core.repository.FirebaseInfoRepository
+import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository
 import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.core.view.BaseError
@@ -15,7 +15,6 @@ import com.valyakinaleksey.roleplayingsystem.core.view.presenter.RestorablePrese
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.CurrentUserRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository
-import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.CheckUserJoinedGameInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
@@ -28,7 +27,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfil
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel.CHANGE_USER_NAME
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.getCheckUserInGameObservable
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.getValidatePasswordSubscription
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameDescriptionScreen
@@ -41,47 +39,43 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
                                private val userProfileInteractor: UserProfileInteractor,
                                private val userRepository: UserRepository,
                                private val gameRepository: GameRepository,
-                               private val currentUserRepository: CurrentUserRepository) : BasePresenter<UserProfileView, UserProfileViewModel>(), RestorablePresenter<UserProfileViewModel>, UserProfilePresenter {
+                               private val currentUserRepository: CurrentUserRepository,
+                               private val stringRepository: StringRepository,
+                               private val firebaseInfoRepository: FirebaseInfoRepository) : BasePresenter<UserProfileView, UserProfileViewModel>(), RestorablePresenter<UserProfileViewModel>, UserProfilePresenter {
 
     override fun initNewViewModel(arguments: Bundle?): UserProfileViewModel {
         val userProfileViewModel = UserProfileViewModel()
-        userProfileViewModel.displayName = RpsApp.app().getString(R.string.profile)
-        val userId = arguments?.getString(UserProfileViewModel.USER_ID) ?: FireBaseUtils.getCurrentUserId()
+        userProfileViewModel.displayName = stringRepository.getProfile()
+        val userId = arguments?.getString(UserProfileViewModel.USER_ID) ?: firebaseInfoRepository.getCurrentUserUid()
         userProfileViewModel.userId = userId
         userProfileViewModel.isCurrentUser = FireBaseUtils.getCurrentUserId() == userId
         return userProfileViewModel
     }
 
-    override fun restoreViewModel(
-            viewViewModelMy: UserProfileViewModel) {
+    override fun restoreViewModel(viewViewModelMy: UserProfileViewModel) {
         super.restoreViewModel(viewViewModelMy)
         viewViewModelMy.setNeedUpdate(true)
     }
 
 
-    override fun navigateToGameScreen(
-            model: GameModel) {
-        compositeSubscription.add(
-                navigateToGameScreen(model, parentPresenter, checkUserJoinedGameInteractor))
+    override fun navigateToGameScreen(model: GameModel) {
+        compositeSubscription.add(navigateToGameScreen(model, parentPresenter, checkUserJoinedGameInteractor))
     }
 
-    override fun checkPassword(
-            model: GameModel) {
-        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
-        compositeSubscription.add(
-                getCheckUserInGameObservable(model, currentUserId, checkUserJoinedGameInteractor)
-                        .subscribe(
-                                { userInGame ->
-                                    if (userInGame!!) {
-                                        navigateToGameScreen(model)
-                                    } else {
-                                        val passwordDialogViewModel = PasswordDialogViewModel()
-                                        passwordDialogViewModel.title = StringUtils.getStringById(R.string.input_password)
-                                        passwordDialogViewModel.gameModel = model
-                                        viewModel.passwordDialogViewModel = passwordDialogViewModel
-                                        view.showPasswordDialog()
-                                    }
-                                }, { this.handleThrowable(it) }))
+    override fun checkPassword(model: GameModel) {
+        val currentUserId = firebaseInfoRepository.getCurrentUserUid()
+        compositeSubscription.add(getCheckUserInGameObservable(model, currentUserId, checkUserJoinedGameInteractor)
+                .subscribe({ userInGame ->
+                    if (userInGame!!) {
+                        navigateToGameScreen(model)
+                    } else {
+                        val passwordDialogViewModel = PasswordDialogViewModel()
+                        passwordDialogViewModel.title = stringRepository.getInputPassword()
+                        passwordDialogViewModel.gameModel = model
+                        viewModel.passwordDialogViewModel = passwordDialogViewModel
+                        view.showPasswordDialog()
+                    }
+                }, { this.handleThrowable(it) }))
     }
 
     override fun validatePassword(userInput: String, gameModel: GameModel) {
@@ -92,8 +86,7 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
                     if (isValid) {
                         navigateToGameDescriptionScreen(gameModel, parentPresenter)
                     } else {
-                        val snack = BaseError(BaseErrorType.SNACK,
-                                RpsApp.app().getString(R.string.error_incorrect_password))
+                        val snack = BaseError(BaseErrorType.SNACK, stringRepository.getErrorIncorrectPassword())
                         view.showError(snack)
                     }
                 }))
@@ -153,7 +146,7 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
 
                     override fun onError(e: Throwable) {
                         super.onError(e)
-                        view.showError(BaseError(BaseErrorType.SNACK, StringUtils.getStringById(R.string.error_network_connection)))
+                        view.showError(BaseError(BaseErrorType.SNACK, stringRepository.getErrorNetwork()))
                     }
                 }))
     }

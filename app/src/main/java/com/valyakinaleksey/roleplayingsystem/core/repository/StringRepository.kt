@@ -3,6 +3,10 @@ package com.valyakinaleksey.roleplayingsystem.core.repository
 import com.valyakinaleksey.roleplayingsystem.R
 
 class StringRepositoryImpl(private val resourcesProvider: ResourcesProvider) : StringRepository {
+    override fun getCharacters(): String = resourcesProvider.getString(R.string.characters)
+    override fun getGames(): String = resourcesProvider.getString(R.string.games)
+    override fun getErrorNetwork(): String = resourcesProvider.getString(R.string.error_network_connection)
+    override fun getProfile(): String = resourcesProvider.getString(R.string.profile)
     override fun getInputPassword(): String = resourcesProvider.getString(R.string.input_password)
     override fun getErrorIncorrectPassword(): String = resourcesProvider.getString(R.string.error_incorrect_password)
     override fun getCreateGame(): String = resourcesProvider.getString(R.string.create_game)
@@ -20,4 +24,8 @@ interface StringRepository {
     fun getCreateGame(): String
     fun getErrorIncorrectPassword(): String
     fun getInputPassword(): String
+    fun getProfile(): String
+    fun getErrorNetwork(): String
+    fun getGames(): String
+    fun getCharacters(): String
 }
