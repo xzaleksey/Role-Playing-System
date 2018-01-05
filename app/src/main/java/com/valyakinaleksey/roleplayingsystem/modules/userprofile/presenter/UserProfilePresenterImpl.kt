@@ -1,6 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
@@ -77,7 +76,7 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
                                         navigateToGameScreen(model)
                                     } else {
                                         val passwordDialogViewModel = PasswordDialogViewModel()
-                                        passwordDialogViewModel.title = StringUtils.getStringById(R.string.create_game)
+                                        passwordDialogViewModel.title = StringUtils.getStringById(R.string.input_password)
                                         passwordDialogViewModel.gameModel = model
                                         viewModel.passwordDialogViewModel = passwordDialogViewModel
                                         view.showPasswordDialog()
@@ -85,7 +84,7 @@ class UserProfilePresenterImpl(private val checkUserJoinedGameInteractor: CheckU
                                 }, { this.handleThrowable(it) }))
     }
 
-    override fun validatePassword(context: Context, userInput: String, gameModel: GameModel) {
+    override fun validatePassword(userInput: String, gameModel: GameModel) {
         compositeSubscription.add(getValidatePasswordSubscription(validatePasswordInteractor,
                 userInput,
                 gameModel.password,

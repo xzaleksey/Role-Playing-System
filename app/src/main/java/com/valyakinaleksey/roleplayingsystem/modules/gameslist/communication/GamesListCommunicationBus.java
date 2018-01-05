@@ -1,80 +1,94 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gameslist.communication;
 
-import android.content.Context;
-
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.state.GamesListViewState;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter.GamesListPresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.GamesListView;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.state.GamesListViewState;
 
-import eu.davidea.flexibleadapter.items.IFlexible;
 import javax.inject.Inject;
 
-@PerFragmentScope public class GamesListCommunicationBus extends
-    SelfRestorableNavigationLceCommunicationBus<GamesListViewModel, GamesListView, GamesListPresenter, GamesListViewState>
-    implements GamesListPresenter, GamesListView {
+import eu.davidea.flexibleadapter.items.IFlexible;
 
-  @Override public void attachView(GamesListView view) {
-    super.attachView(view);
-  }
+@PerFragmentScope
+public class GamesListCommunicationBus extends
+        SelfRestorableNavigationLceCommunicationBus<GamesListViewModel, GamesListView, GamesListPresenter, GamesListViewState>
+        implements GamesListPresenter, GamesListView {
 
-  @Inject
-  public GamesListCommunicationBus(GamesListPresenter presenter, GamesListViewState viewState) {
-    super(presenter, viewState);
-  }
+    @Override
+    public void attachView(GamesListView view) {
+        super.attachView(view);
+    }
 
-  @Override public void createGame(GameModel gameModel) {
-    presenter.createGame(gameModel);
-  }
+    @Inject
+    public GamesListCommunicationBus(GamesListPresenter presenter, GamesListViewState viewState) {
+        super(presenter, viewState);
+    }
 
-  @Override public void loadComplete() {
-    presenter.loadComplete();
-  }
+    @Override
+    public void createGame(GameModel gameModel) {
+        presenter.createGame(gameModel);
+    }
 
-  @Override public void onFabPressed() {
-    presenter.onFabPressed();
-  }
+    @Override
+    public void loadComplete() {
+        presenter.loadComplete();
+    }
 
-  @Override public void navigateToGameScreen(GameModel model) {
-    presenter.navigateToGameScreen(model);
-  }
+    @Override
+    public void onFabPressed() {
+        presenter.onFabPressed();
+    }
 
-  @Override public boolean onItemClick(IFlexible<?> item) {
-    return presenter.onItemClick(item);
-  }
+    @Override
+    public void navigateToGameScreen(GameModel model) {
+        presenter.navigateToGameScreen(model);
+    }
 
-  @Override public void onSearchQueryChanged(String queryText) {
-    presenter.onSearchQueryChanged(queryText);
-  }
+    @Override
+    public boolean onItemClick(IFlexible<?> item) {
+        return presenter.onItemClick(item);
+    }
 
-  @Override public void checkPassword(GameModel model) {
-    presenter.checkPassword(model);
-  }
+    @Override
+    public void onSearchQueryChanged(String queryText) {
+        presenter.onSearchQueryChanged(queryText);
+    }
 
-  @Override public void validatePassword(Context context, String s, GameModel gameModel) {
-    presenter.validatePassword(context, s, gameModel);
-  }
+    @Override
+    public void checkPassword(GameModel model) {
+        presenter.checkPassword(model);
+    }
 
-  @Override public void onGameCreated() {
-    getNavigationResolver().resolveNavigation(GamesListView::onGameCreated);
-  }
+    @Override
+    public void validatePassword(String s, GameModel gameModel) {
+        presenter.validatePassword(s, gameModel);
+    }
 
-  @Override public void showCreateGameDialog() {
-    getNavigationResolver().resolveNavigation(GamesListView::showCreateGameDialog);
-  }
+    @Override
+    public void onGameCreated() {
+        getNavigationResolver().resolveNavigation(GamesListView::onGameCreated);
+    }
 
-  @Override public void showPasswordDialog() {
-    getNavigationResolver().resolveNavigation(GamesListView::showPasswordDialog);
-  }
+    @Override
+    public void showCreateGameDialog() {
+        getNavigationResolver().resolveNavigation(GamesListView::showCreateGameDialog);
+    }
 
-  @Override public void updateGamesCount() {
-    getNavigationResolver().resolveNavigation(GamesListView::updateGamesCount);
-  }
+    @Override
+    public void showPasswordDialog() {
+        getNavigationResolver().resolveNavigation(GamesListView::showPasswordDialog);
+    }
 
-  @Override public void scrollToTop() {
-    getNavigationResolver().resolveNavigation(GamesListView::scrollToTop);
-  }
+    @Override
+    public void updateGamesCount() {
+        getNavigationResolver().resolveNavigation(GamesListView::updateGamesCount);
+    }
+
+    @Override
+    public void scrollToTop() {
+        getNavigationResolver().resolveNavigation(GamesListView::scrollToTop);
+    }
 }

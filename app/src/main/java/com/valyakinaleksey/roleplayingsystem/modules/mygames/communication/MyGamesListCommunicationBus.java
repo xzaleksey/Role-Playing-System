@@ -1,7 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.modules.mygames.communication;
 
-import android.content.Context;
-
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
@@ -68,8 +66,8 @@ public class MyGamesListCommunicationBus extends
     }
 
     @Override
-    public void validatePassword(Context context, String s, GameModel gameModel) {
-        presenter.validatePassword(context, s, gameModel);
+    public void validatePassword(String s, GameModel gameModel) {
+        presenter.validatePassword(s, gameModel);
     }
 
     @Override

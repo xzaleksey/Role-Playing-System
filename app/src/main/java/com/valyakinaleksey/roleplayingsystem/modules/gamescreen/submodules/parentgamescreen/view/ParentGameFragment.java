@@ -13,6 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFr
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersFragment;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
@@ -66,6 +67,9 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
                     case R.id.action_characters:
                         data.setNavigationTag(NavigationScreen.GAME_CHARACTERS_FRAGMENT);
                         break;
+                    case R.id.action_pictures:
+                        data.setNavigationTag(NavigationScreen.GAME_MAPS_FRAGMENT);
+                        break;
                 }
                 navigate();
             }
@@ -104,6 +108,8 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
         switch (navigationTag) {
             case NavigationScreen.GAME_CHARACTERS_FRAGMENT:
                 return GamesCharactersFragment.class;
+            case NavigationScreen.GAME_MAPS_FRAGMENT:
+                return MapsFragment.class;
         }
         throw new IllegalArgumentException("unsupported navigationTag");
     }
@@ -112,6 +118,8 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
         switch (navigationTag) {
             case NavigationScreen.GAME_CHARACTERS_FRAGMENT:
                 return GamesCharactersFragment.newInstance(arguments);
+            case NavigationScreen.GAME_MAPS_FRAGMENT:
+                return MapsFragment.newInstance(arguments);
         }
         throw new IllegalArgumentException("unsupported navigationTag");
     }

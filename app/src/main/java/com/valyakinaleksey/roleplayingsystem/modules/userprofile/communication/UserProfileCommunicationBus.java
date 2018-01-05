@@ -1,6 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.modules.userprofile.communication;
 
-import android.content.Context;
 import com.kbeanie.multipicker.api.entity.ChosenImage;
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus;
 import com.valyakinaleksey.roleplayingsystem.core.view.PerFragmentScope;
@@ -9,11 +8,14 @@ import com.valyakinaleksey.roleplayingsystem.modules.userprofile.presenter.UserP
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileView;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.state.UserProfileViewState;
-import eu.davidea.flexibleadapter.items.IFlexible;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import eu.davidea.flexibleadapter.items.IFlexible;
 
 @PerFragmentScope
 public class UserProfileCommunicationBus extends
@@ -47,8 +49,8 @@ public class UserProfileCommunicationBus extends
     }
 
     @Override
-    public void validatePassword(Context context, String s, GameModel gameModel) {
-        presenter.validatePassword(context, s, gameModel);
+    public void validatePassword(String s, GameModel gameModel) {
+        presenter.validatePassword(s, gameModel);
     }
 
     @Override

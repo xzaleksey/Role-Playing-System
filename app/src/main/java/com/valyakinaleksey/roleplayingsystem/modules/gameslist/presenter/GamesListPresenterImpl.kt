@@ -1,6 +1,5 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gameslist.presenter
 
-import android.content.Context
 import android.os.Bundle
 import com.crashlytics.android.Crashlytics
 import com.valyakinaleksey.roleplayingsystem.R
@@ -92,7 +91,7 @@ class GamesListPresenterImpl(private val createNewGameInteractor: CreateNewGameI
                 }, { this.handleThrowable(it) }))
     }
 
-    override fun validatePassword(context: Context, s: String, gameModel: GameModel) {
+    override fun validatePassword(s: String, gameModel: GameModel) {
         compositeSubscription.add(validatePasswordInteractor.isPasswordValid(s, gameModel.password)
                 .subscribe({ isValid ->
                     if (isValid) {

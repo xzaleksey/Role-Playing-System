@@ -31,13 +31,11 @@ fun Context.showPasswordDialog(data: HasPasswordViewModel,
                                createGamePresenter: PasswordPresenter): MaterialDialog {
     val passwordDialogViewModel = data.passwordDialogViewModel
     val compositeSubscription = CompositeSubscription()
-    val dialog = MaterialDialog.Builder(this).title(R.string.input_password)
+    val dialog = MaterialDialog.Builder(this).title(passwordDialogViewModel.title)
             .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
             .input(getString(R.string.password), passwordDialogViewModel.inputPassword, false
             ) { _, input ->
-                createGamePresenter
-                        .validatePassword(this, input.toString(),
-                                passwordDialogViewModel.gameModel)
+                createGamePresenter.validatePassword(input.toString(), passwordDialogViewModel.gameModel)
             }
             .onNegative({ dialog, _ -> dialog.dismiss() })
             .dismissListener({
@@ -45,12 +43,11 @@ fun Context.showPasswordDialog(data: HasPasswordViewModel,
                 compositeSubscription.unsubscribe()
             })
             .show()
-    compositeSubscription.add(
-            RxTextView.textChanges(dialog.view.findViewById(android.R.id.input))
-                    .skip(1)
-                    .subscribe { charSequence ->
-                        passwordDialogViewModel.inputPassword = charSequence.toString()
-                    })
+    compositeSubscription.add(RxTextView.textChanges(dialog.view.findViewById(android.R.id.input))
+            .skip(1)
+            .subscribe { charSequence ->
+                passwordDialogViewModel.inputPassword = charSequence.toString()
+            })
     return dialog
 }
 

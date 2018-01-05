@@ -8,6 +8,8 @@ import com.valyakinaleksey.roleplayingsystem.core.repository.ColorRepository;
 import com.valyakinaleksey.roleplayingsystem.core.repository.ColorRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.core.repository.DrawableRepository;
 import com.valyakinaleksey.roleplayingsystem.core.repository.DrawableRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.core.repository.FirebaseInfoRepository;
+import com.valyakinaleksey.roleplayingsystem.core.repository.FirebaseInfoRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.core.repository.ResourcesProvider;
 import com.valyakinaleksey.roleplayingsystem.core.repository.ResourcesProviderImpl;
 import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository;
@@ -131,5 +133,10 @@ public class RepositoryModule {
         return new ResourcesProviderImpl(context);
     }
 
+    @Provides
+    @Singleton
+    FirebaseInfoRepository firebaseInfoRepository() {
+        return new FirebaseInfoRepositoryImpl();
+    }
 
 }
