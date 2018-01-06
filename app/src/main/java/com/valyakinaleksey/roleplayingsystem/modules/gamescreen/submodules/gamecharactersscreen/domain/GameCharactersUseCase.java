@@ -8,8 +8,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.IdDateModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.*;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import rx.Observable;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.*;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.*;
 
 public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameCharacterModel>
         implements GameCharactersInteractor {

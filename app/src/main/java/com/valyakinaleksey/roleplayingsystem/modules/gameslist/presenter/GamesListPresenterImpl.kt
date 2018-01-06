@@ -22,7 +22,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.Create
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.GamesListViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gameslist.view.model.PasswordDialogViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.createNewGame
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameDescriptionScreen

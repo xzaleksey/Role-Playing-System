@@ -2,8 +2,8 @@ package com.valyakinaleksey.roleplayingsystem.data.repository.game.map
 
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable
 import rx.Observable
 import rx.functions.Func1
 

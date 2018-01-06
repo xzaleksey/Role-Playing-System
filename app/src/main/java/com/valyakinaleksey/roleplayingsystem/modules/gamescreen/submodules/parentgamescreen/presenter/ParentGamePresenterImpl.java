@@ -12,7 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.model.ParentGameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen;
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils;
 

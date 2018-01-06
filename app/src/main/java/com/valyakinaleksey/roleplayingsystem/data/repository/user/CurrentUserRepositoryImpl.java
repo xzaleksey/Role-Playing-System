@@ -10,8 +10,8 @@ import com.valyakinaleksey.roleplayingsystem.core.model.ResponseModel;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable;
 
 import rx.Observable;
 

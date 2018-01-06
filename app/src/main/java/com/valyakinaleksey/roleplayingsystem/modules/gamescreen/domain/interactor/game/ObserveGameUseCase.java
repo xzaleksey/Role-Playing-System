@@ -6,8 +6,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 
 import rx.Observable;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_DESCRIPTION;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_NAME;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.FIELD_DESCRIPTION;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.FIELD_NAME;
 
 public class ObserveGameUseCase implements ObserveGameInteractor {
 

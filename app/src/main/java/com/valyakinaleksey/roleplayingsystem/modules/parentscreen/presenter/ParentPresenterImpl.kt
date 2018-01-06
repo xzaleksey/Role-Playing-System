@@ -18,7 +18,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.Par
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileFragment
 import com.valyakinaleksey.roleplayingsystem.utils.DeepLinksUtils
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.createFragment
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen

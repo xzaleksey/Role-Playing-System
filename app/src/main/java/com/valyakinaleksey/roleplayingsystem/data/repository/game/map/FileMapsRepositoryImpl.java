@@ -12,8 +12,8 @@ import com.kelvinapps.rxfirebase.RxFirebaseStorage;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.NotificationUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
@@ -28,9 +28,9 @@ import rx.subjects.PublishSubject;
 import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel.PHOTO_URL;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ERROR;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.STATUS;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.SUCCESS;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.ERROR;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.STATUS;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.SUCCESS;
 
 public class FileMapsRepositoryImpl implements FileMapsRepository {
 

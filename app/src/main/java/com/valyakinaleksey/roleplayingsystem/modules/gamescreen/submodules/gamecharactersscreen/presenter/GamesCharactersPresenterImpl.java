@@ -14,7 +14,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamec
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.AbstractGameCharacterListItem;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.GamesCharactersViewModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import rx.subjects.BehaviorSubject;
 import timber.log.Timber;

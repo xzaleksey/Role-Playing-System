@@ -5,7 +5,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.kelvinapps.rxfirebase.RxFirebaseStorage
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager
 import id.zelory.compressor.Compressor
 import rx.Observable

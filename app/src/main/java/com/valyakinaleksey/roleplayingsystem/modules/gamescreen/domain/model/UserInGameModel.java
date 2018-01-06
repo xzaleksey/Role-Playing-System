@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.UID;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.UID;
 
 public class UserInGameModel implements Serializable {
   public static final String FIELD_NAME = "name";

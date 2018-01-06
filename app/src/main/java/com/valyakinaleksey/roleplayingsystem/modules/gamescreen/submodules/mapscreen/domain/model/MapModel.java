@@ -8,7 +8,7 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.kelvinapps.rxfirebase.RxFirebaseStorage;
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import rx.Observable;
@@ -16,8 +16,8 @@ import rx.Observable;
 import java.io.File;
 import java.io.Serializable;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.GAME_MAPS;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.IN_PROGRESS;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable.GAME_MAPS;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.IN_PROGRESS;
 
 public class MapModel implements Serializable, Parcelable {
     public static final String MAP_MODEL_ID = "map_model_id";

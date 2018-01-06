@@ -7,8 +7,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
 import org.joda.time.DateTime;
 import rx.Observable;
@@ -16,7 +16,7 @@ import rx.Observable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.GAMES;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable.GAMES;
 
 public class CreateNewGameUseCase implements CreateNewGameInteractor {
 

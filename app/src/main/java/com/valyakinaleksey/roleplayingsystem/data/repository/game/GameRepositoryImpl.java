@@ -14,8 +14,8 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameInUserModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable;
 
 import org.jetbrains.annotations.NotNull;
 import rx.Observable;
@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameInUserModel.FIELD_LAST_VISITED_DATE;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.*;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.*;
 
 public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel>
         implements GameRepository {

@@ -4,9 +4,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.abstractions.BaseGameTEditInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.GAME_CLASSES;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable.GAME_CLASSES;
 
 public class GameClassesUsecase extends BaseGameTEditInteractorImpl<GameClassModel>
     implements GameClassesInteractor {

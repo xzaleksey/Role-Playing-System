@@ -15,8 +15,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.SUCCESS
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.SUCCESS
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils

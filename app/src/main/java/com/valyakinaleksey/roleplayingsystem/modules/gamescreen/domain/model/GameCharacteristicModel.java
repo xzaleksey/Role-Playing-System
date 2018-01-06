@@ -2,11 +2,11 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.google.firebase.database.PropertyName;
+
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasDescription;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasName;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+
 import java.io.Serializable;
 
 public class GameCharacteristicModel

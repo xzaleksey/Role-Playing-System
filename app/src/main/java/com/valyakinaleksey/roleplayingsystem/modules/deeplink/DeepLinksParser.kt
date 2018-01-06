@@ -5,7 +5,7 @@ import android.content.Intent
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthActivity
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity
 import com.valyakinaleksey.roleplayingsystem.utils.DeepLinksUtils
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
 
 const val SCREEN = "screen"

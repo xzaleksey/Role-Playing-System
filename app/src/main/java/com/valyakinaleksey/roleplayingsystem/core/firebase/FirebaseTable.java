@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.utils;
+package com.valyakinaleksey.roleplayingsystem.core.firebase;
 
 import android.support.annotation.StringDef;
 

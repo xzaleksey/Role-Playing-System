@@ -9,9 +9,9 @@ import com.valyakinaleksey.roleplayingsystem.core.model.DefaultModelProvider
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.*
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.CHARACTERS_IN_USER
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable.CHARACTERS_IN_USER
 import rx.Observable
 import rx.functions.Func3
 

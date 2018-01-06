@@ -4,7 +4,7 @@ import android.support.annotation.PluralsRes;
 import android.support.annotation.StringRes;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FORMAT_SLASHES;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.FORMAT_SLASHES;
 
 public class StringUtils {
   public static final String EMPTY_STRING = "";

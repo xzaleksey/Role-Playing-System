@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.utils;
+package com.valyakinaleksey.roleplayingsystem.core.firebase;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,6 +15,7 @@ import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.kelvinapps.rxfirebase.RxHandler;
 import com.kelvinapps.rxfirebase.exceptions.RxFirebaseDataException;
 import com.valyakinaleksey.roleplayingsystem.core.utils.lambda.Executor;
+import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 

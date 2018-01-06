@@ -4,8 +4,8 @@ import com.google.firebase.database.DatabaseReference
 import com.valyakinaleksey.roleplayingsystem.core.firebase.AbstractFirebaseGameRepositoryImpl
 import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseGameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameClassModel
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable
 
 
 class ClassesRepositoryImpl() : AbstractFirebaseGameRepositoryImpl<GameClassModel>(

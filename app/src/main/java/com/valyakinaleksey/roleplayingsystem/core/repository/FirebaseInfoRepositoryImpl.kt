@@ -1,6 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.core.repository
 
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
 
 class FirebaseInfoRepositoryImpl : FirebaseInfoRepository {
 

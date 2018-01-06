@@ -26,7 +26,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.userprofile.domain.UserProf
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileView
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.model.UserProfileViewModel.CHANGE_USER_NAME
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.getCheckUserInGameObservable
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.getValidatePasswordSubscription
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameDescriptionScreen

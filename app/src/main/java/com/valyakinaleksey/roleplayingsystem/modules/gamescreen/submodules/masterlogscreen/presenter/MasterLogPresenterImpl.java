@@ -11,9 +11,9 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maste
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.MasterLogView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.model.MasterLogModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.GAME_LOG;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable.GAME_LOG;
 
 public class MasterLogPresenterImpl extends BasePresenter<MasterLogView, MasterLogModel>
     implements MasterLogPresenter {

@@ -4,15 +4,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.model.MasterLogMessage;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
-import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable;
 
 import java.util.HashMap;
 import org.joda.time.DateTime;
 import rx.Observable;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.TEMP_DATE_CREATE;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.ID;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.TEMP_DATE_CREATE;
 
 public class MasterLogUseCase implements MasterLogInteractor {
 

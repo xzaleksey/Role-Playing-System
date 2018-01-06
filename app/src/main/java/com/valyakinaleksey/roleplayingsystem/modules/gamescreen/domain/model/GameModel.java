@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_NAME;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ID;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.FIELD_NAME;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.ID;
 
 public class GameModel implements Serializable, Parcelable, HasId {
   public static final String FIELD_FINISHED = "finished";

@@ -38,8 +38,8 @@ import timber.log.Timber;
 
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_MASTER_GAME_DESCRIPTION;
 import static com.valyakinaleksey.roleplayingsystem.utils.AdapterConstants.TYPE_MASTER_GAME_NAME;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_DESCRIPTION;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.FIELD_NAME;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.FIELD_DESCRIPTION;
+import static com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils.FIELD_NAME;
 
 public class MasterGameEditPresenterImpl
     extends BasePresenter<MasterGameEditView, MasterGameEditModel>
