@@ -11,6 +11,7 @@ import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +49,7 @@ public class UserRepositoryImpl implements UserRepository {
             subscription.unsubscribe();
         }
         subscription = observeChildEvent(
-                FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS)).compose(
+                FirebaseDatabase.getInstance().getReference().child(FirebaseTable.USERS)).compose(
                 RxTransformers.applyIoSchedulers()).subscribe(firebaseChildEvent -> {
             User value = firebaseChildEvent.getValue().getValue(User.class);
             switch (firebaseChildEvent.getEventType()) {
@@ -80,11 +81,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Observable<User> observeUser(String uid) {
-        return RxFirebaseDatabase.observeValueEvent(FireBaseUtils.getTableReference(FireBaseUtils.USERS).child(uid), User.class);
+        return RxFirebaseDatabase.observeValueEvent(FireBaseUtils.getTableReference(FirebaseTable.USERS).child(uid), User.class);
     }
 
     public Observable<Map<String, User>> getUsersMapFromServer() {
-        DatabaseReference child = FireBaseUtils.getTableReference(FireBaseUtils.USERS);
+        DatabaseReference child = FireBaseUtils.getTableReference(FirebaseTable.USERS);
         return FireBaseUtils.checkReferenceExistsAndNotEmpty(child).switchMap(aBoolean -> {
             if (aBoolean) {
                 return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(child);
@@ -120,7 +121,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Observable<List<User>> getUserByGameId(String id) {
         DatabaseReference databaseReference =
-                FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.GAMES_IN_USERS).child(id);
+                FirebaseDatabase.getInstance().getReference().child(FirebaseTable.GAMES_IN_USERS).child(id);
         return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(databaseReference)
                 .map(dataSnapshot -> {
                     List<User> users = new ArrayList<>();
@@ -134,13 +135,13 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Observable<RxFirebaseChildEvent<DataSnapshot>> observeUsersInGame(String id) {
         DatabaseReference databaseReference =
-                FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME).child(id);
+                FirebaseDatabase.getInstance().getReference().child(FirebaseTable.USERS_IN_GAME).child(id);
         return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeChildEvent(databaseReference);
     }
 
     @Override
     public Observable<User> getUserByUidFromServer(String uid) {
-        DatabaseReference child = FireBaseUtils.getTableReference(FireBaseUtils.USERS).child(uid);
+        DatabaseReference child = FireBaseUtils.getTableReference(FirebaseTable.USERS).child(uid);
         return FireBaseUtils.checkReferenceExistsAndNotEmpty(child).switchMap(aBoolean -> {
             if (aBoolean) {
                 return com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(child,

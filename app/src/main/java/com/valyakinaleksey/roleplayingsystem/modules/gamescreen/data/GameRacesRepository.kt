@@ -5,12 +5,13 @@ import com.valyakinaleksey.roleplayingsystem.core.firebase.AbstractFirebaseGameR
 import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseGameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable
 
 class GameRacesRepositoryImpl() : AbstractFirebaseGameRepositoryImpl<GameRaceModel>(
         GameRaceModel::class.java), GameRacesRepository {
 
     override fun getDataBaseReference(gameId: String): DatabaseReference {
-        return FireBaseUtils.getTableReference(FireBaseUtils.GAME_RACES).child(gameId)
+        return FireBaseUtils.getTableReference(FirebaseTable.GAME_RACES).child(gameId)
     }
 
 }

@@ -6,7 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_RACES;
+import static com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.GAME_RACES;
 
 public class GameRacesUsecase extends BaseGameTEditInteractorImpl<GameRaceModel>
     implements GameRacesInteractor {

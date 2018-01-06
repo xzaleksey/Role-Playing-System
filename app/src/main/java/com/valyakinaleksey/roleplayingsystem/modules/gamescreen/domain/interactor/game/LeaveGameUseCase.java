@@ -8,19 +8,19 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameCharacterModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+
 import rx.Observable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.*;
 
 public class LeaveGameUseCase implements LeaveGameInteractor {
     @Override
     public Observable<Void> leaveGame(GameModel gameModel) {
         String currentUserId = FireBaseUtils.getCurrentUserId();
         DatabaseReference gameCharactersReference =
-                FireBaseUtils.getTableReference(GAME_CHARACTERS).child(gameModel.getId());
+                FireBaseUtils.getTableReference(FirebaseTable.GAME_CHARACTERS).child(gameModel.getId());
         return RxFirebaseDatabase.observeSingleValueEvent(gameCharactersReference)
                 .switchMap(dataSnapshot -> {
                     List<GameCharacterModel> gameCharacterModels = new ArrayList<>();
@@ -37,19 +37,19 @@ public class LeaveGameUseCase implements LeaveGameInteractor {
                         gameCharacterModel1 -> gameCharacterModel1.setUid(null)))
                 .toList()
                 .switchMap(dataSnapshot -> FireBaseUtils.setData(null,
-                        FireBaseUtils.getTableReference(USERS_IN_GAME)
+                        FireBaseUtils.getTableReference(FirebaseTable.USERS_IN_GAME)
                                 .child(gameModel.getId())
                                 .child(currentUserId)))
                 .switchMap(aVoid -> FireBaseUtils.setData(null,
-                        FireBaseUtils.getTableReference(GAMES_IN_USERS)
+                        FireBaseUtils.getTableReference(FirebaseTable.GAMES_IN_USERS)
                                 .child(currentUserId)
                                 .child(gameModel.getId())))
-                .switchMap(aVoid -> FireBaseUtils.setData(null, FireBaseUtils.getTableReference(CHARACTERS_IN_USER)
+                .switchMap(aVoid -> FireBaseUtils.setData(null, FireBaseUtils.getTableReference(FirebaseTable.CHARACTERS_IN_USER)
                         .child(currentUserId)
                         .child(gameModel.getId()))
                 )
                 .switchMap(aVoid -> FireBaseUtils.startTransaction(
-                        FireBaseUtils.getTableReference(USERS).child(currentUserId), data -> {
+                        FireBaseUtils.getTableReference(FirebaseTable.USERS).child(currentUserId), data -> {
                             User user = data.getValue(User.class);
                             if (user == null) {
                                 return Transaction.success(data);

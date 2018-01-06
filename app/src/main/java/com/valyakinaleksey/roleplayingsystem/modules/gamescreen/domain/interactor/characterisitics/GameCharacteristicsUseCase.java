@@ -6,7 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_CHARACTERISTICS;
+import static com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.GAME_CHARACTERISTICS;
 
 public class GameCharacteristicsUseCase extends BaseGameTEditInteractorImpl<GameCharacteristicModel>
     implements GameCharacteristicsInteractor {

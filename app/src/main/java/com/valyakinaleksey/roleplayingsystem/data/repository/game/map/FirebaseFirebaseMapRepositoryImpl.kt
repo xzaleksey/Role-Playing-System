@@ -3,12 +3,13 @@ package com.valyakinaleksey.roleplayingsystem.data.repository.game.map
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable
 import rx.Observable
 import rx.functions.Func1
 
 class FirebaseFirebaseMapRepositoryImpl : FirebaseMapRepository {
   private fun query(gameId: String) = FireBaseUtils.getTableReference(
-      FireBaseUtils.GAME_MAPS).child(gameId)
+          FirebaseTable.GAME_MAPS).child(gameId)
 
   override fun observeMaps(gameId: String): Observable<Map<String, MapModel>> {
     val observeValueEvent = RxFirebaseDatabase.observeValueEvent<Map<String, MapModel>>(

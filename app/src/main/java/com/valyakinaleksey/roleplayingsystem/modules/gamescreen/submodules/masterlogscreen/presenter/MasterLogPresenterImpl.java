@@ -13,7 +13,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maste
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_LOG;
+import static com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.GAME_LOG;
 
 public class MasterLogPresenterImpl extends BasePresenter<MasterLogView, MasterLogModel>
     implements MasterLogPresenter {

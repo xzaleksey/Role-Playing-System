@@ -11,6 +11,8 @@ import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+
 import rx.Observable;
 
 public class CurrentUserRepositoryImpl implements CurrentUserRepository {
@@ -53,7 +55,7 @@ public class CurrentUserRepositoryImpl implements CurrentUserRepository {
     }
 
     private DatabaseReference getGameReference(String gameId) {
-        return FireBaseUtils.getTableReference(FireBaseUtils.GAMES).child(gameId);
+        return FireBaseUtils.getTableReference(FirebaseTable.GAMES).child(gameId);
     }
 
 
@@ -65,12 +67,12 @@ public class CurrentUserRepositoryImpl implements CurrentUserRepository {
                     UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
                     builder.setPhotoUri(Uri.parse(photoUrl));
                     return RxFirebaseUser.updateProfile(currentUser, builder.build())
-                            .concatMap(aVoid -> FireBaseUtils.setData(photoUrl, FireBaseUtils.getTableReference(FireBaseUtils.USERS)
+                            .concatMap(aVoid -> FireBaseUtils.setData(photoUrl, FireBaseUtils.getTableReference(FirebaseTable.USERS)
                                     .child(currentUser.getUid()).child(User.FIELD_PHOTO_URL))).map(aVoid -> photoUrl);
                 });
     }
 
     private DatabaseReference getDatabaseReference(FirebaseUser currentUser) {
-        return FireBaseUtils.getTableReference(FireBaseUtils.USERS).child(currentUser.getUid());
+        return FireBaseUtils.getTableReference(FirebaseTable.USERS).child(currentUser.getUid());
     }
 }

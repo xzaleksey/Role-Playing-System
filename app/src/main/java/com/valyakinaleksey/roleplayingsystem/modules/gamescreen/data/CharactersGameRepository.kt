@@ -10,7 +10,8 @@ import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.*
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.CHARACTERS_IN_USER
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.CHARACTERS_IN_USER
 import rx.Observable
 import rx.functions.Func3
 
@@ -22,7 +23,7 @@ class CharactersRepositoryImpl(
 ) : AbstractFirebaseGameRepositoryImpl<GameCharacterModel>(GameCharacterModel::class.java), CharactersGameRepository {
 
     override fun getDataBaseReference(gameId: String): DatabaseReference {
-        return FireBaseUtils.getTableReference(FireBaseUtils.GAME_CHARACTERS).child(gameId)
+        return FireBaseUtils.getTableReference(FirebaseTable.GAME_CHARACTERS).child(gameId)
     }
 
     override fun observeData(gameId: String): Observable<MutableMap<String, GameCharacterModel>> {
@@ -56,7 +57,7 @@ class CharactersRepositoryImpl(
     }
 
     private fun getCharacter(characterId: String, gameId: String): Observable<GameCharacterModel> {
-        return RxFirebaseDatabase.observeSingleValueEvent(FireBaseUtils.getTableReference(FireBaseUtils.GAME_CHARACTERS).child(gameId).child(characterId))
+        return RxFirebaseDatabase.observeSingleValueEvent(FireBaseUtils.getTableReference(FirebaseTable.GAME_CHARACTERS).child(gameId).child(characterId))
                 .concatMap { t ->
                     if (t.exists()) {
                         val gameCharacterModel = t.getValue(GameCharacterModel::class.java)!!

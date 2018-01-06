@@ -15,6 +15,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+
 import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 import rx.Subscription;
@@ -93,7 +95,7 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
     }
 
     private DatabaseReference getChildReference(String id) {
-        return FirebaseDatabase.getInstance().getReference().child(GAMES).child(id);
+        return FirebaseDatabase.getInstance().getReference().child(FirebaseTable.GAMES).child(id);
     }
 
     @Override
@@ -101,7 +103,7 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         PublishSubject<Boolean> booleanPublishSubject = PublishSubject.create();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference usersInGame = reference.child(USERS_IN_GAME).child(id);
+        DatabaseReference usersInGame = reference.child(FirebaseTable.USERS_IN_GAME).child(id);
         com.kelvinapps.rxfirebase.RxFirebaseDatabase.observeSingleValueEvent(usersInGame)
                 .subscribe(dataSnapshot -> {
                     Map<String, Object> childUpdates = new HashMap<>();
@@ -109,18 +111,18 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
                         UserInGameModel userInGameModel = data.getValue(UserInGameModel.class);
                         String uid = userInGameModel.getUid();
                         childUpdates.put(
-                                String.format(FORMAT_SLASHES, GAMES_IN_USERS) + uid + "/" + id, null);
+                                String.format(FORMAT_SLASHES, FirebaseTable.GAMES_IN_USERS) + uid + "/" + id, null);
                         childUpdates.put(
-                                String.format(FORMAT_SLASHES, CHARACTERS_IN_USER) + uid + "/" + id, null);
+                                String.format(FORMAT_SLASHES, FirebaseTable.CHARACTERS_IN_USER) + uid + "/" + id, null);
                     }
-                    childUpdates.put(String.format(FORMAT_SLASHES, GAMES) + id, null);
-                    childUpdates.put(String.format(FORMAT_SLASHES, GAMES_IN_USERS) + getCurrentUserId() + "/" + id, null);
-                    childUpdates.put(String.format(FORMAT_SLASHES, USERS_IN_GAME) + id, null);
-                    childUpdates.put(String.format(FORMAT_SLASHES, GAME_CHARACTERISTICS) + id, null);
-                    childUpdates.put(String.format(FORMAT_SLASHES, GAME_CLASSES) + id, null);
-                    childUpdates.put(String.format(FORMAT_SLASHES, GAME_RACES) + id, null);
-                    childUpdates.put(String.format(FORMAT_SLASHES, GAME_LOG) + id, null);
-                    childUpdates.put(String.format(FORMAT_SLASHES, GAME_CHARACTERS) + id, null);
+                    childUpdates.put(String.format(FORMAT_SLASHES, FirebaseTable.GAMES) + id, null);
+                    childUpdates.put(String.format(FORMAT_SLASHES, FirebaseTable.GAMES_IN_USERS) + getCurrentUserId() + "/" + id, null);
+                    childUpdates.put(String.format(FORMAT_SLASHES, FirebaseTable.USERS_IN_GAME) + id, null);
+                    childUpdates.put(String.format(FORMAT_SLASHES, FirebaseTable.GAME_CHARACTERISTICS) + id, null);
+                    childUpdates.put(String.format(FORMAT_SLASHES, FirebaseTable.GAME_CLASSES) + id, null);
+                    childUpdates.put(String.format(FORMAT_SLASHES, FirebaseTable.GAME_RACES) + id, null);
+                    childUpdates.put(String.format(FORMAT_SLASHES, FirebaseTable.GAME_LOG) + id, null);
+                    childUpdates.put(String.format(FORMAT_SLASHES, FirebaseTable.GAME_CHARACTERS) + id, null);
                     databaseReference.updateChildren(childUpdates);
                     booleanPublishSubject.onNext(true);
                 }, throwable -> {
@@ -133,7 +135,7 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
 
     @Override
     public Observable<Map<String, GameModel>> getLastGamesModelByUserId(String userId, int lastGamesCount) {
-        DatabaseReference databaseReference = FireBaseUtils.getTableReference(GAMES_IN_USERS).child(userId);
+        DatabaseReference databaseReference = FireBaseUtils.getTableReference(FirebaseTable.GAMES_IN_USERS).child(userId);
         return Observable.combineLatest(observeData(), RxFirebaseDatabase.observeValueEvent(databaseReference), (stringGameModelMap, dataSnapshot) -> {
             Map<Long, String> gameInUserModelsIds = new TreeMap<>();
             LinkedHashMap<String, GameModel> gameModels = new LinkedHashMap<>();
@@ -164,7 +166,7 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
 
     @Override
     public Observable<Map<String, GameModel>> getGamesByUserId(String userId) {
-        DatabaseReference databaseReference = FireBaseUtils.getTableReference(GAMES_IN_USERS).child(userId);
+        DatabaseReference databaseReference = FireBaseUtils.getTableReference(FirebaseTable.GAMES_IN_USERS).child(userId);
         return Observable.combineLatest(observeData(), RxFirebaseDatabase.observeValueEvent(databaseReference), (stringGameModelMap, dataSnapshot) -> {
             Map<Long, String> gameInUserModelsIds = new TreeMap<>();
             LinkedHashMap<String, GameModel> gameModels = new LinkedHashMap<>();
@@ -190,7 +192,7 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
 
     @Override
     public Observable<Void> updateLastVisit(String id) {
-        return FireBaseUtils.setData(ServerValue.TIMESTAMP, FireBaseUtils.getTableReference(GAMES_IN_USERS)
+        return FireBaseUtils.setData(ServerValue.TIMESTAMP, FireBaseUtils.getTableReference(FirebaseTable.GAMES_IN_USERS)
                 .child(FireBaseUtils.getCurrentUserId())
                 .child(id)
                 .child(FIELD_LAST_VISITED_DATE));
@@ -199,7 +201,7 @@ public class GameRepositoryImpl extends AbstractFirebaseRepositoryImpl<GameModel
     @NotNull
     @Override
     public DatabaseReference getDataBaseReference() {
-        return FireBaseUtils.getTableReference(FireBaseUtils.GAMES);
+        return FireBaseUtils.getTableReference(FirebaseTable.GAMES);
     }
 }
       

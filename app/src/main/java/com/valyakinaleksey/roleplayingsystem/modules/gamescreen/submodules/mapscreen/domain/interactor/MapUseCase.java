@@ -15,6 +15,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapsc
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.presenter.MapHandler;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.model.MapsListFlexibleModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+
 import eu.davidea.flexibleadapter.items.IFlexible;
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class MapUseCase implements MapsInteractor {
   private DatabaseReference getReference(String gameModelId) {
     return FirebaseDatabase.getInstance()
         .getReference()
-        .child(FireBaseUtils.GAME_MAPS)
+        .child(FirebaseTable.GAME_MAPS)
         .child(gameModelId);
   }
 

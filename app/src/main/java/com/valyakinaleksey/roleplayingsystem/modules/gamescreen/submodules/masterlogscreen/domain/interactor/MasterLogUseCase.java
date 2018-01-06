@@ -5,6 +5,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.model.MasterLogMessage;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+
 import java.util.HashMap;
 import org.joda.time.DateTime;
 import rx.Observable;
@@ -33,7 +35,7 @@ public class MasterLogUseCase implements MasterLogInteractor {
   private DatabaseReference getReference(GameModel gameModel) {
     return FirebaseDatabase.getInstance()
         .getReference()
-        .child(FireBaseUtils.GAME_LOG)
+        .child(FirebaseTable.GAME_LOG)
         .child(gameModel.getId());
   }
 }

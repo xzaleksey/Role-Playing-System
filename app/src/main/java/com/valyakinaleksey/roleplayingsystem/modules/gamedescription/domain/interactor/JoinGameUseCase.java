@@ -10,6 +10,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+
 import rx.Observable;
 
 import java.util.HashMap;
@@ -26,16 +28,16 @@ public class JoinGameUseCase implements JoinGameInteractor {
         putGameInUsers(gameModel, uid, childUpdates);
         databaseReference.updateChildren(childUpdates);
         return RxFirebaseDatabase.observeSingleValueEvent(
-                databaseReference.child(FireBaseUtils.USERS_IN_GAME).child(gameModel.getId()))
+                databaseReference.child(FirebaseTable.USERS_IN_GAME).child(gameModel.getId()))
                 .switchMap(dataSnapshot -> FireBaseUtils.startTransaction(
-                        FireBaseUtils.getTableReference(FireBaseUtils.USERS).child(FireBaseUtils.getCurrentUserId()),
+                        FireBaseUtils.getTableReference(FirebaseTable.USERS).child(FireBaseUtils.getCurrentUserId()),
                         User.class,
                         user -> user.setCountOfGamesPlayed(user.getCountOfGamesPlayed() + 1)));
     }
 
     private void putGameInUsers(GameModel gameModel, String uid, Map<String, Object> childUpdates) {
         GameInUserModel gameInUserModel = new GameInUserModel();
-        childUpdates.put(String.format(FireBaseUtils.FORMAT_SLASHES, FireBaseUtils.GAMES_IN_USERS)
+        childUpdates.put(String.format(FireBaseUtils.FORMAT_SLASHES, FirebaseTable.GAMES_IN_USERS)
                 + uid
                 + "/"
                 + gameModel.getId(), gameInUserModel.toMap());
@@ -44,7 +46,7 @@ public class JoinGameUseCase implements JoinGameInteractor {
     private void putUserInGame(GameModel gameModel, FirebaseUser currentUser, String uid, Map<String, Object> childUpdates) {
         UserInGameModel userInGameModel =
                 new UserInGameModel(uid, FireBaseUtils.usernameFromEmail(currentUser.getEmail()));
-        childUpdates.put(String.format(FireBaseUtils.FORMAT_SLASHES, FireBaseUtils.USERS_IN_GAME)
+        childUpdates.put(String.format(FireBaseUtils.FORMAT_SLASHES, FirebaseTable.USERS_IN_GAME)
                 + gameModel.getId()
                 + "/"
                 + uid, userInGameModel.toMap());

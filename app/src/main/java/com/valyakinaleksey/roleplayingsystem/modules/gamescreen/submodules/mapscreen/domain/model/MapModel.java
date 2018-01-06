@@ -8,7 +8,7 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.kelvinapps.rxfirebase.RxFirebaseStorage;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import rx.Observable;
@@ -16,7 +16,7 @@ import rx.Observable;
 import java.io.File;
 import java.io.Serializable;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAME_MAPS;
+import static com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.GAME_MAPS;
 import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.IN_PROGRESS;
 
 public class MapModel implements Serializable, Parcelable {
@@ -124,7 +124,7 @@ public class MapModel implements Serializable, Parcelable {
     @Exclude
     public File getLocalFile() {
         return new File(StorageUtils.getImagesCacheDirectory()
-                .concat(StringUtils.formatWithSlashes(FireBaseUtils.GAME_MAPS))
+                .concat(StringUtils.formatWithSlashes(FirebaseTable.GAME_MAPS))
                 .concat(gameId)
                 .concat("/")
                 .concat(id)

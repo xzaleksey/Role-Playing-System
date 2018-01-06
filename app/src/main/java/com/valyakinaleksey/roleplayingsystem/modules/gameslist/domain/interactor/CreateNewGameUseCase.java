@@ -8,6 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
 import org.joda.time.DateTime;
 import rx.Observable;
@@ -15,7 +16,7 @@ import rx.Observable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.GAMES;
+import static com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable.GAMES;
 
 public class CreateNewGameUseCase implements CreateNewGameInteractor {
 
@@ -57,7 +58,7 @@ public class CreateNewGameUseCase implements CreateNewGameInteractor {
     }
 
     private String getGameInUserReference(String key, String currentUserId) {
-        return String.format(FireBaseUtils.FORMAT_SLASHES, FireBaseUtils.GAMES_IN_USERS)
+        return String.format(FireBaseUtils.FORMAT_SLASHES, FirebaseTable.GAMES_IN_USERS)
                 + currentUserId
                 + "/"
                 + key;
@@ -65,7 +66,7 @@ public class CreateNewGameUseCase implements CreateNewGameInteractor {
 
     @NonNull
     private String getGameReference(String key) {
-        return String.format(FireBaseUtils.FORMAT_SLASHES, FireBaseUtils.GAMES) + key;
+        return String.format(FireBaseUtils.FORMAT_SLASHES, FirebaseTable.GAMES) + key;
     }
 }
       

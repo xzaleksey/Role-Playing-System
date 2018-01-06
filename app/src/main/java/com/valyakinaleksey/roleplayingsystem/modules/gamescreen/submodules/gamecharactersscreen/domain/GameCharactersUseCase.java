@@ -9,6 +9,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.IdDateModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.model.*;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import rx.Observable;
@@ -31,7 +32,7 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
 
     @Override
     public DatabaseReference getDatabaseReference(GameModel gameModel) {
-        return getTableReference(GAME_CHARACTERS).child(gameModel.getId());
+        return getTableReference(FirebaseTable.GAME_CHARACTERS).child(gameModel.getId());
     }
 
     @Override
@@ -127,7 +128,7 @@ public class GameCharactersUseCase extends BaseGameTEditInteractorImpl<GameChara
                     String currentUserId = FireBaseUtils.getCurrentUserId();
                     characterModel.setUid(currentUserId);
                     data.setValue(characterModel);
-                    FireBaseUtils.getTableReference(CHARACTERS_IN_USER)
+                    FireBaseUtils.getTableReference(FirebaseTable.CHARACTERS_IN_USER)
                             .child(currentUserId)
                             .child(gameModel.getId()).setValue(
                             new IdDateModel(gameCharacterModel.getId(), System.currentTimeMillis()));

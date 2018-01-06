@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -16,7 +17,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.*;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kelvinapps.rxfirebase.RxFirebaseUser;
@@ -39,16 +44,19 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.view.AuthView;
 import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.AuthViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
-
-import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
 
 @PerFragmentScope
 public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
@@ -292,7 +300,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
                     }
                 }
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-                reference.child(FireBaseUtils.USERS).child(userId).setValue(newUser);
+                reference.child(FirebaseTable.USERS).child(userId).setValue(newUser);
                 return newUser;
             } else {
                 HashMap<String, Object> map = new HashMap<>();
@@ -311,7 +319,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
                     map.put(User.FIELD_EMAIL, email);
                 }
                 if (!map.isEmpty()) {
-                    FireBaseUtils.getTableReference(FireBaseUtils.USERS).child(userId).updateChildren(map);
+                    FireBaseUtils.getTableReference(FirebaseTable.USERS).child(userId).updateChildren(map);
                 }
             }
             return oldUser;

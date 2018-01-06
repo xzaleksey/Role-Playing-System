@@ -4,7 +4,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.SimpleCrypto;
 import rx.Observable;
 import timber.log.Timber;
@@ -21,7 +21,7 @@ public class EditGameUseCase implements EditGameInteractor {
     return Observable.just(gameModel).switchMap(gameModel1 -> {
       DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
       DatabaseReference gamesName =
-          reference.child(FireBaseUtils.GAMES).child(gameModel.getId()).child(fieldName);
+          reference.child(FirebaseTable.GAMES).child(gameModel.getId()).child(fieldName);
       gamesName.setValue(o);
       return RxFirebaseDatabase.observeSingleValueEvent(gamesName)
           .map(dataSnapshot -> {

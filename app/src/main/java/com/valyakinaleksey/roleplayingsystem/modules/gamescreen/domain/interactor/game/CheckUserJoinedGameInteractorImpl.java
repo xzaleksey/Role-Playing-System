@@ -5,7 +5,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.UserInGameModel;
-import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
+
 import rx.Observable;
 
 public class CheckUserJoinedGameInteractorImpl implements CheckUserJoinedGameInteractor {
@@ -13,7 +14,7 @@ public class CheckUserJoinedGameInteractorImpl implements CheckUserJoinedGameInt
     public Observable<Boolean> checkUserInGame(String userId, GameModel gameModel) {
         if (gameModel.getMasterId().equals(userId)) return Observable.just(true); // master of the game
 
-      return RxFirebaseDatabase.observeSingleValueEvent(FirebaseDatabase.getInstance().getReference().child(FireBaseUtils.USERS_IN_GAME).child(gameModel.getId()))
+      return RxFirebaseDatabase.observeSingleValueEvent(FirebaseDatabase.getInstance().getReference().child(FirebaseTable.USERS_IN_GAME).child(gameModel.getId()))
                 .map(dataSnapshot -> {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         UserInGameModel gameUserModel = snapshot.getValue(UserInGameModel.class);

@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.data.repository.game.map;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -12,20 +13,24 @@ import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
 import com.valyakinaleksey.roleplayingsystem.di.app.RpsApp;
 import com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils;
+import com.valyakinaleksey.roleplayingsystem.utils.FirebaseTable;
 import com.valyakinaleksey.roleplayingsystem.utils.NotificationUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.PathManager;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
-import id.zelory.compressor.Compressor;
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import timber.log.Timber;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import id.zelory.compressor.Compressor;
+import rx.Observable;
+import rx.subjects.PublishSubject;
+import timber.log.Timber;
+
 import static com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.model.MapModel.PHOTO_URL;
-import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.*;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.ERROR;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.STATUS;
+import static com.valyakinaleksey.roleplayingsystem.utils.FireBaseUtils.SUCCESS;
 
 public class FileMapsRepositoryImpl implements FileMapsRepository {
 
@@ -52,7 +57,7 @@ public class FileMapsRepositoryImpl implements FileMapsRepository {
 
     @Override
     public Observable<Integer> uploadMapToFirebase(Uri fileUri, String gameId, String mapId) {
-        final StorageReference photoRef = storageReference.child(GAME_MAPS)
+        final StorageReference photoRef = storageReference.child(FirebaseTable.GAME_MAPS)
                 .child(gameId)
                 .child(mapId)
                 .child(fileUri.getLastPathSegment());
@@ -105,7 +110,7 @@ public class FileMapsRepositoryImpl implements FileMapsRepository {
     @Override
     public Observable<Void> deleteMap(String gameId, String mapId, String fileName) {
         return RxFirebaseStorage.delete(
-                storageReference.child(GAME_MAPS).child(gameId).child(mapId).child(fileName))
+                storageReference.child(FirebaseTable.GAME_MAPS).child(gameId).child(mapId).child(fileName))
                 .doOnNext(aVoid -> {
                     String newDirectory = getLocalDirectory(gameId, mapId);
                     File file = new File(newDirectory);
@@ -117,13 +122,13 @@ public class FileMapsRepositoryImpl implements FileMapsRepository {
     }
 
     private DatabaseReference getReference(String gameModelId) {
-        return FirebaseDatabase.getInstance().getReference().child(GAME_MAPS).child(gameModelId);
+        return FirebaseDatabase.getInstance().getReference().child(FirebaseTable.GAME_MAPS).child(gameModelId);
     }
 
     @NonNull
     private String getLocalDirectory(String gameId, String key) {
         return pathManager.getImagesCachePath()
-                .concat(StringUtils.formatWithSlashes(GAME_MAPS))
+                .concat(StringUtils.formatWithSlashes(FirebaseTable.GAME_MAPS))
                 .concat(gameId)
                 .concat("/")
                 .concat(key);
