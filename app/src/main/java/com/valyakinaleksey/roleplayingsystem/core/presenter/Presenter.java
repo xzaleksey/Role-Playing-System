@@ -40,6 +40,9 @@ public interface Presenter<V extends View> {
      */
     void onCreate(@Nullable Bundle arguments, @Nullable Bundle savedInstanceState);
 
+    /**
+     * Request data
+     */
     void getData();
 
     /**

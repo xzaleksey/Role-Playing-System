@@ -7,9 +7,12 @@ import android.support.v4.app.Fragment;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.AbsSingleFragmentActivity;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.ParentFragment;
+import com.valyakinaleksey.roleplayingsystem.utils.KeyboardFix;
 import com.valyakinaleksey.roleplayingsystem.utils.StorageUtils;
 
 public class ParentActivity extends AbsSingleFragmentActivity {
+
+    private KeyboardFix keyboardFix;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -17,6 +20,14 @@ public class ParentActivity extends AbsSingleFragmentActivity {
         if (savedInstanceState == null) {
             initNavigate();
         }
+        keyboardFix = new KeyboardFix(this, container);
+        keyboardFix.enable();
+    }
+
+    @Override
+    protected void onDestroy() {
+        keyboardFix.disable();
+        super.onDestroy();
     }
 
     @Override

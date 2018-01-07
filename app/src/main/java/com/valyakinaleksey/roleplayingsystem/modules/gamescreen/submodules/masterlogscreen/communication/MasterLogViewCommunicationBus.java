@@ -31,11 +31,6 @@ public class MasterLogViewCommunicationBus
     }
 
     @Override
-    public void loadComplete() {
-        getPresenter().loadComplete();
-    }
-
-    @Override
     public void sendMessage(String s) {
         presenter.sendMessage(s);
     }

@@ -2,76 +2,65 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mast
 
 import android.os.Bundle;
 
-import com.crashlytics.android.Crashlytics;
-import com.google.firebase.database.FirebaseDatabase;
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter;
+import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver;
+import com.valyakinaleksey.roleplayingsystem.core.rx.SkipObserver;
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.interactor.MasterLogInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.domain.model.MasterLogMessage;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.MasterLogView;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.model.MasterLogModel;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
-import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils;
 
-import static com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable.GAME_LOG;
+import java.util.List;
+
+import eu.davidea.flexibleadapter.items.IFlexible;
 
 public class MasterLogPresenterImpl extends BasePresenter<MasterLogView, MasterLogModel>
-    implements MasterLogPresenter {
+        implements MasterLogPresenter {
 
-  private MasterLogInteractor masterLogInteractor;
+    private MasterLogInteractor masterLogInteractor;
 
-  public MasterLogPresenterImpl(MasterLogInteractor masterLogInteractor) {
-    this.masterLogInteractor = masterLogInteractor;
-  }
+    public MasterLogPresenterImpl(MasterLogInteractor masterLogInteractor) {
+        this.masterLogInteractor = masterLogInteractor;
+    }
 
-  @SuppressWarnings("unchecked") @Override
-  protected MasterLogModel initNewViewModel(Bundle arguments) {
-    final MasterLogModel masterLogModel = new MasterLogModel();
-    GameModel gameModel = arguments.getParcelable(GameModel.KEY);
-    masterLogModel.setGameModel(gameModel);
-    setDatabaseReference(masterLogModel);
-    return masterLogModel;
-  }
+    @SuppressWarnings("unchecked")
+    @Override
+    protected MasterLogModel initNewViewModel(Bundle arguments) {
+        final MasterLogModel masterLogModel = new MasterLogModel();
+        GameModel gameModel = arguments.getParcelable(GameModel.KEY);
+        masterLogModel.setGameModel(gameModel);
+        return masterLogModel;
+    }
 
-  @SuppressWarnings("unchecked") @Override public void getData() {
-    view.setData(viewModel);
-    view.showContent();
-    view.showLoading();
-    compositeSubscription.add(FireBaseUtils.checkReferenceExistsAndNotEmpty(
-        FireBaseUtils.getTableReference(GAME_LOG).child(viewModel.getGameModel().getId()))
-        .compose(RxTransformers.applySchedulers())
-        .subscribe(exists -> {
-          viewModel.setNeedUpdate(false);
-          if (!exists) {
-            view.hideLoading();
-          }
-        }, Crashlytics::logException));
-  }
+    @SuppressWarnings("unchecked")
+    @Override
+    public void getData() {
+        if (viewModel.isUpdatedRequired()) {
+            super.getData();
+            compositeSubscription.add(masterLogInteractor.observeMessages(viewModel.getGameModel().getId())
+                    .compose(RxTransformers.applySchedulers())
+                    .subscribe(new DataObserver<List<IFlexible<?>>>() {
+                        @Override
+                        public void onData(List<IFlexible<?>> data) {
+                            viewModel.setItems(data);
+                            view.showContent();
+                        }
+                    }));
+        }
+    }
 
-  @Override public void loadComplete() {
-    view.hideLoading();
-  }
+    @Override
+    public void sendMessage(String s) {
+        MasterLogMessage message = new MasterLogMessage(s);
+        masterLogInteractor.sendMessage(viewModel.getGameModel(), message)
+                .compose(RxTransformers.applyIoSchedulers())
+                .subscribe(new SkipObserver<>());
+    }
 
-  @Override public void sendMessage(String s) {
-    MasterLogMessage message = new MasterLogMessage(s);
-    masterLogInteractor.sendMessage(viewModel.getGameModel(), message)
-        .compose(RxTransformers.applyIoSchedulers())
-        .subscribe(masterLogMessage -> {
-
-        }, Crashlytics::logException);
-  }
-
-  @Override public void restoreViewModel(MasterLogModel viewModel) {
-    super.restoreViewModel(viewModel);
-    setDatabaseReference(viewModel);
-  }
-
-  private void setDatabaseReference(MasterLogModel masterLogModel) {
-    masterLogModel.setDatabaseReference(FirebaseDatabase.getInstance()
-        .getReference()
-        .child(GAME_LOG)
-        .child(masterLogModel.getGameModel().getId())
-        .orderByChild(FireBaseUtils.DATE_CREATE)
-        .getRef());
-  }
+    @Override
+    public void restoreViewModel(MasterLogModel viewModel) {
+        super.restoreViewModel(viewModel);
+    }
 }

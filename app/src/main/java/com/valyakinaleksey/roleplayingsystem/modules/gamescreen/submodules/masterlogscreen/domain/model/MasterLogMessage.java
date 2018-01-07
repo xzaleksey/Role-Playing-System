@@ -2,23 +2,22 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mast
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId;
 
 import java.io.Serializable;
 
-public class MasterLogMessage implements Serializable, Parcelable {
-    public static final int SIMPLE_LINK = 0;
-    public static final int IMAGE_LINK = 1;
-    public static final int MASTER_TYPE = 1;
+public class MasterLogMessage implements Serializable, Parcelable, HasId {
+    public static final int MASTER_MESSAGE = 1;
 
     private String id;
     private String text;
-    private String link;
-    private int linkType;
-    private int logType = MASTER_TYPE;
+    private int logType = MASTER_MESSAGE;
     private Object dateCreate;
     private Long tempDateCreate;
+    private Attachment attachment;
 
     public String getId() {
         return id;
@@ -52,6 +51,14 @@ public class MasterLogMessage implements Serializable, Parcelable {
         return (long) dateCreate;
     }
 
+    public Attachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(Attachment attachment) {
+        this.attachment = attachment;
+    }
+
     public void setTempDateCreate(long dateCreate) {
         this.tempDateCreate = dateCreate;
     }
@@ -66,22 +73,6 @@ public class MasterLogMessage implements Serializable, Parcelable {
 
     public void setDateCreate(Object dateCreate) {
         this.dateCreate = dateCreate;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public int getLinkType() {
-        return linkType;
-    }
-
-    public void setLinkType(int linkType) {
-        this.linkType = linkType;
     }
 
     public MasterLogMessage(String text) {
@@ -101,21 +92,19 @@ public class MasterLogMessage implements Serializable, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.text);
-        dest.writeString(this.link);
-        dest.writeInt(this.linkType);
         dest.writeInt(this.logType);
         dest.writeSerializable((Serializable) this.dateCreate);
         dest.writeValue(this.tempDateCreate);
+        dest.writeSerializable(attachment);
     }
 
     protected MasterLogMessage(Parcel in) {
         this.id = in.readString();
         this.text = in.readString();
-        this.link = in.readString();
-        this.linkType = in.readInt();
         this.logType = in.readInt();
         this.dateCreate = in.readSerializable();
         this.tempDateCreate = (Long) in.readValue(Long.class.getClassLoader());
+        this.attachment = (Attachment) in.readSerializable();
     }
 
     public static final Creator<MasterLogMessage> CREATOR = new Creator<MasterLogMessage>() {
@@ -129,5 +118,34 @@ public class MasterLogMessage implements Serializable, Parcelable {
             return new MasterLogMessage[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MasterLogMessage that = (MasterLogMessage) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (logType != that.logType) return false;
+        if (text != null ? !text.equals(that.text) : that.text != null) return false;
+        if (dateCreate == null ? that.dateCreate != null : that.dateCreate == null) {
+            return false;
+        }
+        if (tempDateCreate != null ? !tempDateCreate.equals(that.tempDateCreate) : that.tempDateCreate != null)
+            return false;
+        return attachment != null ? attachment.equals(that.attachment) : that.attachment == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + logType;
+        result = 31 * result + (dateCreate != null ? dateCreate.hashCode() : 0);
+        result = 31 * result + (tempDateCreate != null ? tempDateCreate.hashCode() : 0);
+        result = 31 * result + (attachment != null ? attachment.hashCode() : 0);
+        return result;
+    }
 }
       

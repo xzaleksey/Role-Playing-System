@@ -3,65 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/material_light_white"
-    >
+    android:background="@color/material_light_white">
 
-  <RelativeLayout
-      android:id="@+id/header_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/material_light_white"
-      android:paddingBottom="@dimen/common_margin_between_elements"
-      android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
-      android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
-      android:paddingTop="@dimen/common_margin_between_elements"
-      >
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textColor="@color/colorTextSecondary"
-        tools:text="text"
-        />
-  </RelativeLayout>
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@id/header_container"
-      android:minHeight="@dimen/material_component_bottom_sheet_list_item_height"
-      android:paddingBottom="@dimen/common_margin_between_elements"
-      android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
-      android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
-      android:paddingTop="@dimen/common_margin_between_elements"
-      >
-
-
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/material_component_bottom_sheet_list_item_height"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="@dimen/common_margin_between_elements"
-        android:layout_marginStart="@dimen/common_margin_between_elements"
-        android:gravity="bottom"
-        android:textColor="@color/colorTextSecondary"
-        tools:text="text"
-        />
-
-    <TextView
-        android:id="@+id/tv_text"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/tv_time"
-        android:layout_toStartOf="@+id/tv_time"
-        android:autoLink="all"
-        android:textColor="@color/colorTextPrimary"
-        tools:text="text"
-        />
-  </RelativeLayout>
+        android:layout_below="@id/header_container"
+        android:minHeight="@dimen/material_component_bottom_sheet_list_item_height"
+        android:paddingBottom="@dimen/common_margin_between_elements"
+        android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
+        android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
+        android:paddingTop="@dimen/common_margin_between_elements">
+
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/material_component_bottom_sheet_list_item_height"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/common_margin_between_elements"
+            android:layout_marginStart="@dimen/common_margin_between_elements"
+            android:gravity="bottom"
+            android:textColor="@color/colorTextSecondary"
+            tools:text="text" />
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_time"
+            android:layout_toStartOf="@+id/tv_time"
+            android:autoLink="all"
+            android:textColor="@color/colorTextPrimary"
+            tools:text="text" />
+    </RelativeLayout>
 
 
 </RelativeLayout>

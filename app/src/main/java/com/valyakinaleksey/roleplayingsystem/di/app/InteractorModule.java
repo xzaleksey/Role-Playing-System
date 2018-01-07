@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 import com.valyakinaleksey.roleplayingsystem.core.repository.DrawableRepository;
 import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.log.LogRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository;
@@ -117,8 +118,8 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    MasterLogInteractor provideMasterLogInteractor() {
-        return new MasterLogUseCase();
+    MasterLogInteractor provideMasterLogInteractor(LogRepository logRepository) {
+        return new MasterLogUseCase(logRepository);
     }
 
     @Provides

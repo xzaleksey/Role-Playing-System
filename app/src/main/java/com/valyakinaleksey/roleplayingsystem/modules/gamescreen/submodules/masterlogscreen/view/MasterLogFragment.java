@@ -12,16 +12,24 @@ import android.widget.EditText;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
+import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.adapter.MasterLogAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.MasterLogFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.di.MasterLogModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.model.MasterLogModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.model.ScrollRecyclerViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.KeyboardUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 
+import java.util.Collections;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.subjects.PublishSubject;
 
 public class MasterLogFragment extends AbsButterLceFragment<MasterLogFragmentComponent, MasterLogModel, MasterLogView> implements MasterLogView {
 
@@ -36,7 +44,8 @@ public class MasterLogFragment extends AbsButterLceFragment<MasterLogFragmentCom
     @BindView(R.id.send_form)
     ViewGroup sendForm;
 
-    private MasterLogAdapter masterLogAdapter;
+    private FlexibleAdapter<IFlexible<?>> masterLogAdapter;
+    private PublishSubject<ScrollRecyclerViewModel> newMessages = PublishSubject.create();
 
     public static MasterLogFragment newInstance(Bundle arguments) {
         MasterLogFragment gamesDescriptionFragment = new MasterLogFragment();
@@ -81,25 +90,26 @@ public class MasterLogFragment extends AbsButterLceFragment<MasterLogFragmentCom
                         }, 100);
                     }
                 });
-        masterLogAdapter = new MasterLogAdapter(data.getDatabaseReference());
-        masterLogAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                super.onItemRangeRemoved(positionStart, itemCount);
-            }
-
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                if (positionStart == 0) {
-                    getComponent().getPresenter().loadComplete();
-                }
-                if (recyclerView != null && masterLogAdapter != null) {
-                    recyclerView.smoothScrollToPosition(masterLogAdapter.getItemCount());
-                }
-            }
-        });
+        masterLogAdapter = new FlexibleAdapter<>(data == null ? Collections.emptyList() : data.getItems());
         recyclerView.setAdapter(masterLogAdapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        compositeSubscription.add(newMessages.onBackpressureLatest()
+                .throttleLast(50, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DataObserver<ScrollRecyclerViewModel>() {
+                    @Override
+                    public void onData(ScrollRecyclerViewModel scrollRecyclerViewModel) {
+                        if (scrollRecyclerViewModel.getSmoothScroll()) {
+                            recyclerView.smoothScrollToPosition(masterLogAdapter.getItemCount() - 1);
+                        } else {
+                            recyclerView.scrollToPosition(masterLogAdapter.getItemCount() - 1);
+                        }
+                    }
+                }));
     }
 
     @Override
@@ -110,6 +120,16 @@ public class MasterLogFragment extends AbsButterLceFragment<MasterLogFragmentCom
     @Override
     public void showContent() {
         super.showContent();
+        int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+        boolean shouldScrollToBottom = false;
+        int previousItemCount = masterLogAdapter.getItemCount();
+        if (lastVisibleItemPosition == previousItemCount - 1 || lastVisibleItemPosition == -1) {
+            shouldScrollToBottom = true;
+        }
+        masterLogAdapter.updateDataSet(data.getItems(), previousItemCount != 0);
+        if (shouldScrollToBottom) {
+            newMessages.onNext(new ScrollRecyclerViewModel(previousItemCount != 0));
+        }
     }
 
     @Override
@@ -128,14 +148,6 @@ public class MasterLogFragment extends AbsButterLceFragment<MasterLogFragmentCom
         //    sendIcon.setVisibility(View.VISIBLE);
         //  }
         //});
-    }
-
-    @Override
-    public void onDestroy() {
-        if (masterLogAdapter != null) {
-            masterLogAdapter.cleanup();
-        }
-        super.onDestroy();
     }
 
     @Override
