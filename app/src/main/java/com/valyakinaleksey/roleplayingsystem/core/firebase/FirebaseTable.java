@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
         FirebaseTable.GAME_CHARACTERISTICS,
         FirebaseTable.GAME_CLASSES,
         FirebaseTable.GAME_RACES,
+        FirebaseTable.CHARACTERS_IN_USER,
         FirebaseTable.GAME_CHARACTERS
 })
 public @interface FirebaseTable {

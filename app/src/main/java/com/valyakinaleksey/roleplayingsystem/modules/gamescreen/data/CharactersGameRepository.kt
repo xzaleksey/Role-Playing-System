@@ -4,16 +4,17 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ServerValue
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.valyakinaleksey.roleplayingsystem.core.firebase.AbstractFirebaseGameRepositoryImpl
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseGameRepository
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable.CHARACTERS_IN_USER
 import com.valyakinaleksey.roleplayingsystem.core.model.DefaultModelProvider
 import com.valyakinaleksey.roleplayingsystem.data.repository.user.UserRepository
 import com.valyakinaleksey.roleplayingsystem.modules.auth.domain.model.User
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.*
-import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
-import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable
-import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable.CHARACTERS_IN_USER
 import rx.Observable
 import rx.functions.Func3
+import timber.log.Timber
 
 class CharactersRepositoryImpl(
         private val userRepository: UserRepository,
@@ -101,7 +102,11 @@ class CharactersRepositoryImpl(
         }.concatMap {
             val observables = mutableListOf<Observable<GameCharacterModel>>()
             for (gameIdDateModel in it) {
-                observables.add(getCharacter(gameIdDateModel.idDateModel.id, gameIdDateModel.id))
+                try {
+                    observables.add(getCharacter(gameIdDateModel.idDateModel.id, gameIdDateModel.id))
+                } catch (e: Exception) {
+                    Timber.e(e)
+                }
             }
             return@concatMap Observable.concat(observables).toList()
         }.map { characters ->
