@@ -2,12 +2,12 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data
 
 import com.google.firebase.database.DatabaseReference
 import com.valyakinaleksey.roleplayingsystem.core.firebase.AbstractFirebaseGameRepositoryImpl
-import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseGameRepository
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel
 import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseGameRepository
 import com.valyakinaleksey.roleplayingsystem.core.firebase.FirebaseTable
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameRaceModel
 
-class GameRacesRepositoryImpl() : AbstractFirebaseGameRepositoryImpl<GameRaceModel>(
+class GameRacesRepositoryImpl : AbstractFirebaseGameRepositoryImpl<GameRaceModel>(
         GameRaceModel::class.java), GameRacesRepository {
 
     override fun getDataBaseReference(gameId: String): DatabaseReference {

@@ -38,4 +38,11 @@ abstract class AbstractFirebaseGameRepositoryImpl<T : HasId>(private val clazz: 
     }
 
     abstract fun getDataBaseReference(gameId: String): DatabaseReference
+
+    override fun addData(gameId: String, data: T): Observable<T> {
+        return FireBaseUtils.observeSetValuePush(getDataBaseReference(gameId), data).map {
+            data.id = it
+            return@map data
+        }
+    }
 }

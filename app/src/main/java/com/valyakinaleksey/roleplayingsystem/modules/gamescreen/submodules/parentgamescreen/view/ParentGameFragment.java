@@ -12,6 +12,7 @@ import com.valyakinaleksey.roleplayingsystem.core.interfaces.DialogProvider;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.DiceFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.view.GamesCharactersFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.view.MapsFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.masterlogscreen.view.MasterLogFragment;
@@ -72,8 +73,7 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
                         data.setNavigationTag(NavigationScreen.GAME_MAPS_FRAGMENT);
                         break;
                     case R.id.action_dices:
-                        //TODO for tests
-                        data.setNavigationTag(NavigationScreen.GAME_MASTER_LOG_FRAGMENT);
+                        data.setNavigationTag(NavigationScreen.GAME_DICES);
                         break;
                 }
                 navigate();
@@ -117,6 +117,9 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
                 return MapsFragment.class;
             case NavigationScreen.GAME_MASTER_LOG_FRAGMENT:
                 return MasterLogFragment.class;
+            case NavigationScreen.GAME_DICES:
+                return DiceFragment.class;
+
         }
         throw new IllegalArgumentException("unsupported navigationTag");
     }
@@ -129,6 +132,9 @@ public class ParentGameFragment extends AbsButterLceFragment<ParentGameComponent
                 return MapsFragment.newInstance(arguments);
             case NavigationScreen.GAME_MASTER_LOG_FRAGMENT:
                 return MasterLogFragment.newInstance(arguments);
+            case NavigationScreen.GAME_DICES:
+                return DiceFragment.newInstance(arguments);
+
         }
         throw new IllegalArgumentException("unsupported navigationTag");
     }

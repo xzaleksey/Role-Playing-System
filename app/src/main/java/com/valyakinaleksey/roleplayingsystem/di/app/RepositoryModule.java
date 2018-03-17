@@ -16,6 +16,8 @@ import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository;
 import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceRepositoryImpl;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceCollectionRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.log.LogRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.log.LogRepositoryImpl;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
@@ -141,11 +143,16 @@ public class RepositoryModule {
         return new FirebaseInfoRepositoryImpl();
     }
 
-
     @Provides
     @Singleton
     LogRepository logRepository() {
         return new LogRepositoryImpl();
+    }
+
+    @Provides
+    @Singleton
+    FirebaseDiceCollectionRepository firebaseDiceCollectionRepository() {
+        return new FirebaseDiceRepositoryImpl();
     }
 
 }

@@ -65,7 +65,9 @@ public class SelfRestorableNavigationLceCommunicationBus<D extends RequestUpdate
 
     @Override
     public void preFillModel(D data) {
-        getNavigationResolver().resolveNavigation(v -> v.preFillModel(data));
+        if (view != null) {
+            view.preFillModel(data);
+        }
     }
 
     @Override

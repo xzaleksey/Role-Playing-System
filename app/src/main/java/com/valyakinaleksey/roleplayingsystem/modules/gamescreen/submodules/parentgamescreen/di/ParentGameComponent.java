@@ -8,6 +8,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameClasses
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.data.GameRacesRepository;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyModule;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.di.DiceFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.di.DiceModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.GamesCharactersFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.di.GamesCharactersModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
@@ -20,34 +22,38 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.maste
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.presenter.ParentGamePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentGameFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter.ParentPresenter;
+
 import dagger.Subcomponent;
 
-@Subcomponent(modules = ParentGameModule.class) @PerFragmentScope
+@Subcomponent(modules = ParentGameModule.class)
+@PerFragmentScope
 public interface ParentGameComponent extends HasPresenter<ParentGamePresenter> {
 
-  void inject(ParentGameFragment gamesListFragment);
+    void inject(ParentGameFragment gamesListFragment);
 
-  ParentPresenter parentPresenter();
+    ParentPresenter parentPresenter();
 
-  @GameId String getGameId();
+    @GameId
+    String getGameId();
 
-  CharactersGameRepository getCharactersRepository();
+    CharactersGameRepository getCharactersRepository();
 
-  GameClassesRepository getGameClassesRepository();
+    GameClassesRepository getGameClassesRepository();
 
-  GameRacesRepository getGameRacesRepository();
+    GameRacesRepository getGameRacesRepository();
 
-  GameCharactersInteractor getGameCharactersInteractor();
+    GameCharactersInteractor getGameCharactersInteractor();
 
-  MasterLogFragmentComponent getMasterLogFragmentComponent(MasterLogModule masterLogModule);
+    MasterLogFragmentComponent getMasterLogFragmentComponent(MasterLogModule masterLogModule);
 
-  MapsFragmentComponent getMapsFragmentComponent(MapsModule mapsModule);
+    MapsFragmentComponent getMapsFragmentComponent(MapsModule mapsModule);
 
-  GamesCharactersFragmentComponent getGamesCharactersFragmentComponent(
-      GamesCharactersModule gamesCharactersModule);
+    GamesCharactersFragmentComponent getGamesCharactersFragmentComponent(
+            GamesCharactersModule gamesCharactersModule);
 
-  MasterGameEditFragmentComponent getMasterGameEditFragmentComponent(
-      MasterGameEditModule masterGameEditModule);
+    MasterGameEditFragmentComponent getMasterGameEditFragmentComponent(MasterGameEditModule masterGameEditModule);
 
-  CopyFragmentComponent getCopyFragmentComponent(CopyModule copyModule);
+    CopyFragmentComponent getCopyFragmentComponent(CopyModule copyModule);
+
+    DiceFragmentComponent getDiceFragmentComponent(DiceModule copyModule);
 }

@@ -1,4 +1,4 @@
-package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.view;
+package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,9 +8,9 @@ import android.view.View;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyFragmentComponent;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.di.CopyModule;
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.copymodule.view.model.CopyViewModel;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.di.DiceFragmentComponent;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.di.DiceModule;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 
 import java.util.ArrayList;
@@ -19,27 +19,28 @@ import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 
-public class CopyFragment extends AbsButterLceFragment<CopyFragmentComponent, CopyViewModel, CopyView> implements CopyView {
+public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, DiceViewModel, DiceView>
+        implements DiceView {
 
-    public static final String TAG = CopyFragment.class.getSimpleName();
+    public static final String TAG = DiceFragment.class.getSimpleName();
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    FlexibleAdapter<IFlexible<?>> flexibleAdapter = new FlexibleAdapter<>(new ArrayList<>());
+    FlexibleAdapter<IFlexible<?>> adapter = new FlexibleAdapter<>(new ArrayList<>());
 
-    public static CopyFragment newInstance(Bundle arguments) {
-        CopyFragment gamesDescriptionFragment = new CopyFragment();
+    public static DiceFragment newInstance(Bundle arguments) {
+        DiceFragment gamesDescriptionFragment = new DiceFragment();
         gamesDescriptionFragment.setArguments(arguments);
         return gamesDescriptionFragment;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected CopyFragmentComponent createComponent(
+    protected DiceFragmentComponent createComponent(
             String fragmentId) {
         return ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent()
-                .getCopyFragmentComponent(new CopyModule(fragmentId));
+                .getDiceFragmentComponent(new DiceModule(fragmentId));
     }
 
     @Override
@@ -53,7 +54,6 @@ public class CopyFragment extends AbsButterLceFragment<CopyFragmentComponent, Co
         super.setupViews(view);
     }
 
-    @Override
     public void loadData() {
         getComponent().getPresenter().getData();
     }
@@ -66,7 +66,8 @@ public class CopyFragment extends AbsButterLceFragment<CopyFragmentComponent, Co
     @Override
     public void showContent() {
         super.showContent();
-        recyclerView.setAdapter(flexibleAdapter);
+        adapter.updateDataSet(data.getDiceItems(), true);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -76,6 +77,6 @@ public class CopyFragment extends AbsButterLceFragment<CopyFragmentComponent, Co
 
     @Override
     protected int getContentResId() {
-        return R.layout.fragment_game_description;
+        return R.layout.fragment_dices;
     }
 }

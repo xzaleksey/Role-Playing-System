@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 import com.valyakinaleksey.roleplayingsystem.core.repository.DrawableRepository;
 import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceCollectionRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.log.LogRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FirebaseMapRepository;
@@ -38,6 +39,8 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interacto
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.game.OpenGameUsecase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.interactor.races.GameRacesUsecase;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.interactor.DiceInteractor;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.interactor.DiceInteractorImpl;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersInteractor;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamecharactersscreen.domain.GameCharactersUseCase;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.mapscreen.domain.interactor.MapUseCase;
@@ -202,6 +205,12 @@ public class InteractorModule {
     @Singleton
     GameCharactersInteractor provideGameCharactersInteractor(CharactersGameRepository charactersRepository) {
         return new GameCharactersUseCase(charactersRepository);
+    }
+
+    @Provides
+    @Singleton
+    DiceInteractor provideDiceInteractor(FirebaseDiceCollectionRepository firebaseDiceCollectionRepo) {
+        return new DiceInteractorImpl(firebaseDiceCollectionRepo);
     }
 }
       
