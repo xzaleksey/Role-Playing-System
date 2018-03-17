@@ -6,6 +6,56 @@
     android:layout_height="match_parent"
     tools:appContext="com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity">
 
+    <RelativeLayout
+        android:id="@+id/top_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/game_characters_top_element_height"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/top_background"
+        android:visibility="visible">
+
+        <View
+            android:id="@+id/status_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/status_bar_height"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/no_dices_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/status_bar"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                fontPath="fonts/Roboto-Medium.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="@string/save_dices_title"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/dp_24"
+                tools:ignore="MissingPrefix,SpUsage" />
+
+            <TextView
+                android:id="@+id/tv_sub_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/dp_4"
+                android:text="@string/save_dices_secondary"
+                android:textColor="@color/white7"
+                android:textSize="@dimen/dp_12"
+                tools:ignore="SpUsage" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/btn_throw"
         android:layout_width="match_parent"
@@ -18,12 +68,54 @@
         android:text="@string/throw_dice"
         android:textColor="@color/material_light_white" />
 
+
+    <RelativeLayout
+        android:id="@+id/label_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_container"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/dp_8">
+
+        <TextView
+            android:id="@+id/new_throw"
+            style="@style/SubHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/material_layout_keylines_screen_edge_margin"
+            android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
+            android:paddingBottom="@dimen/dp_8"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:text="@string/new_throw" />
+
+
+        <TextView
+            android:id="@+id/save"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/material_layout_keylines_screen_edge_margin"
+            android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/dp_8"
+            android:text="@string/save_set"
+            android:textColor="@color/colorAccent"
+            tools:ignore="MissingPrefix" />
+
+
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn_throw"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/label_container"
         android:background="@android:color/white"
         android:scrollbars="vertical"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager" />

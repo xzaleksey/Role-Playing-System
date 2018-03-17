@@ -92,5 +92,9 @@
     <string name="create_your_character">Создайте своего персонажа!</string>
     <string name="press_add_character">Нажмите на кнопку "Добавить" или выберите из списка свободных персонажей ниже</string>
     <string name="throw_dice">Бросить</string>
+    <string name="save_dices_title">Сохраняйте наборы кубов</string>
+    <string name="save_dices_secondary">Нажмите на кнопку "сохранить набор", чтобы сохранить наиболее часто используемые комбинации кубов</string>
+    <string name="save_set">Сохранить набор</string>
+    <string name="new_throw">Новый бросок</string>
 
 </resources>

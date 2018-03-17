@@ -100,5 +100,8 @@
     <string name="create_your_character">Create your character!</string>
     <string name="press_add_character">Press "Add" or choose one of free characters</string>
     <string name="throw_dice">Throw</string>
-
+    <string name="save_dices_title">Save dice sets</string>
+    <string name="save_dices_secondary">Press button "save set" to save most used dice combinations</string>
+    <string name="save_set">Save set</string>
+    <string name="new_throw">New throw</string>
 </resources>
