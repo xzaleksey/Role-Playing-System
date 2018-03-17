@@ -89,5 +89,7 @@
     <string name="pictures">Картинки</string>
     <string name="dices">Кубы</string>
     <string name="menu">Меню</string>
+    <string name="create_your_character">Создайте своего персонажа!</string>
+    <string name="press_add_character">Нажмите на кнопку "Добавить" или выберите из списка свободных персонажей ниже</string>
 
 </resources>

@@ -97,5 +97,7 @@
     <string name="pictures">Pictures</string>
     <string name="dices">Dices</string>
     <string name="menu">Menu</string>
+    <string name="create_your_character">Create your character!</string>
+    <string name="press_add_character">Press "Add" or choose one of free characters</string>
 
 </resources>

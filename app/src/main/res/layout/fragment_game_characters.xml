@@ -3,25 +3,69 @@
     android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:appContext="com.valyakinaleksey.roleplayingsystem.modules.mainscreen.view.MainActivity"
-    >
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical"
-      >
-    <com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout
-        android:id="@+id/title_switcher"
+    tools:appContext="com.valyakinaleksey.roleplayingsystem.modules.mainscreen.view.MainActivity">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/common_margin_between_elements"
-        android:layout_marginRight="@dimen/common_margin_between_elements"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:background="@drawable/titles_background_rounded_rectangle"
-        android:padding="2dp"
-        />
-    <include layout="@layout/recycler_view" />
-  </LinearLayout>
-  <include layout="@layout/fab_plus" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/game_characters_top_element_height"
+            android:background="@drawable/top_background"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <View
+                android:id="@+id/status_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/status_bar_height"
+                android:background="@color/colorPrimary"
+                tools:visibility="visible"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                fontPath="fonts/Roboto-Medium.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/status_bar"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="@string/create_your_character"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/dp_24"
+                tools:ignore="MissingPrefix,SpUsage" />
+
+            <TextView
+                android:id="@+id/tv_sub_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_title"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/dp_4"
+                android:text="@string/press_add_character"
+                android:textColor="@color/white7"
+                android:textSize="@dimen/dp_12"
+                tools:ignore="SpUsage" />
+        </RelativeLayout>
+
+        <com.valyakinaleksey.roleplayingsystem.core.view.customview.AnimatedTitlesLayout
+            android:id="@+id/title_switcher"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/common_margin_between_elements"
+            android:layout_marginRight="@dimen/common_margin_between_elements"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/titles_background_rounded_rectangle"
+            android:padding="2dp" />
+
+        <include layout="@layout/recycler_view" />
+    </LinearLayout>
+
+    <include layout="@layout/fab_plus" />
 </android.support.design.widget.CoordinatorLayout>
