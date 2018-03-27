@@ -1,6 +1,8 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model
 
-class Dice(val maxValue: Int) : Comparable<Dice> {
+import java.io.Serializable
+
+class Dice(val maxValue: Int) : Comparable<Dice>, Serializable {
 
     fun getRndValue(): Int {
         return 1 + (maxValue * Math.random()).toInt()

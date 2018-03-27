@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.core.firebase
 
+import rx.Completable
 import rx.Observable
 
 interface FirebaseGameRepository<T> {
@@ -9,4 +10,6 @@ interface FirebaseGameRepository<T> {
     fun getData(gameId: String): Observable<MutableMap<String, T>>
 
     fun addData(gameId: String, data: T): Observable<T>
+
+    fun removeData(gameId: String, data: T): Completable
 }

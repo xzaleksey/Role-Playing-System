@@ -1,8 +1,9 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model
 
+import java.io.Serializable
 import java.util.*
 
-class DiceCollection {
+class DiceCollection : Serializable {
     private val dices = TreeMap<Dice, Int>()
     var id: String? = null
 

@@ -66,7 +66,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     @Override
     public void showContent() {
         super.showContent();
-        adapter.updateDataSet(data.getDiceItems(), true);
+        adapter.updateDataSet(data.getDiceCollectionsItems(), true);
         recyclerView.setAdapter(adapter);
     }
 

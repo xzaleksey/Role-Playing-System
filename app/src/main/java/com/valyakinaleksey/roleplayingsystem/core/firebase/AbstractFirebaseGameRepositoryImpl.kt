@@ -4,6 +4,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.HasId
+import rx.Completable
 import rx.Observable
 import rx.functions.Func1
 import timber.log.Timber
@@ -44,5 +45,9 @@ abstract class AbstractFirebaseGameRepositoryImpl<T : HasId>(private val clazz: 
             data.id = it
             return@map data
         }
+    }
+
+    override fun removeData(gameId: String, data: T): Completable {
+        return FireBaseUtils.setData(null, getDataBaseReference(gameId).child(data.id)).toCompletable()
     }
 }
