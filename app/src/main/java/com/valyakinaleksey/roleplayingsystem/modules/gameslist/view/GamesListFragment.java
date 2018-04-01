@@ -113,11 +113,7 @@ public class GamesListFragment
     initSearchView();
     flexibleAdapter =
         new FlexibleAdapter<>(data == null ? Collections.emptyList() : data.getItems());
-    flexibleAdapter.mItemClickListener = new FlexibleAdapter.OnItemClickListener() {
-      @Override public boolean onItemClick(int position) {
-        return getComponent().getPresenter().onItemClick(flexibleAdapter.getItem(position));
-      }
-    };
+    flexibleAdapter.mItemClickListener = position -> getComponent().getPresenter().onItemClick(flexibleAdapter.getItem(position));
     recyclerView.addOnScrollListener(new HideFablListener(fab));
     recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
         ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));

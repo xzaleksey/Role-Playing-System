@@ -7,23 +7,23 @@
     app:bbn_rippleColor="#33ffffff">
     <item
         android:id="@+id/action_characters"
-        android:color="@color/colorPrimary"
+        android:color="@color/colorPrimaryDark"
         android:icon="@drawable/bottom_bar_characters"
         android:title="@string/characters" />
     <item
         android:id="@+id/action_dices"
-        android:color="@color/colorAccent"
+        android:color="@color/colorPrimaryDark"
         android:icon="@drawable/bottom_bar_dice"
         android:title="@string/dices" />
 
     <item
         android:id="@+id/action_pictures"
-        android:color="@color/material_green_500"
+        android:color="@color/colorPrimaryDark"
         android:icon="@drawable/bottom_bar_pictures"
         android:title="@string/pictures" />
     <item
         android:id="@+id/action_menu"
-        android:color="@color/material_red_500"
+        android:color="@color/colorPrimaryDark"
         android:icon="@drawable/bottom_bar_menu"
         android:title="@string/menu" />
 </menu>

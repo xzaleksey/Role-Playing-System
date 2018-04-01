@@ -7,10 +7,9 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.interactor.DiceInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.DiceView
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.Dice
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceCollectionViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
-import eu.davidea.flexibleadapter.items.IFlexible
 
 class DicePresenterImpl constructor(
         private val diceInteractor: DiceInteractor
@@ -20,28 +19,63 @@ class DicePresenterImpl constructor(
         val diceViewModel = DiceViewModel()
         val gameModel = arguments.getParcelable<GameModel>(GameModel.KEY)
         diceViewModel.gameModel = gameModel
+        val defaultDicesModel = diceInteractor.getDefaultDicesModel()
+        diceViewModel.diceItems = defaultDicesModel
+
+        for (iFlexible in defaultDicesModel) {
+            if (iFlexible is DiceCollectionViewModel) {
+                diceViewModel.singleDiceCollections.add(iFlexible.diceCollection)
+            }
+        }
         return diceViewModel
     }
 
     override fun getData() {
         super.getData()
-        val diceCollection = DiceCollection()
+        view.showContent()
+        updateInProgressState()
         observeDiceCollections()
-        diceCollection.addDices(Dice(4), 10)
-        addDice(diceCollection)
+    }
+
+    private fun updateInProgressState() {
+        updateSaveDicesBtnState()
+        updateThrowBtnState()
+    }
+
+    private fun updateSaveDicesBtnState() {
+        //TODO add logic to check same set saved already
+        for (diceCollection in viewModel.singleDiceCollections) {
+            if (diceCollection.getDiceCount() > 0) {
+                view.setSaveDicesEnabled(true)
+                return
+            }
+        }
+
+        view.setSaveDicesEnabled(false)
+    }
+
+    private fun updateThrowBtnState() {
+        for (diceCollection in viewModel.singleDiceCollections) {
+            if (diceCollection.getDiceCount() > 0) {
+                view.setThrowBtnEnabled(true)
+                return
+            }
+        }
+
+        view.setThrowBtnEnabled(false)
     }
 
     private fun observeDiceCollections() {
         compositeSubscription.add(diceInteractor.observeDiceCollections(viewModel.gameModel.id)
                 .compose(RxTransformers.applySchedulers())
-                .subscribe(object : DataObserver<List<IFlexible<*>>>() {
-                    override fun onData(data: List<IFlexible<*>>) {
-
+                .subscribe(object : DataObserver<List<DiceCollection>>() {
+                    override fun onData(data: List<DiceCollection>) {
+                        viewModel.savedDiceCollections = data
                     }
                 }))
     }
 
-    private fun addDice(diceCollection: DiceCollection) {
+    private fun addDiceCollection(diceCollection: DiceCollection) {
         compositeSubscription.add(
                 diceInteractor.addDiceCollection(viewModel.gameModel.id, diceCollection)
                         .compose(RxTransformers.applySchedulers())
@@ -51,4 +85,9 @@ class DicePresenterImpl constructor(
                             }
                         }))
     }
+
+    override fun saveCurrentDices() {
+        //TODO add implemetation
+    }
+
 }

@@ -16,10 +16,13 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 public class DiceViewModel extends BaseRequestUpdateViewModel implements RequestUpdateViewModel, Parcelable, Serializable {
 
     private GameModel gameModel;
-    private DiceCollection diceCollection = new DiceCollection();
     private transient List<IFlexible<?>> diceCollectionsItems = new ArrayList<>();
-    private DiceProgressState diceProgressState = DiceProgressState.IN_PROGRESS;
+    private transient List<IFlexible<?>> diceItems = new ArrayList<>();
+
     private DiceCollectionResult diceCollectionResult = new DiceCollectionResult();
+    private DiceProgressState diceProgressState = DiceProgressState.IN_PROGRESS;
+    private List<SingleDiceCollection> singleDiceCollections = new ArrayList<>();
+    private List<DiceCollection> savedDiceCollections = new ArrayList<>();
 
     public DiceViewModel() {
     }
@@ -40,9 +43,6 @@ public class DiceViewModel extends BaseRequestUpdateViewModel implements Request
         return diceCollectionsItems;
     }
 
-    public DiceCollection getDiceCollection() {
-        return diceCollection;
-    }
 
     public void setDiceProgressState(DiceProgressState diceProgressState) {
         this.diceProgressState = diceProgressState;
@@ -56,15 +56,30 @@ public class DiceViewModel extends BaseRequestUpdateViewModel implements Request
         return diceCollectionResult;
     }
 
-    public void setDiceCollection(DiceCollection diceCollection) {
-        this.diceCollection = diceCollection;
+    public List<IFlexible<?>> getDiceItems() {
+        return diceItems;
+    }
+
+    public void setDiceItems(List<IFlexible<?>> diceItems) {
+        this.diceItems = diceItems;
+    }
+
+    public List<SingleDiceCollection> getSingleDiceCollections() {
+        return singleDiceCollections;
+    }
+
+    public List<DiceCollection> getSavedDiceCollections() {
+        return savedDiceCollections;
+    }
+
+    public void setSavedDiceCollections(List<DiceCollection> savedDiceCollections) {
+        this.savedDiceCollections = savedDiceCollections;
     }
 
     @Override
     public boolean isUpdatedRequired() {
         return false;
     }
-
 
     @Override
     public int describeContents() {
@@ -75,18 +90,19 @@ public class DiceViewModel extends BaseRequestUpdateViewModel implements Request
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeParcelable(this.gameModel, flags);
-        dest.writeSerializable(this.diceCollection);
-        dest.writeInt(this.diceProgressState == null ? -1 : this.diceProgressState.ordinal());
         dest.writeSerializable(this.diceCollectionResult);
+        dest.writeInt(this.diceProgressState == null ? -1 : this.diceProgressState.ordinal());
+        dest.writeList(this.singleDiceCollections);
     }
 
     protected DiceViewModel(Parcel in) {
         super(in);
         this.gameModel = in.readParcelable(GameModel.class.getClassLoader());
-        this.diceCollection = (DiceCollection) in.readSerializable();
+        this.diceCollectionResult = (DiceCollectionResult) in.readSerializable();
         int tmpDiceProgressState = in.readInt();
         this.diceProgressState = tmpDiceProgressState == -1 ? null : DiceProgressState.values()[tmpDiceProgressState];
-        this.diceCollectionResult = (DiceCollectionResult) in.readSerializable();
+        this.singleDiceCollections = new ArrayList<>();
+        in.readList(this.singleDiceCollections, DiceCollection.class.getClassLoader());
     }
 
     public static final Creator<DiceViewModel> CREATOR = new Creator<DiceViewModel>() {

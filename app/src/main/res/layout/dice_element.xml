@@ -1,0 +1,17 @@
+<com.valyakinaleksey.roleplayingsystem.core.view.SquareFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dice_selector_bg"
+    tools:appContext="com.valyakinaleksey.roleplayingsystem.modules.gamescreen.view.ParentActivity">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/iv_main_dice"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:tint="@android:color/white"
+        tools:src="@drawable/dice_d4" />
+
+</com.valyakinaleksey.roleplayingsystem.core.view.SquareFrameLayout>

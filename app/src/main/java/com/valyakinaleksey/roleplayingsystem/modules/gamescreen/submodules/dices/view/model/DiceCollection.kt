@@ -25,6 +25,14 @@ class DiceCollection : Serializable {
         return dices
     }
 
+    fun totalDices(): Int {
+        var count = 0
+        for (entry in dices) {
+            count += entry.value
+        }
+        return count
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -40,4 +48,13 @@ class DiceCollection : Serializable {
     }
 
     override fun hashCode(): Int = dices.hashCode()
+
+    companion object {
+        @JvmStatic
+        fun createDiceCollectionFromDice(dice: Dice): DiceCollection {
+            val diceCollection = DiceCollection()
+            diceCollection.addDices(dice, 0)
+            return diceCollection
+        }
+    }
 }

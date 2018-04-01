@@ -6,4 +6,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices
 
 public interface DiceView extends LceView<DiceViewModel> {
 
+    void setThrowBtnEnabled(boolean b);
+
+    void setSaveDicesEnabled(boolean b);
 }

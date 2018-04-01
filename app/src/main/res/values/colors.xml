@@ -2,8 +2,9 @@
 <resources>
   <color name="colorPrimary">#795548</color>
   <color name="colorPrimaryDark">#5d4037</color>
-  <color name="colorAccent">#FF9800</color>
-  <color name="colorAccentDark">#f57c00</color>
+  <color name="colorAccentLight">#7FAD80</color>
+  <color name="colorAccent">#437045</color>
+  <color name="colorAccentDark">#365A37</color>
   <color name="colorStatusBarProfile">#f83d2e2b</color>
   <color name="white7">#B2FFFFFF</color>
   <color name="colorControlNormal">#c5c5c5</color>
@@ -14,6 +15,7 @@
   <color name="backgroundColor">#FAFAFA</color>
   <color name="grey12Color">#0c000000</color>
   <color name="blackColor54">#8a000000</color>
+  <color name="colorDisabled">#E0E0E0</color>
 
 
 </resources>
