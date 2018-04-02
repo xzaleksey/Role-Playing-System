@@ -16,6 +16,7 @@
   <color name="grey12Color">#0c000000</color>
   <color name="blackColor54">#8a000000</color>
   <color name="colorDisabled">#E0E0E0</color>
+  <color name="colorDiceSecondary">#D7CCC8</color>
 
 
 </resources>

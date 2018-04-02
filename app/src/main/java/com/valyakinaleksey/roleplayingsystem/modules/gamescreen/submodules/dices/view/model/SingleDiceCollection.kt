@@ -10,7 +10,7 @@ class SingleDiceCollection(val dice: Dice, private var count: Int = 0) : Seriali
     }
 
     fun removeDices(count: Int = 1) {
-        this.count = Math.min(0, this.count - count)
+        this.count = Math.max(0, this.count - count)
     }
 
     fun getDiceCount(): Int {

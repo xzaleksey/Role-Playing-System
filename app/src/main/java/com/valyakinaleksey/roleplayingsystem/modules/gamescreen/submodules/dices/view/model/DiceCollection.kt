@@ -47,6 +47,10 @@ class DiceCollection : Serializable {
         return dices.entries.sumBy { it.key.maxValue * it.value }
     }
 
+    fun isSame(singleDiceCollections: List<SingleDiceCollection>): Boolean {
+        return singleDiceCollections.none { it.getDiceCount() != dices[it.dice] ?: 0 }
+    }
+
     override fun hashCode(): Int = dices.hashCode()
 
     companion object {

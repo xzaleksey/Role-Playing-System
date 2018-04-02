@@ -37,13 +37,23 @@ class DicePresenterImpl constructor(
         observeDiceCollections()
     }
 
+    override fun onDicesChanged() {
+        updateInProgressState()
+    }
+
     private fun updateInProgressState() {
         updateSaveDicesBtnState()
         updateThrowBtnState()
     }
 
     private fun updateSaveDicesBtnState() {
-        //TODO add logic to check same set saved already
+        for (savedDiceCollection in viewModel.savedDiceCollections) {
+            if (savedDiceCollection.isSame(viewModel.singleDiceCollections)) {
+                view.setSaveDicesEnabled(false)
+                return
+            }
+        }
+
         for (diceCollection in viewModel.singleDiceCollections) {
             if (diceCollection.getDiceCount() > 0) {
                 view.setSaveDicesEnabled(true)
