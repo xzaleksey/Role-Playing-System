@@ -9,4 +9,6 @@ public interface DiceView extends LceView<DiceViewModel> {
     void setThrowBtnEnabled(boolean b);
 
     void setSaveDicesEnabled(boolean b);
+
+    void updateDiceCollections();
 }

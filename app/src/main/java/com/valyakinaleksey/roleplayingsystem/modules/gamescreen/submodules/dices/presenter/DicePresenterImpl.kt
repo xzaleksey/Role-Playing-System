@@ -7,9 +7,10 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.interactor.DiceInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.DiceView
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceCollectionViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceSingleCollectionViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
+import timber.log.Timber
 
 class DicePresenterImpl constructor(
         private val diceInteractor: DiceInteractor
@@ -23,11 +24,15 @@ class DicePresenterImpl constructor(
         diceViewModel.diceItems = defaultDicesModel
 
         for (iFlexible in defaultDicesModel) {
-            if (iFlexible is DiceCollectionViewModel) {
+            if (iFlexible is DiceSingleCollectionViewModel) {
                 diceViewModel.singleDiceCollections.add(iFlexible.diceCollection)
             }
         }
         return diceViewModel
+    }
+
+    override fun onDiceCollectionClicked(diceCollection: DiceCollection) {
+
     }
 
     override fun getData() {
@@ -47,11 +52,8 @@ class DicePresenterImpl constructor(
     }
 
     private fun updateSaveDicesBtnState() {
-        for (savedDiceCollection in viewModel.savedDiceCollections) {
-            if (savedDiceCollection.isSame(viewModel.singleDiceCollections)) {
-                view.setSaveDicesEnabled(false)
-                return
-            }
+        if (checkSameCollectionExists()) {
+            return
         }
 
         for (diceCollection in viewModel.singleDiceCollections) {
@@ -61,6 +63,21 @@ class DicePresenterImpl constructor(
             }
         }
 
+        disableSaveBtn()
+    }
+
+    private fun checkSameCollectionExists(): Boolean {
+        for (savedDiceCollection in viewModel.savedDiceCollections) {
+            if (savedDiceCollection.isSame(viewModel.singleDiceCollections)) {
+                disableSaveBtn()
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private fun disableSaveBtn() {
         view.setSaveDicesEnabled(false)
     }
 
@@ -81,6 +98,8 @@ class DicePresenterImpl constructor(
                 .subscribe(object : DataObserver<List<DiceCollection>>() {
                     override fun onData(data: List<DiceCollection>) {
                         viewModel.savedDiceCollections = data
+                        viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
+                        view.updateDiceCollections()
                     }
                 }))
     }
@@ -91,13 +110,20 @@ class DicePresenterImpl constructor(
                         .compose(RxTransformers.applySchedulers())
                         .subscribe(object : DataObserver<DiceCollection>() {
                             override fun onData(data: DiceCollection) {
-
+                                Timber.d("Collection added")
                             }
                         }))
     }
 
     override fun saveCurrentDices() {
-        //TODO add implemetation
+        if (checkSameCollectionExists()) {
+            return
+        }
+
+        val diceCollection = DiceCollection.createDiceCollectionFromSingleDiceCollections(viewModel.singleDiceCollections)
+        viewModel.savedDiceCollections.add(diceCollection)
+        disableSaveBtn()
+        addDiceCollection(diceCollection)
     }
 
 }

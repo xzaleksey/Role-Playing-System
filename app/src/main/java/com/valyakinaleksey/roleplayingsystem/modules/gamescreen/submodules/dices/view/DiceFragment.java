@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
@@ -14,12 +15,13 @@ import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.di.DiceFragmentComponent;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.di.DiceModule;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceAdapter;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceProgressState;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.ItemOffsetDecoration;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -37,13 +39,22 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     @BindView(R.id.recycler_view_dices_collections)
     RecyclerView recyclerViewDiceCollections;
 
+    @BindView(R.id.no_dices_container)
+    View noDicesContainer;
+
+    @BindView(R.id.dices_collections_container)
+    View dicesCollectionContainer;
+
+    @BindView(R.id.saved_dices_count)
+    TextView tvSavedDicesCount;
+
     @BindView(R.id.save)
     View bntSave;
 
     @BindView(R.id.btn_throw)
     Button bntThrow;
 
-    FlexibleAdapter<IFlexible<?>> collectionAdapter = new FlexibleAdapter<>(new ArrayList<>());
+    FlexibleAdapter<IFlexible<?>> collectionAdapter;
     FlexibleAdapter<IFlexible<?>> dicesAdapter;
     private ItemOffsetDecoration decor;
 
@@ -70,11 +81,11 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     public void setupViews(View view) {
         super.setupViews(view);
         recyclerViewDiceCollections.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerViewDiceCollections.setAdapter(collectionAdapter);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), COLUMN_COUNT));
         bntSave.setOnClickListener(v -> getComponent().getPresenter().saveCurrentDices());
         decor = new ItemOffsetDecoration(getContext(), R.dimen.dp_8);
+        bntSave.setOnClickListener(v -> getComponent().getPresenter().saveCurrentDices());
     }
 
     public void loadData() {
@@ -90,9 +101,9 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     public void showContent() {
         super.showContent();
         recyclerView.removeItemDecoration(decor);
+
         if (data.getDiceProgressState() == DiceProgressState.IN_PROGRESS) {
             showStateInProgress();
-            collectionAdapter.updateDataSet(data.getDiceCollectionsItems(), true);
         } else {
             showStateShowResult();
         }
@@ -107,6 +118,10 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
             recyclerView.setAdapter(dicesAdapter);
         }
 
+        if (collectionAdapter == null || recyclerViewDiceCollections.getAdapter() == null) {
+            collectionAdapter = new DiceAdapter(data.getDiceCollectionsItems(), getComponent().getPresenter());
+            recyclerViewDiceCollections.setAdapter(collectionAdapter);
+        }
     }
 
     private void showStateShowResult() {
@@ -131,5 +146,22 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     @Override
     public void setSaveDicesEnabled(boolean b) {
         bntSave.setEnabled(b);
+    }
+
+    @Override
+    public void updateDiceCollections() {
+        List<DiceCollection> savedDiceCollections = data.getSavedDiceCollections();
+        List<IFlexible<?>> diceCollectionsItems = data.getDiceCollectionsItems();
+
+        if (savedDiceCollections.isEmpty()) {
+            dicesCollectionContainer.setVisibility(View.GONE);
+            noDicesContainer.setVisibility(View.VISIBLE);
+        } else {
+            String collectionCount = getString(R.string.saved_collections) + " (" + savedDiceCollections.size() + ")";
+            tvSavedDicesCount.setText(collectionCount);
+            dicesCollectionContainer.setVisibility(View.VISIBLE);
+            noDicesContainer.setVisibility(View.GONE);
+            collectionAdapter.updateDataSet(diceCollectionsItems, true);
+        }
     }
 }

@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.viewholders.FlexibleViewHolder;
 
-public class DiceCollectionViewHolder extends FlexibleViewHolder {
+public class DiceSingleCollectionViewHolder extends FlexibleViewHolder {
     @BindView(R.id.iv_main_dice)
     ImageView ivMainDice;
 
@@ -33,34 +33,34 @@ public class DiceCollectionViewHolder extends FlexibleViewHolder {
     TextView tvDiceCount;
 
 
-    public DiceCollectionViewHolder(View itemView, FlexibleAdapter mAdapter) {
+    public DiceSingleCollectionViewHolder(View itemView, FlexibleAdapter mAdapter) {
         super(itemView, mAdapter);
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(DiceCollectionViewModel diceCollectionViewModel, DicePresenter dicePresenter) {
-        SingleDiceCollection diceCollection = diceCollectionViewModel.getDiceCollection();
-        updateView(diceCollectionViewModel, dicePresenter);
+    public void bind(DiceSingleCollectionViewModel diceSingleCollectionViewModel, DicePresenter dicePresenter) {
+        SingleDiceCollection diceCollection = diceSingleCollectionViewModel.getDiceCollection();
+        updateView(diceSingleCollectionViewModel, dicePresenter);
         ivPlus.setOnClickListener(v -> {
             diceCollection.addDices(1);
-            update(diceCollectionViewModel, dicePresenter);
+            update(diceSingleCollectionViewModel, dicePresenter);
         });
 
         ivMinus.setOnClickListener(v -> {
             diceCollection.removeDices(1);
-            update(diceCollectionViewModel, dicePresenter);
+            update(diceSingleCollectionViewModel, dicePresenter);
         });
 
     }
 
-    private void update(DiceCollectionViewModel diceCollectionViewModel, DicePresenter dicePresenter) {
-        updateView(diceCollectionViewModel, dicePresenter);
+    private void update(DiceSingleCollectionViewModel diceSingleCollectionViewModel, DicePresenter dicePresenter) {
+        updateView(diceSingleCollectionViewModel, dicePresenter);
         dicePresenter.onDicesChanged();
     }
 
-    private void updateView(DiceCollectionViewModel diceCollectionViewModel, DicePresenter dicePresenter) {
-        SingleDiceCollection diceCollection = diceCollectionViewModel.getDiceCollection();
-        int mainDiceResId = diceCollectionViewModel.getMainDiceResId();
+    private void updateView(DiceSingleCollectionViewModel diceSingleCollectionViewModel, DicePresenter dicePresenter) {
+        SingleDiceCollection diceCollection = diceSingleCollectionViewModel.getDiceCollection();
+        int mainDiceResId = diceSingleCollectionViewModel.getMainDiceResId();
 
         if (diceCollection.getDiceCount() == 0) {
             ivMainDice.setImageResource(mainDiceResId);
@@ -72,7 +72,7 @@ public class DiceCollectionViewHolder extends FlexibleViewHolder {
             ivDiceSecondary.setVisibility(View.GONE);
             dicesActionContainer.setOnClickListener(v -> {
                 diceCollection.addDices(1);
-                update(diceCollectionViewModel, dicePresenter);
+                update(diceSingleCollectionViewModel, dicePresenter);
             });
         } else {
             ivDiceSecondary.setImageResource(mainDiceResId);

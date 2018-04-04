@@ -60,5 +60,15 @@ class DiceCollection : Serializable {
             diceCollection.addDices(dice, 0)
             return diceCollection
         }
+
+        @JvmStatic
+        fun createDiceCollectionFromSingleDiceCollections(singleDiceCollections: List<SingleDiceCollection>): DiceCollection {
+            val diceCollection = DiceCollection()
+            singleDiceCollections
+                    .filter { it.getDiceCount() != 0 }
+                    .forEach { diceCollection.addDices(it.dice, it.getDiceCount()) }
+            return diceCollection
+        }
+
     }
 }

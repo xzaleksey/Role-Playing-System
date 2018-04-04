@@ -3,11 +3,21 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dice
 import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigationLceCommunicationBus
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.presenter.DicePresenter
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.DiceView
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.state.DiceViewState
 
 class DiceViewCommunicationBus(presenter: DicePresenter, viewState: DiceViewState)
     : SelfRestorableNavigationLceCommunicationBus<DiceViewModel, DiceView, DicePresenter, DiceViewState>(presenter, viewState), DicePresenter, DiceView {
+
+    override fun updateDiceCollections() {
+        view?.updateDiceCollections()
+    }
+
+    override fun onDiceCollectionClicked(diceCollection: DiceCollection) {
+        presenter.onDiceCollectionClicked(diceCollection)
+    }
+
     override fun onDicesChanged() {
         presenter.onDicesChanged()
     }

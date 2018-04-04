@@ -23,6 +23,7 @@ public class DiceViewModel extends BaseRequestUpdateViewModel implements Request
     private DiceProgressState diceProgressState = DiceProgressState.IN_PROGRESS;
     private List<SingleDiceCollection> singleDiceCollections = new ArrayList<>();
     private List<DiceCollection> savedDiceCollections = new ArrayList<>();
+    private DiceCollection selectedDiceCollection = null;
 
     public DiceViewModel() {
     }
@@ -37,6 +38,14 @@ public class DiceViewModel extends BaseRequestUpdateViewModel implements Request
 
     public void setDiceCollectionsItems(List<IFlexible<?>> diceCollectionsItems) {
         this.diceCollectionsItems = diceCollectionsItems;
+    }
+
+    public DiceCollection getSelectedDiceCollection() {
+        return selectedDiceCollection;
+    }
+
+    public void setSelectedDiceCollection(DiceCollection selectedDiceCollection) {
+        this.selectedDiceCollection = selectedDiceCollection;
     }
 
     public List<IFlexible<?>> getDiceCollectionsItems() {
@@ -93,6 +102,8 @@ public class DiceViewModel extends BaseRequestUpdateViewModel implements Request
         dest.writeSerializable(this.diceCollectionResult);
         dest.writeInt(this.diceProgressState == null ? -1 : this.diceProgressState.ordinal());
         dest.writeList(this.singleDiceCollections);
+        dest.writeList(this.savedDiceCollections);
+        dest.writeSerializable(this.selectedDiceCollection);
     }
 
     protected DiceViewModel(Parcel in) {
@@ -101,8 +112,11 @@ public class DiceViewModel extends BaseRequestUpdateViewModel implements Request
         this.diceCollectionResult = (DiceCollectionResult) in.readSerializable();
         int tmpDiceProgressState = in.readInt();
         this.diceProgressState = tmpDiceProgressState == -1 ? null : DiceProgressState.values()[tmpDiceProgressState];
-        this.singleDiceCollections = new ArrayList<>();
-        in.readList(this.singleDiceCollections, DiceCollection.class.getClassLoader());
+        this.singleDiceCollections = new ArrayList<SingleDiceCollection>();
+        in.readList(this.singleDiceCollections, SingleDiceCollection.class.getClassLoader());
+        this.savedDiceCollections = new ArrayList<DiceCollection>();
+        in.readList(this.savedDiceCollections, DiceCollection.class.getClassLoader());
+        this.selectedDiceCollection = (DiceCollection) in.readSerializable();
     }
 
     public static final Creator<DiceViewModel> CREATOR = new Creator<DiceViewModel>() {

@@ -96,5 +96,8 @@
     <string name="save_dices_secondary">Нажмите на кнопку "сохранить набор", чтобы сохранить наиболее часто используемые комбинации кубов</string>
     <string name="save_set">Сохранить набор</string>
     <string name="new_throw">Новый бросок</string>
+    <string name="saved_collections">Сохраненные наборы</string>
+    <string name="choose">Выбрать</string>
+    <string name="reset">Сбросить</string>
 
 </resources>

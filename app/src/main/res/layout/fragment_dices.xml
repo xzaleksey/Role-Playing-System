@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_container"
     android:layout_width="match_parent"
@@ -21,45 +20,68 @@
             android:visibility="invisible"
             tools:visibility="visible" />
 
-        <LinearLayout
-            android:id="@+id/no_dices_container"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@+id/status_bar"
-            android:orientation="vertical">
+            android:animateLayoutChanges="true"
+            android:padding="@dimen/dp_16">
 
-            <TextView
-                android:id="@+id/tv_title"
-                fontPath="fonts/Roboto-Medium.ttf"
+            <LinearLayout
+                android:id="@+id/no_dices_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/dp_20"
-                android:text="@string/save_dices_title"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/dp_24"
-                tools:ignore="MissingPrefix,SpUsage" />
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="gone">
 
-            <TextView
-                android:id="@+id/tv_sub_title"
+                <TextView
+                    android:id="@+id/tv_title"
+                    fontPath="fonts/Roboto-Medium.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save_dices_title"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dp_24"
+                    tools:ignore="MissingPrefix,SpUsage" />
+
+                <TextView
+                    android:id="@+id/tv_sub_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:text="@string/save_dices_secondary"
+                    android:textColor="@color/white7"
+                    android:textSize="@dimen/dp_12"
+                    tools:ignore="SpUsage" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/dices_collections_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/save_dices_secondary"
-                android:textColor="@color/white7"
-                android:textSize="@dimen/dp_12"
-                tools:ignore="SpUsage" />
+                android:layout_height="match_parent">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/saved_dices_count"
+                    fontPath="fonts/Roboto-Medium.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_15"
+                    tools:ignore="MissingPrefix"
+                    tools:text="Сохраненные наборы (8)" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_dices_collections"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_dices_collections"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/saved_dices_count"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:scrollbars="vertical" />
+            </RelativeLayout>
+        </FrameLayout>
+
 
     </RelativeLayout>
 
