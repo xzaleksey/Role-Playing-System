@@ -1,8 +1,11 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.collectionadapter;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,10 +51,14 @@ public class DiceCollectionViewHolder extends FlexibleViewHolder {
 
         if (diceCollectionViewModel.isSelected()) {
             cardView.setCardElevation(ContextExtensions.convertDpToPixel(2));
-            tvMain.setText(R.string.choose);
+            tvMain.setText(R.string.reset);
+            tvMain.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary));
+            tvMain.setBackground(null);
         } else {
             cardView.setCardElevation(ContextExtensions.convertDpToPixel(8));
-            tvMain.setText(R.string.reset);
+            tvMain.setTextColor(ContextCompat.getColor(itemView.getContext(), android.R.color.white));
+            tvMain.setText(R.string.choose);
+            tvMain.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary));
         }
 
         cardView.setOnClickListener(v -> {
@@ -72,7 +79,9 @@ public class DiceCollectionViewHolder extends FlexibleViewHolder {
                 diceSingleItem = diceContainer.getChildAt(index);
             } else {
                 diceSingleItem = layoutInflater.inflate(R.layout.dice_collection_single_item, diceContainer, false);
-                diceContainer.addView(diceSingleItem);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ContextExtensions.convertDpToPixel(40), ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.gravity = Gravity.CENTER_VERTICAL;
+                diceContainer.addView(diceSingleItem, params);
             }
 
             ((ImageView) diceSingleItem.findViewById(R.id.iv_dice)).setImageResource(diceType.getResId());
@@ -86,6 +95,15 @@ public class DiceCollectionViewHolder extends FlexibleViewHolder {
                 diceContainer.removeViewAt(index);
                 index++;
             }
+        }
+
+        tvMain.measure(0, 0);
+        diceContainer.measure(0, 0);
+        int diceContainerMeasuredWidth = diceContainer.getMeasuredWidth();
+
+        if (tvMain.getMeasuredWidth() < diceContainerMeasuredWidth) {
+            ViewGroup.LayoutParams layoutParams = tvMain.getLayoutParams();
+            layoutParams.width = diceContainerMeasuredWidth;
         }
     }
 }
