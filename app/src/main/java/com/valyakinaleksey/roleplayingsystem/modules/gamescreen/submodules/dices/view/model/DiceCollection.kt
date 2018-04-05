@@ -56,9 +56,9 @@ class DiceCollection : Serializable {
         for (value in DiceType.values()) {
             val dice = value.createDice()
 
-            dices[dice]?.let {
-                result.add(SingleDiceCollection(dice, it))
-            }?.let { result.add(SingleDiceCollection(dice, 0)) }
+            val count = dices.getOrDefault(dice, 0)
+            result.add(SingleDiceCollection(dice, count))
+
         }
         return result
     }

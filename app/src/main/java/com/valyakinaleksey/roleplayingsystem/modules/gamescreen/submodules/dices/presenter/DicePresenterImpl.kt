@@ -7,10 +7,8 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.interactor.DiceInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.DiceView
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceSingleCollectionViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
-import timber.log.Timber
 
 class DicePresenterImpl constructor(
         private val diceInteractor: DiceInteractor
@@ -20,30 +18,28 @@ class DicePresenterImpl constructor(
         val diceViewModel = DiceViewModel()
         val gameModel = arguments.getParcelable<GameModel>(GameModel.KEY)
         diceViewModel.gameModel = gameModel
-        val defaultDicesModel = diceInteractor.getDefaultDicesModel()
+        diceViewModel.singleDiceCollections = diceInteractor.getDefaultSingleDicesCollections()
+        val defaultDicesModel = diceInteractor.mapDicesCollectionToDicesModel(diceViewModel.singleDiceCollections)
         diceViewModel.diceItems = defaultDicesModel
 
-        for (iFlexible in defaultDicesModel) {
-            if (iFlexible is DiceSingleCollectionViewModel) {
-                diceViewModel.singleDiceCollections.add(iFlexible.diceCollection)
-            }
-        }
         return diceViewModel
     }
 
     override fun onDiceCollectionClicked(diceCollection: DiceCollection) {
         if (viewModel.selectedDiceCollection == diceCollection) {
             viewModel.selectedDiceCollection = null
-            viewModel.diceItems = diceInteractor.getDefaultDicesModel()
-            view.showContent()
+            viewModel.singleDiceCollections = diceInteractor.getDefaultSingleDicesCollections()
+            viewModel.diceItems = diceInteractor.mapDicesCollectionToDicesModel(viewModel.singleDiceCollections)
+            view.updateDices(false)
         } else {
             viewModel.selectedDiceCollection = diceCollection
-            viewModel.diceItems = diceInteractor.mapDicesCollectionToDicesModel(diceCollection)
-            view.showContent()
+            viewModel.singleDiceCollections = diceCollection.toSingleDiceCollections()
+            viewModel.diceItems = diceInteractor.mapDicesCollectionToDicesModel(viewModel.singleDiceCollections)
+            view.updateDices(false)
         }
 
-        viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
-        view.updateDiceCollections(false)
+        updateDiceCollections()
+        updateInProgressState()
     }
 
     override fun getData() {
@@ -55,6 +51,24 @@ class DicePresenterImpl constructor(
 
     override fun onDicesChanged() {
         updateInProgressState()
+        checkUpdateDiceCollections()
+    }
+
+    private fun checkUpdateDiceCollections() {
+        for (savedDiceCollection in viewModel.savedDiceCollections) {
+            if (savedDiceCollection.isSame(viewModel.singleDiceCollections)) {
+                viewModel.selectedDiceCollection = savedDiceCollection
+                updateDiceCollections()
+                return
+            }
+        }
+        viewModel.selectedDiceCollection = null
+        updateDiceCollections()
+    }
+
+    private fun updateDiceCollections() {
+        viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
+        view.updateDiceCollections(false)
     }
 
     private fun updateInProgressState() {
@@ -68,7 +82,7 @@ class DicePresenterImpl constructor(
         }
 
         for (diceCollection in viewModel.singleDiceCollections) {
-            if (diceCollection.getDiceCount() > 0) {
+            if (diceCollection.getDiceCount() > 1) {
                 view.setSaveDicesEnabled(true)
                 return
             }
@@ -111,6 +125,7 @@ class DicePresenterImpl constructor(
                         viewModel.savedDiceCollections = data
                         viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
                         view.updateDiceCollections(true)
+                        view.scrollDiceCollectionsToStart()
                     }
                 }))
     }
@@ -121,7 +136,7 @@ class DicePresenterImpl constructor(
                         .compose(RxTransformers.applySchedulers())
                         .subscribe(object : DataObserver<DiceCollection>() {
                             override fun onData(data: DiceCollection) {
-                                Timber.d("Collection added")
+
                             }
                         }))
     }

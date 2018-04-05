@@ -9,6 +9,13 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices
 
 class DiceViewCommunicationBus(presenter: DicePresenter, viewState: DiceViewState)
     : SelfRestorableNavigationLceCommunicationBus<DiceViewModel, DiceView, DicePresenter, DiceViewState>(presenter, viewState), DicePresenter, DiceView {
+    override fun scrollDiceCollectionsToStart() {
+        view?.scrollDiceCollectionsToStart()
+    }
+
+    override fun updateDices(animate: Boolean) {
+        view?.updateDices(animate)
+    }
 
     override fun updateDiceCollections(animate: Boolean) {
         view?.updateDiceCollections(animate)

@@ -7,11 +7,16 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceType
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.SingleDiceCollection
 import eu.davidea.flexibleadapter.items.IFlexible
 import rx.Observable
 
 class DiceInteractorImpl constructor(
         private val firebaseDiceCollectionRepository: FirebaseDiceCollectionRepository) : DiceInteractor {
+
+    override fun getDefaultSingleDicesCollections(): List<SingleDiceCollection> {
+        return DiceType.values().map { SingleDiceCollection(it.createDice(), 0) }
+    }
 
     override fun mapDiceCollections(diceViewModel: DiceViewModel): MutableList<IFlexible<*>> {
         val selectedDiceCollection = diceViewModel.selectedDiceCollection
@@ -40,14 +45,8 @@ class DiceInteractorImpl constructor(
         }
     }
 
-    override fun getDefaultDicesModel(): MutableList<IFlexible<*>> {
-        val result = mutableListOf<IFlexible<*>>()
-        DiceType.values().mapTo(result) { DiceSingleCollectionViewModel(it.resId, it.createSingleDiceCollection()) }
-        return result
-    }
-
-    override fun mapDicesCollectionToDicesModel(diceCollection: DiceCollection): List<DiceSingleCollectionViewModel> {
-        return diceCollection.toSingleDiceCollections().map {
+    override fun mapDicesCollectionToDicesModel(diceCollections: List<SingleDiceCollection>): List<DiceSingleCollectionViewModel> {
+        return diceCollections.map {
             DiceSingleCollectionViewModel(DiceType.getDiceType(it.dice).resId, it)
         }
     }
@@ -61,7 +60,7 @@ interface DiceInteractor {
 
     fun mapDiceCollections(diceViewModel: DiceViewModel): MutableList<IFlexible<*>>
 
-    fun getDefaultDicesModel(): MutableList<IFlexible<*>>
+    fun getDefaultSingleDicesCollections(): List<SingleDiceCollection>
 
-    fun mapDicesCollectionToDicesModel(diceCollection: DiceCollection): List<IFlexible<*>>
+    fun mapDicesCollectionToDicesModel(diceCollections: List<SingleDiceCollection>): List<IFlexible<*>>
 }

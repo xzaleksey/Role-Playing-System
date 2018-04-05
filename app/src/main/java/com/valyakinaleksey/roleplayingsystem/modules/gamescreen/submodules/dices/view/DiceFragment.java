@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import butterknife.BindDimen;
-import butterknife.BindView;
+
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -22,10 +22,13 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.ItemOffsetDecoration;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.LinearOffsetItemDecortation;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.items.IFlexible;
 
 import java.util.List;
+
+import butterknife.BindDimen;
+import butterknife.BindView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 
 public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, DiceViewModel, DiceView>
         implements DiceView {
@@ -61,6 +64,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     FlexibleAdapter<IFlexible<?>> collectionAdapter;
     FlexibleAdapter<IFlexible<?>> dicesAdapter;
     private ItemOffsetDecoration decor;
+    private RecyclerView.SmoothScroller smoothScroller;
 
     public static DiceFragment newInstance(Bundle arguments) {
         DiceFragment gamesDescriptionFragment = new DiceFragment();
@@ -90,6 +94,12 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
         bntSave.setOnClickListener(v -> getComponent().getPresenter().saveCurrentDices());
         decor = new ItemOffsetDecoration(getContext(), R.dimen.dp_8);
         bntSave.setOnClickListener(v -> getComponent().getPresenter().saveCurrentDices());
+        smoothScroller = new LinearSmoothScroller(getContext()) {
+            @Override
+            protected int getVerticalSnapPreference() {
+                return LinearSmoothScroller.SNAP_TO_START;
+            }
+        };
     }
 
     public void loadData() {
@@ -121,13 +131,18 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
             dicesAdapter = new DiceAdapter(data.getDiceItems(), getComponent().getPresenter());
             recyclerView.setAdapter(dicesAdapter);
         } else {
-            dicesAdapter.updateDataSet(data.getDiceItems(), true);
+            updateDices(true);
         }
 
         if (collectionAdapter == null || recyclerViewDiceCollections.getAdapter() == null) {
             collectionAdapter = new DiceAdapter(data.getDiceCollectionsItems(), getComponent().getPresenter());
             recyclerViewDiceCollections.setAdapter(collectionAdapter);
         }
+    }
+
+    @Override
+    public void updateDices(boolean animate) {
+        dicesAdapter.updateDataSet(data.getDiceItems(), animate);
     }
 
     private void showStateShowResult() {
@@ -169,5 +184,17 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
             noDicesContainer.setVisibility(View.GONE);
             collectionAdapter.updateDataSet(diceCollectionsItems, animate);
         }
+    }
+
+    @Override
+    public void scrollDiceCollectionsToStart() {
+        recyclerViewDiceCollections.post(() -> {
+            if (recyclerViewDiceCollections != null) {
+                if (recyclerViewDiceCollections.getAdapter().getItemCount() > 0) {
+                    smoothScroller.setTargetPosition(0);
+                    recyclerViewDiceCollections.getLayoutManager().startSmoothScroll(smoothScroller);
+                }
+            }
+        });
     }
 }

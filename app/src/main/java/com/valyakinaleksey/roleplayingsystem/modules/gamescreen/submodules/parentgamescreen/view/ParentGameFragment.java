@@ -37,6 +37,7 @@ public class ParentGameFragment
 
   private String gameId;
   private Bundle arguments;
+  private GameModel gameModel;
 
   public static ParentGameFragment newInstance(Bundle arguments) {
     ParentGameFragment gamesDescriptionFragment = new ParentGameFragment();
@@ -52,7 +53,7 @@ public class ParentGameFragment
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     arguments = savedInstanceState == null ? getArguments() : savedInstanceState;
-    GameModel gameModel = arguments.getParcelable(GameModel.KEY);
+    gameModel = arguments.getParcelable(GameModel.KEY);
     gameId = gameModel.getId();
     super.onCreate(savedInstanceState);
     getComponent().inject(this);
@@ -133,7 +134,7 @@ public class ParentGameFragment
 
   @Override public void onSaveInstanceState(Bundle savedInstanceState) {
     super.onSaveInstanceState(savedInstanceState);
-    savedInstanceState.putParcelable(GameModel.KEY, data.getGameModel());
+    savedInstanceState.putParcelable(GameModel.KEY, gameModel);
   }
 
   @Override public void invalidateOptionsMenu() {

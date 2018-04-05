@@ -77,6 +77,10 @@ public class DiceViewModel extends BaseRequestUpdateViewModel implements Request
         return singleDiceCollections;
     }
 
+    public void setSingleDiceCollections(List<SingleDiceCollection> singleDiceCollections) {
+        this.singleDiceCollections = singleDiceCollections;
+    }
+
     public List<DiceCollection> getSavedDiceCollections() {
         return savedDiceCollections;
     }

@@ -26,8 +26,6 @@
             android:layout_below="@+id/status_bar"
             android:animateLayoutChanges="true"
             android:paddingBottom="@dimen/dp_8"
-            android:paddingLeft="@dimen/dp_16"
-            android:paddingRight="@dimen/dp_16"
             android:paddingTop="@dimen/dp_16">
 
             <LinearLayout
@@ -35,6 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
                 android:visibility="gone"
                 tools:visibility="gone">
 
@@ -63,13 +63,15 @@
             <RelativeLayout
                 android:id="@+id/dices_collections_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/dp_16">
 
                 <TextView
                     android:id="@+id/saved_dices_count"
                     fontPath="fonts/Roboto-Medium.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/dp_16"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp_15"
                     tools:ignore="MissingPrefix"
