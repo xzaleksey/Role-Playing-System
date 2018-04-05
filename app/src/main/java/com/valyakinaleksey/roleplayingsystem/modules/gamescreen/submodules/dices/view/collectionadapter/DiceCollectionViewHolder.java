@@ -9,29 +9,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.presenter.DicePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.Dice;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceType;
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.ContextExtensions;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.viewholders.FlexibleViewHolder;
 
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.viewholders.FlexibleViewHolder;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class DiceCollectionViewHolder extends FlexibleViewHolder {
     @BindView(R.id.card_view)
     CardView cardView;
-
+    @BindView(R.id.click_container)
+    View clickContainer;
     @BindView(R.id.dice_container)
     LinearLayout diceContainer;
-
     @BindView(R.id.tv_main)
     TextView tvMain;
 
@@ -61,7 +61,7 @@ public class DiceCollectionViewHolder extends FlexibleViewHolder {
             tvMain.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary));
         }
 
-        cardView.setOnClickListener(v -> {
+        clickContainer.setOnClickListener(v -> {
             dicePresenter.onDiceCollectionClicked(diceCollection);
         });
 
@@ -79,7 +79,7 @@ public class DiceCollectionViewHolder extends FlexibleViewHolder {
                 diceSingleItem = diceContainer.getChildAt(index);
             } else {
                 diceSingleItem = layoutInflater.inflate(R.layout.dice_collection_single_item, diceContainer, false);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ContextExtensions.convertDpToPixel(40), ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ContextExtensions.convertDpToPixel(40), WRAP_CONTENT);
                 params.gravity = Gravity.CENTER_VERTICAL;
                 diceContainer.addView(diceSingleItem, params);
             }
@@ -91,19 +91,23 @@ public class DiceCollectionViewHolder extends FlexibleViewHolder {
         }
 
         if (childCount > index) {
+            int currentIndex = index;
+
             while (index != childCount) {
-                diceContainer.removeViewAt(index);
+                diceContainer.removeViewAt(currentIndex);
                 index++;
             }
         }
 
+        ViewGroup.LayoutParams layoutParams = tvMain.getLayoutParams();
+        layoutParams.width = WRAP_CONTENT;
         tvMain.measure(0, 0);
         diceContainer.measure(0, 0);
         int diceContainerMeasuredWidth = diceContainer.getMeasuredWidth();
 
         if (tvMain.getMeasuredWidth() < diceContainerMeasuredWidth) {
-            ViewGroup.LayoutParams layoutParams = tvMain.getLayoutParams();
             layoutParams.width = diceContainerMeasuredWidth;
         }
+
     }
 }

@@ -153,7 +153,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     }
 
     @Override
-    public void updateDiceCollections() {
+    public void updateDiceCollections(boolean animate) {
         List<DiceCollection> savedDiceCollections = data.getSavedDiceCollections();
         List<IFlexible<?>> diceCollectionsItems = data.getDiceCollectionsItems();
 
@@ -165,7 +165,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
             tvSavedDicesCount.setText(collectionCount);
             dicesCollectionContainer.setVisibility(View.VISIBLE);
             noDicesContainer.setVisibility(View.GONE);
-            collectionAdapter.updateDataSet(diceCollectionsItems, true);
+            collectionAdapter.updateDataSet(diceCollectionsItems, animate);
         }
     }
 }

@@ -2,15 +2,13 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dice
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceAdapter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection;
-
-import java.util.List;
-
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+
+import java.util.List;
 
 public class DiceCollectionViewModel extends AbstractFlexibleItem<DiceCollectionViewHolder> {
 
@@ -56,11 +54,14 @@ public class DiceCollectionViewModel extends AbstractFlexibleItem<DiceCollection
 
         DiceCollectionViewModel that = (DiceCollectionViewModel) o;
 
+        if (isSelected != that.isSelected) return false;
         return diceCollection != null ? diceCollection.equals(that.diceCollection) : that.diceCollection == null;
     }
 
     @Override
     public int hashCode() {
-        return diceCollection != null ? diceCollection.hashCode() : 0;
+        int result = diceCollection != null ? diceCollection.hashCode() : 0;
+        result = 31 * result + (isSelected ? 1 : 0);
+        return result;
     }
 }

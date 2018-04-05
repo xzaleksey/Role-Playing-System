@@ -10,5 +10,5 @@ public interface DiceView extends LceView<DiceViewModel> {
 
     void setSaveDicesEnabled(boolean b);
 
-    void updateDiceCollections();
+    void updateDiceCollections(boolean animate);
 }

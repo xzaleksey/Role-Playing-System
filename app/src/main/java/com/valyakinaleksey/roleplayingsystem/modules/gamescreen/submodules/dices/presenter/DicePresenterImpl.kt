@@ -32,7 +32,14 @@ class DicePresenterImpl constructor(
     }
 
     override fun onDiceCollectionClicked(diceCollection: DiceCollection) {
+        if (viewModel.selectedDiceCollection == diceCollection) {
+            viewModel.selectedDiceCollection = null
+        } else {
+            viewModel.selectedDiceCollection = diceCollection
+        }
 
+        viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
+        view.updateDiceCollections(false)
     }
 
     override fun getData() {
@@ -99,7 +106,7 @@ class DicePresenterImpl constructor(
                     override fun onData(data: List<DiceCollection>) {
                         viewModel.savedDiceCollections = data
                         viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
-                        view.updateDiceCollections()
+                        view.updateDiceCollections(true)
                     }
                 }))
     }
