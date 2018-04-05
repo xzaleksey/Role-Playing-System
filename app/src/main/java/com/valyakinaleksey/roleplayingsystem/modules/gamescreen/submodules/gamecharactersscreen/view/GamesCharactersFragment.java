@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import butterknife.BindView;
+
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -16,94 +16,110 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.gamec
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.RecyclerViewUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.scroll.HideFablListener;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.items.IFlexible;
+
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
+
 public class GamesCharactersFragment extends
-    AbsButterLceFragment<GamesCharactersFragmentComponent, GamesCharactersViewModel, GamesCharactersView>
-    implements GamesCharactersView {
+        AbsButterLceFragment<GamesCharactersFragmentComponent, GamesCharactersViewModel, GamesCharactersView>
+        implements GamesCharactersView {
 
-  public static final String TAG = GamesCharactersFragment.class.getSimpleName();
+    public static final String TAG = GamesCharactersFragment.class.getSimpleName();
 
-  @BindView(R.id.recycler_view) RecyclerView recyclerView;
-  @BindView(R.id.fab) FloatingActionButton fab;
-  @BindView(R.id.title_switcher) AnimatedTitlesLayout titleLayout;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.title_switcher)
+    AnimatedTitlesLayout titleLayout;
 
-  FlexibleAdapter<IFlexible<?>> flexibleAdapter;
-  private HideFablListener listener;
+    FlexibleAdapter<IFlexible<?>> flexibleAdapter;
+    private HideFablListener listener;
 
-  public static GamesCharactersFragment newInstance(Bundle arguments) {
-    GamesCharactersFragment gamesDescriptionFragment = new GamesCharactersFragment();
-    gamesDescriptionFragment.setArguments(arguments);
-    return gamesDescriptionFragment;
-  }
-
-  @Override @SuppressWarnings("unchecked")
-  protected GamesCharactersFragmentComponent createComponent(String fragmentId) {
-    return ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent()
-        .getGamesCharactersFragmentComponent(new GamesCharactersModule(fragmentId));
-  }
-
-  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    getComponent().inject(this);
-  }
-
-  @Override public void setupViews(View view) {
-    super.setupViews(view);
-    fab.setOnClickListener(v -> getComponent().getPresenter().createCharacter());
-    listener = new HideFablListener(fab);
-    if (data != null) {
-      updateNavTabs(data);
+    public static GamesCharactersFragment newInstance(Bundle arguments) {
+        GamesCharactersFragment gamesDescriptionFragment = new GamesCharactersFragment();
+        gamesDescriptionFragment.setArguments(arguments);
+        return gamesDescriptionFragment;
     }
-  }
 
-  @Override public void loadData() {
-    getComponent().getPresenter().getData();
-  }
-
-  @Override public void onResume() {
-    super.onResume();
-  }
-
-  @Override public void showContent() {
-    super.showContent();
-    if (titleLayout.getTitleModels().isEmpty()) {
-      updateNavTabs(data);
+    @Override
+    @SuppressWarnings("unchecked")
+    protected GamesCharactersFragmentComponent createComponent(String fragmentId) {
+        return ((ComponentManagerFragment<ParentGameComponent, ?>) getParentFragment()).getComponent()
+                .getGamesCharactersFragmentComponent(new GamesCharactersModule(fragmentId));
     }
-    if (recyclerView.getAdapter() == null) {
-      flexibleAdapter = new FlexibleAdapter<>(new ArrayList<>());
-      recyclerView.setAdapter(flexibleAdapter);
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getComponent().inject(this);
     }
-    updateView();
-    if (data.canCreateNewCharacter()) {
-      recyclerView.clearOnScrollListeners();
-      recyclerView.addOnScrollListener(listener);
-      recyclerView.post(() -> RecyclerViewUtils.checkFabShow(recyclerView, fab));
-    } else { // if has character - no creation
-      recyclerView.removeOnScrollListener(listener);
-      fab.hide();
+
+    @Override
+    public void setupViews(View view) {
+        super.setupViews(view);
+        fab.setOnClickListener(v -> getComponent().getPresenter().createCharacter());
+        listener = new HideFablListener(fab);
+        if (data != null) {
+            updateNavTabs(data);
+        }
     }
-  }
 
-  @Override public void onDestroy() {
-    super.onDestroy();
-  }
+    @Override
+    public void loadData() {
+        getComponent().getPresenter().getData();
+    }
 
-  @Override protected int getContentResId() {
-    return R.layout.fragment_game_characters;
-  }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
-  @Override public void updateView() {
-    flexibleAdapter.updateDataSet(data.getiFlexibles(), true);
-  }
+    @Override
+    public void showContent() {
+        super.showContent();
+        if (titleLayout.getTitleModels().isEmpty()) {
+            updateNavTabs(data);
+        }
+        if (recyclerView.getAdapter() == null) {
+            flexibleAdapter = new FlexibleAdapter<>(new ArrayList<>());
+            recyclerView.setAdapter(flexibleAdapter);
+        }
+        updateView();
+        if (data.canCreateNewCharacter()) {
+            recyclerView.clearOnScrollListeners();
+            recyclerView.addOnScrollListener(listener);
+            recyclerView.post(() -> RecyclerViewUtils.checkFabShow(recyclerView, fab));
+        } else { // if has character - no creation
+            recyclerView.removeOnScrollListener(listener);
+            fab.hide();
+        }
+    }
 
-  @Override public void preFillModel(GamesCharactersViewModel data) {
-    updateNavTabs(data);
-  }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
-  private void updateNavTabs(GamesCharactersViewModel data) {
-    titleLayout.updateModels(data.getTitleModels(), data.getNavigationTab());
-  }
+    @Override
+    protected int getContentResId() {
+        return R.layout.fragment_game_characters;
+    }
+
+    @Override
+    public void updateView() {
+        flexibleAdapter.updateDataSet(data.getiFlexibles(), true);
+    }
+
+    @Override
+    public void preFillModel(GamesCharactersViewModel data) {
+        updateNavTabs(data);
+    }
+
+    private void updateNavTabs(GamesCharactersViewModel data) {
+        titleLayout.updateModels(data.getTitleModels(), data.getNavigationTab());
+    }
 }
