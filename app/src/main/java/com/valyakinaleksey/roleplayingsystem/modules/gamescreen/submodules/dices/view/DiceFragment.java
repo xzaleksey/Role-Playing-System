@@ -120,6 +120,8 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
         if (dicesAdapter == null || recyclerView.getAdapter() == null) {
             dicesAdapter = new DiceAdapter(data.getDiceItems(), getComponent().getPresenter());
             recyclerView.setAdapter(dicesAdapter);
+        } else {
+            dicesAdapter.updateDataSet(data.getDiceItems(), true);
         }
 
         if (collectionAdapter == null || recyclerViewDiceCollections.getAdapter() == null) {

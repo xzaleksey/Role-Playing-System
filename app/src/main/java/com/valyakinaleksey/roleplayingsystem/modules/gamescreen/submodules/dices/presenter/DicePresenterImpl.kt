@@ -34,8 +34,12 @@ class DicePresenterImpl constructor(
     override fun onDiceCollectionClicked(diceCollection: DiceCollection) {
         if (viewModel.selectedDiceCollection == diceCollection) {
             viewModel.selectedDiceCollection = null
+            viewModel.diceItems = diceInteractor.getDefaultDicesModel()
+            view.showContent()
         } else {
             viewModel.selectedDiceCollection = diceCollection
+            viewModel.diceItems = diceInteractor.mapDicesCollectionToDicesModel(diceCollection)
+            view.showContent()
         }
 
         viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)

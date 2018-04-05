@@ -46,6 +46,11 @@ class DiceInteractorImpl constructor(
         return result
     }
 
+    override fun mapDicesCollectionToDicesModel(diceCollection: DiceCollection): List<DiceSingleCollectionViewModel> {
+        return diceCollection.toSingleDiceCollections().map {
+            DiceSingleCollectionViewModel(DiceType.getDiceType(it.dice).resId, it)
+        }
+    }
 }
 
 
@@ -57,4 +62,6 @@ interface DiceInteractor {
     fun mapDiceCollections(diceViewModel: DiceViewModel): MutableList<IFlexible<*>>
 
     fun getDefaultDicesModel(): MutableList<IFlexible<*>>
+
+    fun mapDicesCollectionToDicesModel(diceCollection: DiceCollection): List<IFlexible<*>>
 }

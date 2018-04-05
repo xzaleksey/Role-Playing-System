@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.util.*
 
 class DiceCollection : Serializable {
-    private val dices = TreeMap<Dice, Int>()
+    private val dices: MutableMap<Dice, Int> = TreeMap()
     var id: String? = null
 
     fun addDices(dice: Dice, count: Int = 1) {
@@ -49,6 +49,18 @@ class DiceCollection : Serializable {
 
     fun isSame(singleDiceCollections: List<SingleDiceCollection>): Boolean {
         return singleDiceCollections.none { it.getDiceCount() != dices[it.dice] ?: 0 }
+    }
+
+    fun toSingleDiceCollections(): List<SingleDiceCollection> {
+        val result = mutableListOf<SingleDiceCollection>()
+        for (value in DiceType.values()) {
+            val dice = value.createDice()
+
+            dices[dice]?.let {
+                result.add(SingleDiceCollection(dice, it))
+            }?.let { result.add(SingleDiceCollection(dice, 0)) }
+        }
+        return result
     }
 
     override fun hashCode(): Int = dices.hashCode()
