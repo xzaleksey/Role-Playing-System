@@ -35,7 +35,7 @@
             android:layout_above="@+id/tv_main"
             android:layout_centerHorizontal="true"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_2"
             android:paddingLeft="@dimen/dp_4"
             android:paddingRight="@dimen/dp_4"
             android:paddingTop="@dimen/dp_4">

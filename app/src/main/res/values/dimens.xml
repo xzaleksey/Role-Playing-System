@@ -23,6 +23,7 @@
     <dimen name="character_avatar_width">108dp</dimen>
     <dimen name="character_avatar_height">130dp</dimen>
     <dimen name="avatar_small_size">32dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
     <dimen name="dp_4">4dp</dimen>
     <dimen name="common_margin_between_elements">8dp</dimen>
     <dimen name="dp_8">8dp</dimen>

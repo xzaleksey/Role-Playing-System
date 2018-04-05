@@ -8,7 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
+import butterknife.BindDimen;
+import butterknife.BindView;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -20,12 +21,11 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.ItemOffsetDecoration;
-
-import java.util.List;
-
-import butterknife.BindView;
+import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.LinearOffsetItemDecortation;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
+
+import java.util.List;
 
 public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, DiceViewModel, DiceView>
         implements DiceView {
@@ -54,6 +54,10 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     @BindView(R.id.btn_throw)
     Button bntThrow;
 
+    @BindDimen(R.dimen.dp_8)
+    int dp8;
+
+
     FlexibleAdapter<IFlexible<?>> collectionAdapter;
     FlexibleAdapter<IFlexible<?>> dicesAdapter;
     private ItemOffsetDecoration decor;
@@ -81,7 +85,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     public void setupViews(View view) {
         super.setupViews(view);
         recyclerViewDiceCollections.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
+        recyclerViewDiceCollections.addItemDecoration(new LinearOffsetItemDecortation(LinearOffsetItemDecortation.HORIZONTAL, dp8));
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), COLUMN_COUNT));
         bntSave.setOnClickListener(v -> getComponent().getPresenter().saveCurrentDices());
         decor = new ItemOffsetDecoration(getContext(), R.dimen.dp_8);
