@@ -80,9 +80,10 @@ class DicePresenterImpl constructor(
         if (checkSameCollectionExists()) {
             return
         }
-
+        var counter = 0
         for (diceCollection in viewModel.singleDiceCollections) {
-            if (diceCollection.getDiceCount() > 1) {
+            counter += diceCollection.getDiceCount()
+            if (counter > 1) {
                 view.setSaveDicesEnabled(true)
                 return
             }
@@ -123,8 +124,7 @@ class DicePresenterImpl constructor(
                 .subscribe(object : DataObserver<List<DiceCollection>>() {
                     override fun onData(data: List<DiceCollection>) {
                         viewModel.savedDiceCollections = data
-                        viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
-                        view.updateDiceCollections(true)
+                        checkUpdateDiceCollections()
                         view.scrollDiceCollectionsToStart()
                     }
                 }))
