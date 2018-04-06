@@ -9,36 +9,48 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.paren
 
 import javax.inject.Inject;
 
-@PerFragmentScope public class ParentViewCommunicationBus extends
-    SelfRestorableNavigationLceCommunicationBus<ParentGameModel, ParentView, ParentGamePresenter, ParentGameViewState>
-    implements ParentGamePresenter, ParentView {
+@PerFragmentScope
+public class ParentViewCommunicationBus extends
+        SelfRestorableNavigationLceCommunicationBus<ParentGameModel, ParentView, ParentGamePresenter, ParentGameViewState>
+        implements ParentGamePresenter, ParentView {
 
-  @Override public void attachView(ParentView view) {
-    super.attachView(view);
-  }
+    @Override
+    public void attachView(ParentView view) {
+        super.attachView(view);
+    }
 
-  @Inject
-  public ParentViewCommunicationBus(ParentGamePresenter presenter, ParentGameViewState viewState) {
-    super(presenter, viewState);
-  }
+    @Inject
+    public ParentViewCommunicationBus(ParentGamePresenter presenter, ParentGameViewState viewState) {
+        super(presenter, viewState);
+    }
 
-  @Override public void invalidateOptionsMenu() {
-    getNavigationResolver().resolveNavigation(ParentView::invalidateOptionsMenu);
-  }
+    @Override
+    public void invalidateOptionsMenu() {
+        getNavigationResolver().resolveNavigation(ParentView::invalidateOptionsMenu);
+    }
 
-  @Override public void deleteGame() {
-    presenter.deleteGame();
-  }
+    @Override
+    public void deleteGame() {
+        presenter.deleteGame();
+    }
 
-  @Override public void finishGame() {
-    presenter.finishGame();
-  }
+    @Override
+    public void finishGame() {
+        presenter.finishGame();
+    }
 
-  @Override public void leaveGame() {
-    presenter.leaveGame();
-  }
+    @Override
+    public void leaveGame() {
+        presenter.leaveGame();
+    }
 
-  @Override public void openGame() {
-    presenter.openGame();
-  }
+    @Override
+    public void openGame() {
+        presenter.openGame();
+    }
+
+    @Override
+    public void onNavigate(int navTag) {
+        presenter.onNavigate(navTag);
+    }
 }

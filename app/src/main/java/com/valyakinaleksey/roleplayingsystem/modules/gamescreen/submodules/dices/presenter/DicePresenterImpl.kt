@@ -25,6 +25,12 @@ class DicePresenterImpl constructor(
         return diceViewModel
     }
 
+    override fun restoreViewModel(viewModel: DiceViewModel) {
+        super.restoreViewModel(viewModel)
+        viewModel.diceItems = diceInteractor.mapDicesCollectionToDicesModel(viewModel.singleDiceCollections)
+        viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
+    }
+
     override fun onDiceCollectionClicked(diceCollection: DiceCollection) {
         if (viewModel.selectedDiceCollection == diceCollection) {
             viewModel.selectedDiceCollection = null
@@ -52,6 +58,7 @@ class DicePresenterImpl constructor(
     override fun onDicesChanged() {
         updateInProgressState()
         checkUpdateDiceCollections()
+        view.setData(viewModel)
     }
 
     private fun checkUpdateDiceCollections() {

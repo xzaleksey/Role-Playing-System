@@ -4,11 +4,13 @@ import com.valyakinaleksey.roleplayingsystem.core.presenter.Presenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.view.ParentView;
 
 public interface ParentGamePresenter extends Presenter<ParentView> {
-  void deleteGame();
+    void deleteGame();
 
-  void finishGame();
+    void finishGame();
 
-  void leaveGame();
+    void leaveGame();
 
-  void openGame();
+    void openGame();
+
+    void onNavigate(int navTag);
 }

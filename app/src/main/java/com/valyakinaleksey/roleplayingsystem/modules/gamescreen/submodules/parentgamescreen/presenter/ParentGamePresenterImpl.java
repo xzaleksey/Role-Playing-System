@@ -133,4 +133,10 @@ public class ParentGamePresenterImpl extends BasePresenter<ParentView, ParentGam
                     view.showContent();
                 }, Crashlytics::logException));
     }
+
+    @Override
+    public void onNavigate(int navTag) {
+        viewModel.setNavigationTag(navTag);
+        view.showContent();
+    }
 }
