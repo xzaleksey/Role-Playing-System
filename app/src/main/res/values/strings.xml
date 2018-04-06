@@ -108,4 +108,6 @@
     <string name="choose">Choose</string>
     <string name="reset">Reset</string>
     <string name="delete">Delete</string>
+    <string name="rethrow_all_dices">Rethrow all dices</string>
+    <string name="result">Result</string>
 </resources>

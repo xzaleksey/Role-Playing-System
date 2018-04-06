@@ -27,12 +27,14 @@
     <dimen name="dp_4">4dp</dimen>
     <dimen name="common_margin_between_elements">8dp</dimen>
     <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_184">184dp</dimen>
     <dimen name="dp_10">10dp</dimen>
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_16">16dp</dimen>
     <dimen name="dp_18">18dp</dimen>
     <dimen name="dp_20">20dp</dimen>
     <dimen name="dp_24">24dp</dimen>
+    <dimen name="dp_36">36dp</dimen>
     <dimen name="dp_28">28dp</dimen>
     <dimen name="dp_74">74dp</dimen>d
     <dimen name="status_bar_height">0dp</dimen>

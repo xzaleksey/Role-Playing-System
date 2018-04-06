@@ -5,10 +5,13 @@ import java.util.*
 
 class DiceCollectionResult : Serializable {
     private val diceResults = TreeMap<Dice, MutableList<DiceResult>>()
+    private var diceResultMax = 0
 
     private fun addDiceResult(diceResult: DiceResult) {
         val dice = diceResult.dice
         var dicesResultsList = diceResults[dice]
+        diceResultMax += diceResult.dice.maxValue
+
         if (dicesResultsList == null) {
             dicesResultsList = mutableListOf()
             diceResults[dice] = dicesResultsList
@@ -19,6 +22,21 @@ class DiceCollectionResult : Serializable {
 
     fun getDiceResults(): Map<Dice, MutableList<DiceResult>> {
         return diceResults
+    }
+
+    fun getCurrentResult(): Int {
+        var counter = 0
+        for (diceResultList in diceResults.values) {
+            for (diceResult in diceResultList) {
+                counter += diceResult.value
+            }
+        }
+
+        return counter
+    }
+
+    fun getMaxResult(): Int {
+        return diceResultMax
     }
 
     fun resetResult() {
