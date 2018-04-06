@@ -34,6 +34,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
         implements DiceView {
 
     public static final String TAG = DiceFragment.class.getSimpleName();
+    public static final String DELETE_DICE_COLLECTION_TAG = "delete_dice_collection_tag";
     private static final int COLUMN_COUNT = 3;
 
     @BindView(R.id.recycler_view)

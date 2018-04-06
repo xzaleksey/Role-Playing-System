@@ -2,7 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.core.presenter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
 import com.valyakinaleksey.roleplayingsystem.core.view.View;
 
 
@@ -57,4 +56,5 @@ public interface Presenter<V extends View> {
      * Free resources etc.
      */
     void onDestroy();
+
 }

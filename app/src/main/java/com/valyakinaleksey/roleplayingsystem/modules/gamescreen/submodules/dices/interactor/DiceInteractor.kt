@@ -9,6 +9,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.SingleDiceCollection
 import eu.davidea.flexibleadapter.items.IFlexible
+import rx.Completable
 import rx.Observable
 
 class DiceInteractorImpl constructor(
@@ -16,6 +17,10 @@ class DiceInteractorImpl constructor(
 
     override fun getDefaultSingleDicesCollections(): List<SingleDiceCollection> {
         return DiceType.values().map { SingleDiceCollection(it.createDice(), 0) }
+    }
+
+    override fun removeDiceCollection(gameId: String, diceCollection: DiceCollection): Completable {
+        return firebaseDiceCollectionRepository.removeData(gameId, FirebaseDiceCollection.newInstance(diceCollection))
     }
 
     override fun mapDiceCollections(diceViewModel: DiceViewModel): MutableList<IFlexible<*>> {
@@ -63,4 +68,6 @@ interface DiceInteractor {
     fun getDefaultSingleDicesCollections(): List<SingleDiceCollection>
 
     fun mapDicesCollectionToDicesModel(diceCollections: List<SingleDiceCollection>): List<IFlexible<*>>
+
+    fun removeDiceCollection(gameId: String, diceCollection: DiceCollection): Completable
 }

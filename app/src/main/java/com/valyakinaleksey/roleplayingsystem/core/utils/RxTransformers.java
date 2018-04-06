@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.core.utils;
 
+import rx.Completable;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -18,6 +19,12 @@ public class RxTransformers {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public static Completable.Transformer applyCompletableSchedulers() {
+        return tObservable -> tObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
     /**
      * Apply standard {@link Schedulers}: io for {@link Observable}, io for {@link Subscriber}
      */
@@ -28,9 +35,10 @@ public class RxTransformers {
 
     /**
      * Run code before running observable {@link Observable} and after its termination
+     *
      * @param before code that will run onSubscribe
-     * @param after code that will run afterTerminate
-     * @param <T> {@link Object}
+     * @param after  code that will run afterTerminate
+     * @param <T>    {@link Object}
      * @return {@link Observable}
      */
     public static <T> Observable.Transformer<T, T> applyOpBeforeAndAfter(Runnable before, Runnable after) {

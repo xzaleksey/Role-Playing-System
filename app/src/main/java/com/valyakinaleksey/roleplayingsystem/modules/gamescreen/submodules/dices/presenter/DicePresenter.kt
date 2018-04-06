@@ -11,4 +11,6 @@ interface DicePresenter : Presenter<DiceView> {
     fun onDicesChanged()
 
     fun onDiceCollectionClicked(diceCollection: DiceCollection)
+
+    fun deleteDiceCollection(diceCollection: DiceCollection)
 }

@@ -107,4 +107,5 @@
     <string name="saved_collections">Saved sets</string>
     <string name="choose">Choose</string>
     <string name="reset">Reset</string>
+    <string name="delete">Delete</string>
 </resources>

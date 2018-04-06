@@ -2,6 +2,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dice
 
 import android.os.Bundle
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
+import com.valyakinaleksey.roleplayingsystem.core.rx.CompletableObserver
 import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
@@ -9,6 +10,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.DiceView
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
+import rx.Subscription
 
 class DicePresenterImpl constructor(
         private val diceInteractor: DiceInteractor
@@ -46,6 +48,10 @@ class DicePresenterImpl constructor(
 
         updateDiceCollections()
         updateInProgressState()
+    }
+
+    override fun deleteDiceCollection(diceCollection: DiceCollection) {
+        removeDiceCollection(diceCollection)
     }
 
     override fun getData() {
@@ -130,9 +136,15 @@ class DicePresenterImpl constructor(
                 .compose(RxTransformers.applySchedulers())
                 .subscribe(object : DataObserver<List<DiceCollection>>() {
                     override fun onData(data: List<DiceCollection>) {
+                        val previousCollection = viewModel.savedDiceCollections
                         viewModel.savedDiceCollections = data
                         checkUpdateDiceCollections()
-                        view.scrollDiceCollectionsToStart()
+
+                        if (previousCollection.size <= data.size) {
+                            view.scrollDiceCollectionsToStart()
+                        }
+
+                        updateSaveDicesBtnState()
                     }
                 }))
     }
@@ -146,6 +158,19 @@ class DicePresenterImpl constructor(
 
                             }
                         }))
+    }
+
+    private fun removeDiceCollection(diceCollection: DiceCollection) {
+        diceInteractor.removeDiceCollection(viewModel.gameModel.id, diceCollection)
+                .compose(RxTransformers.applyCompletableSchedulers())
+                .subscribe(object : CompletableObserver() {
+                    override fun onCompleted() {
+                    }
+
+                    override fun onSubscribe(s: Subscription) {
+                        compositeSubscription.add(s)
+                    }
+                })
     }
 
     override fun saveCurrentDices() {

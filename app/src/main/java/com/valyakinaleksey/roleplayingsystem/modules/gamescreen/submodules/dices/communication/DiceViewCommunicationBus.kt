@@ -21,6 +21,10 @@ class DiceViewCommunicationBus(presenter: DicePresenter, viewState: DiceViewStat
         view?.updateDiceCollections(animate)
     }
 
+    override fun deleteDiceCollection(diceCollection: DiceCollection) {
+        presenter.deleteDiceCollection(diceCollection)
+    }
+
     override fun onDiceCollectionClicked(diceCollection: DiceCollection) {
         presenter.onDiceCollectionClicked(diceCollection)
     }

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.presenter.DicePresenter;
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.Dice;
@@ -63,6 +64,19 @@ public class DiceCollectionViewHolder extends FlexibleViewHolder {
 
         clickContainer.setOnClickListener(v -> {
             dicePresenter.onDiceCollectionClicked(diceCollection);
+        });
+
+        clickContainer.setOnLongClickListener(v -> {
+            new MaterialDialog.Builder(itemView.getContext())
+                    .title(itemView.getContext().getString(R.string.delete) + "?")
+                    .positiveText(android.R.string.ok)
+                    .negativeText(android.R.string.cancel)
+                    .onPositive((dialog, which) -> {
+                        dicePresenter.deleteDiceCollection(diceCollection);
+                    })
+                    .show();
+
+            return true;
         });
 
         Set<Map.Entry<Dice, Integer>> entrySet = diceCollection.getDices().entrySet();
