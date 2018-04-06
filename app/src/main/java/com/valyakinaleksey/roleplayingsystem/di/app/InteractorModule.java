@@ -209,8 +209,8 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    DiceInteractor provideDiceInteractor(FirebaseDiceCollectionRepository firebaseDiceCollectionRepo) {
-        return new DiceInteractorImpl(firebaseDiceCollectionRepo);
+    DiceInteractor provideDiceInteractor(FirebaseDiceCollectionRepository firebaseDiceCollectionRepo, StringRepository stringRepo) {
+        return new DiceInteractorImpl(firebaseDiceCollectionRepo, stringRepo);
     }
 }
       

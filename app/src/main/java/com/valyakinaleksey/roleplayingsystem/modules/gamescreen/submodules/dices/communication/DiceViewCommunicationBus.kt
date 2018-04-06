@@ -13,6 +13,14 @@ class DiceViewCommunicationBus(presenter: DicePresenter, viewState: DiceViewStat
         view?.scrollDiceCollectionsToStart()
     }
 
+    override fun throwDices() {
+        presenter.throwDices()
+    }
+
+    override fun switchBackToProgress() {
+        presenter.switchBackToProgress()
+    }
+
     override fun updateDices(animate: Boolean) {
         view?.updateDices(animate)
     }

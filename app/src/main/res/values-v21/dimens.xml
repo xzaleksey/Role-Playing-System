@@ -2,4 +2,5 @@
 <resources>
     <dimen name="status_bar_height">25dp</dimen>
     <dimen name="game_characters_top_element_height">152dp</dimen>
+    <dimen name="game_characters_top_element_height_result">80dp</dimen>
 </resources>

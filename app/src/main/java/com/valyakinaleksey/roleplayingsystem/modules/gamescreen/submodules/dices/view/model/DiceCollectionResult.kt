@@ -7,7 +7,7 @@ class DiceCollectionResult : Serializable {
     private val diceResults = TreeMap<Dice, MutableList<DiceResult>>()
     private var diceResultMax = 0
 
-    private fun addDiceResult(diceResult: DiceResult) {
+    fun addDiceResult(diceResult: DiceResult) {
         val dice = diceResult.dice
         var dicesResultsList = diceResults[dice]
         diceResultMax += diceResult.dice.maxValue

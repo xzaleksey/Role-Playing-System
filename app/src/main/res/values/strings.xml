@@ -110,4 +110,6 @@
     <string name="delete">Delete</string>
     <string name="rethrow_all_dices">Rethrow all dices</string>
     <string name="result">Result</string>
+    <string name="max">max</string>
+    <string name="throw_result">Throw result</string>
 </resources>

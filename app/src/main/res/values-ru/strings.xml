@@ -102,5 +102,7 @@
     <string name="delete">Удалить</string>
     <string name="rethrow_all_dices">Перебросить все кубы</string>
     <string name="result">Результат</string>
+    <string name="max">макс</string>
+    <string name="throw_result">Результат броска</string>
 
 </resources>

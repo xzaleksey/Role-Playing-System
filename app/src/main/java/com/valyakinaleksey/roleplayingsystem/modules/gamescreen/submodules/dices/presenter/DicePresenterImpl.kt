@@ -8,8 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.GameModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.interactor.DiceInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.DiceView
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.*
 import rx.Subscription
 
 class DicePresenterImpl constructor(
@@ -21,7 +20,7 @@ class DicePresenterImpl constructor(
         val gameModel = arguments.getParcelable<GameModel>(GameModel.KEY)
         diceViewModel.gameModel = gameModel
         diceViewModel.singleDiceCollections = diceInteractor.getDefaultSingleDicesCollections()
-        val defaultDicesModel = diceInteractor.mapDicesCollectionToDicesModel(diceViewModel.singleDiceCollections)
+        val defaultDicesModel = diceInteractor.mapSingleDiceCollectionsToDicesModel(diceViewModel.singleDiceCollections)
         diceViewModel.diceItems = defaultDicesModel
 
         return diceViewModel
@@ -29,20 +28,44 @@ class DicePresenterImpl constructor(
 
     override fun restoreViewModel(viewModel: DiceViewModel) {
         super.restoreViewModel(viewModel)
-        viewModel.diceItems = diceInteractor.mapDicesCollectionToDicesModel(viewModel.singleDiceCollections)
+        if (viewModel.diceProgressState == DiceProgressState.IN_PROGRESS) {
+            viewModel.diceItems = diceInteractor.mapSingleDiceCollectionsToDicesModel(viewModel.singleDiceCollections)
+        } else {
+            viewModel.diceItems = diceInteractor.mapDiceResult(viewModel.diceCollectionResult)
+        }
         viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
+    }
+
+    override fun switchBackToProgress() {
+        viewModel.diceItems = diceInteractor.mapSingleDiceCollectionsToDicesModel(viewModel.singleDiceCollections)
+        viewModel.diceCollectionResult = null
+        viewModel.diceProgressState = DiceProgressState.IN_PROGRESS
+        view.showContent()
+    }
+
+    override fun throwDices() {
+        val diceCollectionResult = DiceCollectionResult()
+        for (singleDiceCollection in viewModel.singleDiceCollections) {
+            for (i in 0 until singleDiceCollection.getDiceCount()) {
+                diceCollectionResult.addDiceResult(DiceResult.throwDice(singleDiceCollection.dice))
+            }
+        }
+        viewModel.diceCollectionResult = diceCollectionResult
+        viewModel.diceProgressState = DiceProgressState.SHOW_RESULT
+        viewModel.diceItems = diceInteractor.mapDiceResult(diceCollectionResult)
+        view.showContent()
     }
 
     override fun onDiceCollectionClicked(diceCollection: DiceCollection) {
         if (viewModel.selectedDiceCollection == diceCollection) {
             viewModel.selectedDiceCollection = null
             viewModel.singleDiceCollections = diceInteractor.getDefaultSingleDicesCollections()
-            viewModel.diceItems = diceInteractor.mapDicesCollectionToDicesModel(viewModel.singleDiceCollections)
+            viewModel.diceItems = diceInteractor.mapSingleDiceCollectionsToDicesModel(viewModel.singleDiceCollections)
             view.updateDices(false)
         } else {
             viewModel.selectedDiceCollection = diceCollection
             viewModel.singleDiceCollections = diceCollection.toSingleDiceCollections()
-            viewModel.diceItems = diceInteractor.mapDicesCollectionToDicesModel(viewModel.singleDiceCollections)
+            viewModel.diceItems = diceInteractor.mapSingleDiceCollectionsToDicesModel(viewModel.singleDiceCollections)
             view.updateDices(false)
         }
 

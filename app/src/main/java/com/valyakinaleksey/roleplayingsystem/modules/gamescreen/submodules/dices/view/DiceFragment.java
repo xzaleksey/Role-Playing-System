@@ -9,8 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import butterknife.BindDimen;
-import butterknife.BindView;
+
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -23,10 +22,13 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.parentgamescreen.di.ParentGameComponent;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.ItemOffsetDecoration;
 import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.LinearOffsetItemDecortation;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.items.IFlexible;
 
 import java.util.List;
+
+import butterknife.BindDimen;
+import butterknife.BindView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 
 public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, DiceViewModel, DiceView>
         implements DiceView {
@@ -53,11 +55,29 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     View bntSave;
 
     @BindView(R.id.btn_throw)
-    Button bntThrow;
+    Button btnThrow;
+
+    @BindView(R.id.label_container)
+    View progressLabelContainer;
+
+    @BindView(R.id.progress_state_container)
+    View progressStateContainer;
+
+    @BindView(R.id.result_state_container)
+    View resultStateContainer;
+
+    @BindView(R.id.top_container)
+    View topContainer;
+
+    @BindView(R.id.iv_result_back)
+    View ivResultBack;
 
     @BindDimen(R.dimen.dp_8)
     int dp8;
-
+    @BindDimen(R.dimen.game_characters_top_element_height)
+    int progressTopElementHeight;
+    @BindDimen(R.dimen.game_characters_top_element_height_result)
+    int resultTopElementHeight;
 
     FlexibleAdapter<IFlexible<?>> collectionAdapter;
     FlexibleAdapter<IFlexible<?>> dicesAdapter;
@@ -98,6 +118,8 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
                 return LinearSmoothScroller.SNAP_TO_START;
             }
         };
+        btnThrow.setOnClickListener(v -> getComponent().getPresenter().throwDices());
+        ivResultBack.setOnClickListener(v -> getComponent().getPresenter().switchBackToProgress());
     }
 
     public void loadData() {
@@ -119,18 +141,23 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
         } else {
             showStateShowResult();
         }
-    }
-
-    private void showStateInProgress() {
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), COLUMN_COUNT));
-        recyclerView.addItemDecoration(decor, 0);
 
         if (dicesAdapter == null || recyclerView.getAdapter() == null) {
             dicesAdapter = new DiceAdapter(data.getDiceItems(), getComponent().getPresenter());
             recyclerView.setAdapter(dicesAdapter);
         } else {
-            updateDices(true);
+            updateDices(false);
         }
+    }
+
+    private void showStateInProgress() {
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), COLUMN_COUNT));
+        recyclerView.addItemDecoration(decor, 0);
+        progressLabelContainer.setVisibility(View.VISIBLE);
+        btnThrow.setVisibility(View.VISIBLE);
+        progressStateContainer.setVisibility(View.VISIBLE);
+        resultStateContainer.setVisibility(View.GONE);
+        topContainer.getLayoutParams().height = progressTopElementHeight;
 
         if (collectionAdapter == null || recyclerViewDiceCollections.getAdapter() == null) {
             collectionAdapter = new DiceAdapter(data.getDiceCollectionsItems(), getComponent().getPresenter());
@@ -138,13 +165,18 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
         }
     }
 
+    private void showStateShowResult() {
+        progressLabelContainer.setVisibility(View.GONE);
+        btnThrow.setVisibility(View.GONE);
+        progressStateContainer.setVisibility(View.GONE);
+        resultStateContainer.setVisibility(View.VISIBLE);
+        topContainer.getLayoutParams().height = resultTopElementHeight;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
     @Override
     public void updateDices(boolean animate) {
         dicesAdapter.updateDataSet(data.getDiceItems(), animate);
-    }
-
-    private void showStateShowResult() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override
@@ -159,7 +191,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
 
     @Override
     public void setThrowBtnEnabled(boolean b) {
-        bntThrow.setEnabled(b);
+        btnThrow.setEnabled(b);
     }
 
     @Override

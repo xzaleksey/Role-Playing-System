@@ -1,19 +1,19 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.interactor
 
+import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceCollection
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceCollectionRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.collectionadapter.DiceCollectionViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceSingleCollectionViewModel
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceType
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
-import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.SingleDiceCollection
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceresultadapter.DiceTotalResultViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.*
 import eu.davidea.flexibleadapter.items.IFlexible
 import rx.Completable
 import rx.Observable
 
 class DiceInteractorImpl constructor(
-        private val firebaseDiceCollectionRepository: FirebaseDiceCollectionRepository) : DiceInteractor {
+        private val firebaseDiceCollectionRepository: FirebaseDiceCollectionRepository,
+        private val stringRepository: StringRepository) : DiceInteractor {
 
     override fun getDefaultSingleDicesCollections(): List<SingleDiceCollection> {
         return DiceType.values().map { SingleDiceCollection(it.createDice(), 0) }
@@ -50,7 +50,16 @@ class DiceInteractorImpl constructor(
         }
     }
 
-    override fun mapDicesCollectionToDicesModel(diceCollections: List<SingleDiceCollection>): List<DiceSingleCollectionViewModel> {
+    override fun mapDiceResult(diceCollectionResult: DiceCollectionResult): MutableList<IFlexible<*>> {
+        val result = mutableListOf<IFlexible<*>>()
+        val currentResult = diceCollectionResult.getCurrentResult()
+        val maxResult = diceCollectionResult.getMaxResult()
+        result.add(DiceTotalResultViewModel(currentResult.toString(),
+                maxResult.toString() + " (${stringRepository.getMax()})"))
+        return result
+    }
+
+    override fun mapSingleDiceCollectionsToDicesModel(diceCollections: List<SingleDiceCollection>): List<DiceSingleCollectionViewModel> {
         return diceCollections.map {
             DiceSingleCollectionViewModel(DiceType.getDiceType(it.dice).resId, it)
         }
@@ -67,7 +76,9 @@ interface DiceInteractor {
 
     fun getDefaultSingleDicesCollections(): List<SingleDiceCollection>
 
-    fun mapDicesCollectionToDicesModel(diceCollections: List<SingleDiceCollection>): List<IFlexible<*>>
+    fun mapSingleDiceCollectionsToDicesModel(diceCollections: List<SingleDiceCollection>): List<IFlexible<*>>
 
     fun removeDiceCollection(gameId: String, diceCollection: DiceCollection): Completable
+
+    fun mapDiceResult(diceCollectionResult: DiceCollectionResult): MutableList<IFlexible<*>>
 }

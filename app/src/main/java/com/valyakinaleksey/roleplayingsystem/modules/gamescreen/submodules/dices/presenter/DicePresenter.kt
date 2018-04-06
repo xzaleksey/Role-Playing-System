@@ -13,4 +13,8 @@ interface DicePresenter : Presenter<DiceView> {
     fun onDiceCollectionClicked(diceCollection: DiceCollection)
 
     fun deleteDiceCollection(diceCollection: DiceCollection)
+
+    fun throwDices()
+
+    fun switchBackToProgress()
 }

@@ -2,16 +2,24 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dice
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import com.valyakinaleksey.roleplayingsystem.R;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceAdapter;
 
 import java.util.List;
+
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 public class DiceTotalResultViewModel extends AbstractFlexibleItem<DiceTotalResultViewHolder> {
 
     private String currentResultValue;
     private String maxResultValue;
+
+    public DiceTotalResultViewModel(String currentResultValue, String maxResultValue) {
+        this.currentResultValue = currentResultValue;
+        this.maxResultValue = maxResultValue;
+    }
 
     @Override
     public int getLayoutRes() {
@@ -33,7 +41,11 @@ public class DiceTotalResultViewModel extends AbstractFlexibleItem<DiceTotalResu
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, DiceTotalResultViewHolder holder, int position, List payloads) {
-        holder.bind(this);
+        if (adapter instanceof DiceAdapter) {
+            holder.bind(this, ((DiceAdapter) adapter).getDicePresenter());
+        } else {
+            throw new IllegalArgumentException("no DiceAdapter");
+        }
     }
 
     @Override

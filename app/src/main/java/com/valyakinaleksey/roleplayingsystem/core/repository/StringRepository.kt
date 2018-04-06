@@ -14,6 +14,7 @@ class StringRepositoryImpl(private val resourcesProvider: ResourcesProvider) : S
     override fun getMyLastGames(): String = resourcesProvider.getString(R.string.my_last_games)
     override fun getAllGames(): String = resourcesProvider.getString(R.string.all_games)
     override fun getMyProfile(): String = resourcesProvider.getString(R.string.my_profile)
+    override fun getMax(): String = resourcesProvider.getString(R.string.max)
 }
 
 interface StringRepository {
@@ -28,4 +29,5 @@ interface StringRepository {
     fun getErrorNetwork(): String
     fun getGames(): String
     fun getCharacters(): String
+    fun getMax(): String
 }

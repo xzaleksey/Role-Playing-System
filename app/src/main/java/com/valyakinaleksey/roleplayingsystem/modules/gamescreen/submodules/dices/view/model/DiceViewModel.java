@@ -65,6 +65,10 @@ public class DiceViewModel extends BaseRequestUpdateViewModel implements Request
         return diceCollectionResult;
     }
 
+    public void setDiceCollectionResult(DiceCollectionResult diceCollectionResult) {
+        this.diceCollectionResult = diceCollectionResult;
+    }
+
     public List<IFlexible<?>> getDiceItems() {
         return diceItems;
     }
