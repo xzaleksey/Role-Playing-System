@@ -113,4 +113,5 @@
     <string name="max">max</string>
     <string name="throw_result">Throw result</string>
     <string name="details">Details</string>
+    <string name="rethrow">Rethrow</string>
 </resources>

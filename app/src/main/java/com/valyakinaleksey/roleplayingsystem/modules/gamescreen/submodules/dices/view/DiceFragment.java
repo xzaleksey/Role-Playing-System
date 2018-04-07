@@ -165,7 +165,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
         }
         recyclerViewCardView.setCardBackgroundColor(colorWhite);
         recyclerViewCardView.setRadius(dp2);
-        recyclerViewCardView.setCardElevation(dp8);
+        recyclerViewCardView.setCardElevation(dp2);
         ((ViewGroup.MarginLayoutParams) recyclerViewCardView.getLayoutParams()).setMargins(dp8, dp8, dp8, dp8);
     }
 

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_8">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingStart="@dimen/dp_16"
+            tools:ignore="RtlSymmetry">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_main_dice"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:layout_centerVertical="true"
+                android:tint="@color/colorDiceResult"
+                tools:src="@drawable/dice_d4" />
+
+
+            <TextView
+                android:id="@+id/tv_dice_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_toEndOf="@+id/iv_main_dice"
+                android:layout_toRightOf="@+id/iv_main_dice"
+                android:gravity="center"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/sp_16"
+                tools:text="1" />
+
+
+            <FrameLayout
+                android:id="@+id/right_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:id="@+id/btn_rethrow_dices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="@dimen/dp_16"
+                    android:text="@string/rethrow"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sp_14"
+                    tools:visibility="gone" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/iv_expand"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_8"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/dp_8"
+                    android:tint="@color/colorDiceResult"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_expand_more_black_24dp"
+                    tools:visibility="visible" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_main_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/tv_dice_count"
+                android:layout_toLeftOf="@+id/right_container"
+                android:layout_toRightOf="@+id/tv_dice_count"
+                android:layout_toStartOf="@+id/right_container"
+                android:gravity="center"
+                android:padding="@dimen/dp_12"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp_14"
+                tools:text="1" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/dice_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/btn_rethrow_dices_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackground"
+            android:padding="@dimen/dp_16"
+            android:text="@string/rethrow"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/sp_14"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

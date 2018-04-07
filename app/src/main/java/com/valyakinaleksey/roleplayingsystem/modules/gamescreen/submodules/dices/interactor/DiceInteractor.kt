@@ -7,6 +7,7 @@ import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.Firebase
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.collectionadapter.DiceCollectionViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceSingleCollectionViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceresultadapter.DiceTotalResultViewModel
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceresultadapter.SingleDiceTypeResultViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.*
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.convertDpToPixel
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -63,6 +64,12 @@ class DiceInteractorImpl constructor(
                 .title(stringRepository.getDetails())
                 .build()
         )
+        for (diceResultEntry in diceCollectionResult.getDiceResults()) {
+            val diceType = DiceType.getDiceType(diceResultEntry.key)
+            val diceResults = diceResultEntry.value
+            result.add(SingleDiceTypeResultViewModel(diceResults,
+                    diceResults.sumBy { it.value }, diceType, false))
+        }
         return result
     }
 
