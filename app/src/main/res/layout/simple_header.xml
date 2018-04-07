@@ -20,10 +20,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/common_margin_between_elements"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_vertical_margin"
         android:singleLine="true"
+        tools:ignore="RtlHardcoded,RtlSymmetry"
         tools:text="SubHeader" />
 
     <View

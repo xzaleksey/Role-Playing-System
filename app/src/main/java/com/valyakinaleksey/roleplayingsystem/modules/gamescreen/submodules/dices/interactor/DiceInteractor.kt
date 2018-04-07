@@ -1,5 +1,6 @@
 package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.interactor
 
+import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
 import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceCollection
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceCollectionRepository
@@ -7,6 +8,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceadapter.DiceSingleCollectionViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.diceresultadapter.DiceTotalResultViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.*
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.convertDpToPixel
 import eu.davidea.flexibleadapter.items.IFlexible
 import rx.Completable
 import rx.Observable
@@ -56,6 +58,11 @@ class DiceInteractorImpl constructor(
         val maxResult = diceCollectionResult.getMaxResult()
         result.add(DiceTotalResultViewModel(currentResult.toString(),
                 maxResult.toString() + " (${stringRepository.getMax()})"))
+        result.add(SubHeaderViewModel.Builder()
+                .paddingLeft(8.convertDpToPixel())
+                .title(stringRepository.getDetails())
+                .build()
+        )
         return result
     }
 

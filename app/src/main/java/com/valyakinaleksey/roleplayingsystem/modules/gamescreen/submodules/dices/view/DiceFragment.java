@@ -2,11 +2,13 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dice
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.recyclerview.decor.LinearOffs
 
 import java.util.List;
 
+import butterknife.BindColor;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -38,46 +41,43 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-
     @BindView(R.id.recycler_view_dices_collections)
     RecyclerView recyclerViewDiceCollections;
-
     @BindView(R.id.no_dices_container)
     View noDicesContainer;
-
     @BindView(R.id.dices_collections_container)
     View dicesCollectionContainer;
-
     @BindView(R.id.saved_dices_count)
     TextView tvSavedDicesCount;
-
     @BindView(R.id.save)
     View bntSave;
-
     @BindView(R.id.btn_throw)
     Button btnThrow;
-
     @BindView(R.id.label_container)
     View progressLabelContainer;
-
     @BindView(R.id.progress_state_container)
     View progressStateContainer;
-
     @BindView(R.id.result_state_container)
     View resultStateContainer;
-
     @BindView(R.id.top_container)
     View topContainer;
-
     @BindView(R.id.iv_result_back)
     View ivResultBack;
+    @BindView(R.id.recycler_view_card_view)
+    CardView recyclerViewCardView;
 
     @BindDimen(R.dimen.dp_8)
     int dp8;
+    @BindDimen(R.dimen.dp_2)
+    int dp2;
     @BindDimen(R.dimen.game_characters_top_element_height)
     int progressTopElementHeight;
     @BindDimen(R.dimen.game_characters_top_element_height_result)
     int resultTopElementHeight;
+    @BindColor(android.R.color.white)
+    int colorWhite;
+    @BindColor(R.color.backgroundColor)
+    int backGroundColor;
 
     FlexibleAdapter<IFlexible<?>> collectionAdapter;
     FlexibleAdapter<IFlexible<?>> dicesAdapter;
@@ -163,6 +163,10 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
             collectionAdapter = new DiceAdapter(data.getDiceCollectionsItems(), getComponent().getPresenter());
             recyclerViewDiceCollections.setAdapter(collectionAdapter);
         }
+        recyclerViewCardView.setCardBackgroundColor(colorWhite);
+        recyclerViewCardView.setRadius(dp2);
+        recyclerViewCardView.setCardElevation(dp8);
+        ((ViewGroup.MarginLayoutParams) recyclerViewCardView.getLayoutParams()).setMargins(dp8, dp8, dp8, dp8);
     }
 
     private void showStateShowResult() {
@@ -172,6 +176,10 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
         resultStateContainer.setVisibility(View.VISIBLE);
         topContainer.getLayoutParams().height = resultTopElementHeight;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewCardView.setCardBackgroundColor(backGroundColor);
+        recyclerViewCardView.setRadius(0);
+        recyclerViewCardView.setCardElevation(0);
+        ((ViewGroup.MarginLayoutParams) recyclerViewCardView.getLayoutParams()).setMargins(0, 0, 0, 0);
     }
 
     @Override

@@ -23,6 +23,7 @@ public class SubHeaderViewHolder extends ButterKnifeViewHolder {
 
     public void bind(SubHeaderViewModel subHeaderViewModel) {
         tvTitle.setText(subHeaderViewModel.getTitle());
+        tvTitle.setPadding(subHeaderViewModel.getPaddingLeft(), tvTitle.getPaddingTop(), tvTitle.getPaddingRight(), tvTitle.getPaddingBottom());
         if (subHeaderViewModel.getColor() == 0) {
             tvTitle.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary));
         } else {

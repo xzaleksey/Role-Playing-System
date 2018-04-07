@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import com.valyakinaleksey.roleplayingsystem.R;
 import com.valyakinaleksey.roleplayingsystem.core.view.adapter.viewholder.SubHeaderViewHolder;
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.ContextExtensions;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,8 +18,13 @@ public class SubHeaderViewModel extends AbstractFlexibleItem<SubHeaderViewHolder
     private int color;
     private boolean drawBottomDivider;
     private boolean drawTopDivider;
+    private int paddingLeft;
 
     public SubHeaderViewModel() {
+    }
+
+    public int getPaddingLeft() {
+        return paddingLeft;
     }
 
     public SubHeaderViewModel(String title) {
@@ -40,6 +46,7 @@ public class SubHeaderViewModel extends AbstractFlexibleItem<SubHeaderViewHolder
         color = builder.color;
         drawBottomDivider = builder.drawBottomDivider;
         setDrawTopDivider(builder.drawTopDivider);
+        paddingLeft = builder.paddingLeft;
     }
 
     public boolean isDrawBottomDivider() {
@@ -111,6 +118,7 @@ public class SubHeaderViewModel extends AbstractFlexibleItem<SubHeaderViewHolder
         private int color;
         private boolean drawBottomDivider;
         private boolean drawTopDivider;
+        private int paddingLeft = ContextExtensions.convertDpToPixel(16);
 
         public Builder() {
         }
@@ -127,6 +135,11 @@ public class SubHeaderViewModel extends AbstractFlexibleItem<SubHeaderViewHolder
 
         public Builder drawBottomDivider(boolean val) {
             drawBottomDivider = val;
+            return this;
+        }
+
+        public Builder paddingLeft(int paddingLeft) {
+            this.paddingLeft = paddingLeft;
             return this;
         }
 

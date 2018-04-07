@@ -104,5 +104,6 @@
     <string name="result">Результат</string>
     <string name="max">макс</string>
     <string name="throw_result">Результат броска</string>
+    <string name="details">Детально</string>
 
 </resources>
