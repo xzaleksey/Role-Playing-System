@@ -4,6 +4,7 @@ import com.valyakinaleksey.roleplayingsystem.core.proxy.SelfRestorableNavigation
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.presenter.DicePresenter
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.DiceView
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceCollection
+import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceResult
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.DiceViewModel
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.state.DiceViewState
 
@@ -19,6 +20,10 @@ class DiceViewCommunicationBus(presenter: DicePresenter, viewState: DiceViewStat
 
     override fun switchBackToProgress() {
         presenter.switchBackToProgress()
+    }
+
+    override fun rethrowDices(diceResults: Set<DiceResult>) {
+        presenter.rethrowDices(diceResults)
     }
 
     override fun updateDices(animate: Boolean) {

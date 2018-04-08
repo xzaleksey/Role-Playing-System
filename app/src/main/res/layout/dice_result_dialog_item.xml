@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/dp_2"
-    android:paddingLeft="@dimen/dp_16"
-    android:paddingStart="@dimen/dp_16"
-    android:paddingTop="@dimen/dp_2"
+    android:background="?attr/selectableItemBackground"
+    android:paddingBottom="@dimen/dp_12"
+    android:paddingTop="@dimen/dp_12"
     tools:ignore="RtlSymmetry">
 
     <android.support.v7.widget.AppCompatImageView
@@ -26,37 +25,23 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="18dp"
-        android:layout_marginStart="18dp"
         android:layout_marginRight="@dimen/dp_4"
+        android:layout_marginStart="18dp"
         android:layout_toEndOf="@+id/iv_main_dice"
         android:layout_toRightOf="@+id/iv_main_dice"
         android:gravity="center"
         android:textColor="@color/colorTextPrimary"
-        android:textSize="@dimen/sp_12"
+        android:textSize="@dimen/sp_16"
         tools:text="1" />
 
 
-    <FrameLayout
-        android:id="@+id/right_container"
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true">
-
-        <TextView
-            android:id="@+id/btn_rethrow_dices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:paddingLeft="@dimen/dp_16"
-            android:paddingRight="@dimen/dp_16"
-            android:text="@string/rethrow"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/sp_14"
-            android:visibility="invisible" />
-
-    </FrameLayout>
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/tv_main_result"
@@ -64,11 +49,11 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/tv_dice_count"
-        android:layout_toLeftOf="@+id/right_container"
+        android:layout_toLeftOf="@+id/checkbox"
         android:layout_toRightOf="@+id/tv_dice_count"
-        android:layout_toStartOf="@+id/right_container"
+        android:layout_toStartOf="@+id/checkbox"
         android:gravity="center"
-        android:textColor="@color/colorTextSecondary"
-        android:textSize="@dimen/sp_12"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/sp_16"
         tools:text="1" />
 </RelativeLayout>

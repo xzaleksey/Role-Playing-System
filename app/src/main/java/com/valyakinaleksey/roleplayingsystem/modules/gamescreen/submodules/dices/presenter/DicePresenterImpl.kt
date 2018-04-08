@@ -36,6 +36,16 @@ class DicePresenterImpl constructor(
         viewModel.diceCollectionsItems = diceInteractor.mapDiceCollections(viewModel)
     }
 
+    override fun rethrowDices(diceResults: Set<DiceResult>) {
+        for (diceResult in diceResults) {
+            diceResult.rethrow()
+        }
+        val diceResultList = diceInteractor.mapDiceResult(viewModel.diceCollectionResult)
+        viewModel.diceItems = diceResultList
+        view.setData(viewModel)
+        view.updateDices(false)
+    }
+
     override fun switchBackToProgress() {
         viewModel.diceItems = diceInteractor.mapSingleDiceCollectionsToDicesModel(viewModel.singleDiceCollections)
         viewModel.diceCollectionResult = null
