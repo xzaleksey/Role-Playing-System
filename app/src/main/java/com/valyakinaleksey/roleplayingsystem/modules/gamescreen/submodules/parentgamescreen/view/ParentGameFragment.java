@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.BackPressedHandler;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.DialogProvider;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.ui.AbsButterLceFragment;
@@ -189,5 +190,11 @@ public class ParentGameFragment
                         .build();
         }
         throw new IllegalArgumentException("Unsupported tag");
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.fragment_container);
+        return fragment instanceof BackPressedHandler && ((BackPressedHandler) fragment).onBackPressed();
     }
 }

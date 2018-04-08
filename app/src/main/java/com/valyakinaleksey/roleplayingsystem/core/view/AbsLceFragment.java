@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.valyakinaleksey.roleplayingsystem.R;
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.BackPressedHandler;
 import com.valyakinaleksey.roleplayingsystem.core.interfaces.DialogProvider;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.ComponentManagerFragment;
 import com.valyakinaleksey.roleplayingsystem.core.persistence.HasPresenter;
@@ -31,7 +32,7 @@ import rx.subscriptions.CompositeSubscription;
  * corresponding fields
  */
 public abstract class AbsLceFragment<C extends HasPresenter, M extends RequestUpdateViewModel, V extends LceView<M>>
-        extends ComponentManagerFragment<C, V> implements LceView<M>, DialogProvider {
+        extends ComponentManagerFragment<C, V> implements LceView<M>, DialogProvider, BackPressedHandler {
 
     @BindView(R.id.progress)
     ProgressBar progress;
@@ -305,7 +306,13 @@ public abstract class AbsLceFragment<C extends HasPresenter, M extends RequestUp
 
     }
 
-    @Override public void performAction(Action1<Context> contextAction) {
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
+
+    @Override
+    public void performAction(Action1<Context> contextAction) {
         contextAction.apply(getActivity());
     }
 }

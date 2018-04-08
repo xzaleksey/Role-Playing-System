@@ -26,6 +26,10 @@ class DiceViewCommunicationBus(presenter: DicePresenter, viewState: DiceViewStat
         presenter.rethrowDices(diceResults)
     }
 
+    override fun resetDices() {
+        presenter.resetDices()
+    }
+
     override fun updateDices(animate: Boolean) {
         view?.updateDices(animate)
     }
@@ -50,8 +54,8 @@ class DiceViewCommunicationBus(presenter: DicePresenter, viewState: DiceViewStat
         view?.setSaveDicesEnabled(b)
     }
 
-    override fun setThrowBtnEnabled(b: Boolean) {
-        view?.setThrowBtnEnabled(b)
+    override fun updateActionsThrowEnabled(b: Boolean) {
+        view?.updateActionsThrowEnabled(b)
     }
 
     override fun saveCurrentDices() {

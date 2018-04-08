@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -117,6 +118,11 @@ public class ParentFragment extends AbsButterLceFragment<ParentFragmentComponent
     @Override
     public void getNavigationFragment(Bundle args) {
         getComponent().getPresenter().navigateTo(this, args);
+    }
+
+    @Override
+    public Fragment getCurrentFragment() {
+        return this;
     }
 
     private AbsActivity getAbsActivity() {

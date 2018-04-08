@@ -3,6 +3,8 @@ package com.valyakinaleksey.roleplayingsystem.modules.parentscreen.presenter
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.valyakinaleksey.roleplayingsystem.R
+import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
+import com.valyakinaleksey.roleplayingsystem.core.interfaces.BackPressedHandler
 import com.valyakinaleksey.roleplayingsystem.core.presenter.BasePresenter
 import com.valyakinaleksey.roleplayingsystem.core.rx.DataObserver
 import com.valyakinaleksey.roleplayingsystem.core.utils.RxTransformers
@@ -18,7 +20,6 @@ import com.valyakinaleksey.roleplayingsystem.modules.parentscreen.view.model.Par
 import com.valyakinaleksey.roleplayingsystem.modules.photo.view.ImageFragment
 import com.valyakinaleksey.roleplayingsystem.modules.userprofile.view.UserProfileFragment
 import com.valyakinaleksey.roleplayingsystem.utils.DeepLinksUtils
-import com.valyakinaleksey.roleplayingsystem.core.firebase.FireBaseUtils
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.createFragment
 import com.valyakinaleksey.roleplayingsystem.utils.extensions.navigateToGameScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
@@ -74,7 +75,7 @@ class ParentPresenterImpl(
         if (arguments != null) {
             if (DeepLinksUtils.DEEPLINK_TYPE_SCREEN == arguments[DeepLinksUtils.DEEPLINK_TYPE_TAG]) {
                 if (arguments.containsKey(
-                        DeepLinksUtils.DEEPLINK_SCREEN_TAG)) {
+                                DeepLinksUtils.DEEPLINK_SCREEN_TAG)) {
                     if (arguments.containsKey(DeepLinksUtils.DEEPLINK_GAME_ID_TAG)) {
                         compositeSubscription.add(getGameScreenSubscription(arguments))
                     }
@@ -88,12 +89,12 @@ class ParentPresenterImpl(
                 arguments.getString(DeepLinksUtils.DEEPLINK_GAME_ID_TAG))
                 .compose(
                         RxTransformers.applySchedulers()).subscribe(
-                object : DataObserver<GameModel>() {
-                    override fun onData(data: GameModel) {
-                        compositeSubscription.add(
-                                navigateToGameScreen(data, this@ParentPresenterImpl, checkUserJoinedGameInteractor))
-                    }
-                })
+                        object : DataObserver<GameModel>() {
+                            override fun onData(data: GameModel) {
+                                compositeSubscription.add(
+                                        navigateToGameScreen(data, this@ParentPresenterImpl, checkUserJoinedGameInteractor))
+                            }
+                        })
     }
 
     override fun getData() {
@@ -145,6 +146,13 @@ class ParentPresenterImpl(
     }
 
     override fun navigateBack() {
+        val currentFragment = view.currentFragment
+        if (currentFragment != null) {
+            val innerFragment = currentFragment.childFragmentManager.findFragmentById(R.id.parent_fragment_container)
+            if (innerFragment is BackPressedHandler && innerFragment.onBackPressed()) {
+                return
+            }
+        }
         val args = Bundle()
         args.putBoolean(POP_BACK_STACK, true)
         navigateToFragment(NavigationScreen.BACK, args)

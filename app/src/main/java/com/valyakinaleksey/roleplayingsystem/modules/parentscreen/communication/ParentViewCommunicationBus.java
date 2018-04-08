@@ -57,4 +57,13 @@ public class ParentViewCommunicationBus extends
         getNavigationResolver().resolveNavigation(parentView -> parentView.getNavigationFragment(args));
     }
 
+    @Override
+    public Fragment getCurrentFragment() {
+        if (view == null) {
+            return null;
+        }
+
+        return view.getCurrentFragment();
+    }
+
 }

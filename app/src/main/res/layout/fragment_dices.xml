@@ -127,17 +127,37 @@
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btn_throw"
+    <LinearLayout
+        android:id="@+id/progress_bottom_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/material_layout_keylines_screen_edge_margin"
-        android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
-        android:background="@drawable/accent_button"
-        android:text="@string/throw_dice"
-        android:textColor="@color/material_light_white" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/material_layout_keylines_screen_edge_margin"
+            android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
+            android:layout_weight="1"
+            android:background="@drawable/accent_button_borders"
+            android:text="@android:string/cancel"
+            android:textColor="@drawable/textview_enable_text_color" />
+
+        <Button
+            android:id="@+id/btn_throw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/material_layout_keylines_screen_edge_margin"
+            android:layout_weight="1"
+            android:background="@drawable/accent_button"
+            android:text="@string/throw_dice"
+            android:textColor="@color/material_light_white" />
+
+    </LinearLayout>
 
 
     <RelativeLayout
@@ -182,16 +202,16 @@
         android:id="@+id/recycler_view_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_8"
-        android:layout_below="@+id/label_container">
+        android:layout_below="@+id/label_container"
+        android:layout_margin="@dimen/dp_8">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:padding="@dimen/dp_8"
-            android:clipToPadding="false"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/btn_throw"
+            android:layout_above="@+id/progress_bottom_container"
+            android:clipToPadding="false"
+            android:padding="@dimen/dp_8"
             android:scrollbars="vertical" />
     </android.support.v7.widget.CardView>
 

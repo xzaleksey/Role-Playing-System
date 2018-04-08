@@ -53,6 +53,11 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     View bntSave;
     @BindView(R.id.btn_throw)
     Button btnThrow;
+    @BindView(R.id.btn_cancel)
+    Button btnCancel;
+    @BindView(R.id.progress_bottom_container)
+    View progressBottomContainer;
+
     @BindView(R.id.label_container)
     View progressLabelContainer;
     @BindView(R.id.progress_state_container)
@@ -119,6 +124,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
             }
         };
         btnThrow.setOnClickListener(v -> getComponent().getPresenter().throwDices());
+        btnCancel.setOnClickListener(v -> getComponent().getPresenter().resetDices());
         ivResultBack.setOnClickListener(v -> getComponent().getPresenter().switchBackToProgress());
     }
 
@@ -154,7 +160,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), COLUMN_COUNT));
         recyclerView.addItemDecoration(decor, 0);
         progressLabelContainer.setVisibility(View.VISIBLE);
-        btnThrow.setVisibility(View.VISIBLE);
+        progressBottomContainer.setVisibility(View.VISIBLE);
         progressStateContainer.setVisibility(View.VISIBLE);
         resultStateContainer.setVisibility(View.GONE);
         topContainer.getLayoutParams().height = progressTopElementHeight;
@@ -171,7 +177,7 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
 
     private void showStateShowResult() {
         progressLabelContainer.setVisibility(View.GONE);
-        btnThrow.setVisibility(View.GONE);
+        progressBottomContainer.setVisibility(View.GONE);
         progressStateContainer.setVisibility(View.GONE);
         resultStateContainer.setVisibility(View.VISIBLE);
         topContainer.getLayoutParams().height = resultTopElementHeight;
@@ -198,8 +204,9 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
     }
 
     @Override
-    public void setThrowBtnEnabled(boolean b) {
+    public void updateActionsThrowEnabled(boolean b) {
         btnThrow.setEnabled(b);
+        btnCancel.setEnabled(b);
     }
 
     @Override
@@ -234,5 +241,14 @@ public class DiceFragment extends AbsButterLceFragment<DiceFragmentComponent, Di
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        boolean handleBackPressed = data != null && data.getDiceProgressState() == DiceProgressState.SHOW_RESULT;
+        if (handleBackPressed) {
+            getComponent().getPresenter().switchBackToProgress();
+        }
+        return handleBackPressed;
     }
 }

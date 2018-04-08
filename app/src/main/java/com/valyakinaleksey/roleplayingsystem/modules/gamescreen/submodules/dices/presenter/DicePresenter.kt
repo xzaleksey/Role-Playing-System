@@ -20,4 +20,6 @@ interface DicePresenter : Presenter<DiceView> {
     fun switchBackToProgress()
 
     fun rethrowDices(diceResults: Set<DiceResult>)
+
+    fun resetDices()
 }

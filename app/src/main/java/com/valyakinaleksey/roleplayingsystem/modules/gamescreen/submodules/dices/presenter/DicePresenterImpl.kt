@@ -156,12 +156,12 @@ class DicePresenterImpl constructor(
     private fun updateThrowBtnState() {
         for (diceCollection in viewModel.singleDiceCollections) {
             if (diceCollection.getDiceCount() > 0) {
-                view.setThrowBtnEnabled(true)
+                view.updateActionsThrowEnabled(true)
                 return
             }
         }
 
-        view.setThrowBtnEnabled(false)
+        view.updateActionsThrowEnabled(false)
     }
 
     private fun observeDiceCollections() {
@@ -180,6 +180,14 @@ class DicePresenterImpl constructor(
                         updateSaveDicesBtnState()
                     }
                 }))
+    }
+
+    override fun resetDices() {
+        viewModel.singleDiceCollections = diceInteractor.getDefaultSingleDicesCollections()
+        viewModel.diceItems = diceInteractor.mapSingleDiceCollectionsToDicesModel(viewModel.singleDiceCollections)
+        view.updateDices(false)
+        updateInProgressState()
+        updateDiceCollections()
     }
 
     private fun addDiceCollection(diceCollection: DiceCollection) {
