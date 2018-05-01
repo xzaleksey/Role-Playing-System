@@ -14,8 +14,6 @@ public interface AuthPresenter extends Presenter<AuthView> {
 
     void resetPassword(String email);
 
-    void restoreData();
-
     void init(FragmentActivity activity);
 
     void googleAuth(FragmentActivity activity);

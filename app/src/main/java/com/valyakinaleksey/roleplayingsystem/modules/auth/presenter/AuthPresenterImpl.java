@@ -90,7 +90,6 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
         if (viewModel == null) {
             viewModel = new AuthViewModel();
             viewModel.setEmail(sharedPreferencesHelper.getLogin());
-            viewModel.setPassword(sharedPreferencesHelper.getPassword());
         }
         return viewModel;
     }
@@ -109,19 +108,17 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
     @Override
     public void onSaveInstanceState(Bundle bundle) {
         String login = bundle.getString(SharedPreferencesHelper.LOGIN, "");
-        String password = bundle.getString(SharedPreferencesHelper.PASSWORD, "");
-        saveModel(login, password);
+        saveLogin(login);
     }
 
-    private void saveModel(String login, String password) {
+    private void saveLogin(String login) {
         sharedPreferencesHelper.saveLogin(login);
-        sharedPreferencesHelper.savePassword(password);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        saveModel(viewModel.getEmail(), viewModel.getPassword());
+        saveLogin(viewModel.getEmail());
     }
 
     private void updateUi(AuthViewModel model) {
@@ -172,14 +169,11 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
     }
 
     @Override
-    public void restoreData() {
-        if (viewModel == null) {
-            viewModel = new AuthViewModel();
-            viewModel.setEmail(sharedPreferencesHelper.getLogin());
-            viewModel.setPassword(sharedPreferencesHelper.getPassword());
-        }
-        updateUi(viewModel);
+    protected void restoreViewModelWithSavedInstanceState(Bundle savedInstanceState) {
+        viewModel.setPassword(savedInstanceState.getString(SharedPreferencesHelper.PASSWORD, ""));
+        viewModel.setEmail(sharedPreferencesHelper.getLogin());
     }
+
 
     @Override
     public void init(FragmentActivity activity) {
@@ -289,8 +283,7 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             if (oldUser == null) {
                 User newUser = new User(userId, name, email);
-                List<? extends UserInfo> providerData =
-                        currentUser.getProviderData();
+                List<? extends UserInfo> providerData = currentUser.getProviderData();
                 for (UserInfo userInfo : providerData) {
                     Uri photoUrl = userInfo.getPhotoUrl();
                     if (photoUrl != null && !TextUtils.isEmpty(photoUrl.toString())) {
@@ -306,18 +299,19 @@ public class AuthPresenterImpl extends BasePresenter<AuthView, AuthViewModel>
                 HashMap<String, Object> map = new HashMap<>();
                 Uri photoUrl = currentUser.getPhotoUrl();
                 String displayName = currentUser.getDisplayName();
+
                 if (photoUrl != null) {
                     map.put(User.FIELD_PHOTO_URL, photoUrl.toString());
                 }
+
                 if (displayName != null) {
                     map.put(User.FIELD_DISPLAY_NAME, currentUser.getDisplayName());
                 }
-                if (displayName != null) {
-                    map.put(User.FIELD_DISPLAY_NAME, currentUser.getDisplayName());
-                }
+
                 if (!StringUtils.areEqual(oldUser.getEmail(), email)) {
                     map.put(User.FIELD_EMAIL, email);
                 }
+
                 if (!map.isEmpty()) {
                     FireBaseUtils.getTableReference(FirebaseTable.USERS).child(userId).updateChildren(map);
                 }

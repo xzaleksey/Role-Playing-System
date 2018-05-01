@@ -44,11 +44,6 @@ public class AuthCommunicationBus
     }
 
     @Override
-    public void restoreData() {
-        getPresenter().restoreData();
-    }
-
-    @Override
     public void init(FragmentActivity activity) {
         presenter.init(activity);
     }

@@ -10,9 +10,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import butterknife.BindString;
-import butterknife.BindView;
-import butterknife.OnClick;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.valyakinaleksey.roleplayingsystem.R;
@@ -25,6 +23,10 @@ import com.valyakinaleksey.roleplayingsystem.modules.auth.view.model.AuthViewMod
 import com.valyakinaleksey.roleplayingsystem.utils.SharedPreferencesHelper;
 import com.valyakinaleksey.roleplayingsystem.utils.StringUtils;
 import com.valyakinaleksey.roleplayingsystem.utils.ValidationUtils;
+
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.OnClick;
 
 public class AuthFragment extends AbsButterLceFragment<AuthComponent, AuthViewModel, AuthView>
     implements AuthView {
@@ -71,9 +73,9 @@ public class AuthFragment extends AbsButterLceFragment<AuthComponent, AuthViewMo
   }
 
   @Override public void onSaveInstanceState(Bundle savedInstanceState) {
-    super.onSaveInstanceState(savedInstanceState);
     savedInstanceState.putString(SharedPreferencesHelper.LOGIN, etEmail.getText().toString());
     savedInstanceState.putString(SharedPreferencesHelper.PASSWORD, etPassword.getText().toString());
+    super.onSaveInstanceState(savedInstanceState);
   }
 
   @Override public void loadData() {

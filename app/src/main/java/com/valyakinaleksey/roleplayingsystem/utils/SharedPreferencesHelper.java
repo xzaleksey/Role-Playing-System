@@ -2,9 +2,6 @@ package com.valyakinaleksey.roleplayingsystem.utils;
 
 import android.content.SharedPreferences;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 public class SharedPreferencesHelper {
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
@@ -19,22 +16,12 @@ public class SharedPreferencesHelper {
         preferences
                 .edit()
                 .putString(LOGIN, login)
-                .commit();
+                .apply();
     }
 
     public String getLogin() {
         return preferences.getString(LOGIN, "");
     }
 
-    public void savePassword(String password) {
-        preferences
-                .edit()
-                .putString(PASSWORD, password)
-                .commit();
-    }
-
-    public String getPassword() {
-        return preferences.getString(PASSWORD, "");
-    }
 }
       
