@@ -12,4 +12,8 @@ interface FirebaseGameRepository<T> {
     fun addData(gameId: String, data: T): Observable<T>
 
     fun removeData(gameId: String, data: T): Completable
+
+    fun getFirstElements(gameId: String, limit: Int): Observable<MutableMap<String, T>>
+    fun removeData(gameId: String, id: String): Completable
+    fun removeData(gameId: String, ids: List<String>): Completable
 }

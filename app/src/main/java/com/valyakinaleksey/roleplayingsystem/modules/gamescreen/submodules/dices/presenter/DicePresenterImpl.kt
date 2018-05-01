@@ -9,6 +9,7 @@ import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.domain.model.Gam
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.interactor.DiceInteractor
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.DiceView
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.model.*
+import com.valyakinaleksey.roleplayingsystem.utils.extensions.subscribeWithErrorLogging
 import rx.Subscription
 
 class DicePresenterImpl constructor(
@@ -64,6 +65,9 @@ class DicePresenterImpl constructor(
         viewModel.diceProgressState = DiceProgressState.SHOW_RESULT
         viewModel.diceItems = diceInteractor.mapDiceResult(diceCollectionResult)
         view.showContent()
+        diceInteractor.saveDiceCollectionResult(viewModel.gameModel.id, diceCollectionResult)
+                .compose(RxTransformers.applySchedulers())
+                .subscribeWithErrorLogging { }
     }
 
     override fun onDiceCollectionClicked(diceCollection: DiceCollection) {

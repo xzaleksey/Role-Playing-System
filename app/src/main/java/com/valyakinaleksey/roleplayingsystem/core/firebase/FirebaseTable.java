@@ -20,6 +20,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
         FirebaseTable.CHARACTERS_IN_USER,
         FirebaseTable.GAME_CHARACTERS,
         FirebaseTable.GAME_DICES,
+        FirebaseTable.GAME_DICES_RESULTS,
 })
 public @interface FirebaseTable {
     String USERS = "users";
@@ -29,6 +30,7 @@ public @interface FirebaseTable {
     String GAMES = "games";
     String GAME_LOG = "game_log";
     String GAME_DICES = "dices";
+    String GAME_DICES_RESULTS = "dice_results";
     String GAME_MAPS = "game_maps";
     String GAME_CHARACTERISTICS = "game_characteristics";
     String GAME_CLASSES = "game_classes";

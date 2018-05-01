@@ -48,6 +48,19 @@ abstract class AbstractFirebaseGameRepositoryImpl<T : HasId>(private val clazz: 
     }
 
     override fun removeData(gameId: String, data: T): Completable {
-        return FireBaseUtils.setData(null, getDataBaseReference(gameId).child(data.id)).toCompletable()
+        return removeData(gameId, data.id)
+    }
+
+    override fun removeData(gameId: String, id: String): Completable {
+        return FireBaseUtils.setData(null, getDataBaseReference(gameId).child(id)).toCompletable()
+    }
+
+    override fun removeData(gameId: String, ids: List<String>): Completable {
+        val list = ids.map { removeData(gameId, it) }
+        return Completable.concat(list)
+    }
+
+    override fun getFirstElements(gameId: String, limit: Int): Observable<MutableMap<String, T>> {
+        return RxFirebaseDatabase.observeSingleValueEvent(getDataBaseReference(gameId).limitToFirst(limit), getDataFunc())
     }
 }

@@ -2,6 +2,8 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dice
 
 import com.valyakinaleksey.roleplayingsystem.core.flexible.SubHeaderViewModel
 import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.diceresults.FirebaseDiceResultCollection
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.diceresults.FirebaseDiceResultRepository
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceCollection
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceCollectionRepository
 import com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dices.view.collectionadapter.DiceCollectionViewModel
@@ -16,7 +18,11 @@ import rx.Observable
 
 class DiceInteractorImpl constructor(
         private val firebaseDiceCollectionRepository: FirebaseDiceCollectionRepository,
-        private val stringRepository: StringRepository) : DiceInteractor {
+        private val stringRepository: StringRepository,
+        private val firebaseDiceResultRepository: FirebaseDiceResultRepository
+) : DiceInteractor {
+
+    private val maxValues = 5
 
     override fun getDefaultSingleDicesCollections(): List<SingleDiceCollection> {
         return DiceType.values().map { SingleDiceCollection(it.createDice(), 0) }
@@ -73,6 +79,24 @@ class DiceInteractorImpl constructor(
         return result
     }
 
+    override fun saveDiceCollectionResult(gameId: String, diceCollectionResult: DiceCollectionResult): Observable<FirebaseDiceResultCollection> {
+        return firebaseDiceResultRepository.getData(gameId)
+                .switchMap { result ->
+                    if (result.size >= maxValues) {
+                        val list = result.values.reversed().take(result.size - maxValues + 1).map { it.id!! }
+
+                        return@switchMap firebaseDiceResultRepository.removeData(gameId, list)
+                                .andThen(saveDiceResult(gameId, diceCollectionResult))
+                    }
+
+                    return@switchMap saveDiceResult(gameId, diceCollectionResult)
+                }
+    }
+
+    private fun saveDiceResult(gameId: String, diceCollectionResult: DiceCollectionResult) =
+            firebaseDiceResultRepository
+                    .addData(gameId, FirebaseDiceResultCollection.newInstance(diceCollectionResult))
+
     override fun mapSingleDiceCollectionsToDicesModel(diceCollections: List<SingleDiceCollection>): List<DiceSingleCollectionViewModel> {
         return diceCollections.map {
             DiceSingleCollectionViewModel(DiceType.getDiceType(it.dice).resId, it)
@@ -95,4 +119,6 @@ interface DiceInteractor {
     fun removeDiceCollection(gameId: String, diceCollection: DiceCollection): Completable
 
     fun mapDiceResult(diceCollectionResult: DiceCollectionResult): MutableList<IFlexible<*>>
+
+    fun saveDiceCollectionResult(gameId: String, diceCollectionResult: DiceCollectionResult): Observable<FirebaseDiceResultCollection>
 }

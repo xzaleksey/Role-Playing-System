@@ -22,6 +22,7 @@ import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationScreen
 import com.valyakinaleksey.roleplayingsystem.utils.navigation.NavigationUtils
 import rx.Observable
 import rx.Subscription
+import timber.log.Timber
 
 fun getValidatePasswordSubscription(validatePasswordInteractor: ValidatePasswordInteractor,
                                     password: String,
@@ -55,12 +56,12 @@ fun <V : LceView<D>, D : RequestUpdateViewModel> BasePresenter<V, D>.navigateToG
 
     return getCheckUserInGameObservable(model, currentUserId, checkUserJoinedGameInteractor)
             .subscribe({ userInGame ->
-        if (userInGame) {
-            parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle)
-        } else {
-            parentPresenter.navigateToFragment(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, bundle)
-        }
-    }, { this.handleThrowable(it) })
+                if (userInGame) {
+                    parentPresenter.navigateToFragment(NavigationScreen.GAME_FRAGMENT, bundle)
+                } else {
+                    parentPresenter.navigateToFragment(NavigationScreen.GAME_DESCRIPTION_FRAGMENT, bundle)
+                }
+            }, { this.handleThrowable(it) })
 }
 
 fun <V : LceView<D>, D : RequestUpdateViewModel> BasePresenter<V, D>.getCheckUserInGameObservable(
@@ -98,4 +99,10 @@ fun ParentPresenter.navigateToMyProfile() {
     val bundle = Bundle()
     bundle.putBoolean(NavigationUtils.ADD_BACK_STACK, true)
     navigateToFragment(NavigationScreen.PROFILE, bundle)
+}
+
+fun <T> Observable<T>.subscribeWithErrorLogging(onNext: (t: T) -> Unit): Subscription {
+    return this.subscribe(onNext, {
+        Timber.e(it)
+    })
 }

@@ -3,6 +3,7 @@ package com.valyakinaleksey.roleplayingsystem.di.app;
 import com.valyakinaleksey.roleplayingsystem.core.repository.DrawableRepository;
 import com.valyakinaleksey.roleplayingsystem.core.repository.StringRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.GameRepository;
+import com.valyakinaleksey.roleplayingsystem.data.repository.game.diceresults.FirebaseDiceResultRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.dices.FirebaseDiceCollectionRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.log.LogRepository;
 import com.valyakinaleksey.roleplayingsystem.data.repository.game.map.FileMapsRepository;
@@ -209,8 +210,10 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    DiceInteractor provideDiceInteractor(FirebaseDiceCollectionRepository firebaseDiceCollectionRepo, StringRepository stringRepo) {
-        return new DiceInteractorImpl(firebaseDiceCollectionRepo, stringRepo);
+    DiceInteractor provideDiceInteractor(FirebaseDiceCollectionRepository firebaseDiceCollectionRepo,
+                                         StringRepository stringRepo,
+                                         FirebaseDiceResultRepository firebaseDiceResultRepository) {
+        return new DiceInteractorImpl(firebaseDiceCollectionRepo, stringRepo, firebaseDiceResultRepository);
     }
 }
       

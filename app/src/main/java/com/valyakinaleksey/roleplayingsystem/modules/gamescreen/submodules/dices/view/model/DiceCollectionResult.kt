@@ -3,9 +3,11 @@ package com.valyakinaleksey.roleplayingsystem.modules.gamescreen.submodules.dice
 import java.io.Serializable
 import java.util.*
 
-class DiceCollectionResult : Serializable {
+class DiceCollectionResult(var id: String? = null) : Serializable {
     private val diceResults = TreeMap<Dice, MutableList<DiceResult>>()
     private var diceResultMax = 0
+
+    constructor() : this(null)
 
     fun addDiceResult(diceResult: DiceResult) {
         val dice = diceResult.dice
