@@ -155,6 +155,19 @@ public class ParentGameFragment
     @Override
     public void preFillModel(ParentGameModel data) {
         super.preFillModel(data);
+        bottomNavigation.setSelectedIndex(getIndexFromNavigationTag(data.getNavigationTag()), false);
+    }
+
+    private int getIndexFromNavigationTag(int navigationTag) {
+        if (navigationTag == NavigationScreen.GAME_CHARACTERS_FRAGMENT) {
+            return 0;
+        } else if (navigationTag == NavigationScreen.GAME_DICES) {
+            return 1;
+        } else if (navigationTag == NavigationScreen.GAME_MAPS_FRAGMENT) {
+            return 2;
+        } else {
+            return 3;
+        }
     }
 
     @Override
