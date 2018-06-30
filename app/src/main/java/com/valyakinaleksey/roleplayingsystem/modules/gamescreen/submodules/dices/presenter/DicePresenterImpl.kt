@@ -189,6 +189,7 @@ class DicePresenterImpl constructor(
     override fun resetDices() {
         viewModel.singleDiceCollections = diceInteractor.getDefaultSingleDicesCollections()
         viewModel.diceItems = diceInteractor.mapSingleDiceCollectionsToDicesModel(viewModel.singleDiceCollections)
+        viewModel.selectedDiceCollection = null
         view.updateDices(false)
         updateInProgressState()
         updateDiceCollections()
